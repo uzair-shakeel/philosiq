@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/next
 /.pnp
 .pnp.js
 
@@ -12,6 +13,7 @@
 /build
 
 # misc
+.next
 .DS_Store
 .env.local
 .env.development.local
