@@ -45,7 +45,7 @@ const Navbar = ({ user }) => {
       <div className="container-custom flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <img src="/LOGO.png" alt="logo" className="h-12 w-auto" />
+          <img src="/blacklogo.png" alt="logo" className="h-12 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
