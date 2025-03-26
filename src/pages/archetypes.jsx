@@ -1,4 +1,6 @@
+import React from "react";
 import Layout from "../components/Layout";
+import Link from "next/link";
 
 export default function ArchetypePage() {
   // Original categories data
@@ -117,7 +119,7 @@ export default function ArchetypePage() {
     },
   ];
 
-  // Comprehensive archetypes data from the provided object
+  // Comprehensive archetypes data with links to detail pages
   const archetypeGroups = [
     {
       id: 5,
@@ -127,24 +129,28 @@ export default function ArchetypePage() {
         "These archetypes emphasize global influence, cooperation, and interconnected prosperity.",
       archetypes: [
         {
-          id: 501,
-          name: "The Egalitarian Technocrat",
-          traits: ["Equity", "Authority", "Secular", "Globalism"],
+          id: "progressive-humanitarian",
+          name: "The Progressive Humanitarian",
+          traits: ["Equity", "Democracy", "Secular", "Globalism"],
+          slug: "progressive-humanitarian",
         },
         {
-          id: 502,
-          name: "The Faith-Based Free Trader",
-          traits: ["Markets", "Democracy", "Religious", "Globalism"],
+          id: "faithful-global-reformer",
+          name: "The Faith-Based Global Reformer",
+          traits: ["Equity", "Democracy", "Religious", "Globalism"],
+          slug: "faithful-global-reformer",
         },
         {
-          id: 503,
+          id: "authoritarian-capitalist",
           name: "The Authoritarian Capitalist",
           traits: ["Markets", "Authority", "Secular", "Globalism"],
+          slug: "authoritarian-capitalist",
         },
         {
-          id: 504,
+          id: "corporate-theocrat",
           name: "The Corporate Theocrat",
           traits: ["Markets", "Authority", "Religious", "Globalism"],
+          slug: "corporate-theocrat",
         },
       ],
       common_theme:
@@ -158,24 +164,28 @@ export default function ArchetypePage() {
         "These archetypes prioritize strengthening their nation through enterprise and leadership.",
       archetypes: [
         {
-          id: 601,
+          id: "national-welfare-advocate",
           name: "The National Welfare Advocate",
           traits: ["Equity", "Authority", "Secular", "Nationalism"],
+          slug: "national-welfare-advocate",
         },
         {
-          id: 602,
+          id: "conservative-capitalist",
           name: "The Conservative Capitalist",
           traits: ["Markets", "Democracy", "Religious", "Nationalism"],
+          slug: "conservative-capitalist",
         },
         {
-          id: 603,
+          id: "nationalist-industrialist",
           name: "The Nationalist Industrialist",
           traits: ["Markets", "Authority", "Secular", "Nationalism"],
+          slug: "nationalist-industrialist",
         },
         {
-          id: 604,
+          id: "paternalistic-guardian",
           name: "The Paternalistic Guardian",
           traits: ["Equity", "Authority", "Religious", "Nationalism"],
+          slug: "paternalistic-guardian",
         },
       ],
       common_theme:
@@ -189,24 +199,28 @@ export default function ArchetypePage() {
         "These archetypes champion fairness and inclusion, whether locally or globally.",
       archetypes: [
         {
-          id: 701,
+          id: "progressive-humanitarian-2",
           name: "The Progressive Humanitarian",
           traits: ["Equity", "Democracy", "Secular", "Globalism"],
+          slug: "progressive-humanitarian",
         },
         {
-          id: 702,
+          id: "faithful-global-reformer-2",
           name: "The Faithful Global Reformer",
           traits: ["Equity", "Democracy", "Religious", "Globalism"],
+          slug: "faithful-global-reformer",
         },
         {
-          id: 703,
+          id: "social-justice-patriot",
           name: "The Social Justice Patriot",
           traits: ["Equity", "Democracy", "Secular", "Nationalism"],
+          slug: "social-justice-patriot",
         },
         {
-          id: 704,
+          id: "compassionate-traditionalist",
           name: "The Compassionate Traditionalist",
           traits: ["Equity", "Democracy", "Religious", "Nationalism"],
+          slug: "compassionate-traditionalist",
         },
       ],
       common_theme:
@@ -220,24 +234,28 @@ export default function ArchetypePage() {
         "These archetypes see free enterprise and personal initiative as essential to progress.",
       archetypes: [
         {
-          id: 801,
+          id: "libertarian-cosmopolitan",
           name: "The Libertarian Cosmopolitan",
           traits: ["Markets", "Democracy", "Secular", "Globalism"],
+          slug: "libertarian-cosmopolitan",
         },
         {
-          id: 802,
+          id: "free-market-patriot",
           name: "The Free Market Patriot",
           traits: ["Markets", "Democracy", "Secular", "Nationalism"],
+          slug: "free-market-patriot",
         },
         {
-          id: 803,
+          id: "traditionalist-capitalist",
           name: "The Traditionalist Capitalist",
           traits: ["Markets", "Authority", "Religious", "Nationalism"],
+          slug: "traditionalist-capitalist",
         },
         {
-          id: 804,
+          id: "nationalist-industrialist-2",
           name: "The Nationalist Industrialist",
           traits: ["Markets", "Authority", "Secular", "Nationalism"],
+          slug: "nationalist-industrialist",
         },
       ],
       common_theme:
@@ -283,9 +301,10 @@ export default function ArchetypePage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {group.archetypes.map((archetype) => (
-                    <div
+                    <Link
+                      href={`/archetypes/${archetype.slug}`}
                       key={archetype.id}
-                      className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-300"
+                      className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-300 hover:border-primary-maroon"
                     >
                       <h3 className="text-xl font-bold mb-4 text-primary-maroon">
                         {archetype.name}
@@ -303,7 +322,10 @@ export default function ArchetypePage() {
                           ))}
                         </ul>
                       </div>
-                    </div>
+                      <div className="mt-4 text-sm text-primary-maroon font-medium">
+                        View details →
+                      </div>
+                    </Link>
                   ))}
                 </div>
               </div>

@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
-import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
+import {
+  FaArrowRight,
+  FaArrowLeft,
+  FaClipboardList,
+  FaClipboardCheck,
+} from "react-icons/fa";
 
 export default function QuizPage() {
+  const [quizStarted, setQuizStarted] = useState(false);
+  const [quizType, setQuizType] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [questions, setQuestions] = useState([]);
 
   // Sample questions - in a real app, these would come from an API
-  const questions = [
+  const allQuestions = [
     {
       id: 1,
       text: "The government should prioritize economic growth over environmental protection.",
@@ -33,14 +41,158 @@ export default function QuizPage() {
       text: "Traditional values should guide social policy.",
       category: "Societal",
     },
+    {
+      id: 6,
+      text: "Military strength is essential for national security.",
+      category: "Military",
+    },
+    {
+      id: 7,
+      text: "Religious principles should influence government decisions.",
+      category: "Religious",
+    },
+    {
+      id: 8,
+      text: "Free markets lead to more prosperity than government intervention.",
+      category: "Economic",
+    },
+    {
+      id: 9,
+      text: "A strong leader is more effective than democratic consensus.",
+      category: "Civil",
+    },
+    {
+      id: 10,
+      text: "National borders should be strictly controlled.",
+      category: "Diplomatic",
+    },
+    // Additional questions to have more variety
+    {
+      id: 11,
+      text: "Society should strive for greater income equality.",
+      category: "Economic",
+    },
+    {
+      id: 12,
+      text: "Corporations have too much power in today's society.",
+      category: "Economic",
+    },
+    {
+      id: 13,
+      text: "Immigration enriches our culture and economy.",
+      category: "Diplomatic",
+    },
+    {
+      id: 14,
+      text: "The government should regulate speech that is offensive to minorities.",
+      category: "Civil",
+    },
+    {
+      id: 15,
+      text: "Marriage is primarily a religious institution.",
+      category: "Societal",
+    },
+    {
+      id: 16,
+      text: "Military intervention in other countries is sometimes necessary for global stability.",
+      category: "Military",
+    },
+    {
+      id: 17,
+      text: "Public education should include religious perspectives.",
+      category: "Religious",
+    },
+    {
+      id: 18,
+      text: "Taxation of the wealthy should be increased to fund social programs.",
+      category: "Economic",
+    },
+    {
+      id: 19,
+      text: "Direct democracy is preferable to representative democracy.",
+      category: "Civil",
+    },
+    {
+      id: 20,
+      text: "Global institutions should have more authority over national governments.",
+      category: "Diplomatic",
+    },
   ];
+
+  // Function to shuffle array (Fisher-Yates algorithm)
+  const shuffleArray = (array) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
+
+  // Function to generate a large set of questions by modifying existing ones
+  const generateLargeQuestionSet = (baseQuestions, targetCount) => {
+    const result = [...baseQuestions];
+
+    // If we already have enough questions, just return them shuffled
+    if (baseQuestions.length >= targetCount) {
+      return shuffleArray(baseQuestions).slice(0, targetCount);
+    }
+
+    // Generate variations of existing questions to reach the target count
+    let currentId = Math.max(...baseQuestions.map((q) => q.id)) + 1;
+
+    while (result.length < targetCount) {
+      const originalQuestion =
+        baseQuestions[result.length % baseQuestions.length];
+
+      // Create variations by adding qualifiers or slightly changing the wording
+      const variations = [
+        `In most cases, ${originalQuestion.text.toLowerCase()}`,
+        `Generally speaking, ${originalQuestion.text.toLowerCase()}`,
+        `From a practical standpoint, ${originalQuestion.text.toLowerCase()}`,
+        `Considering long-term outcomes, ${originalQuestion.text.toLowerCase()}`,
+        `In the current global context, ${originalQuestion.text.toLowerCase()}`,
+        `From an ethical perspective, ${originalQuestion.text.toLowerCase()}`,
+      ];
+
+      // Add a variation if we haven't reached the target count
+      if (result.length < targetCount) {
+        const variationIndex = result.length % variations.length;
+        result.push({
+          id: currentId++,
+          text: variations[variationIndex],
+          category: originalQuestion.category,
+        });
+      }
+    }
+
+    return shuffleArray(result).slice(0, targetCount);
+  };
+
+  const startQuiz = (type) => {
+    setQuizType(type);
+
+    if (type === "short") {
+      // Generate 36 questions for the short quiz
+      setQuestions(generateLargeQuestionSet(allQuestions, 36));
+    } else {
+      // Generate 130 questions for the full quiz
+      setQuestions(generateLargeQuestionSet(allQuestions, 130));
+    }
+
+    setQuizStarted(true);
+    setCurrentQuestion(0);
+    setAnswers({});
+  };
 
   const handleAnswer = (value) => {
     setAnswers({
       ...answers,
-      [questions[currentQuestion].id]: value,
+      [questions[currentQuestion]?.id]: value,
     });
+  };
 
+  const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     }
@@ -56,6 +208,9 @@ export default function QuizPage() {
     // In a real app, you would send the answers to your backend
     console.log("Answers submitted:", answers);
     // Redirect to results page or show results
+    alert(
+      "Thank you for completing the quiz! Your results would be shown here."
+    );
   };
 
   const progressPercentage = ((currentQuestion + 1) / questions.length) * 100;
@@ -64,94 +219,194 @@ export default function QuizPage() {
     <Layout title="Political Survey Quiz - PhilosiQ">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              {/* Progress bar */}
-              <div className="mb-8">
-                <div className="flex justify-between text-sm mb-2">
-                  <span>
-                    Question {currentQuestion + 1} of {questions.length}
-                  </span>
-                  <span>{Math.round(progressPercentage)}% Complete</span>
+          {!quizStarted ? (
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <h1 className="text-4xl font-bold mb-4">
+                  Political Survey Quiz
+                </h1>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                  Discover your political identity by answering questions about
+                  your views on various political issues.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Short Quiz Option */}
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                  <div className="bg-secondary-darkBlue text-white p-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-2xl font-bold">Short Quiz</h2>
+                      <FaClipboardList className="text-3xl" />
+                    </div>
+                    <p className="text-sm opacity-90">
+                      36 questions • ~10 minutes
+                    </p>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-gray-600 mb-6">
+                      A condensed version of our political survey that covers
+                      the essential aspects of political ideology. Perfect if
+                      you're short on time.
+                    </p>
+                    <button
+                      onClick={() => startQuiz("short")}
+                      className="w-full bg-secondary-darkBlue hover:bg-secondary-blue text-white font-bold py-3 px-4 rounded transition-colors duration-300"
+                    >
+                      Start Short Quiz
+                    </button>
+                  </div>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div
-                    className="bg-primary-maroon h-2.5 rounded-full transition-all duration-300"
-                    style={{ width: `${progressPercentage}%` }}
-                  ></div>
+
+                {/* Full Quiz Option */}
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                  <div className="bg-primary-maroon text-white p-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-2xl font-bold">Full Quiz</h2>
+                      <FaClipboardCheck className="text-3xl" />
+                    </div>
+                    <p className="text-sm opacity-90">
+                      130 questions • ~30 minutes
+                    </p>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-gray-600 mb-6">
+                      Our comprehensive political survey that explores the full
+                      spectrum of political thought. Provides the most accurate
+                      and detailed results.
+                    </p>
+                    <button
+                      onClick={() => startQuiz("full")}
+                      className="w-full bg-primary-maroon hover:bg-primary-darkMaroon text-white font-bold py-3 px-4 rounded transition-colors duration-300"
+                    >
+                      Start Full Quiz
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* Category badge */}
-              <div className="mb-4">
-                <span className="inline-block bg-secondary-lightBlue text-white text-sm px-3 py-1 rounded-full">
-                  {questions[currentQuestion].category}
-                </span>
-              </div>
-
-              {/* Question */}
-              <h2 className="text-2xl font-bold mb-8">
-                {questions[currentQuestion].text}
-              </h2>
-
-              {/* Answer options */}
-              <div className="space-y-4">
-                {[-2, -1, 0, 1, 2].map((value) => (
-                  <button
-                    key={value}
-                    className={`w-full text-left p-4 rounded-lg border transition-all duration-200 hover:border-primary-maroon ${
-                      answers[questions[currentQuestion].id] === value
-                        ? "bg-primary-maroon text-white border-primary-maroon"
-                        : "bg-white text-gray-700 border-gray-300"
-                    }`}
-                    onClick={() => handleAnswer(value)}
-                  >
-                    {value === -2 && "Strongly Disagree"}
-                    {value === -1 && "Disagree"}
-                    {value === 0 && "Neutral"}
-                    {value === 1 && "Agree"}
-                    {value === 2 && "Strongly Agree"}
-                  </button>
-                ))}
-              </div>
-
-              {/* Navigation buttons */}
-              <div className="flex justify-between mt-8">
-                <button
-                  onClick={handlePrevious}
-                  disabled={currentQuestion === 0}
-                  className={`flex items-center gap-2 px-4 py-2 rounded ${
-                    currentQuestion === 0
-                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                      : "bg-secondary-darkBlue text-white hover:bg-secondary-blue"
-                  }`}
-                >
-                  <FaArrowLeft /> Previous
-                </button>
-
-                {currentQuestion === questions.length - 1 ? (
-                  <button
-                    onClick={handleSubmit}
-                    className="bg-primary-maroon hover:bg-primary-darkMaroon text-white px-6 py-2 rounded flex items-center gap-2"
-                  >
-                    Submit
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setCurrentQuestion(currentQuestion + 1)}
-                    disabled={!answers[questions[currentQuestion].id]}
-                    className={`flex items-center gap-2 px-4 py-2 rounded ${
-                      !answers[questions[currentQuestion].id]
-                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                        : "bg-secondary-darkBlue text-white hover:bg-secondary-blue"
-                    }`}
-                  >
-                    Next <FaArrowRight />
-                  </button>
-                )}
+              <div className="mt-12 text-center">
+                <p className="text-gray-500 text-sm">
+                  Your responses are anonymous and will be used to determine
+                  your political archetype.
+                </p>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="max-w-3xl mx-auto">
+              <div className="bg-white rounded-lg shadow-lg p-8">
+                {/* Quiz header */}
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                  <h2 className="text-2xl font-bold mb-2 md:mb-0">
+                    {quizType === "short" ? "Short Quiz" : "Full Quiz"}
+                  </h2>
+                  <div className="text-sm text-gray-500">
+                    Question {currentQuestion + 1} of {questions.length}
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="mb-8">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span>Progress</span>
+                    <span>{Math.round(progressPercentage)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className={`h-2.5 rounded-full transition-all duration-300 ${
+                        quizType === "short"
+                          ? "bg-secondary-darkBlue"
+                          : "bg-primary-maroon"
+                      }`}
+                      style={{ width: `${progressPercentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                {/* Category badge */}
+                <div className="mb-4">
+                  <span className="inline-block bg-secondary-lightBlue text-white text-sm px-3 py-1 rounded-full">
+                    {questions[currentQuestion]?.category}
+                  </span>
+                </div>
+
+                {/* Question */}
+                <h2 className="text-2xl font-bold mb-8">
+                  {questions[currentQuestion]?.text}
+                </h2>
+
+                {/* Answer options */}
+                <div className="space-y-4">
+                  {[-2, -1, 0, 1, 2].map((value) => (
+                    <button
+                      key={value}
+                      className={`w-full text-left p-4 rounded-lg border transition-all duration-200 hover:border-primary-maroon ${
+                        answers[questions[currentQuestion]?.id] === value
+                          ? quizType === "short"
+                            ? "bg-secondary-darkBlue text-white border-secondary-darkBlue"
+                            : "bg-primary-maroon text-white border-primary-maroon"
+                          : "bg-white text-gray-700 border-gray-300"
+                      }`}
+                      onClick={() => handleAnswer(value)}
+                    >
+                      {value === -2 && "Strongly Disagree"}
+                      {value === -1 && "Disagree"}
+                      {value === 0 && "Neutral"}
+                      {value === 1 && "Agree"}
+                      {value === 2 && "Strongly Agree"}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Navigation buttons */}
+                <div className="flex justify-between mt-8">
+                  <button
+                    onClick={handlePrevious}
+                    disabled={currentQuestion === 0}
+                    className={`flex items-center gap-2 px-4 py-2 rounded ${
+                      currentQuestion === 0
+                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                        : quizType === "short"
+                        ? "bg-secondary-darkBlue text-white hover:bg-secondary-blue"
+                        : "bg-primary-maroon text-white hover:bg-primary-darkMaroon"
+                    }`}
+                  >
+                    <FaArrowLeft /> Previous
+                  </button>
+
+                  {currentQuestion === questions.length - 1 ? (
+                    <button
+                      onClick={handleSubmit}
+                      disabled={!answers[questions[currentQuestion]?.id]}
+                      className={`px-6 py-2 rounded flex items-center gap-2 ${
+                        !answers[questions[currentQuestion]?.id]
+                          ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                          : quizType === "short"
+                          ? "bg-secondary-darkBlue text-white hover:bg-secondary-blue"
+                          : "bg-primary-maroon text-white hover:bg-primary-darkMaroon"
+                      }`}
+                    >
+                      Submit
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleNext}
+                      disabled={!answers[questions[currentQuestion]?.id]}
+                      className={`flex items-center gap-2 px-4 py-2 rounded ${
+                        !answers[questions[currentQuestion]?.id]
+                          ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                          : quizType === "short"
+                          ? "bg-secondary-darkBlue text-white hover:bg-secondary-blue"
+                          : "bg-primary-maroon text-white hover:bg-primary-darkMaroon"
+                      }`}
+                    >
+                      Next <FaArrowRight />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </Layout>
