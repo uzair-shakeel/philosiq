@@ -29,7 +29,7 @@ const Navbar = ({ user }) => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Archetypes", path: "/archetypes" },
-    { name: "Quiz", path: "/quiz" },
+    // { name: "Quiz", path: "/quiz" },
     { name: "Contact Us", path: "/contact-us" },
   ];
 
