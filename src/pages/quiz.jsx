@@ -335,25 +335,27 @@ export default function QuizPage() {
                   {questions[currentQuestion]?.text}
                 </h2>
 
-                {/* Answer options */}
+                {/* Answer options - REVERSED ORDER */}
                 <div className="space-y-4">
-                  {[-2, -1, 0, 1, 2].map((value) => (
+                  {[2, 1, 0, -1, -2].map((value) => (
                     <button
                       key={value}
                       className={`w-full text-left p-4 rounded-lg border transition-all duration-200 hover:border-primary-maroon ${
                         answers[questions[currentQuestion]?.id] === value
-                          ? quizType === "short"
-                            ? "bg-secondary-darkBlue text-white border-secondary-darkBlue"
-                            : "bg-primary-maroon text-white border-primary-maroon"
+                          ? value > 0
+                            ? "bg-green-600 text-white border-green-600"
+                            : value < 0
+                            ? "bg-primary-maroon text-white border-primary-maroon"
+                            : "bg-gray-500 text-white border-gray-500"
                           : "bg-white text-gray-700 border-gray-300"
                       }`}
                       onClick={() => handleAnswer(value)}
                     >
-                      {value === -2 && "Strongly Disagree"}
-                      {value === -1 && "Disagree"}
-                      {value === 0 && "Neutral"}
-                      {value === 1 && "Agree"}
                       {value === 2 && "Strongly Agree"}
+                      {value === 1 && "Agree"}
+                      {value === 0 && "Neutral"}
+                      {value === -1 && "Disagree"}
+                      {value === -2 && "Strongly Disagree"}
                     </button>
                   ))}
                 </div>
