@@ -26,9 +26,8 @@ export default function Home() {
               Discover Your Political Identity
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-gray-200">
-              Take our comprehensive political survey to understand where you
-              stand on the political spectrum and discover your unique political
-              archetype.
+              Uncover the beliefs that shape your worldview with our in-depth
+              quiz and discover the unique archetype that defines you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -59,7 +58,8 @@ export default function Home() {
               Our Six Axes
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Our survey measures your political beliefs across these six fundamental dimensions
+              Our survey measures your political beliefs across these six
+              fundamental dimensions
             </p>
           </div>
 
@@ -70,7 +70,6 @@ export default function Home() {
               "Progress Vs. Tradition",
               "Secular Vs. Religious",
               "Military Vs. Pacifist",
-              "Globalism Vs. Nationalism",
             ].map((axis, index) => (
               <div
                 key={index}
@@ -79,9 +78,13 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary-maroon to-secondary-darkBlue flex items-center justify-center text-white font-bold text-xl mb-4">
                   {index + 1}
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-secondary-darkBlue">{axis}</h3>
+                <h3 className="text-xl font-bold mb-2 text-secondary-darkBlue">
+                  {axis}
+                </h3>
                 <p className="text-gray-600">
-                  Measures your stance on the spectrum between {axis.split(" Vs. ")[0].toLowerCase()} and {axis.split(" Vs. ")[1].toLowerCase()}
+                  Measures your stance on the spectrum between{" "}
+                  {axis.split(" Vs. ")[0].toLowerCase()} and{" "}
+                  {axis.split(" Vs. ")[1].toLowerCase()}
                 </p>
               </div>
             ))}

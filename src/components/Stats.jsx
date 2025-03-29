@@ -14,44 +14,42 @@ export default function Stats() {
       color: "from-primary-maroon to-primary-darkMaroon",
     },
     {
-      title: "100+",
-      description:
-        "Our quiz chooses from a pool of over 100 questions! Or you can take a full quiz for the most accurate results!",
-      buttonText: "Take the Quiz",
-      buttonLink: "/quiz",
-      icon: <FaQuestionCircle className="text-white text-4xl" />,
-      color: "from-secondary-darkBlue to-secondary-blue",
-    },
-    {
       title: "92%",
       description:
         "Test takers rated our test as accurate or very accurate! Have feedback? Click below to complete a contact form!",
       buttonText: "Contact Us",
       buttonLink: "/contact-us",
       icon: <FaChartLine className="text-white text-4xl" />,
-      color: "from-primary-lightMaroon to-primary-maroon",
+      color: "from-secondary-darkBlue to-secondary-blue",
     },
   ];
 
   return (
     <section className="section-padding bg-neutral-light">
       <div className="container-custom">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {statsData.map((stat, index) => (
             <div key={index} className="flex flex-col h-full">
-              <div className={`bg-gradient-to-r ${stat.color} rounded-t-lg p-6 flex items-center`}>
+              <div
+                className={`bg-gradient-to-r ${stat.color} rounded-t-lg p-6 flex items-center`}
+              >
                 <div className="bg-white/20 p-4 rounded-full mr-4">
                   {stat.icon}
                 </div>
                 <h2 className="text-4xl font-bold text-white">{stat.title}</h2>
               </div>
               <div className="bg-white rounded-b-lg p-6 shadow-md flex flex-col flex-grow">
-                <p className="text-gray-700 mb-6 flex-grow">{stat.description}</p>
-                <Link 
-                  href={stat.buttonLink} 
+                <p className="text-gray-700 mb-6 flex-grow">
+                  {stat.description}
+                </p>
+                <Link
+                  href={stat.buttonLink}
                   className={`self-start btn-primary ${
-                    index === 1 ? 'bg-secondary-darkBlue hover:bg-secondary-blue' : 
-                    index === 2 ? 'bg-primary-lightMaroon hover:bg-primary-maroon' : ''
+                    index === 1
+                      ? "bg-secondary-darkBlue hover:bg-secondary-blue"
+                      : index === 2
+                      ? "bg-primary-lightMaroon hover:bg-primary-maroon"
+                      : ""
                   }`}
                 >
                   {stat.buttonText}
@@ -63,4 +61,4 @@ export default function Stats() {
       </div>
     </section>
   );
-} 
+}

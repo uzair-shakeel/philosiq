@@ -13,6 +13,7 @@ export default function QuizPage() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [questions, setQuestions] = useState([]);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Sample questions - in a real app, these would come from an API
   const allQuestions = [
@@ -190,6 +191,17 @@ export default function QuizPage() {
       ...answers,
       [questions[currentQuestion]?.id]: value,
     });
+
+    // Only auto-advance if not on the last question
+    if (currentQuestion < questions.length - 1) {
+      setIsTransitioning(true);
+
+      // Wait for transition animation before changing question
+      setTimeout(() => {
+        setCurrentQuestion(currentQuestion + 1);
+        setIsTransitioning(false);
+      }, 400);
+    }
   };
 
   const handleNext = () => {
@@ -323,41 +335,47 @@ export default function QuizPage() {
                   </div>
                 </div>
 
-                {/* Category badge */}
-                <div className="mb-4">
-                  <span className="inline-block bg-secondary-lightBlue text-white text-sm px-3 py-1 rounded-full">
-                    {questions[currentQuestion]?.category}
-                  </span>
-                </div>
+                {/* Question with transition effect */}
+                <div
+                  className={`transition-opacity duration-300 ${
+                    isTransitioning ? "opacity-0" : "opacity-100"
+                  }`}
+                >
+                  {/* Question */}
+                  <h2 className="text-2xl font-bold mb-8">
+                    {questions[currentQuestion]?.text}
+                  </h2>
 
-                {/* Question */}
-                <h2 className="text-2xl font-bold mb-8">
-                  {questions[currentQuestion]?.text}
-                </h2>
-
-                {/* Answer options - REVERSED ORDER */}
-                <div className="space-y-4">
-                  {[2, 1, 0, -1, -2].map((value) => (
-                    <button
-                      key={value}
-                      className={`w-full text-left p-4 rounded-lg border transition-all duration-200 hover:border-primary-maroon ${
-                        answers[questions[currentQuestion]?.id] === value
-                          ? value > 0
-                            ? "bg-green-600 text-white border-green-600"
-                            : value < 0
-                            ? "bg-primary-maroon text-white border-primary-maroon"
-                            : "bg-gray-500 text-white border-gray-500"
-                          : "bg-white text-gray-700 border-gray-300"
-                      }`}
-                      onClick={() => handleAnswer(value)}
-                    >
-                      {value === 2 && "Strongly Agree"}
-                      {value === 1 && "Agree"}
-                      {value === 0 && "Neutral"}
-                      {value === -1 && "Disagree"}
-                      {value === -2 && "Strongly Disagree"}
-                    </button>
-                  ))}
+                  {/* Answer options - REVERSED ORDER */}
+                  <div className="space-y-4">
+                    {[2, 1, 0, -1, -2].map((value) => (
+                      <button
+                        key={value}
+                        className={`w-full text-left p-4 rounded-lg border transition-all duration-200 
+                          ${
+                            answers[questions[currentQuestion]?.id] === value
+                              ? value > 0
+                                ? "bg-green-600 text-white border-green-600"
+                                : value < 0
+                                ? "bg-primary-maroon text-white border-primary-maroon"
+                                : "bg-gray-500 text-white border-gray-500"
+                              : "bg-white text-gray-700 border-gray-300 " +
+                                (value > 0
+                                  ? "hover:bg-green-50 hover:border-green-300"
+                                  : value < 0
+                                  ? "hover:bg-red-50 hover:border-primary-maroon"
+                                  : "hover:bg-gray-100")
+                          }`}
+                        onClick={() => handleAnswer(value)}
+                      >
+                        {value === 2 && "Strongly Agree"}
+                        {value === 1 && "Agree"}
+                        {value === 0 && "Neutral"}
+                        {value === -1 && "Disagree"}
+                        {value === -2 && "Strongly Disagree"}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Navigation buttons */}
@@ -379,9 +397,11 @@ export default function QuizPage() {
                   {currentQuestion === questions.length - 1 ? (
                     <button
                       onClick={handleSubmit}
-                      disabled={!answers[questions[currentQuestion]?.id]}
+                      disabled={
+                        answers[questions[currentQuestion]?.id] === undefined
+                      }
                       className={`px-6 py-2 rounded flex items-center gap-2 ${
-                        !answers[questions[currentQuestion]?.id]
+                        answers[questions[currentQuestion]?.id] === undefined
                           ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                           : quizType === "short"
                           ? "bg-secondary-darkBlue text-white hover:bg-secondary-blue"
@@ -393,9 +413,11 @@ export default function QuizPage() {
                   ) : (
                     <button
                       onClick={handleNext}
-                      disabled={!answers[questions[currentQuestion]?.id]}
+                      disabled={
+                        answers[questions[currentQuestion]?.id] === undefined
+                      }
                       className={`flex items-center gap-2 px-4 py-2 rounded ${
-                        !answers[questions[currentQuestion]?.id]
+                        answers[questions[currentQuestion]?.id] === undefined
                           ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                           : quizType === "short"
                           ? "bg-secondary-darkBlue text-white hover:bg-secondary-blue"
