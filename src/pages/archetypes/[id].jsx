@@ -69,11 +69,6 @@ export default function ArchetypeDetail() {
           description: "Strongly secular worldview",
         },
         {
-          axis: "Military vs. Pacifist",
-          position: 25,
-          description: "Generally pacifist with limited support for military",
-        },
-        {
           axis: "Globalism vs. Nationalism",
           position: 90,
           description: "Strongly globalist perspective",
@@ -424,17 +419,84 @@ export default function ArchetypeDetail() {
                 <h2 className="text-2xl font-bold mb-6 text-secondary-darkBlue flex items-center">
                   <FaUsers className="mr-3 text-primary-maroon" /> Famous People
                 </h2>
-                <div className="space-y-4">
+                <div className="space-y-8">
                   {archetype.famousPeople.map((person, index) => (
                     <div
                       key={index}
-                      className="border-b border-gray-200 last:border-b-0 pb-4 last:pb-0"
+                      className="flex flex-col items-center text-center"
                     >
+                      <div className="w-32 h-32 mb-4 overflow-hidden flex items-center justify-center">
+                        {person.image ? (
+                          <img 
+                            src={person.image} 
+                            alt={person.name}
+                            className="w-full h-auto" 
+                          />
+                        ) : (
+                          <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-3xl font-bold text-gray-400">
+                              {person.name.charAt(0)}
+                            </span>
+                          </div>
+                        )}
+                      </div>
                       <h3 className="font-bold text-lg">{person.name}</h3>
-                      <p className="text-gray-600">{person.role}</p>
+                      <p className="text-gray-600 text-sm">{person.role}</p>
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Axis Breakdown Section */}
+          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 className="text-2xl font-bold mb-6 text-center">Axis Breakdown</h2>
+            
+            <div className="space-y-8">
+              {/* Markets vs. Equality */}
+              <div>
+                <h3 className="text-xl font-bold mb-2 text-green-600">Markets: The Power of Individual Enterprise and Competition</h3>
+                <p className="text-gray-700">
+                  {archetype.axisDescriptions?.markets || 
+                    "Success is not handed out; it is earned. High achievers understand that individual effort, innovation, and competition are the engines of economic growth and personal success. They believe in a merit-based system where those who provide the most value rise to the top. Rather than waiting for permission or relying on external help, they take control of their own destiny, leveraging their skills, knowledge, and work ethic to create opportunities."}
+                </p>
+              </div>
+              
+              {/* Democracy vs. Authority */}
+              <div>
+                <h3 className="text-xl font-bold mb-2 text-blue-600">Democracy: Freedom as the Cornerstone of Opportunity</h3>
+                <p className="text-gray-700">
+                  {archetype.axisDescriptions?.democracy || 
+                    "A thriving society—and by extension, a thriving business environment—depends on the ability of individuals to make choices, voice opinions, and pursue their ambitions without unnecessary interference. Those who succeed recognize that freedom, accountability, and fair competition foster innovation and long-term prosperity. They value a system where effort and ability determine outcomes, not arbitrary barriers."}
+                </p>
+              </div>
+              
+              {/* Secular vs. Religious */}
+              <div>
+                <h3 className="text-xl font-bold mb-2 text-yellow-600">Secular Rationality: Logic and Inclusivity Drive Growth</h3>
+                <p className="text-gray-700">
+                  {archetype.axisDescriptions?.secular || 
+                    "Decisions must be based on rational analysis, not dogma. The most effective leaders and entrepreneurs embrace evidence-based thinking, ensuring that policies, strategies, and business decisions are guided by logic, inclusivity, and real-world data. They understand that success requires adaptability and a willingness to engage with diverse perspectives to solve complex problems."}
+                </p>
+              </div>
+              
+              {/* Nationalism vs. Globalism */}
+              <div>
+                <h3 className="text-xl font-bold mb-2 text-red-600">Nationalism: Strength Through Self-Reliance</h3>
+                <p className="text-gray-700">
+                  {archetype.axisDescriptions?.nationalism || 
+                    "Independence breeds resilience. Whether at the level of an individual, a business, or a nation, true power comes from the ability to stand on one's own, rather than depending on external forces. The most successful people and organizations take ownership of their outcomes, cultivate internal strength, and focus on sustainable long-term prosperity. They build systems, businesses, and skill sets that allow them to thrive, regardless of external challenges."}
+                </p>
+              </div>
+              
+              {/* Progress vs. Tradition */}
+              <div>
+                <h3 className="text-xl font-bold mb-2 text-purple-600">Progress: The Relentless Drive for Innovation</h3>
+                <p className="text-gray-700">
+                  {archetype.axisDescriptions?.progress || 
+                    "Success is built on the ability to adapt, evolve, and push forward. High achievers recognize that progress is not just about change for its own sake—it's about finding better, faster, and smarter ways to solve problems. They embrace technology, challenge outdated norms, and seek continuous improvement in all areas of life. Rather than being confined by the past, they forge new paths, understanding that stagnation is the enemy of success. Those who thrive in competitive markets and dynamic industries are the ones who relentlessly pursue growth, knowing that the future belongs to those willing to build it."}
+                </p>
               </div>
             </div>
           </div>
