@@ -17,14 +17,15 @@ export default function ResultsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [emailSent, setEmailSent] = useState(false);
   const [userEmail, setUserEmail] = useState("");
-  
+
   // In a real app, this would come from the quiz results or API
   const results = {
     archetype: {
-      id: "free-market-patriot",
-      name: "Free Market Patriot",
-      description: "You believe in economic freedom within a framework of national identity and democratic values.",
-      traits: ["Markets", "Authority", "Progress", "Secular", "Military", "Globalism"],
+      id: "patriot",
+      name: "The Patriot",
+      description:
+        "You believe in economic freedom within a framework of national identity and democratic values.",
+      traits: ["Markets", "Democracy", "Conservative", "Nationalism"],
       color: "from-red-500 to-blue-400",
     },
     axisResults: [
@@ -32,51 +33,59 @@ export default function ResultsPage() {
         name: "Equality vs. Markets",
         score: 75,
         userPosition: "Markets",
-        description: "You strongly favor market-based solutions and economic freedom over centralized economic planning. You believe that free markets, with limited government intervention, lead to greater prosperity and innovation."
+        description:
+          "You strongly favor market-based solutions and economic freedom over centralized economic planning. You believe that free markets, with limited government intervention, lead to greater prosperity and innovation.",
       },
       {
         name: "Democracy vs. Authority",
         score: 60,
-        userPosition: "Authority",
-        description: "You lean toward strong leadership and efficient governance, while still valuing democratic processes. You believe that decisive leadership is often necessary to implement effective policies."
+        userPosition: "Democracy",
+        description:
+          "You lean toward democratic processes and individual liberty, while still valuing effective governance. You believe that citizens should have a strong voice in political decisions.",
       },
       {
         name: "Progress vs. Tradition",
-        score: 65,
-        userPosition: "Progress",
-        description: "You favor forward-thinking approaches and embrace change, particularly in economic and technological domains. You believe innovation drives society forward."
+        score: 35,
+        userPosition: "Tradition",
+        description:
+          "You favor traditional approaches and value stability, particularly in social and cultural domains. You believe established institutions and values provide important foundations for society.",
       },
       {
         name: "Secular vs. Religious",
-        score: 70,
+        score: 55,
         userPosition: "Secular",
-        description: "You prefer policy decisions based on secular reasoning rather than religious principles. You believe in the separation of church and state."
+        description:
+          "You have a balanced view on the role of religion in society, though slightly favoring secular reasoning in policy decisions. You respect religious values while supporting separation of church and state.",
       },
       {
         name: "Military vs. Pacifist",
         score: 80,
         userPosition: "Military",
-        description: "You strongly support military strength and preparedness as essential for national security. You believe a strong defense is necessary in today's world."
+        description:
+          "You strongly support military strength and preparedness as essential for national security. You believe a strong defense is necessary in today's world.",
       },
       {
         name: "Globalism vs. Nationalism",
-        score: 55,
-        userPosition: "Globalism",
-        description: "You slightly favor international cooperation and global engagement, while still valuing national sovereignty. You believe in strategic global participation that benefits national interests."
-      }
+        score: 25,
+        userPosition: "Nationalism",
+        description:
+          "You favor national sovereignty and prioritizing domestic interests over international obligations. You believe in protecting national identity and independence.",
+      },
     ],
     secondaryArchetypes: [
       {
-        name: "Libertarian Cosmopolitan",
+        name: "The Maverick",
         match: "85% match",
-        traits: ["Markets", "Democracy", "Secular", "Globalism"],
+        traits: ["Markets", "Democracy", "Secular", "Nationalism"],
+        slug: "maverick",
       },
       {
-        name: "Nationalist Industrialist",
+        name: "The Steward",
         match: "78% match",
-        traits: ["Markets", "Authority", "Secular", "Nationalism"],
-      }
-    ]
+        traits: ["Markets", "Democracy", "Conservative", "Nationalism"],
+        slug: "steward",
+      },
+    ],
   };
 
   useEffect(() => {
@@ -84,7 +93,7 @@ export default function ResultsPage() {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1500);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -92,7 +101,7 @@ export default function ResultsPage() {
     e.preventDefault();
     // In a real app, this would send an API request to email the results
     console.log(`Sending results to ${userEmail}`);
-    
+
     // Simulate email sending
     setTimeout(() => {
       setEmailSent(true);
@@ -111,8 +120,12 @@ export default function ResultsPage() {
         <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
           <div className="text-center">
             <div className="w-16 h-16 border-4 border-primary-maroon border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <h2 className="text-2xl font-bold mb-2">Analyzing Your Responses</h2>
-            <p className="text-gray-600">Please wait while we calculate your political archetype...</p>
+            <h2 className="text-2xl font-bold mb-2">
+              Analyzing Your Responses
+            </h2>
+            <p className="text-gray-600">
+              Please wait while we calculate your political archetype...
+            </p>
           </div>
         </div>
       </Layout>
@@ -127,7 +140,7 @@ export default function ResultsPage() {
           <div className="absolute top-28 right-8 opacity-70">
             <img src="/whitelogo.png" alt="PhilosiQ" className="h-10 w-auto" />
           </div>
-          
+
           {/* Main Results Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-2">Your Quiz Results</h1>
@@ -138,56 +151,76 @@ export default function ResultsPage() {
 
           {/* Primary Archetype Card */}
           <div className="mb-16">
-            <div className={`bg-gradient-to-r ${results.archetype.color} rounded-lg shadow-xl overflow-hidden`}>
+            <div
+              className={`bg-gradient-to-r ${results.archetype.color} rounded-lg shadow-xl overflow-hidden`}
+            >
               <div className="p-8 text-white text-center">
-                <h2 className="text-5xl font-bold mb-4">{results.archetype.name}</h2>
+                <h2 className="text-5xl font-bold mb-4">
+                  {results.archetype.name}
+                </h2>
                 <div className="flex flex-wrap justify-center gap-3 mb-6">
                   {results.archetype.traits.map((trait, index) => (
-                    <span key={index} className="bg-white/20 px-4 py-1 rounded-full text-sm">
+                    <span
+                      key={index}
+                      className="bg-white/20 px-4 py-1 rounded-full text-sm"
+                    >
                       {trait}
                     </span>
                   ))}
                 </div>
-                <p className="text-xl max-w-3xl mx-auto">{results.archetype.description}</p>
+                <p className="text-xl max-w-3xl mx-auto">
+                  {results.archetype.description}
+                </p>
               </div>
             </div>
-            
+
             <div className="bg-white rounded-b-lg shadow-lg p-6 text-center">
-              <Link 
+              <Link
                 href={`/archetypes/${results.archetype.id}`}
                 className="btn-primary inline-flex items-center"
               >
-                Learn More About Your Archetype <FaArrowRight className="ml-2" />
+                Learn More About Your Archetype{" "}
+                <FaArrowRight className="ml-2" />
               </Link>
             </div>
           </div>
 
           {/* Secondary Archetypes */}
           <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-6 text-center">Your Secondary Archetypes</h2>
+            <h2 className="text-3xl font-bold mb-6 text-center">
+              Your Secondary Archetypes
+            </h2>
             <p className="text-center text-gray-600 mb-8">
               You also show strong alignment with these political archetypes
             </p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {results.secondaryArchetypes.map((archetype, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div
+                  key={index}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden"
+                >
                   <div className="p-6">
                     <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-2xl font-bold text-secondary-darkBlue">{archetype.name}</h3>
+                      <h3 className="text-2xl font-bold text-secondary-darkBlue">
+                        {archetype.name}
+                      </h3>
                       <span className="bg-secondary-lightBlue text-white px-3 py-1 rounded-full text-sm">
                         {archetype.match}
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {archetype.traits.map((trait, i) => (
-                        <span key={i} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">
+                        <span
+                          key={i}
+                          className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700"
+                        >
                           {trait}
                         </span>
                       ))}
                     </div>
-                    <Link 
-                      href={`/archetypes/${archetype.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    <Link
+                      href={`/archetypes/${archetype.slug}`}
                       className="text-primary-maroon hover:underline inline-flex items-center text-sm font-medium"
                     >
                       View Details <FaArrowRight className="ml-1 text-xs" />
@@ -200,48 +233,64 @@ export default function ResultsPage() {
 
           {/* Axis Breakdown */}
           <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-6 text-center">Your Political Axis Breakdown</h2>
+            <h2 className="text-3xl font-bold mb-6 text-center">
+              Your Political Axis Breakdown
+            </h2>
             <p className="text-center text-gray-600 mb-8">
               See where you stand on each of the six political dimensions
             </p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {results.axisResults.map((axis, index) => (
                 <div key={index} className="bg-white rounded-lg shadow-lg p-6">
                   <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-secondary-darkBlue">{axis.name}</h3>
-                    <span className={`px-3 py-1 rounded-full text-white text-sm ${
-                      axis.name.includes("Equality") ? "bg-blue-500" :
-                      axis.name.includes("Democracy") ? "bg-green-500" :
-                      axis.name.includes("Progress") ? "bg-purple-500" :
-                      axis.name.includes("Secular") ? "bg-yellow-500" :
-                      axis.name.includes("Military") ? "bg-red-500" :
-                      "bg-indigo-500"
-                    }`}>
+                    <h3 className="text-xl font-bold text-secondary-darkBlue">
+                      {axis.name}
+                    </h3>
+                    <span
+                      className={`px-3 py-1 rounded-full text-white text-sm ${
+                        axis.name.includes("Equality")
+                          ? "bg-blue-500"
+                          : axis.name.includes("Democracy")
+                          ? "bg-green-500"
+                          : axis.name.includes("Progress")
+                          ? "bg-purple-500"
+                          : axis.name.includes("Secular")
+                          ? "bg-yellow-500"
+                          : axis.name.includes("Military")
+                          ? "bg-red-500"
+                          : "bg-indigo-500"
+                      }`}
+                    >
                       {axis.userPosition}
                     </span>
                   </div>
-                  
+
                   <div className="mb-4">
                     <div className="flex justify-between text-sm mb-1">
                       <span>{axis.name.split(" vs. ")[1]}</span>
                       <span>{axis.name.split(" vs. ")[0]}</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2.5">
-                      <div 
+                      <div
                         className={`h-2.5 rounded-full ${
-                          axis.name.includes("Equality") ? "bg-blue-500" :
-                          axis.name.includes("Democracy") ? "bg-green-500" :
-                          axis.name.includes("Progress") ? "bg-purple-500" :
-                          axis.name.includes("Secular") ? "bg-yellow-500" :
-                          axis.name.includes("Military") ? "bg-red-500" :
-                          "bg-indigo-500"
+                          axis.name.includes("Equality")
+                            ? "bg-blue-500"
+                            : axis.name.includes("Democracy")
+                            ? "bg-green-500"
+                            : axis.name.includes("Progress")
+                            ? "bg-purple-500"
+                            : axis.name.includes("Secular")
+                            ? "bg-yellow-500"
+                            : axis.name.includes("Military")
+                            ? "bg-red-500"
+                            : "bg-indigo-500"
                         }`}
                         style={{ width: `${axis.score}%` }}
                       ></div>
                     </div>
                   </div>
-                  
+
                   <p className="text-gray-700 text-sm">{axis.description}</p>
                 </div>
               ))}
@@ -250,19 +299,25 @@ export default function ResultsPage() {
 
           {/* Share Results */}
           <div className="bg-white rounded-lg shadow-lg p-8 mb-16">
-            <h2 className="text-2xl font-bold mb-6 text-center">Share Your Results</h2>
-            
+            <h2 className="text-2xl font-bold mb-6 text-center">
+              Share Your Results
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Email Results */}
               <div className="border border-gray-200 rounded-lg p-6">
                 <h3 className="text-xl font-bold mb-4 flex items-center">
-                  <FaEnvelope className="mr-2 text-primary-maroon" /> Email Your Results
+                  <FaEnvelope className="mr-2 text-primary-maroon" /> Email Your
+                  Results
                 </h3>
-                
+
                 {!emailSent ? (
                   <form onSubmit={handleEmailSubmit} className="space-y-4">
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
                         Email Address
                       </label>
                       <input
@@ -275,10 +330,7 @@ export default function ResultsPage() {
                         required
                       />
                     </div>
-                    <button
-                      type="submit"
-                      className="w-full btn-primary py-2"
-                    >
+                    <button type="submit" className="w-full btn-primary py-2">
                       Send Results
                     </button>
                   </form>
@@ -296,14 +348,16 @@ export default function ResultsPage() {
                   </div>
                 )}
               </div>
-              
+
               {/* Download PDF */}
               <div className="border border-gray-200 rounded-lg p-6">
                 <h3 className="text-xl font-bold mb-4 flex items-center">
-                  <FaDownload className="mr-2 text-primary-maroon" /> Download Your Results
+                  <FaDownload className="mr-2 text-primary-maroon" /> Download
+                  Your Results
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Get a PDF copy of your results to save or print for future reference.
+                  Get a PDF copy of your results to save or print for future
+                  reference.
                 </p>
                 <button
                   onClick={handleDownloadPDF}
@@ -311,9 +365,11 @@ export default function ResultsPage() {
                 >
                   <FaDownload className="mr-2" /> Download PDF
                 </button>
-                
+
                 <div className="mt-6">
-                  <p className="text-sm text-gray-500 mb-3">Share on social media:</p>
+                  <p className="text-sm text-gray-500 mb-3">
+                    Share on social media:
+                  </p>
                   <div className="flex space-x-4">
                     <button className="text-blue-600 hover:text-blue-800">
                       <FaFacebook size={24} />
@@ -329,7 +385,7 @@ export default function ResultsPage() {
               </div>
             </div>
           </div>
-          
+
           {/* Take Another Quiz */}
           <div className="text-center">
             <Link href="/quiz" className="btn-outline inline-block">
@@ -340,4 +396,4 @@ export default function ResultsPage() {
       </div>
     </Layout>
   );
-} 
+}

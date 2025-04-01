@@ -14,20 +14,29 @@ export default function Stats() {
       color: "from-primary-maroon to-primary-darkMaroon",
     },
     {
+      title: "100+",
+      description:
+        "Our quiz chooses from a pool of over 100 questions! Or you can take a full quiz for the most accurate results!",
+      buttonText: "Take the Quiz",
+      buttonLink: "/quiz",
+      icon: <FaQuestionCircle className="text-white text-4xl" />,
+      color: "from-secondary-darkBlue to-secondary-blue",
+    },
+    {
       title: "92%",
       description:
         "Test takers rated our test as accurate or very accurate! Have feedback? Click below to complete a contact form!",
       buttonText: "Contact Us",
       buttonLink: "/contact-us",
       icon: <FaChartLine className="text-white text-4xl" />,
-      color: "from-secondary-darkBlue to-secondary-blue",
+      color: "from-primary-lightMaroon to-primary-maroon",
     },
   ];
 
   return (
     <section className="section-padding bg-neutral-light">
       <div className="container-custom">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {statsData.map((stat, index) => (
             <div key={index} className="flex flex-col h-full">
               <div

@@ -14,6 +14,7 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState({});
   const [questions, setQuestions] = useState([]);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showingAxes, setShowingAxes] = useState(false);
 
   // Sample questions - in a real app, these would come from an API
   const allQuestions = [
@@ -225,6 +226,10 @@ export default function QuizPage() {
     );
   };
 
+  const toggleAxesDisplay = () => {
+    setShowingAxes(!showingAxes);
+  };
+
   const progressPercentage = ((currentQuestion + 1) / questions.length) * 100;
 
   return (
@@ -295,6 +300,207 @@ export default function QuizPage() {
                     </button>
                   </div>
                 </div>
+              </div>
+
+              {/* Political Axes Information Section */}
+              <div className="mt-12 bg-white rounded-lg shadow-lg p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold">
+                    Political Axes Explained
+                  </h2>
+                  <button
+                    onClick={toggleAxesDisplay}
+                    className="px-4 py-2 bg-secondary-darkBlue hover:bg-secondary-blue text-white rounded transition-colors duration-300"
+                  >
+                    {showingAxes ? "Hide Details" : "Show Details"}
+                  </button>
+                </div>
+
+                <p className="text-gray-600 mb-4">
+                  This quiz measures your political position across five
+                  fundamental axes. Each represents a key dimension of political
+                  thought.
+                </p>
+
+                {showingAxes && (
+                  <div className="space-y-6 mt-6">
+                    {/* Economic Axis */}
+                    <div className="border-b pb-6">
+                      <h3 className="text-xl font-semibold mb-2 text-primary-maroon">
+                        Economic Equity vs. Free Market
+                      </h3>
+                      <p className="text-gray-700">
+                        The Economic Equity vs. Free Market axis represents the
+                        fundamental debate between government intervention to
+                        reduce economic disparities and the belief that free
+                        markets generate the most prosperity. On one end, the
+                        Economic Equity perspective argues that systemic
+                        inequalities require state intervention, such as
+                        progressive taxation, social welfare programs, labor
+                        protections, and public funding of essential services
+                        like education and healthcare. Supporters of this view
+                        believe that economic systems should prioritize reducing
+                        wealth concentration and ensuring that all individuals,
+                        regardless of background, have equal opportunities. On
+                        the other end, the Free Market perspective champions
+                        minimal government interference, arguing that
+                        capitalism, entrepreneurship, and competition naturally
+                        drive innovation and economic growth. Advocates believe
+                        that market forces, rather than state control, should
+                        dictate wages, industry regulations, and social
+                        policies, as excessive intervention can stifle
+                        productivity and individual ambition. This axis
+                        ultimately reflects a long-standing ideological divide:
+                        Should the government play an active role in
+                        redistributing wealth and regulating markets, or should
+                        individuals and businesses be left to operate with
+                        minimal restrictions, even if it results in greater
+                        economic inequality?
+                      </p>
+                    </div>
+
+                    {/* Liberty Axis */}
+                    <div className="border-b pb-6">
+                      <h3 className="text-xl font-semibold mb-2 text-secondary-darkBlue">
+                        Libertarian vs. Authoritarian
+                      </h3>
+                      <p className="text-gray-700">
+                        The Libertarian vs. Authoritarian axis centers around
+                        the balance between personal freedoms and government
+                        authority. On the Libertarian end, there is a strong
+                        emphasis on individual rights, with the belief that
+                        government should interfere as little as possible in the
+                        lives of its citizens. This view advocates for the
+                        protection of civil liberties such as freedom of speech,
+                        the right to protest, and the ability to make personal
+                        choices, such as the legalization of recreational drugs.
+                        Libertarians argue that citizens should be free to
+                        express dissent and engage in activities that do not
+                        harm others, even if these actions disrupt social order.
+                        In contrast, the Authoritarian perspective supports a
+                        strong, centralized government that prioritizes national
+                        security, social order, and political stability.
+                        Authoritarians argue that government surveillance,
+                        censorship, and even the suspension of civil liberties
+                        in times of crisis are necessary to protect the public
+                        and maintain control. They support a more powerful state
+                        with the authority to regulate and oversee various
+                        aspects of life, including education, media, and
+                        national culture, to ensure social cohesion and unity.
+                        This axis raises critical questions about the role of
+                        government: Should personal freedoms be protected above
+                        all else, or should the government be granted broader
+                        powers to safeguard security, stability, and national
+                        interests, even at the expense of individual rights?
+                      </p>
+                    </div>
+
+                    {/* Social Axis */}
+                    <div className="border-b pb-6">
+                      <h3 className="text-xl font-semibold mb-2 text-primary-maroon">
+                        Progressive vs. Conservative
+                      </h3>
+                      <p className="text-gray-700">
+                        The Progressive vs. Conservative axis represents the
+                        ideological divide between embracing societal change and
+                        preserving long-standing traditions. On one end, the
+                        Progressive perspective advocates for rapid social
+                        evolution, embracing cultural shifts, technological
+                        advancements, and modern values, even if they challenge
+                        established norms. Progressives prioritize inclusivity,
+                        adaptation, and innovation, believing that society
+                        should continuously evolve to address new challenges and
+                        reflect contemporary moral, economic, and social
+                        realities. They argue that education, government
+                        policies, and social structures should be updated to
+                        promote equality, environmental sustainability, and
+                        cultural diversity. On the other end, the Conservative
+                        perspective emphasizes the importance of stability,
+                        tradition, and continuity. Conservatives believe that
+                        preserving cultural heritage, traditional family
+                        structures, and moral values is essential for
+                        maintaining social order and national identity. They
+                        argue that rapid change can lead to instability, and
+                        that customs, religious principles, and historical
+                        lessons provide a strong foundation for a functioning
+                        society. This axis ultimately reflects a key question:
+                        Should society prioritize innovation, inclusivity, and
+                        transformation, or should it focus on maintaining
+                        established traditions and values as the cornerstone of
+                        stability?
+                      </p>
+                    </div>
+
+                    {/* Religion Axis */}
+                    <div className="border-b pb-6">
+                      <h3 className="text-xl font-semibold mb-2 text-secondary-darkBlue">
+                        Secular vs. Religious
+                      </h3>
+                      <p className="text-gray-700">
+                        The Secular vs. Religious axis explores the role of
+                        religion in governance, society, and morality. On one
+                        end, the Secular perspective argues that government and
+                        public institutions should remain entirely separate from
+                        religious influence, ensuring that laws and policies are
+                        based on reason, science, and universal human rights
+                        rather than religious doctrine. Secularists believe that
+                        morality can be derived from humanistic principles, that
+                        public funding should not support religious
+                        organizations, and that no religion should have a
+                        privileged role in shaping public policy. They also
+                        advocate for religious neutrality in schools and
+                        government spaces to maintain inclusivity and fairness.
+                        On the other end, the Religious perspective holds that
+                        religious values provide a necessary moral foundation
+                        for society and should play a guiding role in
+                        governance, education, and public life. Supporters of
+                        this view argue that religious institutions should be
+                        protected from laws that contradict their beliefs, that
+                        faith-based teachings instill essential ethical values,
+                        and that national identity is often rooted in religious
+                        traditions. This axis ultimately reflects a fundamental
+                        question: Should society be governed by secular
+                        principles that prioritize neutrality and reason, or
+                        should religious traditions and moral teachings be
+                        central to shaping laws, policies, and cultural
+                        identity?
+                      </p>
+                    </div>
+
+                    {/* International Axis */}
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2 text-primary-maroon">
+                        Globalism vs. Nationalism
+                      </h3>
+                      <p className="text-gray-700">
+                        The Globalism vs. Nationalism axis examines the balance
+                        between prioritizing international cooperation and
+                        maintaining strong national sovereignty. On one end, the
+                        Globalist perspective emphasizes international
+                        collaboration, open borders, and cultural exchange.
+                        Globalists argue that solving issues like climate
+                        change, economic stability, and security requires
+                        cooperation with other nations, even if it means
+                        compromising some national policies. They support free
+                        trade, foreign aid, and diplomatic efforts over military
+                        intervention, believing that global interconnectedness
+                        leads to prosperity and peace. On the other end, the
+                        Nationalist perspective prioritizes national
+                        sovereignty, self-sufficiency, and cultural
+                        preservation. Nationalists argue that strong borders,
+                        military strength, and economic independence are
+                        essential for security and prosperity. They believe that
+                        a nation should focus on its own citizens first, even if
+                        it means limiting international agreements or foreign
+                        involvement. This axis ultimately reflects the debate
+                        between global engagement and national independence:
+                        Should a country integrate with the world to tackle
+                        global challenges, or should it focus on protecting its
+                        identity, security, and interests above all else?
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="mt-12 text-center">
