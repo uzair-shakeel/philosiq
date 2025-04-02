@@ -14,9 +14,8 @@ export default function ArchetypeDetail() {
   const router = useRouter();
   const { id } = router.query;
 
-  // This would come from an API in a real application
   const archetypes = {
-    "progressive-humanitarian": {
+    utopian: {
       id: "progressive-humanitarian",
       name: "The Progressive Humanitarian",
       traits: ["Equity", "Democracy", "Secular", "Globalism"],
@@ -76,198 +75,10 @@ export default function ArchetypeDetail() {
       ],
       color: "from-blue-600 to-green-500",
     },
-    "conservative-capitalist": {
-      id: "conservative-capitalist",
-      name: "The Conservative Capitalist",
-      traits: ["Markets", "Democracy", "Religious", "Nationalism"],
-      description:
-        "Conservative Capitalists champion free markets, traditional values, and national identity. They believe in democratic processes guided by religious principles and prioritize economic freedom.",
-      introduction:
-        "Conservative Capitalists believe in the power of free markets, individual liberty, and traditional values to create prosperity and maintain social order. They support democratic institutions while emphasizing the importance of religious and cultural heritage in shaping policy. Their worldview balances economic freedom with a commitment to national sovereignty and traditional moral frameworks.",
-      strengths: [
-        "Strong support for entrepreneurship and economic growth",
-        "Commitment to individual liberty and personal responsibility",
-        "Respect for traditions and cultural continuity",
-        "Practical approach to policy implementation",
-        "Emphasis on family and community institutions",
-      ],
-      weaknesses: [
-        "May underestimate systemic barriers to economic opportunity",
-        "Can be resistant to necessary social changes",
-        "Sometimes prioritize national interests at the expense of global cooperation",
-        "Risk of allowing religious views to limit personal freedoms",
-        "May overlook environmental concerns in favor of economic development",
-      ],
-      famousPeople: [
-        { name: "Ronald Reagan", role: "Former U.S. President" },
-        { name: "Margaret Thatcher", role: "Former UK Prime Minister" },
-        { name: "Mitt Romney", role: "U.S. Senator" },
-        { name: "Nikki Haley", role: "Former UN Ambassador" },
-      ],
-      axisPositions: [
-        {
-          axis: "Equality vs. Markets",
-          position: 25,
-          description: "Strongly favors market-based solutions",
-        },
-        {
-          axis: "Democracy vs. Authority",
-          position: 65,
-          description: "Supports democratic processes with strong leadership",
-        },
-        {
-          axis: "Progress vs. Tradition",
-          position: 30,
-          description: "Leans toward traditional values",
-        },
-        {
-          axis: "Secular vs. Religious",
-          position: 25,
-          description: "Favors religious principles in governance",
-        },
-        {
-          axis: "Military vs. Pacifist",
-          position: 70,
-          description: "Supports strong military capabilities",
-        },
-        {
-          axis: "Globalism vs. Nationalism",
-          position: 25,
-          description: "Prioritizes national interests",
-        },
-      ],
-      color: "from-red-600 to-blue-500",
-    },
-    "nationalist-industrialist": {
-      id: "nationalist-industrialist",
-      name: "The Nationalist Industrialist",
-      traits: ["Markets", "Authority", "Secular", "Nationalism"],
-      description:
-        "Nationalist Industrialists prioritize economic development through strong leadership and national focus. They favor market solutions with strategic government intervention to advance national interests.",
-      introduction:
-        "Nationalist Industrialists believe in building national strength through economic development and strategic leadership. They support market-based solutions but are willing to use government authority to protect and advance national interests. Their worldview combines pragmatic economic policies with a strong emphasis on national sovereignty, security, and industrial capacity.",
-      strengths: [
-        "Practical focus on economic development and job creation",
-        "Strategic approach to protecting national industries",
-        "Ability to mobilize resources for national priorities",
-        "Decisive leadership during crises",
-        "Balance of market principles with national interests",
-      ],
-      weaknesses: [
-        "Risk of authoritarian tendencies in governance",
-        "May sacrifice individual liberties for national goals",
-        "Can create international tensions through protectionist policies",
-        "Sometimes overlooks environmental and social concerns",
-        "Tendency toward centralized decision-making",
-      ],
-      famousPeople: [
-        { name: "Park Chung-hee", role: "Former President of South Korea" },
-        { name: "Lee Kuan Yew", role: "Former Prime Minister of Singapore" },
-        { name: "Narendra Modi", role: "Prime Minister of India" },
-        { name: "Shinzo Abe", role: "Former Prime Minister of Japan" },
-      ],
-      axisPositions: [
-        {
-          axis: "Equality vs. Markets",
-          position: 30,
-          description: "Favors markets with strategic intervention",
-        },
-        {
-          axis: "Democracy vs. Authority",
-          position: 25,
-          description: "Leans toward strong authority",
-        },
-        {
-          axis: "Progress vs. Tradition",
-          position: 50,
-          description: "Balanced between progress and tradition",
-        },
-        {
-          axis: "Secular vs. Religious",
-          position: 70,
-          description: "Generally secular approach",
-        },
-        {
-          axis: "Military vs. Pacifist",
-          position: 80,
-          description: "Strong support for military capabilities",
-        },
-        {
-          axis: "Globalism vs. Nationalism",
-          position: 15,
-          description: "Strongly nationalist perspective",
-        },
-      ],
-      color: "from-yellow-500 to-red-600",
-    },
-    "faithful-global-reformer": {
-      id: "faithful-global-reformer",
-      name: "The Faithful Global Reformer",
-      traits: ["Equity", "Democracy", "Religious", "Globalism"],
-      description:
-        "Faithful Global Reformers combine religious principles with a commitment to global cooperation and social equity. They believe democratic processes should be guided by faith-based values to address worldwide challenges.",
-      introduction:
-        "Faithful Global Reformers are driven by religious principles to pursue social justice and international cooperation. They believe that faith provides a moral framework for addressing global challenges through democratic processes. Their worldview combines religious values with a commitment to human dignity, equity, and global solidarity.",
-      strengths: [
-        "Strong moral foundation for policy positions",
-        "Ability to bridge religious and secular communities",
-        "Commitment to serving vulnerable populations",
-        "Global perspective on human challenges",
-        "Emphasis on human dignity and rights",
-      ],
-      weaknesses: [
-        "May face tensions between religious teachings and progressive policies",
-        "Can struggle with balancing universal principles and cultural differences",
-        "Sometimes perceived as imposing religious values on secular institutions",
-        "Risk of idealism overshadowing practical implementation",
-        "May underestimate economic complexities in pursuit of social goals",
-      ],
-      famousPeople: [
-        { name: "Pope Francis", role: "Head of the Catholic Church" },
-        { name: "Desmond Tutu", role: "Former Archbishop and Activist" },
-        { name: "Jimmy Carter", role: "Former U.S. President" },
-        { name: "Malala Yousafzai", role: "Education Activist" },
-      ],
-      axisPositions: [
-        {
-          axis: "Equality vs. Markets",
-          position: 75,
-          description: "Strongly favors equality with moral foundations",
-        },
-        {
-          axis: "Democracy vs. Authority",
-          position: 70,
-          description: "Supports democratic processes guided by values",
-        },
-        {
-          axis: "Progress vs. Tradition",
-          position: 60,
-          description: "Progressive on social issues within moral framework",
-        },
-        {
-          axis: "Secular vs. Religious",
-          position: 25,
-          description: "Strongly religious worldview",
-        },
-        {
-          axis: "Military vs. Pacifist",
-          position: 30,
-          description: "Generally pacifist with emphasis on peace",
-        },
-        {
-          axis: "Globalism vs. Nationalism",
-          position: 80,
-          description: "Strongly globalist perspective",
-        },
-      ],
-      color: "from-purple-600 to-blue-500",
-    },
   };
 
-  // Get the archetype data based on the ID from the URL
   const archetype = archetypes[id];
 
-  // If the archetype doesn't exist or the page is still loading, show a loading state
   if (!archetype) {
     return (
       <Layout title="Loading Archetype - PhilosiQ">
@@ -427,10 +238,10 @@ export default function ArchetypeDetail() {
                     >
                       <div className="w-32 h-32 mb-4 overflow-hidden flex items-center justify-center">
                         {person.image ? (
-                          <img 
-                            src={person.image} 
+                          <img
+                            src={person.image}
                             alt={person.name}
-                            className="w-full h-auto" 
+                            className="w-full h-auto"
                           />
                         ) : (
                           <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
@@ -451,50 +262,62 @@ export default function ArchetypeDetail() {
 
           {/* Axis Breakdown Section */}
           <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-            <h2 className="text-2xl font-bold mb-6 text-center">Axis Breakdown</h2>
-            
+            <h2 className="text-2xl font-bold mb-6 text-center">
+              Axis Breakdown
+            </h2>
+
             <div className="space-y-8">
               {/* Markets vs. Equality */}
               <div>
-                <h3 className="text-xl font-bold mb-2 text-green-600">Markets: The Power of Individual Enterprise and Competition</h3>
+                <h3 className="text-xl font-bold mb-2 text-green-600">
+                  Markets: The Power of Individual Enterprise and Competition
+                </h3>
                 <p className="text-gray-700">
-                  {archetype.axisDescriptions?.markets || 
+                  {archetype.axisDescriptions?.markets ||
                     "Success is not handed out; it is earned. High achievers understand that individual effort, innovation, and competition are the engines of economic growth and personal success. They believe in a merit-based system where those who provide the most value rise to the top. Rather than waiting for permission or relying on external help, they take control of their own destiny, leveraging their skills, knowledge, and work ethic to create opportunities."}
                 </p>
               </div>
-              
+
               {/* Democracy vs. Authority */}
               <div>
-                <h3 className="text-xl font-bold mb-2 text-blue-600">Democracy: Freedom as the Cornerstone of Opportunity</h3>
+                <h3 className="text-xl font-bold mb-2 text-blue-600">
+                  Democracy: Freedom as the Cornerstone of Opportunity
+                </h3>
                 <p className="text-gray-700">
-                  {archetype.axisDescriptions?.democracy || 
+                  {archetype.axisDescriptions?.democracy ||
                     "A thriving society—and by extension, a thriving business environment—depends on the ability of individuals to make choices, voice opinions, and pursue their ambitions without unnecessary interference. Those who succeed recognize that freedom, accountability, and fair competition foster innovation and long-term prosperity. They value a system where effort and ability determine outcomes, not arbitrary barriers."}
                 </p>
               </div>
-              
+
               {/* Secular vs. Religious */}
               <div>
-                <h3 className="text-xl font-bold mb-2 text-yellow-600">Secular Rationality: Logic and Inclusivity Drive Growth</h3>
+                <h3 className="text-xl font-bold mb-2 text-yellow-600">
+                  Secular Rationality: Logic and Inclusivity Drive Growth
+                </h3>
                 <p className="text-gray-700">
-                  {archetype.axisDescriptions?.secular || 
+                  {archetype.axisDescriptions?.secular ||
                     "Decisions must be based on rational analysis, not dogma. The most effective leaders and entrepreneurs embrace evidence-based thinking, ensuring that policies, strategies, and business decisions are guided by logic, inclusivity, and real-world data. They understand that success requires adaptability and a willingness to engage with diverse perspectives to solve complex problems."}
                 </p>
               </div>
-              
+
               {/* Nationalism vs. Globalism */}
               <div>
-                <h3 className="text-xl font-bold mb-2 text-red-600">Nationalism: Strength Through Self-Reliance</h3>
+                <h3 className="text-xl font-bold mb-2 text-red-600">
+                  Nationalism: Strength Through Self-Reliance
+                </h3>
                 <p className="text-gray-700">
-                  {archetype.axisDescriptions?.nationalism || 
+                  {archetype.axisDescriptions?.nationalism ||
                     "Independence breeds resilience. Whether at the level of an individual, a business, or a nation, true power comes from the ability to stand on one's own, rather than depending on external forces. The most successful people and organizations take ownership of their outcomes, cultivate internal strength, and focus on sustainable long-term prosperity. They build systems, businesses, and skill sets that allow them to thrive, regardless of external challenges."}
                 </p>
               </div>
-              
+
               {/* Progress vs. Tradition */}
               <div>
-                <h3 className="text-xl font-bold mb-2 text-purple-600">Progress: The Relentless Drive for Innovation</h3>
+                <h3 className="text-xl font-bold mb-2 text-purple-600">
+                  Progress: The Relentless Drive for Innovation
+                </h3>
                 <p className="text-gray-700">
-                  {archetype.axisDescriptions?.progress || 
+                  {archetype.axisDescriptions?.progress ||
                     "Success is built on the ability to adapt, evolve, and push forward. High achievers recognize that progress is not just about change for its own sake—it's about finding better, faster, and smarter ways to solve problems. They embrace technology, challenge outdated norms, and seek continuous improvement in all areas of life. Rather than being confined by the past, they forge new paths, understanding that stagnation is the enemy of success. Those who thrive in competitive markets and dynamic industries are the ones who relentlessly pursue growth, knowing that the future belongs to those willing to build it."}
                 </p>
               </div>
