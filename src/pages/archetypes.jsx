@@ -8,7 +8,7 @@ export default function ArchetypePage() {
     {
       id: "utopian",
       name: "The Utopian",
-      traits: ["Equity", "Democracy", "Progressive", "Globalism"],
+      traits: ["Equity", "Democracy", "Progressive", "Globalism", "Globalism"],
       slug: "utopian",
     },
     {
