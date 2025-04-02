@@ -23,7 +23,8 @@ export default function ArchetypePage() {
       traits: ["Equity", "Democracy", "Religious", "Globalism"],
       slug: "prophet",
     },
-    {
+    {   
+      
       id: "firebrand",
       name: "The Firebrand",
       traits: ["Equity", "Democracy", "Progressive", "Nationalism"],
