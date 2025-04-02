@@ -39,7 +39,7 @@ export default function ArchetypeDetail() {
       ],
       famousPeople: [
         { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23ns U.S. President" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
         { name: "Karl Marx", role: "Political Theorist" },
         { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative", },
       ],
