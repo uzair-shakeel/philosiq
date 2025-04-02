@@ -58,18 +58,18 @@ export default function Home() {
               Our Six Axes
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Our survey measures your political beliefs across these six
-              fundamental dimensions
+              Our test measures your political beliefs across these five
+              fundamental axes
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              "Equality Vs. Markets",
-              "Democracy Vs. Authority",
-              "Progress Vs. Tradition",
+              "Equity Vs. Free Market",
+              "Libertarian Vs. Authoritarian",
+              "Progressive Vs. Conservative",
               "Secular Vs. Religious",
-              "Military Vs. Pacifist",
+              "Globalist Vs. Nationalist",
             ].map((axis, index) => (
               <div
                 key={index}
