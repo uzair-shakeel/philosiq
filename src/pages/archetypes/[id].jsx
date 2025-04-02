@@ -16,35 +16,32 @@ export default function ArchetypeDetail() {
 
   const archetypes = {
     utopian: {
-      id: "progressive-humanitarian",
-      name: "The Progressive Humanitarian",
-      traits: ["Equity", "Democracy", "Secular", "Globalism"],
+      id: "the-utopian",
+      name: "The Utopian",
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
       description:
-        "Progressive Humanitarians are driven by a vision of global cooperation and equality. They believe in democratic processes, secular governance, and prioritize equity in social and economic policies.",
+        "ELPSG",
       introduction:
-        "Progressive Humanitarians are idealistic visionaries who believe in the power of human cooperation to solve global challenges. They advocate for democratic institutions, secular governance, and equitable distribution of resources. Their worldview is shaped by a commitment to human rights, social justice, and international collaboration.",
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
       strengths: [
-        "Strong commitment to social justice and equality",
-        "Ability to build coalitions across diverse groups",
-        "Forward-thinking approach to global challenges",
-        "Empathy and concern for marginalized communities",
-        "Belief in evidence-based policy making",
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
       ],
       weaknesses: [
-        "May underestimate practical challenges in implementing idealistic policies",
-        "Sometimes prioritize global concerns over local needs",
-        "Can be perceived as elitist or disconnected from traditional values",
-        "May struggle with pragmatic compromises",
-        "Tendency to favor bureaucratic solutions",
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
         { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
-        { name: "Greta Thunberg", role: "Climate Activist" },
-        {
-          name: "Jacinda Ardern",
-          role: "Former Prime Minister of New Zealand",
-        },
+        { name: "Franklin D. Roosevelt", role: "23ns U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative", },
       ],
       axisPositions: [
         {
