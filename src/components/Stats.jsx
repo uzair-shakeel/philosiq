@@ -16,7 +16,7 @@ export default function Stats() {
     {
       title: "100+",
       description:
-        "Our quiz chooses from a pool of over 100 questions! Or you can take a full quiz for the most accurate results!",
+        "Our quiz features over 100 unique questions designed to gauge your perspective across five distinct axes!",
       buttonText: "Take the Quiz",
       buttonLink: "/quiz",
       icon: <FaQuestionCircle className="text-white text-4xl" />,
