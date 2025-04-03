@@ -55,7 +55,7 @@ export default function Home() {
         <div className="container-custom">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Our Six Axes
+              The Five Pillars of Politics
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Our test measures your political beliefs across these five
