@@ -16,9 +16,60 @@ export default function ArchetypeDetail() {
 
   const archetypes = {
     utopian: {
-      id: "utopian",
+      id: "the-utopian",
       name: "The Utopian",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     reformer: {
       id: "reformer",
