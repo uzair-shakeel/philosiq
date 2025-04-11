@@ -6,6 +6,7 @@ import {
   FaClipboardList,
   FaClipboardCheck,
 } from "react-icons/fa";
+import axios from "axios";
 
 export default function QuizPage() {
   const [quizStarted, setQuizStarted] = useState(false);
@@ -15,111 +16,29 @@ export default function QuizPage() {
   const [questions, setQuestions] = useState([]);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showingAxes, setShowingAxes] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Sample questions - in a real app, these would come from an API
-  const allQuestions = [
-    {
-      id: 1,
-      text: "The government should prioritize economic growth over environmental protection.",
-      category: "Economic",
-    },
-    {
-      id: 2,
-      text: "Healthcare should be provided as a public service to all citizens.",
-      category: "Economic",
-    },
-    {
-      id: 3,
-      text: "International cooperation is more effective than national self-interest.",
-      category: "Diplomatic",
-    },
-    {
-      id: 4,
-      text: "Individual freedom is more important than social equality.",
-      category: "Civil",
-    },
-    {
-      id: 5,
-      text: "Traditional values should guide social policy.",
-      category: "Societal",
-    },
-    {
-      id: 6,
-      text: "Military strength is essential for national security.",
-      category: "Military",
-    },
-    {
-      id: 7,
-      text: "Religious principles should influence government decisions.",
-      category: "Religious",
-    },
-    {
-      id: 8,
-      text: "Free markets lead to more prosperity than government intervention.",
-      category: "Economic",
-    },
-    {
-      id: 9,
-      text: "A strong leader is more effective than democratic consensus.",
-      category: "Civil",
-    },
-    {
-      id: 10,
-      text: "National borders should be strictly controlled.",
-      category: "Diplomatic",
-    },
-    // Additional questions to have more variety
-    {
-      id: 11,
-      text: "Society should strive for greater income equality.",
-      category: "Economic",
-    },
-    {
-      id: 12,
-      text: "Corporations have too much power in today's society.",
-      category: "Economic",
-    },
-    {
-      id: 13,
-      text: "Immigration enriches our culture and economy.",
-      category: "Diplomatic",
-    },
-    {
-      id: 14,
-      text: "The government should regulate speech that is offensive to minorities.",
-      category: "Civil",
-    },
-    {
-      id: 15,
-      text: "Marriage is primarily a religious institution.",
-      category: "Societal",
-    },
-    {
-      id: 16,
-      text: "Military intervention in other countries is sometimes necessary for global stability.",
-      category: "Military",
-    },
-    {
-      id: 17,
-      text: "Public education should include religious perspectives.",
-      category: "Religious",
-    },
-    {
-      id: 18,
-      text: "Taxation of the wealthy should be increased to fund social programs.",
-      category: "Economic",
-    },
-    {
-      id: 19,
-      text: "Direct democracy is preferable to representative democracy.",
-      category: "Civil",
-    },
-    {
-      id: 20,
-      text: "Global institutions should have more authority over national governments.",
-      category: "Diplomatic",
-    },
-  ];
+  // Function to fetch questions from the API
+  const fetchQuestions = async (limit) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.get(`/api/questions?limit=${limit}`);
+      if (response.data.success) {
+        return response.data.questions || [];
+      } else {
+        throw new Error("Failed to fetch questions");
+      }
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+      setError("Failed to load questions. Please try again later.");
+      return [];
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Function to shuffle array (Fisher-Yates algorithm)
   const shuffleArray = (array) => {
@@ -131,66 +50,45 @@ export default function QuizPage() {
     return newArray;
   };
 
-  // Function to generate a large set of questions by modifying existing ones
-  const generateLargeQuestionSet = (baseQuestions, targetCount) => {
-    const result = [...baseQuestions];
-
-    // If we already have enough questions, just return them shuffled
-    if (baseQuestions.length >= targetCount) {
-      return shuffleArray(baseQuestions).slice(0, targetCount);
-    }
-
-    // Generate variations of existing questions to reach the target count
-    let currentId = Math.max(...baseQuestions.map((q) => q.id)) + 1;
-
-    while (result.length < targetCount) {
-      const originalQuestion =
-        baseQuestions[result.length % baseQuestions.length];
-
-      // Create variations by adding qualifiers or slightly changing the wording
-      const variations = [
-        `In most cases, ${originalQuestion.text.toLowerCase()}`,
-        `Generally speaking, ${originalQuestion.text.toLowerCase()}`,
-        `From a practical standpoint, ${originalQuestion.text.toLowerCase()}`,
-        `Considering long-term outcomes, ${originalQuestion.text.toLowerCase()}`,
-        `In the current global context, ${originalQuestion.text.toLowerCase()}`,
-        `From an ethical perspective, ${originalQuestion.text.toLowerCase()}`,
-      ];
-
-      // Add a variation if we haven't reached the target count
-      if (result.length < targetCount) {
-        const variationIndex = result.length % variations.length;
-        result.push({
-          id: currentId++,
-          text: variations[variationIndex],
-          category: originalQuestion.category,
-        });
-      }
-    }
-
-    return shuffleArray(result).slice(0, targetCount);
-  };
-
-  const startQuiz = (type) => {
+  // Function to start the quiz
+  const startQuiz = async (type) => {
     setQuizType(type);
+    setIsLoading(true);
 
-    if (type === "short") {
-      // Generate 36 questions for the short quiz
-      setQuestions(generateLargeQuestionSet(allQuestions, 36));
-    } else {
-      // Generate 130 questions for the full quiz
-      setQuestions(generateLargeQuestionSet(allQuestions, 130));
+    try {
+      let fetchedQuestions = [];
+
+      if (type === "short") {
+        // Fetch 36 questions for the short quiz
+        fetchedQuestions = await fetchQuestions(36);
+      } else {
+        // Fetch 130 questions for the full quiz
+        fetchedQuestions = await fetchQuestions(130);
+      }
+
+      if (fetchedQuestions.length === 0) {
+        setError("Not enough questions available. Please try again later.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Shuffle the questions
+      const shuffledQuestions = shuffleArray(fetchedQuestions);
+      setQuestions(shuffledQuestions);
+      setQuizStarted(true);
+      setCurrentQuestion(0);
+      setAnswers({});
+    } catch (error) {
+      setError("Failed to start quiz. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
-
-    setQuizStarted(true);
-    setCurrentQuestion(0);
-    setAnswers({});
   };
 
   const handleAnswer = (value) => {
     setAnswers({
       ...answers,
-      [questions[currentQuestion]?.id]: value,
+      [questions[currentQuestion]?._id]: value,
     });
 
     // Only auto-advance if not on the last question
@@ -218,12 +116,93 @@ export default function QuizPage() {
   };
 
   const handleSubmit = () => {
-    // In a real app, you would send the answers to your backend
-    console.log("Answers submitted:", answers);
-    // Redirect to results page or show results
-    alert(
-      "Thank you for completing the quiz! Your results would be shown here."
+    // Prepare results data with axis calculations
+    const axisScores = calculateResults();
+
+    // Store results in localStorage or sessionStorage for the results page
+    sessionStorage.setItem(
+      "quizResults",
+      JSON.stringify({
+        answers,
+        axisScores,
+        totalQuestions: questions.length,
+      })
     );
+
+    // Redirect to results page
+    window.location.href = "/results";
+  };
+
+  // Calculate quiz results based on answers
+  const calculateResults = () => {
+    // Initialize axis scores
+    const axisScores = {
+      "Equality vs. Markets": 50,
+      "Democracy vs. Authority": 50,
+      "Progress vs. Tradition": 50,
+      "Secular vs. Religious": 50,
+      "Globalism vs. Nationalism": 50,
+    };
+
+    // Count how many questions were answered for each axis
+    const axisCounts = {
+      "Equality vs. Markets": 0,
+      "Democracy vs. Authority": 0,
+      "Progress vs. Tradition": 0,
+      "Secular vs. Religious": 0,
+      "Globalism vs. Nationalism": 0,
+    };
+
+    // Calculate the scores
+    questions.forEach((question) => {
+      const answer = answers[question._id];
+
+      // Skip if question wasn't answered
+      if (answer === undefined) return;
+
+      const axis = question.axis;
+      const direction = question.direction;
+      const weight = question.weight;
+
+      // Convert answer to a score modifier
+      // -2 (strongly disagree) to +2 (strongly agree)
+      const modifier = answer;
+
+      // Update the score based on direction
+      // Left positions decrease for "Right" answers and increase for "Left" answers
+      if (direction === "Left") {
+        axisScores[axis] += modifier * weight;
+      } else {
+        axisScores[axis] -= modifier * weight;
+      }
+
+      // Increment the question count for this axis
+      axisCounts[axis] += 1;
+    });
+
+    // Normalize scores to be between 0 and 100
+    // Where 50 is the starting point
+    Object.keys(axisScores).forEach((axis) => {
+      if (axisCounts[axis] > 0) {
+        // Calculate maximum possible points for this axis
+        const maxPoints = axisCounts[axis] * 5; // 5 = max weight (1-5) * max answer value (2)
+
+        // Convert to 0-100 scale
+        // First, get the raw offset from the middle (50)
+        const rawOffset = axisScores[axis] - 50;
+
+        // Scale this offset based on the maximum possible points
+        const scaledOffset = (rawOffset / maxPoints) * 50;
+
+        // Apply the scaled offset to the middle value (50)
+        axisScores[axis] = Math.round(50 + scaledOffset);
+
+        // Ensure the score is between 0 and 100
+        axisScores[axis] = Math.max(0, Math.min(100, axisScores[axis]));
+      }
+    });
+
+    return axisScores;
   };
 
   const toggleAxesDisplay = () => {
@@ -231,6 +210,44 @@ export default function QuizPage() {
   };
 
   const progressPercentage = ((currentQuestion + 1) / questions.length) * 100;
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <Layout title="Loading Quiz - PhilosiQ">
+        <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-primary-maroon border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <h2 className="text-2xl font-bold mb-2">Loading Quiz</h2>
+            <p className="text-gray-600">
+              Please wait while we prepare your questions...
+            </p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  // Show error state
+  if (error && !quizStarted) {
+    return (
+      <Layout title="Quiz Error - PhilosiQ">
+        <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
+          <div className="text-center max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg">
+            <div className="text-red-500 text-5xl mb-4">⚠️</div>
+            <h2 className="text-2xl font-bold mb-4">Error Loading Quiz</h2>
+            <p className="text-gray-600 mb-6">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-primary-maroon hover:bg-primary-darkMaroon text-white font-bold py-2 px-4 rounded"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout title="Political Survey Quiz - PhilosiQ">
@@ -549,7 +566,7 @@ export default function QuizPage() {
                 >
                   {/* Question */}
                   <h2 className="text-2xl font-bold mb-8">
-                    {questions[currentQuestion]?.text}
+                    {questions[currentQuestion]?.question}
                   </h2>
 
                   {/* Answer options - REVERSED ORDER */}
@@ -559,7 +576,7 @@ export default function QuizPage() {
                         key={value}
                         className={`w-full text-left p-4 rounded-lg border transition-all duration-200 
                           ${
-                            answers[questions[currentQuestion]?.id] === value
+                            answers[questions[currentQuestion]?._id] === value
                               ? value > 0
                                 ? "bg-green-600 text-white border-green-600"
                                 : value < 0
@@ -604,10 +621,10 @@ export default function QuizPage() {
                     <button
                       onClick={handleSubmit}
                       disabled={
-                        answers[questions[currentQuestion]?.id] === undefined
+                        answers[questions[currentQuestion]?._id] === undefined
                       }
                       className={`px-6 py-2 rounded flex items-center gap-2 ${
-                        answers[questions[currentQuestion]?.id] === undefined
+                        answers[questions[currentQuestion]?._id] === undefined
                           ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                           : quizType === "short"
                           ? "bg-secondary-darkBlue text-white hover:bg-secondary-blue"
@@ -620,10 +637,10 @@ export default function QuizPage() {
                     <button
                       onClick={handleNext}
                       disabled={
-                        answers[questions[currentQuestion]?.id] === undefined
+                        answers[questions[currentQuestion]?._id] === undefined
                       }
                       className={`flex items-center gap-2 px-4 py-2 rounded ${
-                        answers[questions[currentQuestion]?.id] === undefined
+                        answers[questions[currentQuestion]?._id] === undefined
                           ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                           : quizType === "short"
                           ? "bg-secondary-darkBlue text-white hover:bg-secondary-blue"

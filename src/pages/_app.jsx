@@ -2,8 +2,9 @@ import "../styles/globals.css";
 import { useState, useEffect } from "react";
 import { BACKEND_HOSTNAME } from "../commons/development_config";
 import axios from "axios";
+import { SessionProvider } from "next-auth/react";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -25,7 +26,11 @@ function MyApp({ Component, pageProps }) {
     }
   };
 
-  return <Component {...pageProps} user={user} setUser={setUser} />;
+  return (
+    <SessionProvider session={session}>
+      <Component {...pageProps} user={user} setUser={setUser} />
+    </SessionProvider>
+  );
 }
 
 export default MyApp;
