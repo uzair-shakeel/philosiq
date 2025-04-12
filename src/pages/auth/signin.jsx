@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { signIn, getCsrfToken } from "next-auth/react";
+import React, { useState, useEffect } from "react";
+import { signIn, getCsrfToken, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
+import authConfig from "../../lib/auth-config";
 
 export default function SignIn({ csrfToken }) {
   const [email, setEmail] = useState("");
@@ -9,6 +10,19 @@ export default function SignIn({ csrfToken }) {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkSession = async () => {
+      const session = await getSession();
+      if (session) {
+        const callbackUrl = router.query.callbackUrl || "/admin";
+        router.push(callbackUrl);
+      }
+    };
+
+    checkSession();
+  }, [router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,26 +36,47 @@ export default function SignIn({ csrfToken }) {
     setError(null);
 
     try {
+      console.log("Signing in with credentials...");
+
+      // Get the callback URL
+      const callbackUrl = router.query.callbackUrl || "/admin";
+
       const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
+        callbackUrl,
       });
+
+      console.log("Sign in result:", result);
 
       if (result.error) {
         setError(result.error);
       } else {
-        // Redirect to admin dashboard or callback URL
-        const callbackUrl = router.query.callbackUrl || "/admin";
-        router.push(callbackUrl);
+        // Success! Redirect to callbackUrl
+        console.log("Login successful, redirecting to:", callbackUrl);
+
+        // Use window.location for a full page reload to ensure cookies are properly set
+        window.location.href = callbackUrl;
       }
     } catch (error) {
-      setError("An error occurred during sign in");
       console.error("Sign in error:", error);
+      setError("An error occurred during sign in");
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Extract error from URL if present
+  useEffect(() => {
+    if (router.query.error) {
+      setError(
+        router.query.error === "CredentialsSignin"
+          ? "Invalid email or password"
+          : router.query.error
+      );
+    }
+  }, [router.query]);
 
   return (
     <Layout title="Sign In - PhilosiQ Admin">
@@ -124,6 +159,18 @@ export default function SignIn({ csrfToken }) {
 }
 
 export async function getServerSideProps(context) {
+  // Check if user is already authenticated
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: context.query.callbackUrl || "/admin",
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {
       csrfToken: await getCsrfToken(context),

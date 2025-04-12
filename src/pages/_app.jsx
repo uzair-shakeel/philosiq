@@ -1,34 +1,18 @@
 import "../styles/globals.css";
-import { useState, useEffect } from "react";
-import { BACKEND_HOSTNAME } from "../commons/development_config";
-import axios from "axios";
 import { SessionProvider } from "next-auth/react";
+import authConfig from "../lib/auth-config";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  // Fetch user authentication status
-  const fetchUser = async () => {
-    try {
-      const response = await axios.get(
-        `${BACKEND_HOSTNAME}/api/auth/protected`,
-        {
-          withCredentials: true,
-        }
-      );
-      setUser(response.data.user);
-    } catch (error) {
-      setUser(null);
-    }
+  // Add options for NextAuth SessionProvider
+  const sessionOptions = {
+    refetchInterval: 5 * 60, // Refetch session every 5 minutes
+    refetchOnWindowFocus: true,
+    storeInSessionStorage: typeof window !== "undefined" ? true : false, // Enable sessionStorage for better cross-domain support
   };
 
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} user={user} setUser={setUser} />
+    <SessionProvider session={session} options={sessionOptions}>
+      <Component {...pageProps} />
     </SessionProvider>
   );
 }
