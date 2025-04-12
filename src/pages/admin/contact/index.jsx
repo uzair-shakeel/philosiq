@@ -21,9 +21,6 @@ export default function ContactMessages() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMessage, setSelectedMessage] = useState(null);
-  const [showReplyModal, setShowReplyModal] = useState(false);
-  const [reply, setReply] = useState("");
-  const [replyLoading, setReplyLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [filter, setFilter] = useState("all");
   const [showFilterMenu, setShowFilterMenu] = useState(false);
@@ -105,49 +102,35 @@ export default function ContactMessages() {
     }
   };
 
-  // Handle reply
-  const handleReply = async (e) => {
-    e.preventDefault();
-
-    if (!reply.trim()) {
-      return;
-    }
-
-    setReplyLoading(true);
-
+  // Mark as responded after Gmail opens
+  const markAsResponded = async (id) => {
     try {
-      const response = await axios.put(`/api/contact/${selectedMessage._id}`, {
-        response: reply,
+      const response = await axios.put(`/api/contact/${id}`, {
+        status: "responded",
+        response: "Responded via Gmail",
       });
 
       if (response.data.success) {
         // Update messages list
         setMessages((prev) =>
           prev.map((msg) =>
-            msg._id === selectedMessage._id
-              ? { ...msg, status: "responded" }
-              : msg
+            msg._id === id ? { ...msg, status: "responded" } : msg
           )
         );
 
-        // Update selected message
-        setSelectedMessage({
-          ...selectedMessage,
-          status: "responded",
-          response: reply,
-        });
-
-        // Close reply modal
-        setShowReplyModal(false);
-        setReply("");
-      } else {
-        throw new Error("Failed to send reply");
+        // Update selected message if it's the current one
+        if (selectedMessage && selectedMessage._id === id) {
+          setSelectedMessage({
+            ...selectedMessage,
+            status: "responded",
+            response: "Responded via Gmail",
+            respondedAt: new Date().toISOString(),
+          });
+        }
       }
     } catch (error) {
-      console.error("Error sending reply:", error);
-      setError("Failed to send reply. Please try again.");
-    } finally {
-      setReplyLoading(false);
+      console.error("Error marking message as responded:", error);
+      setError("Failed to update message status. Please try again.");
     }
   };
 
@@ -357,7 +340,7 @@ export default function ContactMessages() {
 
       {/* Messages list and details */}
       {messages.length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full max-w-full">
           {/* Messages list */}
           <div className="lg:col-span-5 xl:col-span-4">
             <div className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col">
@@ -444,25 +427,29 @@ export default function ContactMessages() {
           {/* Message details */}
           <div className="lg:col-span-7 xl:col-span-8">
             {selectedMessage ? (
-              <div className="bg-white rounded-lg shadow-md h-full flex flex-col">
+              <div className="bg-white rounded-lg shadow-md h-full flex flex-col overflow-hidden">
                 <div className="border-b px-6 py-4 flex justify-between items-center">
-                  <h2 className="font-semibold text-lg truncate max-w-[80%]">
+                  <h2 className="font-semibold text-lg truncate max-w-[70%]">
                     {selectedMessage.subject}
                   </h2>
                   <div className="flex space-x-2">
                     <button
-                      onClick={() => setShowReplyModal(true)}
-                      disabled={selectedMessage.status === "responded"}
-                      className={`p-2 rounded-full ${
-                        selectedMessage.status === "responded"
-                          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                          : "bg-blue-100 text-blue-600 hover:bg-blue-200"
-                      }`}
-                      title={
-                        selectedMessage.status === "responded"
-                          ? "Already responded"
-                          : "Reply"
-                      }
+                      onClick={() => {
+                        // Open Gmail with pre-filled email
+                        const subject = `Re: ${selectedMessage.subject}`;
+                        const body = `\n\n\n-----Original Message-----\nFrom: ${selectedMessage.name} <${selectedMessage.email}>\nSubject: ${selectedMessage.subject}\n\n${selectedMessage.message}`;
+                        const mailtoUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${
+                          selectedMessage.email
+                        }&subject=${encodeURIComponent(
+                          subject
+                        )}&body=${encodeURIComponent(body)}`;
+                        window.open(mailtoUrl, "_blank");
+
+                        // Mark as responded
+                        markAsResponded(selectedMessage._id);
+                      }}
+                      className="p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200"
+                      title="Reply via Gmail"
                     >
                       <FaReply />
                     </button>
@@ -535,98 +522,29 @@ export default function ContactMessages() {
         </div>
       )}
 
-      {/* Reply modal */}
-      {showReplyModal && selectedMessage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4">
-            <div className="border-b px-6 py-4">
-              <h2 className="font-semibold text-lg">
-                Reply to {selectedMessage.name}
-              </h2>
-            </div>
-            <form onSubmit={handleReply}>
-              <div className="p-6">
-                <div className="mb-4">
-                  <label
-                    htmlFor="reply"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Your Response
-                  </label>
-                  <textarea
-                    id="reply"
-                    rows="6"
-                    value={reply}
-                    onChange={(e) => setReply(e.target.value)}
-                    className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-primary-maroon"
-                    placeholder="Write your reply here..."
-                    required
-                  ></textarea>
-                </div>
-              </div>
-              <div className="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowReplyModal(false);
-                    setReply("");
-                  }}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={replyLoading}
-                  className={`px-4 py-2 bg-primary-maroon hover:bg-primary-darkMaroon text-white rounded-md flex items-center ${
-                    replyLoading ? "opacity-70 cursor-not-allowed" : ""
-                  }`}
-                >
-                  {replyLoading ? (
-                    <>
-                      <FaSpinner className="animate-spin mr-2" />
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      <FaReply className="mr-2" />
-                      Send Reply
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
       {/* Delete confirmation modal */}
       {deleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full">
             <div className="p-6">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-500 mx-auto mb-4">
-                <FaExclamationTriangle size={24} />
+              <div className="flex items-center text-red-500 mb-4">
+                <FaExclamationTriangle className="text-xl mr-2" />
+                <h3 className="text-lg font-semibold">Confirm Deletion</h3>
               </div>
-              <h3 className="text-lg font-medium text-gray-900 text-center mb-2">
-                Delete Message
-              </h3>
-              <p className="text-sm text-gray-500 text-center mb-6">
+              <p className="mb-4">
                 Are you sure you want to delete this message? This action cannot
                 be undone.
               </p>
-              <div className="flex justify-center space-x-3">
+              <div className="flex justify-end space-x-3">
                 <button
-                  type="button"
                   onClick={() => setDeleteConfirm(null)}
                   className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
                 >
                   Cancel
                 </button>
                 <button
-                  type="button"
                   onClick={() => deleteMessage(deleteConfirm)}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md"
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
                 >
                   Delete
                 </button>

@@ -5,7 +5,7 @@ import { FaUser, FaEnvelope, FaLock, FaSave } from "react-icons/fa";
 import axios from "axios";
 
 export default function AdminProfile() {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
@@ -64,25 +64,54 @@ export default function AdminProfile() {
       }
     }
 
+    // Prepare request payload
+    const payload = {
+      name: profileData.name,
+      email: profileData.email,
+    };
+
+    if (profileData.newPassword) {
+      payload.currentPassword = profileData.currentPassword;
+      payload.newPassword = profileData.newPassword;
+    }
+
+    console.log("Sending profile update with payload:", payload);
+
     try {
-      // In a real implementation, this would call an API endpoint
-      // const response = await axios.put("/api/admin/profile", profileData);
+      // Call the API endpoint to update profile
+      const response = await axios.put("/api/admin/profile", payload);
+      console.log("Profile update response:", response.data);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (response.data.success) {
+        setSuccess(response.data.message || "Profile updated successfully");
 
-      setSuccess("Profile updated successfully");
+        // Update the session with new user info
+        await update({
+          ...session,
+          user: {
+            ...session.user,
+            name: profileData.name,
+            email: profileData.email,
+          },
+        });
 
-      // Clear password fields
-      setProfileData((prev) => ({
-        ...prev,
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      }));
+        // Clear password fields
+        setProfileData((prev) => ({
+          ...prev,
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        }));
+      } else {
+        throw new Error(response.data.message || "Failed to update profile");
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
-      setError(error.response?.data?.message || "Failed to update profile");
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update profile"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -97,7 +126,7 @@ export default function AdminProfile() {
       {/* Success message */}
       {success && (
         <div
-          className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6"
+          className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 break-words"
           role="alert"
         >
           <p>{success}</p>
@@ -107,14 +136,14 @@ export default function AdminProfile() {
       {/* Error message */}
       {error && (
         <div
-          className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6"
+          className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 break-words"
           role="alert"
         >
           <p>{error}</p>
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-6 max-w-full">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Profile Info */}
           <div className="md:col-span-2">

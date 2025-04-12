@@ -10,6 +10,7 @@ import {
   FaFilter,
   FaChevronLeft,
   FaChevronRight,
+  FaSpinner,
 } from "react-icons/fa";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -37,6 +38,10 @@ export default function QuestionsIndex() {
   // Delete confirmation
   const [deleteId, setDeleteId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Migration states
+  const [isMigrating, setIsMigrating] = useState(false);
+  const [migrationSuccess, setMigrationSuccess] = useState(null);
 
   // Load initial data based on URL params
   useEffect(() => {
@@ -171,6 +176,34 @@ export default function QuestionsIndex() {
     setDeleteId(null);
   };
 
+  // Migration function
+  const migrateWeights = async () => {
+    setIsMigrating(true);
+    setMigrationSuccess(null);
+    setError(null);
+
+    try {
+      const response = await axios.post("/api/admin/migrate-weights");
+
+      if (response.data.success) {
+        setMigrationSuccess(response.data.message);
+        // Refresh questions to show new weights
+        fetchQuestions(pagination.page);
+      } else {
+        throw new Error(response.data.message || "Migration failed");
+      }
+    } catch (error) {
+      console.error("Error migrating weights:", error);
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to migrate question weights. Please try again."
+      );
+    } finally {
+      setIsMigrating(false);
+    }
+  };
+
   // Render loading state
   if (isLoading && !questions.length) {
     return (
@@ -191,13 +224,41 @@ export default function QuestionsIndex() {
         <h1 className="text-2xl font-bold mb-4 md:mb-0">
           Manage Quiz Questions
         </h1>
-        <Link
-          href="/admin/questions/new"
-          className="bg-primary-maroon hover:bg-primary-darkMaroon text-white py-2 px-4 rounded-md inline-flex items-center"
-        >
-          <FaPlus className="mr-2" /> Add New Question
-        </Link>
+        <div className="flex flex-col md:flex-row gap-2">
+          {/* <button
+            onClick={migrateWeights}
+            disabled={isMigrating}
+            className={`bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-md inline-flex items-center mb-2 md:mb-0 md:mr-2 ${
+              isMigrating ? "opacity-70 cursor-not-allowed" : ""
+            }`}
+          >
+            {isMigrating ? (
+              <>
+                <FaSpinner className="animate-spin mr-2" /> Migrating...
+              </>
+            ) : (
+              "Migrate Weights"
+            )}
+          </button> */}
+          <Link
+            href="/admin/questions/new"
+            className="bg-primary-maroon hover:bg-primary-darkMaroon text-white py-2 px-4 rounded-md inline-flex items-center"
+          >
+            <FaPlus className="mr-2" /> Add New Question
+          </Link>
+        </div>
       </div>
+
+      {/* Success message */}
+      {migrationSuccess && (
+        <div
+          className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6"
+          role="alert"
+        >
+          <p className="font-bold">Success</p>
+          <p>{migrationSuccess}</p>
+        </div>
+      )}
 
       {/* Error message */}
       {error && (
@@ -211,7 +272,7 @@ export default function QuestionsIndex() {
       )}
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-white   rounded-lg shadow-md p-6 mb-6">
         <div className="flex items-center mb-4">
           <FaFilter className="text-gray-500 mr-2" />
           <h2 className="text-lg font-semibold">Filter Questions</h2>
@@ -334,14 +395,14 @@ export default function QuestionsIndex() {
       </div>
 
       {/* Questions table */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden max-w-full">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 min-w-64 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Question
                 </th>
@@ -367,7 +428,7 @@ export default function QuestionsIndex() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Weight
+                  Weights
                 </th>
                 <th
                   scope="col"
@@ -387,8 +448,8 @@ export default function QuestionsIndex() {
               {questions.length > 0 ? (
                 questions.map((question) => (
                   <tr key={question._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-normal max-w-xs">
-                      <div className="text-sm font-medium text-gray-900">
+                    <td className="px-6 py-4 min-w-64 whitespace-normal max-w-xs">
+                      <div className="text-sm min-w-64 font-medium text-gray-900">
                         {question.question}
                       </div>
                     </td>
@@ -415,7 +476,25 @@ export default function QuestionsIndex() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">
-                        {question.weight}
+                        {question.weight_agree || question.weight ? (
+                          <div className="flex flex-col">
+                            <span className="inline-flex items-center">
+                              <span className="font-semibold text-green-600 mr-1">
+                                ↑
+                              </span>{" "}
+                              Agree: {question.weight_agree || question.weight}
+                            </span>
+                            <span className="inline-flex items-center mt-1">
+                              <span className="font-semibold text-red-600 mr-1">
+                                ↓
+                              </span>{" "}
+                              Disagree:{" "}
+                              {question.weight_disagree || question.weight}
+                            </span>
+                          </div>
+                        ) : (
+                          question.weight
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -466,7 +545,7 @@ export default function QuestionsIndex() {
 
       {/* Pagination */}
       {pagination.total > 0 && (
-        <div className="flex items-center justify-between mt-6">
+        <div className="flex  items-center justify-between mt-6">
           <div className="text-sm text-gray-700">
             Showing{" "}
             <span className="font-medium">

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout";
+import axios from "axios";
 import {
   FaPaperPlane,
   FaPhone,
   FaEnvelope,
   FaMapMarkerAlt,
+  FaSpinner,
 } from "react-icons/fa";
 
 export default function ContactUs() {
@@ -30,28 +32,35 @@ export default function ContactUs() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitMessage("");
+    setSubmitStatus("");
 
     try {
-      // In a real app, you would send this data to your backend
-      // await axios.post('/api/contact', formData);
+      // Send data to the backend API
+      const response = await axios.post("/api/contact", formData);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      setSubmitStatus("success");
-      setSubmitMessage(
-        "Thank you for your message! We will get back to you soon."
-      );
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      });
+      if (response.data.success) {
+        setSubmitStatus("success");
+        setSubmitMessage(
+          response.data.message ||
+            "Thank you for your message! We will get back to you soon."
+        );
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        throw new Error(response.data.message || "Failed to send message");
+      }
     } catch (error) {
+      console.error("Error submitting contact form:", error);
       setSubmitStatus("error");
       setSubmitMessage(
-        "There was an error sending your message. Please try again later."
+        error.response?.data?.message ||
+          error.message ||
+          "There was an error sending your message. Please try again later."
       );
     } finally {
       setIsSubmitting(false);
@@ -61,7 +70,7 @@ export default function ContactUs() {
   return (
     <Layout title="Contact Us - PhilosiQ">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
-        <div className="container-custom">
+        <div className="container-custom max-w-full px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -205,7 +214,7 @@ export default function ContactUs() {
                     className="btn-primary flex items-center justify-center gap-2 w-full md:w-auto px-8 py-3"
                   >
                     {isSubmitting ? (
-                      "Sending..."
+                      <FaSpinner className="animate-spin" />
                     ) : (
                       <>
                         Send Message <FaPaperPlane />

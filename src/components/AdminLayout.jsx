@@ -175,10 +175,10 @@ export default function AdminLayout({ children, title }) {
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-64 flex flex-col flex-1 min-h-screen">
+      <div className="lg:pl-64 flex flex-col flex-1 min-h-screen overflow-hidden">
         {/* Header */}
         <header className="z-10 bg-white shadow-sm h-16 flex items-center">
-          <div className="container-custom flex w-full items-center justify-between">
+          <div className="container-custom flex w-full items-center justify-between px-4">
             <button
               onClick={() => setSidebarOpen(true)}
               className="p-2 rounded-md text-gray-700 lg:hidden"
@@ -201,11 +201,13 @@ export default function AdminLayout({ children, title }) {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 container-custom py-6">{children}</main>
+        <main className="flex-1 container-custom py-6 px-4 max-w-full overflow-x-hidden">
+          {children}
+        </main>
 
         {/* Footer */}
         <footer className="bg-white border-t py-4">
-          <div className="container-custom">
+          <div className="container-custom px-4">
             <p className="text-sm text-gray-500 text-center">
               &copy; {new Date().getFullYear()} PhilosiQ Admin Panel. All rights
               reserved.

@@ -17,6 +17,8 @@ export default function NewQuestion() {
     topic: "",
     direction: "Left",
     weight: 1,
+    weight_agree: 1,
+    weight_disagree: 1,
     active: true,
   });
 
@@ -264,41 +266,70 @@ export default function NewQuestion() {
                 htmlFor="weight"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Weight <span className="text-red-500">*</span>
+                Weight (Legacy){" "}
+                <span className="text-gray-400 text-xs">(1-5)</span>
               </label>
-              <div className="flex items-center">
-                <input
-                  type="number"
-                  id="weight"
-                  name="weight"
-                  min="1"
-                  max="5"
-                  value={formData.weight}
-                  onChange={handleNumberChange}
-                  className="w-24 rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-primary-maroon"
-                />
-                <div className="flex ml-4">
-                  {[1, 2, 3, 4, 5].map((value) => (
-                    <button
-                      key={value}
-                      type="button"
-                      className={`h-8 w-8 flex items-center justify-center rounded-full mx-1 ${
-                        formData.weight === value
-                          ? "bg-primary-maroon text-white"
-                          : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                      }`}
-                      onClick={() =>
-                        setFormData((prev) => ({ ...prev, weight: value }))
-                      }
-                    >
-                      {value}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <p className="mt-1 text-xs text-gray-500">
-                Weight determines how much this question affects the final score
-                (1-5)
+              <input
+                type="number"
+                id="weight"
+                name="weight"
+                min="1"
+                max="5"
+                value={formData.weight}
+                onChange={handleNumberChange}
+                className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-primary-maroon"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Higher values have stronger impact on results
+              </p>
+            </div>
+          </div>
+
+          {/* Weight Agree and Disagree */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label
+                htmlFor="weight_agree"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Weight for Agree <span className="text-red-500">*</span>{" "}
+                <span className="text-gray-400 text-xs">(1-5)</span>
+              </label>
+              <input
+                type="number"
+                id="weight_agree"
+                name="weight_agree"
+                min="1"
+                max="5"
+                value={formData.weight_agree}
+                onChange={handleNumberChange}
+                className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-primary-maroon"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Weight when user agrees with the question
+              </p>
+            </div>
+
+            <div>
+              <label
+                htmlFor="weight_disagree"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Weight for Disagree <span className="text-red-500">*</span>{" "}
+                <span className="text-gray-400 text-xs">(1-5)</span>
+              </label>
+              <input
+                type="number"
+                id="weight_disagree"
+                name="weight_disagree"
+                min="1"
+                max="5"
+                value={formData.weight_disagree}
+                onChange={handleNumberChange}
+                className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-primary-maroon"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Weight when user disagrees with the question
               </p>
             </div>
           </div>

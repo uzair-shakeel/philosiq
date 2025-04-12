@@ -67,38 +67,44 @@ export default async function handler(req, res) {
       });
     }
   } else if (req.method === "POST") {
-    // Only admin can create questions
+    // Only admins can create questions
     if (session.user.role !== "admin") {
       return res
         .status(403)
-        .json({ success: false, message: "Forbidden: Admin access required" });
+        .json({ success: false, message: "Only admins can create questions" });
     }
 
     try {
-      const { question, axis, topic, direction, weight, active } = req.body;
+      const {
+        question,
+        axis,
+        topic,
+        direction,
+        weight,
+        weight_agree,
+        weight_disagree,
+        active,
+      } = req.body;
 
       // Validate required fields
       if (!question || !axis || !topic || !direction) {
-        return res.status(400).json({
-          success: false,
-          message: "Missing required fields",
-        });
+        return res
+          .status(400)
+          .json({ success: false, message: "Required fields are missing" });
       }
 
-      // Create timestamp
-      const now = new Date();
-
-      // Create new question document
+      // Prepare the new question data
       const newQuestion = {
         question,
         axis,
         topic,
         direction,
         weight: weight || 1,
+        weight_agree: weight_agree || weight || 1,
+        weight_disagree: weight_disagree || weight || 1,
         active: active !== undefined ? active : true,
-        createdAt: now,
-        updatedAt: now,
-        createdBy: session.user.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
       // Insert into database

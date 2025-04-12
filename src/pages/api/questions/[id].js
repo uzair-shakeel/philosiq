@@ -70,7 +70,16 @@ export default async function handler(req, res) {
     }
 
     try {
-      const { question, axis, topic, direction, active } = req.body;
+      const {
+        question,
+        axis,
+        topic,
+        direction,
+        weight,
+        weight_agree,
+        weight_disagree,
+        active,
+      } = req.body;
 
       // Validate required fields
       if (!question || !axis || !topic || !direction) {
@@ -88,6 +97,25 @@ export default async function handler(req, res) {
         active: active !== undefined ? active : true,
         updatedAt: new Date(),
       };
+
+      // Add weight fields
+      if (weight !== undefined) {
+        updateData.weight = weight;
+      }
+
+      if (weight_agree !== undefined) {
+        updateData.weight_agree = weight_agree;
+      } else {
+        // Default to regular weight if not provided
+        updateData.weight_agree = weight || 1;
+      }
+
+      if (weight_disagree !== undefined) {
+        updateData.weight_disagree = weight_disagree;
+      } else {
+        // Default to regular weight if not provided
+        updateData.weight_disagree = weight || 1;
+      }
 
       // Update the question in the database
       const result = await questionsCollection.updateOne(

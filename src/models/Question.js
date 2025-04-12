@@ -31,7 +31,20 @@ const QuestionSchema = new mongoose.Schema(
     },
     weight: {
       type: Number,
-      required: [true, "Weight is required"],
+      min: 1,
+      max: 5,
+      default: 1,
+    },
+    weight_agree: {
+      type: Number,
+      required: [true, "Weight for agree is required"],
+      min: 1,
+      max: 5,
+      default: 1,
+    },
+    weight_disagree: {
+      type: Number,
+      required: [true, "Weight for disagree is required"],
       min: 1,
       max: 5,
       default: 1,
