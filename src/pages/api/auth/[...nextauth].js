@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import connectToDatabase from "../../../lib/mongodb";
 import User from "../../../models/User";
-import authConfig, { getAllowedOrigins } from "../../../lib/auth-config";
 
 export const authOptions = {
   providers: [
@@ -62,49 +61,11 @@ export const authOptions = {
   },
   session: {
     strategy: "jwt",
-    maxAge: authConfig.sessionMaxAge,
-  },
-  cookies: {
-    sessionToken: {
-      name: `${authConfig.cookiePrefix}.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: authConfig.cookieSameSite,
-        path: "/",
-        secure: authConfig.cookieSecure,
-        domain:
-          process.env.NODE_ENV === "production" ? ".vercel.app" : undefined,
-      },
-    },
-    callbackUrl: {
-      name: `${authConfig.cookiePrefix}.callback-url`,
-      options: {
-        sameSite: authConfig.cookieSameSite,
-        path: "/",
-        secure: authConfig.cookieSecure,
-        domain:
-          process.env.NODE_ENV === "production" ? ".vercel.app" : undefined,
-      },
-    },
-    csrfToken: {
-      name: `${authConfig.cookiePrefix}.csrf-token`,
-      options: {
-        httpOnly: true,
-        sameSite: authConfig.cookieSameSite,
-        path: "/",
-        secure: authConfig.cookieSecure,
-        domain:
-          process.env.NODE_ENV === "production" ? ".vercel.app" : undefined,
-      },
-    },
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret:
     process.env.NEXTAUTH_SECRET || "default-secret-key-change-in-production",
   debug: process.env.NODE_ENV === "development",
-  // Ensure cookies can be sent in HTTPS environments
-  useSecureCookies: authConfig.cookieSecure,
-  // Enable CORS for authentication endpoints
-  basePath: "/api/auth",
 };
 
 export default NextAuth(authOptions);
