@@ -59,10 +59,93 @@ export default function QuizPage() {
       let fetchedQuestions = [];
 
       if (type === "short") {
-        // Fetch 36 questions for the short quiz
-        fetchedQuestions = await fetchQuestions(36);
+        // For short quiz, we want an equal number of questions from each axis
+        // First, fetch all questions
+        const allQuestions = await fetchQuestions(200); // Fetch more than needed to ensure we have enough from each axis
+
+        if (allQuestions.length === 0) {
+          setError("Not enough questions available. Please try again later.");
+          setIsLoading(false);
+          return;
+        }
+
+        // Group questions by axis
+        const questionsByAxis = {};
+        allQuestions.forEach((question) => {
+          // Only include questions marked for inclusion in the short quiz
+          if (question.includeInShortQuiz === true) {
+            if (!questionsByAxis[question.axis]) {
+              questionsByAxis[question.axis] = [];
+            }
+            questionsByAxis[question.axis].push(question);
+          }
+        });
+
+        // Get axes available
+        const axes = Object.keys(questionsByAxis);
+
+        if (axes.length === 0) {
+          setError(
+            "No questions marked for short quiz found. Please contact administrator."
+          );
+          setIsLoading(false);
+          return;
+        }
+
+        // Calculate how many questions to take from each axis
+        // We want 36 questions total, distributed evenly
+        const questionsPerAxis = Math.floor(36 / axes.length);
+
+        // Select questions from each axis
+        let selectedQuestions = [];
+        axes.forEach((axis) => {
+          const axisQuestions = questionsByAxis[axis];
+          // If we have more questions than needed, shuffle and take the required number
+          if (axisQuestions.length > questionsPerAxis) {
+            const shuffled = shuffleArray([...axisQuestions]);
+            selectedQuestions = [
+              ...selectedQuestions,
+              ...shuffled.slice(0, questionsPerAxis),
+            ];
+          } else {
+            // If we don't have enough, take all available
+            selectedQuestions = [...selectedQuestions, ...axisQuestions];
+          }
+        });
+
+        // If we still need more questions to reach 36, take from any axis
+        if (selectedQuestions.length < 36) {
+          // Create a pool of all remaining questions
+          const remainingQuestions = [];
+          axes.forEach((axis) => {
+            const axisQuestions = questionsByAxis[axis];
+            const alreadySelected = selectedQuestions.filter(
+              (q) => q.axis === axis
+            ).length;
+            if (axisQuestions.length > alreadySelected) {
+              const notSelected = axisQuestions.filter(
+                (q) =>
+                  !selectedQuestions.some((selected) => selected._id === q._id)
+              );
+              remainingQuestions.push(...notSelected);
+            }
+          });
+
+          // Shuffle and take what we need
+          if (remainingQuestions.length > 0) {
+            const shuffled = shuffleArray(remainingQuestions);
+            const needed = 36 - selectedQuestions.length;
+            selectedQuestions = [
+              ...selectedQuestions,
+              ...shuffled.slice(0, needed),
+            ];
+          }
+        }
+
+        // Final shuffle to mix questions from different axes
+        fetchedQuestions = shuffleArray(selectedQuestions);
       } else {
-        // Fetch 130 questions for the full quiz
+        // For full quiz, just fetch 130 questions
         fetchedQuestions = await fetchQuestions(130);
       }
 
@@ -72,9 +155,8 @@ export default function QuizPage() {
         return;
       }
 
-      // Shuffle the questions
-      const shuffledQuestions = shuffleArray(fetchedQuestions);
-      setQuestions(shuffledQuestions);
+      // Set the questions and start the quiz
+      setQuestions(fetchedQuestions);
       setQuizStarted(true);
       setCurrentQuestion(0);
       setAnswers({});
@@ -119,11 +201,22 @@ export default function QuizPage() {
     // Prepare results data with axis calculations
     const axisScores = calculateResults();
 
-    // Store results in localStorage or sessionStorage for the results page
+    // Make sure each question has the necessary weight fields
+    const processedQuestions = questions.map((question) => {
+      return {
+        ...question,
+        // Ensure weight_agree and weight_disagree exist, falling back to weight or default value of 1
+        weight_agree: question.weight_agree || question.weight || 1,
+        weight_disagree: question.weight_disagree || question.weight || 1,
+      };
+    });
+
+    // Store results in sessionStorage for the results page
     sessionStorage.setItem(
       "quizResults",
       JSON.stringify({
         answers,
+        questions: processedQuestions,
         axisScores,
         totalQuestions: questions.length,
       })

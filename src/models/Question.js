@@ -53,6 +53,10 @@ const QuestionSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    includeInShortQuiz: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

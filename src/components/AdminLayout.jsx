@@ -14,6 +14,7 @@ import {
   FaList,
   FaGlobe,
   FaEnvelope,
+  FaCog,
 } from "react-icons/fa";
 
 export default function AdminLayout({ children, title }) {
@@ -117,6 +118,17 @@ export default function AdminLayout({ children, title }) {
                 Add Question
               </Link>
             </li>
+            <li>
+              <Link
+                href="/admin/short-quiz"
+                className={`flex items-center px-4 py-2 rounded-md ${isActive(
+                  "/admin/short-quiz"
+                )}`}
+              >
+                <FaCog className="mr-3" />
+                Short Quiz Config
+              </Link>
+            </li>
             {/* <li>
               <Link
                 href="/admin/stats"
@@ -141,13 +153,13 @@ export default function AdminLayout({ children, title }) {
             </li>
             <li>
               <Link
-                href="/admin/profile"
+                href="/admin/admins"
                 className={`flex items-center px-4 py-2 rounded-md ${isActive(
-                  "/admin/profile"
+                  "/admin/admins"
                 )}`}
               >
                 <FaUser className="mr-3" />
-                Profile
+                Manage Admins
               </Link>
             </li>
             <li>

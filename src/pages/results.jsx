@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import {
   FaDownload,
@@ -10,92 +9,70 @@ import {
   FaTwitter,
   FaFacebook,
   FaLinkedin,
+  FaBug,
+  FaChevronDown,
+  FaChevronUp,
 } from "react-icons/fa";
+import ResultsProcessor from "../components/ResultsProcessor";
+import AxisGraph from "../components/AxisGraph";
+import DebugResultsTable from "../components/DebugResultsTable";
 
 export default function ResultsPage() {
+  return (
+    <Layout title="Your Results - PhilosiQ">
+      <ResultsProcessor>
+        <ResultsContent />
+      </ResultsProcessor>
+    </Layout>
+  );
+}
+
+// Separated content component to receive processed results as props
+function ResultsContent({ results }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
   const [emailSent, setEmailSent] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [showDebug, setShowDebug] = useState(false);
 
-  // In a real app, this would come from the quiz results or API
-  const results = {
-    archetype: {
-      id: "patriot",
-      name: "The Patriot",
-      description:
-        "You believe in economic freedom within a framework of national identity and democratic values.",
-      traits: ["Markets", "Democracy", "Conservative", "Nationalism"],
-      color: "from-red-500 to-blue-400",
-    },
-    axisResults: [
-      {
-        name: "Equality vs. Markets",
-        score: 75,
-        userPosition: "Markets",
-        description:
-          "You strongly favor market-based solutions and economic freedom over centralized economic planning. You believe that free markets, with limited government intervention, lead to greater prosperity and innovation.",
-      },
-      {
-        name: "Democracy vs. Authority",
-        score: 60,
-        userPosition: "Democracy",
-        description:
-          "You lean toward democratic processes and individual liberty, while still valuing effective governance. You believe that citizens should have a strong voice in political decisions.",
-      },
-      {
-        name: "Progress vs. Tradition",
-        score: 35,
-        userPosition: "Tradition",
-        description:
-          "You favor traditional approaches and value stability, particularly in social and cultural domains. You believe established institutions and values provide important foundations for society.",
-      },
-      {
-        name: "Secular vs. Religious",
-        score: 55,
-        userPosition: "Secular",
-        description:
-          "You have a balanced view on the role of religion in society, though slightly favoring secular reasoning in policy decisions. You respect religious values while supporting separation of church and state.",
-      },
-      {
-        name: "Military vs. Pacifist",
-        score: 80,
-        userPosition: "Military",
-        description:
-          "You strongly support military strength and preparedness as essential for national security. You believe a strong defense is necessary in today's world.",
-      },
-      {
-        name: "Globalism vs. Nationalism",
-        score: 25,
-        userPosition: "Nationalism",
-        description:
-          "You favor national sovereignty and prioritizing domestic interests over international obligations. You believe in protecting national identity and independence.",
-      },
-    ],
-    secondaryArchetypes: [
-      {
-        name: "The Maverick",
-        match: "85% match",
-        traits: ["Markets", "Democracy", "Secular", "Nationalism"],
-        slug: "maverick",
-      },
-      {
-        name: "The Steward",
-        match: "78% match",
-        traits: ["Markets", "Democracy", "Conservative", "Nationalism"],
-        slug: "steward",
-      },
-    ],
-  };
+  // Get the raw data from session storage for debugging
+  const [rawData, setRawData] = useState(null);
 
   useEffect(() => {
-    // Simulate loading results
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
+    try {
+      const storedData = sessionStorage.getItem("quizResults");
+      if (storedData) {
+        setRawData(JSON.parse(storedData));
+      }
+    } catch (err) {
+      console.error("Error loading raw quiz data:", err);
+    }
   }, []);
+
+  // Sample archetype data - in a real app, this would be derived from the axis scores
+  const archetype = {
+    id: "patriot",
+    name: "The Patriot",
+    description:
+      "You believe in economic freedom within a framework of national identity and democratic values.",
+    traits: ["Markets", "Democracy", "Conservative", "Nationalism"],
+    color: "from-red-500 to-blue-400",
+  };
+
+  // Sample secondary archetypes
+  const secondaryArchetypes = [
+    {
+      name: "The Maverick",
+      match: "85% match",
+      traits: ["Markets", "Democracy", "Secular", "Nationalism"],
+      slug: "maverick",
+    },
+    {
+      name: "The Steward",
+      match: "78% match",
+      traits: ["Markets", "Democracy", "Conservative", "Nationalism"],
+      slug: "steward",
+    },
+  ];
 
   const handleEmailSubmit = (e) => {
     e.preventDefault();
@@ -114,286 +91,254 @@ export default function ResultsPage() {
     alert("PDF download functionality would be implemented here");
   };
 
-  if (isLoading) {
-    return (
-      <Layout title="Analyzing Results - PhilosiQ">
-        <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-primary-maroon border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <h2 className="text-2xl font-bold mb-2">
-              Analyzing Your Responses
-            </h2>
-            <p className="text-gray-600">
-              Please wait while we calculate your political archetype...
-            </p>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
+  // If no results are passed, the ResultsProcessor component will handle it
+  if (!results) return null;
 
   return (
-    <Layout title={`Your Results: ${results.archetype.name} - PhilosiQ`}>
-      <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
-        <div className="container-custom">
-          {/* Logo for PDF sharing */}
-          <div className="absolute top-28 right-8 opacity-70">
-            <img src="/whitelogo.png" alt="PhilosiQ" className="h-10 w-auto" />
-          </div>
+    <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
+      <div className="container-custom">
+        {/* Logo for PDF sharing */}
+        <div className="absolute top-28 right-8 opacity-70">
+          <img src="/whitelogo.png" alt="PhilosiQ" className="h-10 w-auto" />
+        </div>
 
-          {/* Main Results Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-2">Your Quiz Results</h1>
-            <p className="text-lg text-gray-600">
-              Based on your responses, we've identified your political archetype
-            </p>
-          </div>
+        {/* Main Results Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-2">Your Quiz Results</h1>
+          <p className="text-lg text-gray-600">
+            Based on your responses, we've identified your political archetype
+          </p>
+        </div>
 
-          {/* Primary Archetype Card */}
-          <div className="mb-16">
-            <div
-              className={`bg-gradient-to-r ${results.archetype.color} rounded-lg shadow-xl overflow-hidden`}
-            >
-              <div className="p-8 text-white text-center">
-                <h2 className="text-5xl font-bold mb-4">
-                  {results.archetype.name}
-                </h2>
-                <div className="flex flex-wrap justify-center gap-3 mb-6">
-                  {results.archetype.traits.map((trait, index) => (
-                    <span
-                      key={index}
-                      className="bg-white/20 px-4 py-1 rounded-full text-sm"
-                    >
-                      {trait}
-                    </span>
-                  ))}
-                </div>
-                <p className="text-xl max-w-3xl mx-auto">
-                  {results.archetype.description}
-                </p>
+        {/* Primary Archetype Card */}
+        <div className="mb-16">
+          <div
+            className={`bg-gradient-to-r ${archetype.color} rounded-lg shadow-xl overflow-hidden`}
+          >
+            <div className="p-8 text-white text-center">
+              <h2 className="text-5xl font-bold mb-4">{archetype.name}</h2>
+              <div className="flex flex-wrap justify-center gap-3 mb-6">
+                {archetype.traits.map((trait, index) => (
+                  <span
+                    key={index}
+                    className="bg-white/20 px-4 py-1 rounded-full text-sm"
+                  >
+                    {trait}
+                  </span>
+                ))}
               </div>
+              <p className="text-xl max-w-3xl mx-auto">
+                {archetype.description}
+              </p>
             </div>
+          </div>
 
-            <div className="bg-white rounded-b-lg shadow-lg p-6 text-center">
-              <Link
-                href={`/archetypes/${results.archetype.id}`}
-                className="btn-primary inline-flex items-center"
+          <div className="bg-white rounded-b-lg shadow-lg p-6 text-center">
+            <Link
+              href={`/archetypes/${archetype.id}`}
+              className="btn-primary inline-flex items-center"
+            >
+              Learn More About Your Archetype <FaArrowRight className="ml-2" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Axis Breakdown */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold mb-6 text-center">
+            Your Political Axis Breakdown
+          </h2>
+          <p className="text-center text-gray-600 mb-8">
+            See where you stand on each political dimension
+          </p>
+
+          <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
+            {/* Display the axis results using our AxisGraph component */}
+            {results.axisResults.map((axis, index) => (
+              <AxisGraph
+                key={index}
+                name={axis.name}
+                score={axis.score}
+                leftLabel={axis.leftLabel}
+                rightLabel={axis.rightLabel}
+                userPosition={axis.userPosition}
+                positionStrength={axis.positionStrength}
+                className={
+                  index < results.axisResults.length - 1
+                    ? "border-b border-gray-200 pb-6"
+                    : ""
+                }
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Secondary Archetypes */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold mb-6 text-center">
+            Your Secondary Archetypes
+          </h2>
+          <p className="text-center text-gray-600 mb-8">
+            You also show strong alignment with these political archetypes
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {secondaryArchetypes.map((archetype, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-lg shadow-lg overflow-hidden"
               >
-                Learn More About Your Archetype{" "}
-                <FaArrowRight className="ml-2" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Secondary Archetypes */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-6 text-center">
-              Your Secondary Archetypes
-            </h2>
-            <p className="text-center text-gray-600 mb-8">
-              You also show strong alignment with these political archetypes
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {results.secondaryArchetypes.map((archetype, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden"
-                >
-                  <div className="p-6">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-2xl font-bold text-secondary-darkBlue">
-                        {archetype.name}
-                      </h3>
-                      <span className="bg-secondary-lightBlue text-white px-3 py-1 rounded-full text-sm">
-                        {archetype.match}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {archetype.traits.map((trait, i) => (
-                        <span
-                          key={i}
-                          className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700"
-                        >
-                          {trait}
-                        </span>
-                      ))}
-                    </div>
-                    <Link
-                      href={`/archetypes/${archetype.slug}`}
-                      className="text-primary-maroon hover:underline inline-flex items-center text-sm font-medium"
-                    >
-                      View Details <FaArrowRight className="ml-1 text-xs" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Axis Breakdown */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-6 text-center">
-              Your Political Axis Breakdown
-            </h2>
-            <p className="text-center text-gray-600 mb-8">
-              See where you stand on each of the six political dimensions
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {results.axisResults.map((axis, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-lg p-6">
+                <div className="p-6">
                   <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-secondary-darkBlue">
-                      {axis.name}
+                    <h3 className="text-2xl font-bold text-secondary-darkBlue">
+                      {archetype.name}
                     </h3>
-                    <span
-                      className={`px-3 py-1 rounded-full text-white text-sm ${
-                        axis.name.includes("Equality")
-                          ? "bg-blue-500"
-                          : axis.name.includes("Democracy")
-                          ? "bg-green-500"
-                          : axis.name.includes("Progress")
-                          ? "bg-purple-500"
-                          : axis.name.includes("Secular")
-                          ? "bg-yellow-500"
-                          : axis.name.includes("Military")
-                          ? "bg-red-500"
-                          : "bg-indigo-500"
-                      }`}
-                    >
-                      {axis.userPosition}
+                    <span className="bg-secondary-lightBlue text-white px-3 py-1 rounded-full text-sm">
+                      {archetype.match}
                     </span>
                   </div>
-
-                  <div className="mb-4">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>{axis.name.split(" vs. ")[1]}</span>
-                      <span>{axis.name.split(" vs. ")[0]}</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2.5">
-                      <div
-                        className={`h-2.5 rounded-full ${
-                          axis.name.includes("Equality")
-                            ? "bg-blue-500"
-                            : axis.name.includes("Democracy")
-                            ? "bg-green-500"
-                            : axis.name.includes("Progress")
-                            ? "bg-purple-500"
-                            : axis.name.includes("Secular")
-                            ? "bg-yellow-500"
-                            : axis.name.includes("Military")
-                            ? "bg-red-500"
-                            : "bg-indigo-500"
-                        }`}
-                        style={{ width: `${axis.score}%` }}
-                      ></div>
-                    </div>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {archetype.traits.map((trait, i) => (
+                      <span
+                        key={i}
+                        className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700"
+                      >
+                        {trait}
+                      </span>
+                    ))}
                   </div>
-
-                  <p className="text-gray-700 text-sm">{axis.description}</p>
+                  <Link
+                    href={`/archetypes/${archetype.slug}`}
+                    className="text-primary-maroon hover:underline inline-flex items-center text-sm font-medium"
+                  >
+                    View Details <FaArrowRight className="ml-1 text-xs" />
+                  </Link>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
+        </div>
 
-          {/* Share Results */}
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-16">
-            <h2 className="text-2xl font-bold mb-6 text-center">
-              Share Your Results
-            </h2>
+        {/* Debug Section */}
+        {rawData && (
+          <div className="mb-16">
+            <button
+              onClick={() => setShowDebug(!showDebug)}
+              className="w-full bg-gray-100 hover:bg-gray-200 p-4 rounded-lg flex items-center justify-center font-medium text-gray-700"
+            >
+              <FaBug className="mr-2" />
+              {showDebug ? "Hide" : "Show"} Debug Information
+              {showDebug ? (
+                <FaChevronUp className="ml-2" />
+              ) : (
+                <FaChevronDown className="ml-2" />
+              )}
+            </button>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {showDebug && (
+              <div className="mt-4 bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <DebugResultsTable
+                  questions={rawData.questions}
+                  answers={rawData.answers}
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Share Results */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold mb-8 text-center">
+            Share Your Results
+          </h2>
+
+          <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Email Results */}
-              <div className="border border-gray-200 rounded-lg p-6">
+              <div className="p-6 border border-gray-200 rounded-lg">
                 <h3 className="text-xl font-bold mb-4 flex items-center">
-                  <FaEnvelope className="mr-2 text-primary-maroon" /> Email Your
+                  <FaEnvelope className="mr-2 text-primary-maroon" /> Email
                   Results
                 </h3>
-
-                {!emailSent ? (
-                  <form onSubmit={handleEmailSubmit} className="space-y-4">
-                    <div>
+                {emailSent ? (
+                  <div className="text-green-600">
+                    <p className="mb-2">Results sent!</p>
+                    <p className="text-sm">
+                      Check your inbox for your PhilosiQ results.
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleEmailSubmit}>
+                    <div className="mb-4">
                       <label
                         htmlFor="email"
                         className="block text-sm font-medium text-gray-700 mb-1"
                       >
-                        Email Address
+                        Your Email
                       </label>
                       <input
                         type="email"
                         id="email"
+                        className="w-full p-2 border border-gray-300 rounded"
                         value={userEmail}
                         onChange={(e) => setUserEmail(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-maroon"
-                        placeholder="your@email.com"
                         required
                       />
                     </div>
-                    <button type="submit" className="w-full btn-primary py-2">
+                    <button
+                      type="submit"
+                      className="w-full btn-primary-outline"
+                    >
                       Send Results
                     </button>
                   </form>
-                ) : (
-                  <div className="text-center py-4">
-                    <div className="bg-green-100 text-green-800 p-3 rounded-lg mb-4">
-                      Results sent successfully!
-                    </div>
-                    <button
-                      onClick={() => setEmailSent(false)}
-                      className="text-primary-maroon hover:underline"
-                    >
-                      Send to another email
-                    </button>
-                  </div>
                 )}
               </div>
 
               {/* Download PDF */}
-              <div className="border border-gray-200 rounded-lg p-6">
+              <div className="p-6 border border-gray-200 rounded-lg">
                 <h3 className="text-xl font-bold mb-4 flex items-center">
                   <FaDownload className="mr-2 text-primary-maroon" /> Download
-                  Your Results
+                  Results
                 </h3>
-                <p className="text-gray-600 mb-6">
-                  Get a PDF copy of your results to save or print for future
-                  reference.
+                <p className="mb-4 text-sm">
+                  Save your results as a PDF to reference later or share with
+                  others.
                 </p>
                 <button
                   onClick={handleDownloadPDF}
-                  className="w-full btn-primary py-2 flex items-center justify-center"
+                  className="w-full btn-primary-outline"
                 >
-                  <FaDownload className="mr-2" /> Download PDF
+                  Download PDF
                 </button>
+              </div>
+            </div>
 
-                <div className="mt-6">
-                  <p className="text-sm text-gray-500 mb-3">
-                    Share on social media:
-                  </p>
-                  <div className="flex space-x-4">
-                    <button className="text-blue-600 hover:text-blue-800">
-                      <FaFacebook size={24} />
-                    </button>
-                    <button className="text-blue-400 hover:text-blue-600">
-                      <FaTwitter size={24} />
-                    </button>
-                    <button className="text-blue-700 hover:text-blue-900">
-                      <FaLinkedin size={24} />
-                    </button>
-                  </div>
-                </div>
+            {/* Social Sharing */}
+            <div className="mt-6 text-center">
+              <h3 className="text-lg font-bold mb-4">Share on Social Media</h3>
+              <div className="flex justify-center gap-4">
+                <button className="p-3 bg-[#1DA1F2] text-white rounded-full hover:bg-opacity-90 transition">
+                  <FaTwitter size={20} />
+                </button>
+                <button className="p-3 bg-[#4267B2] text-white rounded-full hover:bg-opacity-90 transition">
+                  <FaFacebook size={20} />
+                </button>
+                <button className="p-3 bg-[#0077B5] text-white rounded-full hover:bg-opacity-90 transition">
+                  <FaLinkedin size={20} />
+                </button>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Take Another Quiz */}
-          <div className="text-center">
-            <Link href="/quiz" className="btn-outline inline-block">
-              Take Another Quiz
-            </Link>
-          </div>
+        {/* Take Quiz Again Button */}
+        <div className="text-center">
+          <Link href="/quiz" className="btn-secondary inline-flex items-center">
+            Take Quiz Again <FaArrowRight className="ml-2" />
+          </Link>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 }

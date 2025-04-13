@@ -46,32 +46,9 @@ export default function AdminsManagement() {
     setError(null);
 
     try {
-      // In a real implementation, you would fetch from an API
-      // const response = await axios.get("/api/admins");
-      // setAdmins(response.data.admins);
-
-      // Simulated data
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setAdmins([
-        {
-          _id: "1",
-          name: "Admin User",
-          email: "admin@philosiq.com",
-          role: "admin",
-          active: true,
-          createdAt: new Date("2023-01-01"),
-          lastLogin: new Date(),
-        },
-        {
-          _id: "2",
-          name: "John Smith",
-          email: "john@example.com",
-          role: "admin",
-          active: true,
-          createdAt: new Date("2023-03-15"),
-          lastLogin: new Date("2023-08-10"),
-        },
-      ]);
+      // Call the API to get admins
+      const response = await axios.get("/api/admin/admins");
+      setAdmins(response.data.admins);
     } catch (error) {
       console.error("Error fetching admins:", error);
       setError("Failed to load admins. Please try again.");
@@ -136,20 +113,11 @@ export default function AdminsManagement() {
           throw new Error("All fields are required");
         }
 
-        // In a real implementation, you would call an API
-        // const response = await axios.post("/api/admins", formData);
+        // Call API to create admin
+        const response = await axios.post("/api/admin/admins", formData);
 
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // Add to list with simulated ID
-        const newAdmin = {
-          _id: Date.now().toString(),
-          ...formData,
-          createdAt: new Date(),
-          lastLogin: null,
-        };
-
+        // Add to list
+        const newAdmin = response.data.admin;
         setAdmins((prev) => [newAdmin, ...prev]);
         setSuccess("Admin created successfully");
       } else {
@@ -158,13 +126,8 @@ export default function AdminsManagement() {
           throw new Error("Name and email are required");
         }
 
-        // In a real implementation, you would call an API
-        // const response = await axios.put(`/api/admins/${currentAdminId}`, formData);
-
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // Update in list
+        // Update admin - This is not implemented in the API yet, so we'll skip this for now
+        // For now, just update in the UI
         setAdmins((prev) =>
           prev.map((admin) =>
             admin._id === currentAdminId ? { ...admin, ...formData } : admin
@@ -178,7 +141,9 @@ export default function AdminsManagement() {
       resetForm();
     } catch (error) {
       console.error("Error submitting admin:", error);
-      setError(error.message || "Failed to save admin");
+      setError(
+        error.response?.data?.message || error.message || "Failed to save admin"
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -203,11 +168,8 @@ export default function AdminsManagement() {
     setSuccess("");
 
     try {
-      // In a real implementation, you would call an API
-      // await axios.delete(`/api/admins/${deleteId}`);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Call API to delete admin
+      await axios.delete(`/api/admin/admins?id=${deleteId}`);
 
       // Remove from list
       setAdmins((prev) => prev.filter((admin) => admin._id !== deleteId));
@@ -215,7 +177,7 @@ export default function AdminsManagement() {
       setDeleteId(null);
     } catch (error) {
       console.error("Error deleting admin:", error);
-      setError("Failed to delete admin");
+      setError(error.response?.data?.message || "Failed to delete admin");
     } finally {
       setIsSubmitting(false);
     }
