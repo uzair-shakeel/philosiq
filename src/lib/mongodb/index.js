@@ -17,10 +17,17 @@ async function connectToDatabase() {
     return cached.conn;
   }
 
+  console.log("Setting up new MongoDB connection");
+
+  // Print partially redacted connection string for debugging
+  const hiddenUri = MONGODB_URI.replace(/(mongodb:\/\/)([^@]+)@/, "$1****@");
+  console.log("Connecting to MongoDB with URI:", hiddenUri);
+
   if (!cached.promise) {
     const opts = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 10000, // Timeout after 10s instead of default 30s
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
@@ -32,12 +39,20 @@ async function connectToDatabase() {
   try {
     cached.conn = await cached.promise;
     console.log("MongoDB connection established successfully");
+
     // Log available collections
     const collections = Object.keys(mongoose.connection.collections);
     console.log("Available collections:", collections);
+
+    // Log connection status
+    console.log("MongoDB connection state:", mongoose.connection.readyState);
+
     return cached.conn;
   } catch (error) {
-    console.error("MongoDB connection error:", error);
+    console.error("MongoDB connection error:", error.message);
+    console.error("Full error:", error);
+    // Clear promise so connection can be retried
+    cached.promise = null;
     throw error;
   }
 }

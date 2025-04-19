@@ -13,29 +13,42 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        await connectToDatabase();
+        try {
+          await connectToDatabase();
 
-        // Find user by email
-        const user = await User.findOne({ email: credentials.email }).select(
-          "+password"
-        );
+          // Find user by email
+          const user = await User.findOne({ email: credentials.email }).select(
+            "+password"
+          );
 
-        // Check if user exists and password is correct
-        if (
-          !user ||
-          !(await bcrypt.compare(credentials.password, user.password))
-        ) {
-          throw new Error("Invalid email or password");
+          // Check if user exists and password is correct
+          if (!user) {
+            console.log("User not found");
+            return null;
+          }
+
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (!isPasswordValid) {
+            console.log("Invalid password");
+            return null;
+          }
+
+          // Return user object without password
+          return {
+            id: user._id.toString(),
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            image: user.image,
+          };
+        } catch (error) {
+          console.error("Authentication error:", error);
+          return null;
         }
-
-        // Return user object without password
-        return {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          image: user.image,
-        };
       },
     }),
   ],

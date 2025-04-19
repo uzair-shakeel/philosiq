@@ -22,18 +22,26 @@ export default function SignIn({ csrfToken }) {
     setError(null);
 
     try {
+      console.log("Attempting to sign in with:", { email });
+
       const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
       });
 
-      if (result.error) {
-        setError(result.error);
-      } else {
+      console.log("Sign in result:", result);
+
+      if (result?.error) {
+        setError(result.error || "Authentication failed");
+        console.error("Authentication error:", result.error);
+      } else if (result?.ok) {
         // Redirect to admin dashboard or callback URL
         const callbackUrl = router.query.callbackUrl || "/admin";
         router.push(callbackUrl);
+      } else {
+        setError("An unexpected error occurred");
+        console.error("Unexpected sign in result:", result);
       }
     } catch (error) {
       setError("An error occurred during sign in");
