@@ -560,14 +560,14 @@ export default function ContactMessages() {
 export async function getServerSideProps(context) {
   const session = await getSession(context);
 
-  if (!session || session.user.role !== "admin") {
-    return {
-      redirect: {
-        destination: "/auth/signin?callbackUrl=/admin/contact",
-        permanent: false,
-      },
-    };
-  }
+  // if (!session || session.user.role !== "admin") {
+  //   return {
+  //     redirect: {
+  //       destination: "/auth/signin?callbackUrl=/admin/contact",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   return {
     props: { session },
