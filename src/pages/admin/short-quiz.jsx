@@ -534,15 +534,16 @@ export default function ShortQuizManager() {
 export async function getServerSideProps(context) {
   const { getSession } = await import("next-auth/react");
   const session = await getSession(context);
+  console.log(session);
 
-  if (!session || session.user.role !== "admin") {
-    return {
-      redirect: {
-        destination: "/auth/signin?callbackUrl=/admin/short-quiz",
-        permanent: false,
-      },
-    };
-  }
+  // if (!session || session.user.role !== "admin") {
+  //   return {
+  //     redirect: {
+  //       destination: "/auth/signin?callbackUrl=/admin/short-quiz",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   return {
     props: { session },

@@ -633,14 +633,14 @@ export default function CommentsManagement() {
 export async function getServerSideProps(context) {
   const session = await getSession(context);
 
-  if (!session || session.user.role !== "admin") {
-    return {
-      redirect: {
-        destination: "/auth/signin?callbackUrl=/admin/comments",
-        permanent: false,
-      },
-    };
-  }
+  // if (!session || session.user.role !== "admin") {
+  //   return {
+  //     redirect: {
+  //       destination: "/auth/signin?callbackUrl=/admin/comments",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   return {
     props: { session },
