@@ -474,14 +474,14 @@ export default function EditQuestion() {
 export async function getServerSideProps(context) {
   const session = await getSession(context);
 
-  if (!session || session.user.role !== "admin") {
-    return {
-      redirect: {
-        destination: "/auth/signin?callbackUrl=/admin/questions",
-        permanent: false,
-      },
-    };
-  }
+  // if (!session || session.user.role !== "admin") {
+  //   return {
+  //     redirect: {
+  //       destination: "/auth/signin?callbackUrl=/admin/questions",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   return {
     props: { session },
