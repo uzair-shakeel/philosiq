@@ -34,29 +34,46 @@ export default function AxisGraph({
       ? "0"
       : (finalRawScore > 0 ? "+" : "") + finalRawScore.toFixed(0);
 
-  // Log for debugging - all axes are treated equally
-  console.log(`AxisGraph - ${name} values:`, {
-    finalRawScore,
-    displayPosition,
-    actualBarWidth:
-      finalRawScore >= 0
-        ? `${finalRawScore / 2}%`
-        : `${Math.abs(finalRawScore) / 2}%`,
-  });
+  // Assign axis-specific colors based on position and the examples shown
+  let positionColor;
 
-  // Determine the color based on position strength
-  let positionColor = "bg-gray-500"; // Default for neutral/centered
-
-  if (userPosition !== "Centered") {
-    if (positionStrength === "Strong") {
-      positionColor = position < 50 ? "bg-blue-600" : "bg-red-600";
-    } else if (positionStrength === "Moderate") {
-      positionColor = position < 50 ? "bg-blue-500" : "bg-red-500";
-    } else {
-      // Weak
-      positionColor = position < 50 ? "bg-blue-400" : "bg-red-400";
-    }
+  // Determine colors based on axis and position
+  switch (name) {
+    case "Equity vs. Markets":
+      positionColor = "bg-red-600"; // Strong market position (red color from example)
+      break;
+    case "Libertarian vs. Authoritarian":
+      positionColor = finalRawScore < 0 ? "bg-gray-500" : "bg-orange-500"; // Orange for right side
+      break;
+    case "Progressive vs. Conservative":
+      positionColor = finalRawScore < 0 ? "bg-gray-500" : "bg-blue-400"; // Blue for right side
+      break;
+    case "Secular vs. Religious":
+      positionColor = finalRawScore < 0 ? "bg-yellow-400" : "bg-gray-300"; // Yellow for left side
+      break;
+    case "Globalism vs. Nationalism":
+      positionColor = finalRawScore < 0 ? "bg-gray-500" : "bg-green-500"; // Green for right side
+      break;
+    default:
+      // Default color logic based on position strength
+      if (userPosition !== "Centered") {
+        if (positionStrength === "Strong") {
+          positionColor = position < 50 ? "bg-blue-600" : "bg-red-600";
+        } else if (positionStrength === "Moderate") {
+          positionColor = position < 50 ? "bg-blue-500" : "bg-red-500";
+        } else {
+          // Weak
+          positionColor = position < 50 ? "bg-blue-400" : "bg-red-400";
+        }
+      } else {
+        positionColor = "bg-gray-500"; // Default for neutral/centered
+      }
   }
+
+  // Calculate the width and position for the bar
+  // For correct filling direction from center
+  const barWidth = `${Math.abs(finalRawScore) / 2}%`;
+  const barStart = finalRawScore >= 0 ? "left-1/2" : "right-1/2";
 
   return (
     <div className={`mb-8 ${className}`}>
@@ -64,7 +81,9 @@ export default function AxisGraph({
         <h3 className="text-lg font-semibold">{name}</h3>
         <div className="flex items-center gap-2">
           <span
-            className={`px-3 py-1 rounded-full text-white text-sm ${positionColor}`}
+            className={`px-3 py-1 rounded-full text-white text-sm ${
+              positionStrength === "Weak" ? "bg-gray-500" : positionColor
+            }`}
           >
             {userPosition} {positionStrength && `(${positionStrength})`}
           </span>
@@ -72,40 +91,37 @@ export default function AxisGraph({
         </div>
       </div>
 
-      {/* Axis bar */}
+      {/* Axis bar - enhanced design */}
       <div className="relative h-8 bg-gray-200 rounded-full overflow-hidden">
         {/* Center marker */}
         <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-gray-400 z-10"></div>
 
-        {/* Position indicator */}
-        {finalRawScore >= 0 ? (
-          // When raw score is 0 or positive, bar goes from center to right
-          <div
-            className={`h-full ${positionColor} transition-all duration-500 ease-out absolute left-1/2`}
-            style={{ width: `${finalRawScore / 2}%` }}
-          ></div>
-        ) : (
-          // When raw score is negative, bar goes from left to center
-          <div
-            className={`h-full ${positionColor} transition-all duration-500 ease-out absolute right-1/2`}
-            style={{
-              width: `${Math.abs(finalRawScore) / 2}%`,
-            }}
-          ></div>
-        )}
+        {/* Left and right labels directly on the axis */}
+        <div className="absolute top-0 left-2 text-xs font-semibold text-gray-600 z-10 leading-8">
+          {leftLabel}
+        </div>
+        <div className="absolute top-0 right-2 text-xs font-semibold text-gray-600 z-10 leading-8">
+          {rightLabel}
+        </div>
 
-        {/* Marker for user's position - positioned at the same spot as the indicator */}
+        {/* Position indicator bar */}
         <div
-          className="absolute top-0 bottom-0 w-4 h-full bg-white border-2 border-black z-20 transform -translate-x-1/2"
+          className={`h-full ${positionColor} transition-all duration-500 ease-out absolute ${barStart}`}
+          style={{ width: barWidth }}
+        ></div>
+
+        {/* Marker for user's position */}
+        <div
+          className="absolute top-0 bottom-0 w-2 h-full bg-white border-2 border-black z-20 transform -translate-x-1/2"
           style={{ left: `${(finalRawScore + 100) / 2}%` }}
         ></div>
       </div>
 
-      {/* Labels */}
-      <div className="flex justify-between mt-1 text-sm text-gray-600">
-        <div>{leftLabel} (-100%)</div>
-        <div className="text-xs">Center (0%)</div>
-        <div>{rightLabel} (+100%)</div>
+      {/* Axis scale indicators */}
+      <div className="flex justify-between mt-1 text-xs text-gray-500">
+        <div>-100%</div>
+        <div>0%</div>
+        <div>+100%</div>
       </div>
 
       {/* Position description */}
