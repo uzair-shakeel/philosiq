@@ -12,6 +12,11 @@ const ANSWER_VALUES = {
   2: 1, // Strongly Agree
 };
 
+// Define axis name aliases to handle different naming conventions
+const AXIS_ALIASES = {
+  "Equality vs. Markets": "Equity vs. Markets",
+};
+
 // Axis configuration
 const AXIS_CONFIG = {
   "Equity vs. Markets": {
@@ -26,11 +31,23 @@ const AXIS_CONFIG = {
     leftLabel: "Libertarian",
     rightLabel: "Authoritarian",
   },
+  "Democracy vs. Authority": {
+    maxScore: 95,
+    minScore: -95,
+    leftLabel: "Democracy",
+    rightLabel: "Authority",
+  },
   "Progressive vs. Conservative": {
     maxScore: 103,
     minScore: -103,
     leftLabel: "Progressive",
     rightLabel: "Conservative",
+  },
+  "Progress vs. Tradition": {
+    maxScore: 98,
+    minScore: -98,
+    leftLabel: "Progress",
+    rightLabel: "Tradition",
   },
   "Secular vs. Religious": {
     maxScore: 72,
@@ -103,86 +120,97 @@ function calculateAnswerScore(
  * @returns {Object} - Object containing raw scores and normalized scores (0-100) for each axis
  */
 function calculateAxisScores(questions, answers) {
-  // Initialize scores for each axis
-  const rawScores = {};
+  // Initialize scores and weights for each axis
+  const rawScores = {}; // A - Total score
+  const disagreeWeights = {}; // B - Sum of disagree weights
+  const agreeWeights = {}; // C - Sum of agree weights
+
   Object.keys(AXIS_CONFIG).forEach((axis) => {
     rawScores[axis] = 0;
+    disagreeWeights[axis] = 0;
+    agreeWeights[axis] = 0;
   });
 
-  // For debugging
-  console.log("Questions:", questions.length);
-  console.log("Answer keys:", Object.keys(answers).length);
-
-  // Calculate raw scores by summing weighted answers
+  // Calculate raw scores and collect weights
   questions.forEach((question) => {
     const answer = answers[question._id];
 
     // Skip if question wasn't answered
     if (answer === undefined) return;
 
-    const axis = question.axis;
+    // Handle axis aliases - map alternative axis names to the canonical name
+    const canonicalAxis = AXIS_ALIASES[question.axis] || question.axis;
 
     // Skip if axis is not defined in our configuration
-    if (!AXIS_CONFIG[axis]) {
-      console.warn(`Unknown axis: ${axis}`);
+    if (!AXIS_CONFIG[canonicalAxis]) {
+      console.warn(`Unknown axis: ${question.axis} (${canonicalAxis})`);
       return;
     }
+
+    // Get weights for this question
+    const agreeWeight = question.weight_agree || question.weight || 1;
+    const disagreeWeight = question.weight_disagree || question.weight || 1;
+
+    // Add the weights to our totals
+    agreeWeights[canonicalAxis] += agreeWeight;
+    disagreeWeights[canonicalAxis] += disagreeWeight;
 
     // Add the weighted score to the corresponding axis
     const weightedScore = calculateAnswerScore(
       answer,
-      question.weight_agree || question.weight || 1,
-      question.weight_disagree || question.weight || 1,
+      agreeWeight,
+      disagreeWeight,
       question.direction
     );
 
     // Add to the axis total
-    rawScores[axis] = (rawScores[axis] || 0) + weightedScore;
+    rawScores[canonicalAxis] = (rawScores[canonicalAxis] || 0) + weightedScore;
   });
 
-  // Normalize scores to 0-100 scale
+  // Calculate raw normalized scores (-100 to 100 scale)
+  const rawNormalizedScores = {};
+
+  // Normalize scores to 0-100 scale for display
   const normalizedScores = {};
+
   Object.keys(rawScores).forEach((axis) => {
     const config = AXIS_CONFIG[axis];
     if (!config) return;
 
-    // Apply the normalization formula: ((score - min) / (max - min)) * 100
-    // This converts the raw score to a percentage position between min and max
-    const score = rawScores[axis];
-    const min = config.minScore;
-    const max = config.maxScore;
+    // Get values for formula components
+    const A = rawScores[axis] || 0; // User's raw score
+    const B = disagreeWeights[axis] || 0; // Sum of disagree weights
+    const C = agreeWeights[axis] || 0; // Sum of agree weights
 
-    // Special formula for Equity vs. Markets axis
-    if (axis === "Equity vs. Markets") {
-      // Apply the formula: EquityMarkets_score = ((user_score - min_score) / (max_score + min_score)) * 100
-      let normalizedScore = ((score - min) / (max + min)) * 100;
+    // Apply the formula: (A-B)/(B+C) to get a value between -1 and 1
+    // Then multiply by 100 to get percentage between -100% and 100%
+    // Handle division by zero by defaulting to 0
+    const denominator = B + C;
+    let normalizedRaw = denominator === 0 ? 0 : ((A - B) / denominator) * 100;
 
-      // Clamp between 0 and 100
-      normalizedScore = Math.max(0, Math.min(100, normalizedScore));
+    // Ensure the score is a finite number between -100 and 100
+    normalizedRaw = isFinite(normalizedRaw)
+      ? Math.max(-100, Math.min(100, normalizedRaw))
+      : 0;
 
-      // Round to whole number
-      normalizedScores[axis] = Math.round(normalizedScore);
-    } else {
-      // Standard formula for other axes: ((score - min) / (max - min)) * 100
-      // Ensure the range is valid
-      const range = max - min;
-      if (range <= 0) {
-        normalizedScores[axis] = 50; // Default to middle if range is invalid
-      } else {
-        let normalizedScore = ((score - min) / range) * 100;
+    // Store raw normalized score (-100 to 100)
+    rawNormalizedScores[axis] = normalizedRaw;
 
-        // Clamp between 0 and 100
-        normalizedScore = Math.max(0, Math.min(100, normalizedScore));
+    // Convert to 0-100 scale for display purposes
+    // 0 = -100%, 50 = 0%, 100 = 100%
+    const displayScore = (normalizedRaw + 100) / 2;
 
-        // Round to whole number
-        normalizedScores[axis] = Math.round(normalizedScore);
-      }
-    }
+    // Round to whole number
+    normalizedScores[axis] = Math.round(displayScore);
   });
 
+  // Return all the values for debugging
   return {
-    rawScores,
-    normalizedScores,
+    rawScores, // A
+    disagreeWeights, // B
+    agreeWeights, // C
+    rawNormalizedScores, // -100 to 100 scale (actual values)
+    normalizedScores, // 0-100 scale for display
   };
 }
 
@@ -201,7 +229,7 @@ function determineAxisPositions(normalizedScores) {
 
     if (!config) return;
 
-    // If score is exactly 50, it's perfectly centered
+    // If score is exactly 50, it's perfectly centered (0 on the -100 to 100 scale)
     if (score === 50) {
       positions[axis] = "Centered";
     } else if (score < 50) {
@@ -226,10 +254,14 @@ function determinePositionStrengths(normalizedScores) {
   Object.keys(normalizedScores).forEach((axis) => {
     const score = normalizedScores[axis];
 
-    // Calculate distance from center (50)
+    // Calculate distance from center (50 on the 0-100 scale)
     const distanceFromCenter = Math.abs(score - 50);
 
     // Determine strength based on distance
+    // For 0-100 scale:
+    // 0-15 from center (35-65) = Weak
+    // 15-35 from center (15-35 or 65-85) = Moderate
+    // 35+ from center (0-15 or 85-100) = Strong
     if (distanceFromCenter < 15) {
       strengths[axis] = "Weak";
     } else if (distanceFromCenter < 35) {
@@ -251,10 +283,13 @@ function determinePositionStrengths(normalizedScores) {
  */
 function calculateResults(questions, answers) {
   // Calculate scores
-  const { rawScores, normalizedScores } = calculateAxisScores(
-    questions,
-    answers
-  );
+  const {
+    rawScores,
+    disagreeWeights,
+    agreeWeights,
+    rawNormalizedScores,
+    normalizedScores,
+  } = calculateAxisScores(questions, answers);
 
   // Determine positions on each axis
   const axisPositions = determineAxisPositions(normalizedScores);
@@ -264,8 +299,11 @@ function calculateResults(questions, answers) {
 
   // Build the final results object
   const results = {
-    rawScores,
-    normalizedScores,
+    rawScores, // A
+    disagreeWeights, // B
+    agreeWeights, // C
+    normalizedScores, // 0-100 scale for display
+    rawNormalizedScores, // -100 to 100 scale (actual values)
     axisPositions,
     positionStrengths,
     axisResults: [],
@@ -273,9 +311,18 @@ function calculateResults(questions, answers) {
 
   // Format axis results for display
   Object.keys(AXIS_CONFIG).forEach((axis) => {
+    // Skip the axes we want to exclude from display
+    if (
+      axis === "Progressive vs. Conservative" ||
+      axis === "Libertarian vs. Authoritarian"
+    ) {
+      return;
+    }
+
     results.axisResults.push({
       name: axis,
       score: normalizedScores[axis],
+      rawScore: rawNormalizedScores[axis], // Add the raw score to the axis results
       userPosition: axisPositions[axis],
       positionStrength: positionStrengths[axis],
       leftLabel: AXIS_CONFIG[axis].leftLabel,
@@ -293,4 +340,5 @@ export {
   determineAxisPositions,
   ANSWER_VALUES,
   AXIS_CONFIG,
+  AXIS_ALIASES,
 };

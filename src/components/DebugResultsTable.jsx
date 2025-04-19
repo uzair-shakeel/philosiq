@@ -3,9 +3,14 @@ import React, { useState } from "react";
 /**
  * Debug component to display detailed calculations for each question
  */
-export default function DebugResultsTable({ questions, answers }) {
+export default function DebugResultsTable({ questions, answers, results }) {
   const [expandedQuestion, setExpandedQuestion] = useState(null);
   const [showNormalization, setShowNormalization] = useState(false);
+
+  // Define axis aliases to handle different naming conventions
+  const AXIS_ALIASES = {
+    "Equality vs. Markets": "Equity vs. Markets",
+  };
 
   // Return early if there's no data
   if (!questions || !answers || questions.length === 0) {
@@ -75,49 +80,75 @@ export default function DebugResultsTable({ questions, answers }) {
   // Group questions by axis
   const questionsByAxis = {};
   questions.forEach((question) => {
-    if (!questionsByAxis[question.axis]) {
-      questionsByAxis[question.axis] = [];
+    // Use canonical axis name (through alias mapping if needed)
+    const canonicalAxis = AXIS_ALIASES[question.axis] || question.axis;
+
+    if (!questionsByAxis[canonicalAxis]) {
+      questionsByAxis[canonicalAxis] = [];
     }
-    questionsByAxis[question.axis].push(question);
+    questionsByAxis[canonicalAxis].push(question);
   });
 
   // Calculate total score for each axis
   const axisTotals = {};
+  const axisAgreeWeights = {};
+  const axisDisagreeWeights = {};
+
   Object.keys(questionsByAxis).forEach((axis) => {
     axisTotals[axis] = questionsByAxis[axis].reduce((total, question) => {
       const score = calculateQuestionScore(question, answers[question._id]);
       return typeof score === "number" ? total + score : total;
     }, 0);
+
+    // Calculate agree weights (C) and disagree weights (B) for each axis
+    let totalAgreeWeight = 0;
+    let totalDisagreeWeight = 0;
+
+    questionsByAxis[axis].forEach((question) => {
+      totalAgreeWeight += question.weight_agree || question.weight || 1;
+      totalDisagreeWeight += question.weight_disagree || question.weight || 1;
+    });
+
+    axisAgreeWeights[axis] = totalAgreeWeight;
+    axisDisagreeWeights[axis] = totalDisagreeWeight;
   });
 
   // Axis configuration with min/max values
   const axisConfig = {
     "Equity vs. Markets": { min: -61, max: 61 },
     "Libertarian vs. Authoritarian": { min: -101, max: 101 },
+    "Democracy vs. Authority": { min: -95, max: 95 },
     "Progressive vs. Conservative": { min: -103, max: 103 },
+    "Progress vs. Tradition": { min: -98, max: 98 },
     "Secular vs. Religious": { min: -72, max: 72 },
     "Globalism vs. Nationalism": { min: -86, max: 86 },
   };
 
-  // Calculate normalized scores (0-100%)
-  const normalizedScores = {};
+  // Calculate normalized scores using new formula (-100 to 100%)
+  const rawNormalizedScores = {};
+  const displayNormalizedScores = {};
+
   Object.keys(axisTotals).forEach((axis) => {
     if (!axisConfig[axis]) return;
 
-    const rawScore = axisTotals[axis];
-    const min = axisConfig[axis].min;
-    const max = axisConfig[axis].max;
-    const range = max - min;
+    const A = axisTotals[axis] || 0; // Raw score
+    const B = axisDisagreeWeights[axis] || 0; // Sum of disagree weights
+    const C = axisAgreeWeights[axis] || 0; // Sum of agree weights
 
-    if (range <= 0) {
-      normalizedScores[axis] = 50;
-    } else {
-      // Apply the formula: EquityMarkets_score = ((user_score - min_score) / (max_score - min_score)) * 100
-      const normalized = ((rawScore - min) / range) * 100;
-      normalizedScores[axis] = Math.round(
-        Math.max(0, Math.min(100, normalized))
-      );
-    }
+    // Apply the formula: (A-B)/(B+C)*100 to get a percentage between -100% and 100%
+    // Handle division by zero by defaulting to 0
+    const denominator = B + C;
+    const normalizedRaw = denominator === 0 ? 0 : ((A - B) / denominator) * 100;
+
+    // Ensure we have a finite number
+    rawNormalizedScores[axis] = isFinite(normalizedRaw)
+      ? Math.max(-100, Math.min(100, normalizedRaw))
+      : 0;
+
+    // Convert to 0-100 scale for display
+    displayNormalizedScores[axis] = Math.round(
+      (rawNormalizedScores[axis] + 100) / 2
+    );
   });
 
   // Count questions per axis
@@ -139,11 +170,21 @@ export default function DebugResultsTable({ questions, answers }) {
             <div key={axis} className="border rounded p-3 bg-white">
               <div className="font-medium">{axis}</div>
               <div className="text-xl font-bold">
-                {axisTotals[axis].toFixed(2)} (Raw)
+                {axisTotals[axis].toFixed(2)} (Raw - A)
+              </div>
+              <div className="text-sm mt-1 flex justify-between">
+                <span>B: {axisDisagreeWeights[axis]} (Disagree)</span>
+                <span>C: {axisAgreeWeights[axis]} (Agree)</span>
               </div>
               <div className="text-sm mt-1">
-                <span className="font-medium">{normalizedScores[axis]}%</span>{" "}
-                (Normalized)
+                <span className="font-medium">
+                  {displayNormalizedScores[axis]}%
+                </span>{" "}
+                (Normalized:{" "}
+                {rawNormalizedScores[axis] !== undefined
+                  ? rawNormalizedScores[axis].toFixed(1)
+                  : "0"}
+                %)
               </div>
               <div className="text-xs text-gray-500 mt-1">
                 {questionsPerAxis[axis]} questions
@@ -152,76 +193,69 @@ export default function DebugResultsTable({ questions, answers }) {
           ))}
         </div>
 
-        {/* <button
+        <button
           onClick={() => setShowNormalization(!showNormalization)}
           className="text-blue-600 hover:text-blue-800 underline text-sm"
         >
           {showNormalization ? "Hide" : "Show"} Normalization Formula
-        </button> */}
+        </button>
 
         {showNormalization && (
           <div className="mt-4 p-4 bg-white rounded border">
             <h4 className="font-semibold mb-2">Normalization Formula</h4>
             <p className="mb-2 text-sm">
-              Each axis has a theoretical min and max score. The normalization
-              formula converts the raw score to a percentage (0-100) position
-              between these values:
+              The normalization formula converts the raw score to a percentage
+              (-100% to 100%) position:
             </p>
             <div className="bg-gray-100 p-3 rounded font-mono text-sm mb-2">
-              NormalizedScore = ((RawScore - MinScore) / (MaxScore - MinScore))
-              * 100
+              NormalizedScore = ((A - B) / (B + C)) * 100
+            </div>
+            <div className="text-sm mb-2">
+              <ul className="list-disc pl-6">
+                <li>A = Raw score (sum of all weighted answers)</li>
+                <li>B = Sum of all disagree weights</li>
+                <li>C = Sum of all agree weights</li>
+              </ul>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               {Object.keys(axisTotals).map((axis) => {
-                const raw = axisTotals[axis];
-                const min = axisConfig[axis].min;
-                const max = axisConfig[axis].max;
-                const range = max - min;
-                const normalized = ((raw - min) / range) * 100;
+                const A = axisTotals[axis] || 0;
+                const B = axisDisagreeWeights[axis] || 0;
+                const C = axisAgreeWeights[axis] || 0;
+                const rawScore = ((A - B) / (B + C)) * 100;
+                const displayScore = (rawScore + 100) / 2;
 
                 return (
                   <div key={axis} className="mb-3">
                     <h5 className="font-medium">{axis}</h5>
-                    <p className="text-xs mt-1 mb-1">Raw score: {raw}</p>
-                    <p className="text-xs mb-1">
-                      Range: {min} to {max}
+                    <p className="text-xs mt-1 mb-1">
+                      Raw score (A): {A.toFixed(2)}
                     </p>
-                    {axis === "Equity vs. Markets" ? (
-                      <div className="bg-gray-50 p-2 text-xs rounded">
-                        <p>Special formula for Equity vs Markets:</p>
-                        <pre className="bg-gray-100 p-1">
-                          ((RawScore - MinScore) / (MaxScore + MinScore)) * 100
-                        </pre>
-                        <p className="mt-1">
-                          = (({raw} - {min}) / ({max} + {min})) * 100
-                        </p>
-                        <p className="mt-1">
-                          = ({raw - min} / {max + min}) * 100
-                        </p>
-                        <p className="mt-1">
-                          = {(((raw - min) / (max + min)) * 100).toFixed(2)}% ≈{" "}
-                          {Math.round(((raw - min) / (max + min)) * 100)}%
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="bg-gray-50 p-2 text-xs rounded">
-                        <p>Standard formula:</p>
-                        <pre className="bg-gray-100 p-1">
-                          ((RawScore - MinScore) / (MaxScore - MinScore)) * 100
-                        </pre>
-                        <p className="mt-1">
-                          = (({raw} - {min}) / ({max} - {min})) * 100
-                        </p>
-                        <p className="mt-1">
-                          = ({raw - min} / {range}) * 100
-                        </p>
-                        <p className="mt-1">
-                          = {(((raw - min) / range) * 100).toFixed(2)}% ≈{" "}
-                          {Math.round(((raw - min) / range) * 100)}%
-                        </p>
-                      </div>
-                    )}
+                    <p className="text-xs mb-1">
+                      Disagree weights (B): {B}, Agree weights (C): {C}
+                    </p>
+                    <div className="bg-gray-50 p-2 text-xs rounded">
+                      <p>Formula calculation:</p>
+                      <pre className="bg-gray-100 p-1">
+                        ((A - B) / (B + C)) * 100
+                      </pre>
+                      <p className="mt-1">
+                        = (({A.toFixed(2)} - {B}) / ({B} + {C})) * 100
+                      </p>
+                      <p className="mt-1">
+                        = ({(A - B).toFixed(2)} / {B + C}) * 100
+                      </p>
+                      <p className="mt-1">
+                        = {isFinite(rawScore) ? rawScore.toFixed(2) : "N/A"}%
+                        (Raw normalized score)
+                      </p>
+                      <p className="mt-1">
+                        Displayed as:{" "}
+                        {isFinite(displayScore) ? Math.round(displayScore) : 50}
+                        % (0-100 scale)
+                      </p>
+                    </div>
                   </div>
                 );
               })}

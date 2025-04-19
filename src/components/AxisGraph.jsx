@@ -7,14 +7,42 @@ import React from "react";
 export default function AxisGraph({
   name,
   score = 50,
+  rawScore = 0, // This is the -100 to 100 score
   leftLabel,
   rightLabel,
   positionStrength,
   userPosition,
   className = "",
 }) {
-  // Calculate the position as a percentage (0-100)
+  // Calculate the position as a percentage (0-100) for the UI
   const position = Math.max(0, Math.min(100, score));
+
+  // Ensure rawScore is a number
+  const actualRawScore =
+    typeof rawScore === "number"
+      ? rawScore
+      : typeof rawScore === "string"
+      ? parseFloat(rawScore)
+      : 0;
+
+  // Use the actual raw score for all axes (no special cases)
+  const finalRawScore = actualRawScore;
+
+  // Show normalized percentage in a more user-friendly way
+  const displayPosition =
+    finalRawScore === 0
+      ? "0"
+      : (finalRawScore > 0 ? "+" : "") + finalRawScore.toFixed(0);
+
+  // Log for debugging - all axes are treated equally
+  console.log(`AxisGraph - ${name} values:`, {
+    finalRawScore,
+    displayPosition,
+    actualBarWidth:
+      finalRawScore >= 0
+        ? `${finalRawScore / 2}%`
+        : `${Math.abs(finalRawScore) / 2}%`,
+  });
 
   // Determine the color based on position strength
   let positionColor = "bg-gray-500"; // Default for neutral/centered
@@ -40,7 +68,7 @@ export default function AxisGraph({
           >
             {userPosition} {positionStrength && `(${positionStrength})`}
           </span>
-          <span className="font-bold">{score}%</span>
+          <span className="font-bold">{displayPosition}%</span>
         </div>
       </div>
 
@@ -50,22 +78,34 @@ export default function AxisGraph({
         <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-gray-400 z-10"></div>
 
         {/* Position indicator */}
-        <div
-          className={`h-full ${positionColor} transition-all duration-500 ease-out`}
-          style={{ width: `${position}%` }}
-        ></div>
+        {finalRawScore >= 0 ? (
+          // When raw score is 0 or positive, bar goes from center to right
+          <div
+            className={`h-full ${positionColor} transition-all duration-500 ease-out absolute left-1/2`}
+            style={{ width: `${finalRawScore / 2}%` }}
+          ></div>
+        ) : (
+          // When raw score is negative, bar goes from left to center
+          <div
+            className={`h-full ${positionColor} transition-all duration-500 ease-out absolute right-1/2`}
+            style={{
+              width: `${Math.abs(finalRawScore) / 2}%`,
+            }}
+          ></div>
+        )}
 
-        {/* Marker for user's position */}
+        {/* Marker for user's position - positioned at the same spot as the indicator */}
         <div
           className="absolute top-0 bottom-0 w-4 h-full bg-white border-2 border-black z-20 transform -translate-x-1/2"
-          style={{ left: `${position}%` }}
+          style={{ left: `${(finalRawScore + 100) / 2}%` }}
         ></div>
       </div>
 
       {/* Labels */}
       <div className="flex justify-between mt-1 text-sm text-gray-600">
-        <div>{leftLabel}</div>
-        <div>{rightLabel}</div>
+        <div>{leftLabel} (-100%)</div>
+        <div className="text-xs">Center (0%)</div>
+        <div>{rightLabel} (+100%)</div>
       </div>
 
       {/* Position description */}
@@ -82,6 +122,14 @@ export default function AxisGraph({
 function getPositionDescription(axis, score, strength) {
   const position = score < 50 ? "left" : "right";
   const intensity = strength?.toLowerCase() || "moderate";
+
+  // Define axis aliases
+  const AXIS_ALIASES = {
+    "Equality vs. Markets": "Equity vs. Markets",
+  };
+
+  // Use canonical axis name if an alias exists
+  const canonicalAxis = AXIS_ALIASES[axis] || axis;
 
   const descriptions = {
     "Equity vs. Markets": {
@@ -116,6 +164,22 @@ function getPositionDescription(axis, score, strength) {
           "You strongly believe in the necessity of centralized authority to ensure order, security, and effective governance.",
       },
     },
+    "Democracy vs. Authority": {
+      left: {
+        weak: "You generally prefer democratic processes, while recognizing some situations benefit from stronger leadership.",
+        moderate:
+          "You value democratic principles and believe meaningful citizen participation is important for good governance.",
+        strong:
+          "You strongly believe in democratic systems where power ultimately rests with citizens through direct participation.",
+      },
+      right: {
+        weak: "You see value in authority figures while still appreciating democratic processes in many contexts.",
+        moderate:
+          "You believe effective leadership often requires concentrated authority to implement policies efficiently.",
+        strong:
+          "You strongly favor hierarchical systems where authority and decision-making power are concentrated with expert leaders.",
+      },
+    },
     "Progressive vs. Conservative": {
       left: {
         weak: "You generally favor gradual social change while respecting some traditional values.",
@@ -130,6 +194,22 @@ function getPositionDescription(axis, score, strength) {
           "You value traditional institutions and believe in preserving established social structures and practices.",
         strong:
           "You strongly prioritize traditional values and believe in preserving established institutions against rapid change.",
+      },
+    },
+    "Progress vs. Tradition": {
+      left: {
+        weak: "You generally prefer modern approaches to problems while acknowledging the value of some traditions.",
+        moderate:
+          "You believe in embracing innovation and new ideas to improve society and create better outcomes.",
+        strong:
+          "You strongly favor progressive thinking and believe tradition should be regularly reassessed in light of new information.",
+      },
+      right: {
+        weak: "You appreciate traditional wisdom while remaining open to appropriate innovations when necessary.",
+        moderate:
+          "You value time-tested traditions and believe they provide stability and important cultural continuity.",
+        strong:
+          "You strongly believe in upholding traditional values and practices that have stood the test of time.",
       },
     },
     "Secular vs. Religious": {
@@ -168,7 +248,7 @@ function getPositionDescription(axis, score, strength) {
 
   // Return appropriate description or a default message if not found
   return (
-    descriptions[axis]?.[position]?.[intensity] ||
+    descriptions[canonicalAxis]?.[position]?.[intensity] ||
     "Your position on this axis reflects a balance between the opposing viewpoints."
   );
 }

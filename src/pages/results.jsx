@@ -30,6 +30,7 @@ export default function ResultsPage() {
 // Separated content component to receive processed results as props
 function ResultsContent({ results }) {
   const router = useRouter();
+
   const [emailSent, setEmailSent] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [showDebug, setShowDebug] = useState(false);
@@ -153,23 +154,37 @@ function ResultsContent({ results }) {
           </p>
 
           <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
-            {/* Display the axis results using our AxisGraph component */}
-            {results.axisResults.map((axis, index) => (
-              <AxisGraph
-                key={index}
-                name={axis.name}
-                score={axis.score}
-                leftLabel={axis.leftLabel}
-                rightLabel={axis.rightLabel}
-                userPosition={axis.userPosition}
-                positionStrength={axis.positionStrength}
-                className={
-                  index < results.axisResults.length - 1
-                    ? "border-b border-gray-200 pb-6"
-                    : ""
-                }
-              />
-            ))}
+            {/* 
+              Display the axis results using our AxisGraph component
+              Note: "Progressive vs. Conservative" and "Libertarian vs. Authoritarian" axes
+              are filtered out in the resultsCalculator.js file
+            */}
+            {results.axisResults.map((axis, index) => {
+              // Only log a summary of which axes are being displayed
+              if (index === 0) {
+                console.log(
+                  `Displaying ${results.axisResults.length} axes in results chart`
+                );
+              }
+
+              return (
+                <AxisGraph
+                  key={index}
+                  name={axis.name}
+                  score={axis.score}
+                  rawScore={axis.rawScore}
+                  leftLabel={axis.leftLabel}
+                  rightLabel={axis.rightLabel}
+                  userPosition={axis.userPosition}
+                  positionStrength={axis.positionStrength}
+                  className={
+                    index < results.axisResults.length - 1
+                      ? "border-b border-gray-200 pb-6"
+                      : ""
+                  }
+                />
+              );
+            })}
           </div>
         </div>
 
@@ -240,6 +255,7 @@ function ResultsContent({ results }) {
                 <DebugResultsTable
                   questions={rawData.questions}
                   answers={rawData.answers}
+                  results={results}
                 />
               </div>
             )}

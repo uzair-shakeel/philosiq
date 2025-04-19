@@ -30,7 +30,6 @@ export default function ResultsProcessor({ children }) {
 
       // Parse the stored data
       const parsedData = JSON.parse(storedData);
-      console.log("Parsed quiz data:", parsedData);
 
       const { answers, questions, axisScores } = parsedData;
 
@@ -40,28 +39,8 @@ export default function ResultsProcessor({ children }) {
         return;
       }
 
-      console.log("Calculating results with:", {
-        questionCount: questions.length,
-        answerCount: Object.keys(answers).length,
-        answerValues: Object.values(answers).slice(0, 5), // Show first 5 answers for debugging
-      });
-
-      // Verify that we have the correct data structure for questions
-      const sampleQuestion = questions[0];
-      if (sampleQuestion) {
-        console.log("Sample question:", {
-          id: sampleQuestion._id,
-          axis: sampleQuestion.axis,
-          direction: sampleQuestion.direction,
-          weight: sampleQuestion.weight,
-          weight_agree: sampleQuestion.weight_agree,
-          weight_disagree: sampleQuestion.weight_disagree,
-        });
-      }
-
       // Calculate the results using our utility function
       const calculatedResults = calculateResults(questions, answers);
-      console.log("Calculated results:", calculatedResults);
 
       // Set the processed results
       setResults(calculatedResults);
