@@ -71,9 +71,26 @@ export default function AxisGraph({
   }
 
   // Calculate the width and position for the bar
-  // For correct filling direction from center
-  const barWidth = `${Math.abs(finalRawScore) / 2}%`;
-  const barStart = finalRawScore >= 0 ? "left-1/2" : "right-1/2";
+  // Calculate exactly to the position marker
+  let barWidth;
+  let barPosition;
+
+  // The position marker is at (finalRawScore + 100) / 2 % from the left edge
+  // For negative values, we start from right and need to calculate width differently
+  if (finalRawScore < 0) {
+    // For negative values (left)
+    // We need the distance from right edge to position marker
+    const markerPosition = (finalRawScore + 100) / 2; // % from left
+    barWidth = `${100 - markerPosition}%`; // Distance from right edge
+    barPosition = "right-0"; // Start from right edge
+  } else if (finalRawScore > 0) {
+    // For positive values (right)
+    // We need the distance from left edge to position marker
+    const markerPosition = (finalRawScore + 100) / 2; // % from left
+    barWidth = `${markerPosition}%`; // Distance from left edge
+    barPosition = "left-0"; // Start from left edge
+  }
+  // For exactly 0, we don't set dimensions - bar won't render
 
   return (
     <div className={`mb-8 ${className}`}>
@@ -93,9 +110,6 @@ export default function AxisGraph({
 
       {/* Axis bar - enhanced design */}
       <div className="relative h-8 bg-gray-200 rounded-full overflow-hidden">
-        {/* Center marker */}
-        <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-gray-400 z-10"></div>
-
         {/* Left and right labels directly on the axis */}
         <div className="absolute top-0 left-2 text-xs font-semibold text-gray-600 z-10 leading-8">
           {leftLabel}
@@ -104,11 +118,13 @@ export default function AxisGraph({
           {rightLabel}
         </div>
 
-        {/* Position indicator bar */}
-        <div
-          className={`h-full ${positionColor} transition-all duration-500 ease-out absolute ${barStart}`}
-          style={{ width: barWidth }}
-        ></div>
+        {/* Position indicator bar - only shown if not zero */}
+        {finalRawScore !== 0 && (
+          <div
+            className={`h-full ${positionColor} transition-all duration-500 ease-out absolute ${barPosition}`}
+            style={{ width: barWidth }}
+          ></div>
+        )}
 
         {/* Marker for user's position */}
         <div
