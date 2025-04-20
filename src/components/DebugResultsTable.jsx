@@ -213,28 +213,35 @@ export default function DebugResultsTable({ questions, answers, results }) {
                 <li>A = Raw score (sum of all weighted answers)</li>
                 <li>B = Sum of all disagree weights</li>
                 <li>C = Sum of all agree weights</li>
+                <li>
+                  Max Score = Maximum possible score for this axis (from config)
+                </li>
               </ul>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               {Object.keys(axisTotals).map((axis) => {
-                const A = axisTotals[axis] || 0;
+                const A = axisTotals[axis] || 0; // Raw user score
                 const B = axisDisagreeWeights[axis] || 0;
                 const C = axisAgreeWeights[axis] || 0;
+                const maxScore = axisConfig[axis]?.max || 100;
                 const rawScore = ((A - B) / (B + C)) * 100;
-                const displayScore = (rawScore + 100) / 2;
+
+                // Calculate display score directly from user score (A) and max score
+                const displayScore = ((A + maxScore) / (maxScore * 2)) * 100;
 
                 return (
                   <div key={axis} className="mb-3">
                     <h5 className="font-medium">{axis}</h5>
                     <p className="text-xs mt-1 mb-1">
-                      Raw score (A): {A.toFixed(2)}
+                      Raw user score (A): {A.toFixed(2)}
                     </p>
+                    <p className="text-xs mb-1">Max score: {maxScore}</p>
                     <p className="text-xs mb-1">
                       Disagree weights (B): {B}, Agree weights (C): {C}
                     </p>
                     <div className="bg-gray-50 p-2 text-xs rounded">
-                      <p>Formula calculation:</p>
+                      <p>Raw normalized score formula:</p>
                       <pre className="bg-gray-100 p-1">
                         ((A - B) / (B + C)) * 100
                       </pre>
@@ -248,10 +255,25 @@ export default function DebugResultsTable({ questions, answers, results }) {
                         = {isFinite(rawScore) ? rawScore.toFixed(2) : "N/A"}%
                         (Raw normalized score)
                       </p>
+
+                      <p className="mt-3">
+                        Display score formula (0-100 scale):
+                      </p>
+                      <pre className="bg-gray-100 p-1">
+                        (User Score + Max Score) / (Max Score * 2) * 100
+                      </pre>
                       <p className="mt-1">
-                        Displayed as:{" "}
-                        {isFinite(displayScore) ? Math.round(displayScore) : 50}
-                        % (0-100 scale)
+                        = ({A.toFixed(2)} + {maxScore}) / ({maxScore} * 2) * 100
+                      </p>
+                      <p className="mt-1">
+                        = {(A + maxScore).toFixed(2)} / {maxScore * 2} * 100
+                      </p>
+                      <p className="mt-1">
+                        ={" "}
+                        {isFinite(displayScore)
+                          ? displayScore.toFixed(2)
+                          : "N/A"}
+                        % (Display score on 0-100 scale)
                       </p>
                     </div>
                   </div>

@@ -169,6 +169,7 @@ function calculateAxisScores(questions, answers) {
     const A = rawScores[axis] || 0; // User's raw score
     const B = disagreeWeights[axis] || 0; // Sum of disagree weights
     const C = agreeWeights[axis] || 0; // Sum of agree weights
+    const maxScore = config.maxScore || 100; // Get max score from config
 
     // Apply the formula: (A-B)/(B+C) to get a value between -1 and 1
     // Then multiply by 100 to get percentage between -100% and 100%
@@ -184,9 +185,8 @@ function calculateAxisScores(questions, answers) {
     // Store raw normalized score (-100 to 100)
     rawNormalizedScores[axis] = normalizedRaw;
 
-    // Convert to 0-100 scale for display purposes
-    // 0 = -100%, 50 = 0%, 100 = 100%
-    const displayScore = (normalizedRaw + 100) / 2;
+    // NEW FORMULA: Convert to 0-100 scale using (User Score + Max Score) / (Max Score * 2) * 100
+    const displayScore = ((A + maxScore) / (maxScore * 2)) * 100;
 
     // Round to whole number
     normalizedScores[axis] = Math.round(displayScore);
