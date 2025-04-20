@@ -13,7 +13,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="space-y-4">
             <Link href="/" className="inline-block">
-              <img src="/whitelogo.png" alt="logo" className="h-12 w-auto" />
+              <img src="/footer logo.png" alt="logo" className="h-12 w-auto" />
             </Link>
             <p className="text-gray-300 text-sm">
               Discover your political identity through our comprehensive survey
