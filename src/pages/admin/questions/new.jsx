@@ -177,14 +177,15 @@ export default function NewQuestion() {
                 onChange={handleChange}
                 className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-primary-maroon"
               >
-                <option value="Equality vs. Markets">
-                  Equality vs. Markets
+                <option value="">Select an axis</option>
+                <option value="Equity vs. Free Market">
+                  Equity vs. Free Market
                 </option>
-                <option value="Democracy vs. Authority">
-                  Democracy vs. Authority
+                <option value="Libertarian vs. Authoritarian">
+                  Libertarian vs. Authoritarian
                 </option>
-                <option value="Progress vs. Tradition">
-                  Progress vs. Tradition
+                <option value="Progressive vs. Conservative">
+                  Progressive vs. Conservative
                 </option>
                 <option value="Secular vs. Religious">
                   Secular vs. Religious

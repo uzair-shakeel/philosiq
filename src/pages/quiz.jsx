@@ -230,18 +230,18 @@ export default function QuizPage() {
   const calculateResults = () => {
     // Initialize axis scores
     const axisScores = {
-      "Equality vs. Markets": 50,
-      "Democracy vs. Authority": 50,
-      "Progress vs. Tradition": 50,
+      "Equity vs. Free Market": 50,
+      "Libertarian vs. Authoritarian": 50,
+      "Progressive vs. Conservative": 50,
       "Secular vs. Religious": 50,
       "Globalism vs. Nationalism": 50,
     };
 
     // Count how many questions were answered for each axis
     const axisCounts = {
-      "Equality vs. Markets": 0,
-      "Democracy vs. Authority": 0,
-      "Progress vs. Tradition": 0,
+      "Equity vs. Free Market": 0,
+      "Libertarian vs. Authoritarian": 0,
+      "Progressive vs. Conservative": 0,
       "Secular vs. Religious": 0,
       "Globalism vs. Nationalism": 0,
     };

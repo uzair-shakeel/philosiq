@@ -7,9 +7,9 @@ export default function DebugResultsTable({ questions, answers, results }) {
   const [expandedQuestion, setExpandedQuestion] = useState(null);
   const [showNormalization, setShowNormalization] = useState(false);
 
-  // Define axis aliases to handle different naming conventions
-  const AXIS_ALIASES = {
-    "Equality vs. Markets": "Equity vs. Markets",
+  // Create axis aliases to handle alternative names
+  const axisAliases = {
+    "Equality vs. Markets": "Equity vs. Free Market",
   };
 
   // Return early if there's no data
@@ -81,7 +81,7 @@ export default function DebugResultsTable({ questions, answers, results }) {
   const questionsByAxis = {};
   questions.forEach((question) => {
     // Use canonical axis name (through alias mapping if needed)
-    const canonicalAxis = AXIS_ALIASES[question.axis] || question.axis;
+    const canonicalAxis = axisAliases[question.axis] || question.axis;
 
     if (!questionsByAxis[canonicalAxis]) {
       questionsByAxis[canonicalAxis] = [];
@@ -115,11 +115,9 @@ export default function DebugResultsTable({ questions, answers, results }) {
 
   // Axis configuration with min/max values
   const axisConfig = {
-    "Equity vs. Markets": { min: -61, max: 61 },
+    "Equity vs. Free Market": { min: -61, max: 61 },
     "Libertarian vs. Authoritarian": { min: -101, max: 101 },
-    "Democracy vs. Authority": { min: -95, max: 95 },
     "Progressive vs. Conservative": { min: -103, max: 103 },
-    "Progress vs. Tradition": { min: -98, max: 98 },
     "Secular vs. Religious": { min: -72, max: 72 },
     "Globalism vs. Nationalism": { min: -86, max: 86 },
   };

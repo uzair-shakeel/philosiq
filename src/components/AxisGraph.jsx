@@ -39,7 +39,7 @@ export default function AxisGraph({
 
   // Determine colors based on axis and position
   switch (name) {
-    case "Equity vs. Markets":
+    case "Equity vs. Free Market":
       positionColor = "bg-red-600"; // Strong market position (red color from example)
       break;
     case "Libertarian vs. Authoritarian":
@@ -141,14 +141,14 @@ function getPositionDescription(axis, score, strength) {
 
   // Define axis aliases
   const AXIS_ALIASES = {
-    "Equality vs. Markets": "Equity vs. Markets",
+    "Equality vs. Markets": "Equity vs. Free Market",
   };
 
   // Use canonical axis name if an alias exists
   const canonicalAxis = AXIS_ALIASES[axis] || axis;
 
   const descriptions = {
-    "Equity vs. Markets": {
+    "Equity vs. Free Market": {
       left: {
         weak: "You have a slight preference for economic equality and redistributive policies, but you also see value in market mechanisms.",
         moderate:
@@ -180,22 +180,6 @@ function getPositionDescription(axis, score, strength) {
           "You strongly believe in the necessity of centralized authority to ensure order, security, and effective governance.",
       },
     },
-    "Democracy vs. Authority": {
-      left: {
-        weak: "You generally prefer democratic processes, while recognizing some situations benefit from stronger leadership.",
-        moderate:
-          "You value democratic principles and believe meaningful citizen participation is important for good governance.",
-        strong:
-          "You strongly believe in democratic systems where power ultimately rests with citizens through direct participation.",
-      },
-      right: {
-        weak: "You see value in authority figures while still appreciating democratic processes in many contexts.",
-        moderate:
-          "You believe effective leadership often requires concentrated authority to implement policies efficiently.",
-        strong:
-          "You strongly favor hierarchical systems where authority and decision-making power are concentrated with expert leaders.",
-      },
-    },
     "Progressive vs. Conservative": {
       left: {
         weak: "You generally favor gradual social change while respecting some traditional values.",
@@ -210,22 +194,6 @@ function getPositionDescription(axis, score, strength) {
           "You value traditional institutions and believe in preserving established social structures and practices.",
         strong:
           "You strongly prioritize traditional values and believe in preserving established institutions against rapid change.",
-      },
-    },
-    "Progress vs. Tradition": {
-      left: {
-        weak: "You generally prefer modern approaches to problems while acknowledging the value of some traditions.",
-        moderate:
-          "You believe in embracing innovation and new ideas to improve society and create better outcomes.",
-        strong:
-          "You strongly favor progressive thinking and believe tradition should be regularly reassessed in light of new information.",
-      },
-      right: {
-        weak: "You appreciate traditional wisdom while remaining open to appropriate innovations when necessary.",
-        moderate:
-          "You value time-tested traditions and believe they provide stability and important cultural continuity.",
-        strong:
-          "You strongly believe in upholding traditional values and practices that have stood the test of time.",
       },
     },
     "Secular vs. Religious": {

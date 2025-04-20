@@ -14,16 +14,16 @@ const ANSWER_VALUES = {
 
 // Define axis name aliases to handle different naming conventions
 const AXIS_ALIASES = {
-  "Equality vs. Markets": "Equity vs. Markets",
+  "Equality vs. Markets": "Equity vs. Free Market",
 };
 
 // Axis configuration
 const AXIS_CONFIG = {
-  "Equity vs. Markets": {
+  "Equity vs. Free Market": {
     maxScore: 61,
     minScore: -61,
     leftLabel: "Equity",
-    rightLabel: "Markets",
+    rightLabel: "Free Market",
   },
   "Libertarian vs. Authoritarian": {
     maxScore: 101,
@@ -31,23 +31,11 @@ const AXIS_CONFIG = {
     leftLabel: "Libertarian",
     rightLabel: "Authoritarian",
   },
-  "Democracy vs. Authority": {
-    maxScore: 95,
-    minScore: -95,
-    leftLabel: "Democracy",
-    rightLabel: "Authority",
-  },
   "Progressive vs. Conservative": {
     maxScore: 103,
     minScore: -103,
     leftLabel: "Progressive",
     rightLabel: "Conservative",
-  },
-  "Progress vs. Tradition": {
-    maxScore: 98,
-    minScore: -98,
-    leftLabel: "Progress",
-    rightLabel: "Tradition",
   },
   "Secular vs. Religious": {
     maxScore: 72,
@@ -311,14 +299,7 @@ function calculateResults(questions, answers) {
 
   // Format axis results for display
   Object.keys(AXIS_CONFIG).forEach((axis) => {
-    // Skip the axes we want to exclude from display
-    if (
-      axis === "Progressive vs. Conservative" ||
-      axis === "Libertarian vs. Authoritarian"
-    ) {
-      return;
-    }
-
+    // Include all axes in the results display
     results.axisResults.push({
       name: axis,
       score: normalizedScores[axis],

@@ -32,7 +32,7 @@ async function seedDatabase() {
     if (questionCount === 0) {
       const sampleQuestions = [
         {
-          axis: "Equality vs. Markets",
+          axis: "Equity vs. Free Market",
           topic: "Wealth Redistribution",
           question:
             "The government should heavily tax the wealthy to fund social programs for the poor.",
@@ -40,7 +40,7 @@ async function seedDatabase() {
           weight: 3,
         },
         {
-          axis: "Equality vs. Markets",
+          axis: "Equity vs. Free Market",
           topic: "Economic Freedom",
           question:
             "Free markets are the most efficient way to distribute resources and create prosperity.",
@@ -48,7 +48,7 @@ async function seedDatabase() {
           weight: 3,
         },
         {
-          axis: "Democracy vs. Authority",
+          axis: "Libertarian vs. Authoritarian",
           topic: "Civil Liberties",
           question:
             "Individual freedom should be prioritized even if it reduces society's security.",
@@ -56,7 +56,7 @@ async function seedDatabase() {
           weight: 2,
         },
         {
-          axis: "Democracy vs. Authority",
+          axis: "Libertarian vs. Authoritarian",
           topic: "Law Enforcement",
           question:
             "Strong government authority is necessary to maintain order and safety.",
@@ -64,7 +64,7 @@ async function seedDatabase() {
           weight: 2,
         },
         {
-          axis: "Progress vs. Tradition",
+          axis: "Progressive vs. Conservative",
           topic: "Social Change",
           question:
             "Society should embrace radical change when necessary to address systemic problems.",
@@ -72,7 +72,7 @@ async function seedDatabase() {
           weight: 3,
         },
         {
-          axis: "Progress vs. Tradition",
+          axis: "Progressive vs. Conservative",
           topic: "Cultural Values",
           question:
             "Traditional values and customs are important for maintaining social stability.",

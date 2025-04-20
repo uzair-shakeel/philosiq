@@ -7,9 +7,9 @@ const QuestionSchema = new mongoose.Schema(
       type: String,
       required: [true, "Axis is required"],
       enum: [
-        "Equality vs. Markets",
-        "Democracy vs. Authority",
-        "Progress vs. Tradition",
+        "Equity vs. Free Market",
+        "Libertarian vs. Authoritarian",
+        "Progressive vs. Conservative",
         "Secular vs. Religious",
         "Globalism vs. Nationalism",
       ],
