@@ -13,7 +13,7 @@ export default function NewQuestion() {
   // Form data
   const [formData, setFormData] = useState({
     question: "",
-    axis: "Equality vs. Markets",
+    axis: "Equity vs. Free Market",
     topic: "",
     direction: "Left",
     weight: 1,

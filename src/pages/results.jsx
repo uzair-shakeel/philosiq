@@ -49,17 +49,18 @@ function ResultsContent({ results }) {
     }
   }, []);
 
-  // Sample archetype data - in a real app, this would be derived from the axis scores
-  const archetype = {
-    id: "patriot",
-    name: "The Patriot",
-    description:
-      "You believe in economic freedom within a framework of national identity and democratic values.",
-    traits: ["Markets", "Democracy", "Conservative", "Nationalism"],
-    color: "from-red-500 to-blue-400",
-  };
+  // Get the user's archetype information from results
+  const archetype = results
+    ? {
+        id: results.archetype?.code?.toLowerCase() || "unknown",
+        name: results.archetype?.name || "Unknown Archetype",
+        description: getArchetypeDescription(results.archetype?.name),
+        traits: getAllAxisTraits(results.axisResults),
+        color: getArchetypeColor(results.archetype?.name),
+      }
+    : null;
 
-  // Sample secondary archetypes
+  // Sample secondary archetypes - in production these would be calculated
   const secondaryArchetypes = [
     {
       name: "The Maverick",
@@ -163,8 +164,24 @@ function ResultsContent({ results }) {
               // Only log a summary of which axes are being displayed
               if (index === 0) {
                 console.log(
-                  `Displaying ${results.axisResults.length} axes in results chart`
+                  `Displaying ${results.axisResults.length} axes in results chart:`,
+                  results.axisResults.map((a) => a)
                 );
+              }
+
+              // Additional debug for the Equity axis
+              if (
+                axis.name === "Equity vs. Free Market" ||
+                axis.name === "Equality vs. Markets"
+              ) {
+                console.log(`Results page - ${axis.name} data:`, {
+                  rawScore: axis.rawScore,
+                  score: axis.score,
+                  userPosition: axis.userPosition,
+                  positionStrength: axis.positionStrength,
+                  leftLabel: axis.leftLabel,
+                  rightLabel: axis.rightLabel,
+                });
               }
 
               return (
@@ -357,4 +374,82 @@ function ResultsContent({ results }) {
       </div>
     </div>
   );
+}
+
+// Helper function to extract all traits from axis results
+function getAllAxisTraits(axisResults) {
+  if (!axisResults || !Array.isArray(axisResults)) return [];
+
+  return axisResults.map((axis) => {
+    // FIXED: Return the OPPOSITE trait to match the archetype code
+    // This is needed because we're using the opposite position for display
+    const axisName = axis.name;
+    const userPosition = axis.userPosition;
+
+    // Define opposite positions for each axis
+    const oppositePositions = {
+      // For "Equity vs. Free Market" axis
+      Equity: "Free Market",
+      "Free Market": "Equity",
+      // For "Libertarian vs. Authoritarian" axis
+      Libertarian: "Authoritarian",
+      Authoritarian: "Libertarian",
+      // For "Progressive vs. Conservative" axis
+      Progressive: "Conservative",
+      Conservative: "Progressive",
+      // For "Secular vs. Religious" axis
+      Secular: "Religious",
+      Religious: "Secular",
+      // For "Globalism vs. Nationalism" axis
+      Globalism: "Nationalism",
+      Nationalism: "Globalism",
+      // Handle centered positions
+      Centered: "Centered",
+    };
+
+    // Use raw score to determine which side the user is actually on
+    // This aligns with the archetype code that's calculated
+    const rawScore = axis.rawScore;
+
+    // Return the opposite of what was calculated
+    // If rawScore is negative, we should show the right label
+    // If rawScore is positive, we should show the left label
+    if (rawScore < 0) {
+      return axis.rightLabel;
+    } else if (rawScore > 0) {
+      return axis.leftLabel;
+    } else {
+      return "Centered"; // For scores exactly at 0
+    }
+  });
+}
+
+// Helper function to get a description for the archetype
+function getArchetypeDescription(archetypeName) {
+  const descriptions = {
+    "The Patriot":
+      "You believe in economic freedom within a framework of national identity and democratic values while leaning conservative.",
+    "The Maverick":
+      "You value individual liberty and free markets, combined with a secular approach and strong national identity.",
+    "The Steward":
+      "You prioritize traditional values and market economics, with a balanced approach to authority and national sovereignty.",
+    // Add more descriptions as needed
+    "Unknown Archetype":
+      "Your unique combination of political values doesn't fit neatly into our defined archetypes.",
+  };
+
+  return descriptions[archetypeName] || descriptions["Unknown Archetype"];
+}
+
+// Helper function to get appropriate color gradient for the archetype
+function getArchetypeColor(archetypeName) {
+  const colors = {
+    "The Patriot": "from-red-500 to-blue-400",
+    "The Maverick": "from-blue-500 to-purple-400",
+    "The Steward": "from-green-500 to-blue-400",
+    // Add more colors as needed
+    "Unknown Archetype": "from-gray-500 to-gray-400",
+  };
+
+  return colors[archetypeName] || colors["Unknown Archetype"];
 }

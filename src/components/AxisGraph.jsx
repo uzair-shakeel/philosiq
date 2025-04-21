@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 /**
  * Component to display a visual representation of a political axis
@@ -14,56 +14,90 @@ export default function AxisGraph({
   userPosition,
   className = "",
 }) {
+  // More comprehensive debug information
+  useEffect(() => {
+    // Extra debugging for all axes to find inconsistencies
+    console.log(`AxisGraph Render - ${name || "unnamed axis"}:`, {
+      name,
+      score,
+      rawScore,
+      leftLabel,
+      rightLabel,
+      positionStrength,
+      userPosition,
+      isScoreValid: typeof score === "number" && !isNaN(score),
+      isRawScoreValid: typeof rawScore === "number" && !isNaN(rawScore),
+    });
+  }, [
+    name,
+    score,
+    rawScore,
+    leftLabel,
+    rightLabel,
+    positionStrength,
+    userPosition,
+  ]);
+
+  // Ensure we have valid data before rendering
+  if (!name) {
+    console.error("AxisGraph received an empty axis name");
+    return null;
+  }
+
+  // Handle potentially invalid score values
+  const validScore = typeof score === "number" && !isNaN(score) ? score : 50;
+  const validRawScore =
+    typeof rawScore === "number" && !isNaN(rawScore) ? rawScore : 0;
+
   // Calculate the position as a percentage (0-100) for the UI
-  const position = Math.max(0, Math.min(100, score));
+  const position = Math.max(0, Math.min(100, validScore));
 
-  // Ensure rawScore is a number
-  const actualRawScore =
-    typeof rawScore === "number"
-      ? rawScore
-      : typeof rawScore === "string"
-      ? parseFloat(rawScore)
-      : 0;
-
-  // Use the actual raw score for all axes (no special cases)
-  const finalRawScore = actualRawScore;
+  // Handle the canonical name for axes with aliases
+  const canonicalName =
+    name === "Equality vs. Markets" ? "Equity vs. Free Market" : name;
 
   // Show normalized percentage in a more user-friendly way
   const displayPosition =
-    finalRawScore === 0
+    validRawScore === 0
       ? "0"
-      : (finalRawScore > 0 ? "+" : "") + finalRawScore.toFixed(0);
+      : (validRawScore > 0 ? "+" : "") + validRawScore.toFixed(0);
+
+  // Make sure we have valid labels
+  const safeLeftLabel = leftLabel || "Left";
+  const safeRightLabel = rightLabel || "Right";
+  const safeUserPosition = userPosition || "Centered";
+  const safePositionStrength = positionStrength || "Weak";
 
   // Assign axis-specific colors based on position and the examples shown
   let positionColor;
 
   // Determine colors based on axis and position
-  switch (name) {
+  switch (canonicalName) {
     case "Equity vs. Free Market":
-      positionColor = "bg-red-600"; // Strong market position (red color from example)
+      positionColor = validRawScore < 0 ? "bg-blue-600" : "bg-red-600"; // Blue for left (Equity), Red for right (Free Market)
       break;
     case "Libertarian vs. Authoritarian":
-      positionColor = finalRawScore < 0 ? "bg-gray-500" : "bg-orange-500"; // Orange for right side
+      positionColor = validRawScore < 0 ? "bg-blue-500" : "bg-orange-500"; // Blue for left (Libertarian), Orange for right (Authoritarian)
       break;
     case "Progressive vs. Conservative":
-      positionColor = finalRawScore < 0 ? "bg-gray-500" : "bg-blue-400"; // Blue for right side
+      positionColor = validRawScore < 0 ? "bg-green-500" : "bg-blue-400"; // Green for left (Progressive), Blue for right (Conservative)
       break;
     case "Secular vs. Religious":
-      positionColor = finalRawScore < 0 ? "bg-yellow-400" : "bg-gray-300"; // Yellow for left side
+      positionColor = validRawScore < 0 ? "bg-yellow-400" : "bg-purple-500"; // Yellow for left (Secular), Purple for right (Religious)
       break;
     case "Globalism vs. Nationalism":
-      positionColor = finalRawScore < 0 ? "bg-gray-500" : "bg-green-500"; // Green for right side
+      positionColor = validRawScore < 0 ? "bg-teal-500" : "bg-green-500"; // Teal for left (Globalism), Green for right (Nationalism)
       break;
     default:
       // Default color logic based on position strength
-      if (userPosition !== "Centered") {
-        if (positionStrength === "Strong") {
-          positionColor = position < 50 ? "bg-blue-600" : "bg-red-600";
-        } else if (positionStrength === "Moderate") {
-          positionColor = position < 50 ? "bg-blue-500" : "bg-red-500";
+      if (safeUserPosition !== "Centered") {
+        if (safePositionStrength === "Strong") {
+          positionColor = validRawScore < 0 ? "bg-blue-600" : "bg-red-600";
+        } else if (safePositionStrength === "Moderate") {
+          positionColor = validRawScore < 0 ? "bg-blue-500" : "bg-red-500";
         } else {
           // Weak
-          positionColor = position < 50 ? "bg-blue-400" : "bg-red-400";
+          positionColor = validRawScore < 0 ? "bg-blue-400" : "bg-red-400";
         }
       } else {
         positionColor = "bg-gray-500"; // Default for neutral/centered
@@ -77,32 +111,46 @@ export default function AxisGraph({
 
   // The position marker is at (finalRawScore + 100) / 2 % from the left edge
   // For negative values, we start from right and need to calculate width differently
-  if (finalRawScore < 0) {
+  if (validRawScore < 0) {
     // For negative values (left)
     // We need the distance from right edge to position marker
-    const markerPosition = (finalRawScore + 100) / 2; // % from left
+    const markerPosition = (validRawScore + 100) / 2; // % from left
     barWidth = `${100 - markerPosition}%`; // Distance from right edge
     barPosition = "right-0"; // Start from right edge
-  } else if (finalRawScore > 0) {
+  } else if (validRawScore > 0) {
     // For positive values (right)
     // We need the distance from left edge to position marker
-    const markerPosition = (finalRawScore + 100) / 2; // % from left
+    const markerPosition = (validRawScore + 100) / 2; // % from left
     barWidth = `${markerPosition}%`; // Distance from left edge
     barPosition = "left-0"; // Start from left edge
+  } else {
+    // For zero, we'll still show a small marker
+    barWidth = "2px";
+    barPosition = "left-1/2 -translate-x-1/2";
   }
-  // For exactly 0, we don't set dimensions - bar won't render
 
   return (
     <div className={`mb-8 ${className}`}>
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-semibold">{name}</h3>
+      {/* Add a data attribute for debugging */}
+      <div
+        className="flex justify-between items-center mb-2"
+        data-axis-name={name}
+      >
+        <h3 className="text-lg font-semibold">{canonicalName}</h3>
         <div className="flex items-center gap-2">
           <span
             className={`px-3 py-1 rounded-full text-white text-sm ${
-              positionStrength === "Weak" ? "bg-gray-500" : positionColor
+              safePositionStrength === "Weak" && validRawScore === 0
+                ? "bg-gray-500"
+                : positionColor
             }`}
           >
-            {userPosition} {positionStrength && `(${positionStrength})`}
+            {validRawScore < 0
+              ? safeRightLabel
+              : validRawScore > 0
+              ? safeLeftLabel
+              : "Centered"}{" "}
+            {safePositionStrength && `(${safePositionStrength})`}
           </span>
           <span className="font-bold">{displayPosition}%</span>
         </div>
@@ -112,24 +160,22 @@ export default function AxisGraph({
       <div className="relative h-8 bg-gray-200 rounded-full overflow-hidden">
         {/* Left and right labels directly on the axis */}
         <div className="absolute top-0 left-2 text-xs font-semibold text-gray-600 z-10 leading-8">
-          {leftLabel}
+          {safeLeftLabel}
         </div>
         <div className="absolute top-0 right-2 text-xs font-semibold text-gray-600 z-10 leading-8">
-          {rightLabel}
+          {safeRightLabel}
         </div>
 
-        {/* Position indicator bar - only shown if not zero */}
-        {finalRawScore !== 0 && (
-          <div
-            className={`h-full ${positionColor} transition-all duration-500 ease-out absolute ${barPosition}`}
-            style={{ width: barWidth }}
-          ></div>
-        )}
+        {/* Position indicator bar */}
+        <div
+          className={`h-full ${positionColor} transition-all duration-500 ease-out absolute ${barPosition}`}
+          style={{ width: barWidth }}
+        ></div>
 
         {/* Marker for user's position */}
         <div
           className="absolute top-0 bottom-0 w-2 h-full bg-white border-2 border-black z-20 transform -translate-x-1/2"
-          style={{ left: `${(finalRawScore + 100) / 2}%` }}
+          style={{ left: `${(validRawScore + 100) / 2}%` }}
         ></div>
       </div>
 
@@ -142,7 +188,7 @@ export default function AxisGraph({
 
       {/* Position description */}
       <div className="mt-3 text-sm text-gray-700">
-        {getPositionDescription(name, position, positionStrength)}
+        {getPositionDescription(canonicalName, position, safePositionStrength)}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import React, { useState } from "react";
 export default function DebugResultsTable({ questions, answers, results }) {
   const [expandedQuestion, setExpandedQuestion] = useState(null);
   const [showNormalization, setShowNormalization] = useState(false);
+  const [showArchetype, setShowArchetype] = useState(false);
 
   // Create axis aliases to handle alternative names
   const axisAliases = {
@@ -20,6 +21,105 @@ export default function DebugResultsTable({ questions, answers, results }) {
       </div>
     );
   }
+
+  // Archetype mapping
+  const archetypeMap = {
+    ELPSG: "The Utopian",
+    ELPSN: "The Reformer",
+    ELPRG: "The Prophet",
+    ELPRN: "The Firebrand",
+    ELCSG: "The Philosopher",
+    ELCSN: "The Localist",
+    ELCRG: "The Missionary",
+    ELCRN: "The Guardian",
+    EAPSG: "The Technocrat",
+    EAPSN: "The Enforcer",
+    EAPRG: "The Zealot",
+    EAPRN: "The Purist",
+    EACSG: "The Commander",
+    EACSN: "The Steward",
+    EACRG: "The Shepherd",
+    EACRN: "The High Priest",
+    FLPSG: "The Futurist",
+    FLPSN: "The Maverick",
+    FLPRG: "The Evangelist",
+    FLPRN: "The Dissident",
+    FLCSG: "The Globalist",
+    FLCSN: "The Patriot",
+    FLCRG: "The Traditionalist",
+    FLCRN: "The Traditionalist",
+    FAPSG: "The Overlord",
+    FAPSN: "The Corporatist",
+    FAPRG: "The Moralizer",
+    FAPRN: "The Builder",
+    FACSG: "The Executive",
+    FACSN: "The Iconoclast",
+    FACRG: "The Traditionalist",
+    FACRN: "The Crusader",
+  };
+
+  // Function to determine axis letter based on score
+  const getAxisLetter = (axis, score, rawScore) => {
+    // Handle axis aliases for consistent naming
+    const canonicalAxis = axisAliases[axis] || axis;
+
+    // Add special debug for equity axis
+    if (axis === "Equity vs. Free Market" || axis === "Equality vs. Markets") {
+      console.log(
+        `DebugTable - Getting letter for ${axis} with score ${score}, rawScore ${rawScore}`,
+        {
+          canonicalName: canonicalAxis,
+          usingRawScore: rawScore !== undefined,
+          willReturn:
+            rawScore !== undefined
+              ? rawScore < 0
+                ? "F"
+                : "E"
+              : score < 50
+              ? "F"
+              : "E",
+        }
+      );
+    }
+
+    // FIXED: Completely reversed the logic to match resultsCalculator.js
+    // Now negative raw scores (left side on graph) map to RIGHT side letters
+    // and positive raw scores (right side on graph) map to LEFT side letters
+    const isRightSide = rawScore !== undefined ? rawScore < 0 : score < 50;
+
+    // Use the score to determine if we're on right or left side
+    if (isRightSide) {
+      switch (canonicalAxis) {
+        case "Equity vs. Free Market":
+          return "F"; // Free Market
+        case "Libertarian vs. Authoritarian":
+          return "A"; // Authoritarian
+        case "Progressive vs. Conservative":
+          return "C"; // Conservative
+        case "Secular vs. Religious":
+          return "R"; // Religious
+        case "Globalism vs. Nationalism":
+          return "N"; // Nationalism
+        default:
+          return "?";
+      }
+    } else {
+      switch (canonicalAxis) {
+        case "Equity vs. Free Market":
+          return "E"; // Equity
+        case "Libertarian vs. Authoritarian":
+          return "L"; // Libertarian
+        case "Progressive vs. Conservative":
+          return "P"; // Progressive
+        case "Secular vs. Religious":
+          return "S"; // Secular
+        case "Globalism vs. Nationalism":
+          return "G"; // Globalism
+        default:
+          return "?";
+      }
+    }
+  };
 
   // Simple mapping for direction/side
   const getSide = (direction) => (direction === "Left" ? "Left" : "Right");
@@ -191,12 +291,124 @@ export default function DebugResultsTable({ questions, answers, results }) {
           ))}
         </div>
 
-        <button
-          onClick={() => setShowNormalization(!showNormalization)}
-          className="text-blue-600 hover:text-blue-800 underline text-sm"
-        >
-          {showNormalization ? "Hide" : "Show"} Normalization Formula
-        </button>
+        {/* Archetype Calculation */}
+        <div className="mt-4">
+          <button
+            onClick={() => setShowArchetype(!showArchetype)}
+            className="text-blue-600 hover:text-blue-800 underline text-sm mr-4"
+          >
+            {showArchetype ? "Hide" : "Show"} Archetype Calculation
+          </button>
+
+          <button
+            onClick={() => setShowNormalization(!showNormalization)}
+            className="text-blue-600 hover:text-blue-800 underline text-sm"
+          >
+            {showNormalization ? "Hide" : "Show"} Normalization Formula
+          </button>
+        </div>
+
+        {showArchetype && (
+          <div className="mt-4 p-4 bg-white rounded border">
+            <h4 className="font-semibold mb-2">Archetype Calculation</h4>
+            <p className="mb-2 text-sm">
+              Each axis contributes one letter to the archetype code based on
+              which side of the center (50%) the score falls:
+            </p>
+
+            <div className="overflow-auto">
+              <table className="min-w-full divide-y divide-gray-200 mt-2 mb-4">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                      Axis
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                      Score
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                      Letter
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                      Meaning
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {Object.keys(axisConfig).map((axis) => {
+                    const score = displayNormalizedScores[axis] || 50;
+                    const letter = getAxisLetter(
+                      axis,
+                      score,
+                      rawNormalizedScores[axis]
+                    );
+                    const meaning =
+                      letter === "?"
+                        ? "Unknown"
+                        : {
+                            E: "Equity",
+                            F: "Free Market",
+                            L: "Libertarian",
+                            A: "Authoritarian",
+                            P: "Progressive",
+                            C: "Conservative",
+                            S: "Secular",
+                            R: "Religious",
+                            G: "Globalist",
+                            N: "Nationalist",
+                          }[letter];
+
+                    return (
+                      <tr key={axis}>
+                        <td className="px-4 py-2 text-sm">{axis}</td>
+                        <td className="px-4 py-2 text-sm">{score}%</td>
+                        <td className="px-4 py-2 text-sm font-bold">
+                          {letter}
+                        </td>
+                        <td className="px-4 py-2 text-sm">{meaning}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Archetype Result */}
+            {(() => {
+              const code = Object.keys(axisConfig)
+                .map((axis) =>
+                  getAxisLetter(
+                    axis,
+                    displayNormalizedScores[axis] || 50,
+                    rawNormalizedScores[axis]
+                  )
+                )
+                .join("");
+
+              const archetypeName = archetypeMap[code] || "Unknown Archetype";
+
+              return (
+                <div className="bg-gray-50 p-4 rounded">
+                  <div className="text-lg font-bold mb-1">
+                    Archetype Code:{" "}
+                    <span className="text-primary-maroon">{code}</span>
+                  </div>
+                  <div className="text-lg font-bold">
+                    Archetype Name:{" "}
+                    <span className="text-primary-maroon">{archetypeName}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">
+                    This archetype is determined by combining the letters from
+                    each axis. NOTE: We display OPPOSITE positions from the
+                    visual bars to match the archetype code. Left side bars
+                    (-100%) produce RIGHT side labels/letters and right side
+                    bars (+100%) produce LEFT side labels/letters.
+                  </p>
+                </div>
+              );
+            })()}
+          </div>
+        )}
 
         {showNormalization && (
           <div className="mt-4 p-4 bg-white rounded border">

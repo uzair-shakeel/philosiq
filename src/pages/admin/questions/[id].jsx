@@ -22,7 +22,7 @@ export default function EditQuestion() {
   // Form data
   const [formData, setFormData] = useState({
     question: "",
-    axis: "Equality vs. Markets",
+    axis: "Equity vs. Free Market",
     topic: "",
     direction: "Left",
     weight: 1,
@@ -49,7 +49,7 @@ export default function EditQuestion() {
       if (response.data && response.data.question) {
         setFormData({
           question: response.data.question.question || "",
-          axis: response.data.question.axis || "Equality vs. Markets",
+          axis: response.data.question.axis || "Equity vs. Free Market",
           topic: response.data.question.topic || "",
           direction: response.data.question.direction || "Left",
           weight: response.data.question.weight || 1,
