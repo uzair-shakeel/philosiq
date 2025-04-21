@@ -221,8 +221,12 @@ function calculateAxisScores(questions, answers) {
     // Store raw normalized score (-100 to 100)
     rawNormalizedScores[axis] = normalizedRaw;
 
-    // NEW FORMULA: Convert to 0-100 scale using (User Score + Max Score) / (Max Score * 2) * 100
-    const displayScore = ((A + maxScore) / (maxScore * 2)) * 100;
+    // FIXED: Use the sum of weights (B+C) as the max score instead of the hardcoded maxScore
+    // This makes the display score formula match the raw normalization formula
+    // NEW FORMULA: Convert to 0-100 scale using (User Score + Sum of Weights) / (Sum of Weights * 2) * 100
+    const totalWeight = denominator; // B + C = sum of all weights
+    const displayScore =
+      denominator === 0 ? 50 : ((A + totalWeight) / (totalWeight * 2)) * 100;
 
     // Round to whole number
     normalizedScores[axis] = Math.round(displayScore);

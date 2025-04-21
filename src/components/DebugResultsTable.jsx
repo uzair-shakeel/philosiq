@@ -425,10 +425,34 @@ export default function DebugResultsTable({ questions, answers, results }) {
                 <li>A = Raw score (sum of all weighted answers)</li>
                 <li>B = Sum of all disagree weights</li>
                 <li>C = Sum of all agree weights</li>
-                <li>
-                  Max Score = Maximum possible score for this axis (from config)
-                </li>
               </ul>
+            </div>
+
+            <h4 className="font-semibold mt-4 mb-2">
+              Display Score Formula (0-100 scale)
+            </h4>
+            <p className="mb-2 text-sm">
+              The display score formula converts the raw score to a percentage
+              (0-100%) for easier display:
+            </p>
+            <div className="bg-gray-100 p-3 rounded font-mono text-sm mb-2">
+              DisplayScore = ((A + (B + C)) / ((B + C) * 2)) * 100
+            </div>
+            <p className="text-sm mb-2">
+              This uses the sum of weights (B + C) rather than a static maximum
+              score, ensuring consistency between the raw normalization and
+              display score calculations.
+            </p>
+
+            <div className="bg-yellow-100 p-3 rounded text-sm mb-4 border border-yellow-300">
+              <p className="font-semibold text-yellow-800">Important Note:</p>
+              <p className="text-yellow-800">
+                Previous versions used a static "maxScore" value (e.g., 61 for
+                Equity vs. Free Market) instead of the sum of weights. This has
+                been corrected to use (B + C), which is the sum of all disagree
+                and agree weights. This ensures that both formulas use the same
+                denominator in their calculations.
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -436,11 +460,10 @@ export default function DebugResultsTable({ questions, answers, results }) {
                 const A = axisTotals[axis] || 0; // Raw user score
                 const B = axisDisagreeWeights[axis] || 0;
                 const C = axisAgreeWeights[axis] || 0;
-                const maxScore = axisConfig[axis]?.max || 100;
                 const rawScore = ((A - B) / (B + C)) * 100;
 
-                // Calculate display score directly from user score (A) and max score
-                const displayScore = ((A + maxScore) / (maxScore * 2)) * 100;
+                // Calculate display score directly from user score (A) and raw score
+                const displayScore = ((A + (B + C)) / ((B + C) * 2)) * 100;
 
                 return (
                   <div key={axis} className="mb-3">
@@ -448,7 +471,6 @@ export default function DebugResultsTable({ questions, answers, results }) {
                     <p className="text-xs mt-1 mb-1">
                       Raw user score (A): {A.toFixed(2)}
                     </p>
-                    <p className="text-xs mb-1">Max score: {maxScore}</p>
                     <p className="text-xs mb-1">
                       Disagree weights (B): {B}, Agree weights (C): {C}
                     </p>
@@ -472,20 +494,17 @@ export default function DebugResultsTable({ questions, answers, results }) {
                         Display score formula (0-100 scale):
                       </p>
                       <pre className="bg-gray-100 p-1">
-                        (User Score + Max Score) / (Max Score * 2) * 100
+                        (User Score + (B + C)) / ((B + C) * 2) * 100
                       </pre>
                       <p className="mt-1">
-                        = ({A.toFixed(2)} + {maxScore}) / ({maxScore} * 2) * 100
+                        = ({A.toFixed(2)} + ({B} + {C})) / (({B} + {C}) * 2) *
+                        100
                       </p>
                       <p className="mt-1">
-                        = {(A + maxScore).toFixed(2)} / {maxScore * 2} * 100
+                        = {(A + (B + C)).toFixed(2)} / {(B + C) * 2} * 100
                       </p>
-                      <p className="mt-1">
-                        ={" "}
-                        {isFinite(displayScore)
-                          ? displayScore.toFixed(2)
-                          : "N/A"}
-                        % (Display score on 0-100 scale)
+                      <p className="mt-1 font-bold text-primary-maroon">
+                        = {displayScore.toFixed(2)}%
                       </p>
                     </div>
                   </div>
