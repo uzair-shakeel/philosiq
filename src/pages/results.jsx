@@ -189,6 +189,8 @@ function ResultsContent({ results }) {
                   key={index}
                   name={axis.name}
                   score={axis.score}
+                  questions={rawData?.questions}
+                  answers={rawData?.answers}
                   rawScore={axis.rawScore}
                   leftLabel={axis.leftLabel}
                   rightLabel={axis.rightLabel}

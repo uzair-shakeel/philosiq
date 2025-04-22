@@ -275,9 +275,9 @@ export default function DebugResultsTable({ questions, answers, results }) {
                 <span>C: {axisAgreeWeights[axis]} (Agree)</span>
               </div>
               <div className="text-sm mt-1">
-                <span className="font-medium">
+                {/* <span className="font-medium">
                   {displayNormalizedScores[axis]}%
-                </span>{" "}
+                </span>{" "} */}
                 (Normalized:{" "}
                 {rawNormalizedScores[axis] !== undefined
                   ? rawNormalizedScores[axis].toFixed(1)
@@ -412,58 +412,16 @@ export default function DebugResultsTable({ questions, answers, results }) {
 
         {showNormalization && (
           <div className="mt-4 p-4 bg-white rounded border">
-            <h4 className="font-semibold mb-2">Normalization Formula</h4>
-            <p className="mb-2 text-sm">
-              The normalization formula converts the raw score to a percentage
-              (-100% to 100%) position:
-            </p>
-            <div className="bg-gray-100 p-3 rounded font-mono text-sm mb-2">
-              NormalizedScore = ((A - B) / (B + C)) * 100
-            </div>
-            <div className="text-sm mb-2">
-              <ul className="list-disc pl-6">
-                <li>A = Raw score (sum of all weighted answers)</li>
-                <li>B = Sum of all disagree weights</li>
-                <li>C = Sum of all agree weights</li>
-              </ul>
-            </div>
-
-            <h4 className="font-semibold mt-4 mb-2">
-              Display Score Formula (0-100 scale)
-            </h4>
-            <p className="mb-2 text-sm">
-              The display score formula converts the raw score to a percentage
-              (0-100%) for easier display:
-            </p>
-            <div className="bg-gray-100 p-3 rounded font-mono text-sm mb-2">
-              DisplayScore = ((A + (B + C)) / ((B + C) * 2)) * 100
-            </div>
-            <p className="text-sm mb-2">
-              This uses the sum of weights (B + C) rather than a static maximum
-              score, ensuring consistency between the raw normalization and
-              display score calculations.
-            </p>
-
-            <div className="bg-yellow-100 p-3 rounded text-sm mb-4 border border-yellow-300">
-              <p className="font-semibold text-yellow-800">Important Note:</p>
-              <p className="text-yellow-800">
-                Previous versions used a static "maxScore" value (e.g., 61 for
-                Equity vs. Free Market) instead of the sum of weights. This has
-                been corrected to use (B + C), which is the sum of all disagree
-                and agree weights. This ensures that both formulas use the same
-                denominator in their calculations.
-              </p>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               {Object.keys(axisTotals).map((axis) => {
                 const A = axisTotals[axis] || 0; // Raw user score
                 const B = axisDisagreeWeights[axis] || 0;
                 const C = axisAgreeWeights[axis] || 0;
-                const rawScore = ((A - B) / (B + C)) * 100;
+                // const maxScore = axisConfig[axis]?.max || 100;
+                // const rawScore = ((A - B) / (B + C)) * 100;
 
                 // Calculate display score directly from user score (A) and raw score
-                const displayScore = ((A + (B + C)) / ((B + C) * 2)) * 100;
+                const displayScore = (A / C) * 50 + 50;
 
                 return (
                   <div key={axis} className="mb-3">
@@ -475,7 +433,7 @@ export default function DebugResultsTable({ questions, answers, results }) {
                       Disagree weights (B): {B}, Agree weights (C): {C}
                     </p>
                     <div className="bg-gray-50 p-2 text-xs rounded">
-                      <p>Raw normalized score formula:</p>
+                      {/* <p>Raw normalized score formula:</p>
                       <pre className="bg-gray-100 p-1">
                         ((A - B) / (B + C)) * 100
                       </pre>
@@ -488,23 +446,22 @@ export default function DebugResultsTable({ questions, answers, results }) {
                       <p className="mt-1">
                         = {isFinite(rawScore) ? rawScore.toFixed(2) : "N/A"}%
                         (Raw normalized score)
-                      </p>
+                      </p> */}
 
                       <p className="mt-3">
                         Display score formula (0-100 scale):
                       </p>
                       <pre className="bg-gray-100 p-1">
-                        (User Score + (B + C)) / ((B + C) * 2) * 100
+                        (User Score / Max Score) * 50) + 50
                       </pre>
                       <p className="mt-1">
-                        = ({A.toFixed(2)} + ({B} + {C})) / (({B} + {C}) * 2) *
-                        100
+                        = ({A.toFixed(2)} / ( {C})) * 50) + 50
                       </p>
-                      <p className="mt-1">
-                        = {(A + (B + C)).toFixed(2)} / {(B + C) * 2} * 100
+                      <p className="mt-1 font-bold text-blue-600">
+                        = {displayScore.toFixed(2)}%
                       </p>
                       <p className="mt-1 font-bold text-primary-maroon">
-                        = {displayScore.toFixed(2)}%
+                        = {100 - displayScore.toFixed(2)}%
                       </p>
                     </div>
                   </div>

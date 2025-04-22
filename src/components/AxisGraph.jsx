@@ -10,39 +10,268 @@ export default function AxisGraph({
   rawScore = 0, // This is the -100 to 100 score
   leftLabel,
   rightLabel,
+  questions,
+  answers,
   positionStrength,
   userPosition,
   className = "",
 }) {
-  // More comprehensive debug information
-  useEffect(() => {
-    // Extra debugging for all axes to find inconsistencies
-    console.log(`AxisGraph Render - ${name || "unnamed axis"}:`, {
-      name,
-      score,
-      rawScore,
-      leftLabel,
-      rightLabel,
-      positionStrength,
-      userPosition,
-      isScoreValid: typeof score === "number" && !isNaN(score),
-      isRawScoreValid: typeof rawScore === "number" && !isNaN(rawScore),
-    });
-  }, [
-    name,
-    score,
-    rawScore,
-    leftLabel,
-    rightLabel,
-    positionStrength,
-    userPosition,
-  ]);
+  // Create axis aliases to handle alternative names
+  const axisAliases = {
+    "Equality vs. Markets": "Equity vs. Free Market",
+  };
 
-  // Ensure we have valid data before rendering
-  if (!name) {
-    console.error("AxisGraph received an empty axis name");
-    return null;
+  // Return early if there's no data
+  if (!questions || !answers || questions.length === 0) {
+    return (
+      <div className="p-4 bg-red-100 text-red-700 rounded">
+        No question or answer data available for debugging
+      </div>
+    );
   }
+
+  // Archetype mapping
+  const archetypeMap = {
+    ELPSG: "The Utopian",
+    ELPSN: "The Reformer",
+    ELPRG: "The Prophet",
+    ELPRN: "The Firebrand",
+    ELCSG: "The Philosopher",
+    ELCSN: "The Localist",
+    ELCRG: "The Missionary",
+    ELCRN: "The Guardian",
+    EAPSG: "The Technocrat",
+    EAPSN: "The Enforcer",
+    EAPRG: "The Zealot",
+    EAPRN: "The Purist",
+    EACSG: "The Commander",
+    EACSN: "The Steward",
+    EACRG: "The Shepherd",
+    EACRN: "The High Priest",
+    FLPSG: "The Futurist",
+    FLPSN: "The Maverick",
+    FLPRG: "The Evangelist",
+    FLPRN: "The Dissident",
+    FLCSG: "The Globalist",
+    FLCSN: "The Patriot",
+    FLCRG: "The Traditionalist",
+    FLCRN: "The Traditionalist",
+    FAPSG: "The Overlord",
+    FAPSN: "The Corporatist",
+    FAPRG: "The Moralizer",
+    FAPRN: "The Builder",
+    FACSG: "The Executive",
+    FACSN: "The Iconoclast",
+    FACRG: "The Traditionalist",
+    FACRN: "The Crusader",
+  };
+
+  // Function to determine axis letter based on score
+  const getAxisLetter = (axis, score, rawScore) => {
+    // Handle axis aliases for consistent naming
+    const canonicalAxis = axisAliases[axis] || axis;
+
+    // Add special debug for equity axis
+    if (axis === "Equity vs. Free Market" || axis === "Equality vs. Markets") {
+      console.log(
+        `DebugTable - Getting letter for ${axis} with score ${score}, rawScore ${rawScore}`,
+        {
+          canonicalName: canonicalAxis,
+          usingRawScore: rawScore !== undefined,
+          willReturn:
+            rawScore !== undefined
+              ? rawScore < 0
+                ? "F"
+                : "E"
+              : score < 50
+              ? "F"
+              : "E",
+        }
+      );
+    }
+
+    // FIXED: Completely reversed the logic to match resultsCalculator.js
+    // Now negative raw scores (left side on graph) map to RIGHT side letters
+    // and positive raw scores (right side on graph) map to LEFT side letters
+    const isRightSide = rawScore !== undefined ? rawScore < 0 : score < 50;
+
+    // Use the score to determine if we're on right or left side
+    if (isRightSide) {
+      switch (canonicalAxis) {
+        case "Equity vs. Free Market":
+          return "F"; // Free Market
+        case "Libertarian vs. Authoritarian":
+          return "A"; // Authoritarian
+        case "Progressive vs. Conservative":
+          return "C"; // Conservative
+        case "Secular vs. Religious":
+          return "R"; // Religious
+        case "Globalism vs. Nationalism":
+          return "N"; // Nationalism
+        default:
+          return "?";
+      }
+    } else {
+      switch (canonicalAxis) {
+        case "Equity vs. Free Market":
+          return "E"; // Equity
+        case "Libertarian vs. Authoritarian":
+          return "L"; // Libertarian
+        case "Progressive vs. Conservative":
+          return "P"; // Progressive
+        case "Secular vs. Religious":
+          return "S"; // Secular
+        case "Globalism vs. Nationalism":
+          return "G"; // Globalism
+        default:
+          return "?";
+      }
+    }
+  };
+
+  // Simple mapping for direction/side
+  const getSide = (direction) => (direction === "Left" ? "Left" : "Right");
+
+  // Convert numeric answer to text
+  const answerToText = (value) => {
+    const map = {
+      "-2": "Strongly Disagree (-1.0)",
+      "-1": "Disagree (-0.5)",
+      0: "Neutral (0)",
+      1: "Agree (+0.5)",
+      2: "Strongly Agree (+1.0)",
+    };
+    return map[value?.toString()] || "Not answered";
+  };
+
+  // Calculate the base value of the answer
+  const getBaseValue = (answerValue) => {
+    const baseValues = {
+      "-2": -1,
+      "-1": -0.5,
+      0: 0,
+      1: 0.5,
+      2: 1,
+    };
+    return baseValues[answerValue?.toString()] || 0;
+  };
+
+  // Calculate the weighted score for a single answer
+  const calculateQuestionScore = (question, answerValue) => {
+    if (answerValue === undefined) return "Not answered";
+
+    const baseValue = getBaseValue(answerValue);
+    if (baseValue === 0) return "0 (Neutral)";
+
+    // Determine which weight to apply
+    let appliedWeight;
+    if (baseValue > 0) {
+      // For positive answers (agree/strongly agree), use agree weight
+      appliedWeight = question.weight_agree || question.weight || 1;
+    } else {
+      // For negative answers (disagree/strongly disagree), use disagree weight
+      appliedWeight = question.weight_disagree || question.weight || 1;
+    }
+
+    // Calculate the weighted score
+    let weightedScore = baseValue * appliedWeight;
+
+    // If the question is aligned with the "Left" side, multiply by -1
+    // This is because Left should be negative and Right should be positive
+    if (question.direction === "Left") {
+      weightedScore *= -1;
+    }
+
+    return weightedScore;
+  };
+
+  // Group questions by axis
+  const questionsByAxis = {};
+  questions.forEach((question) => {
+    // Use canonical axis name (through alias mapping if needed)
+    const canonicalAxis = axisAliases[question.axis] || question.axis;
+
+    if (!questionsByAxis[canonicalAxis]) {
+      questionsByAxis[canonicalAxis] = [];
+    }
+    questionsByAxis[canonicalAxis].push(question);
+  });
+
+  // Calculate total score for each axis
+  const axisTotals = {};
+  const axisAgreeWeights = {};
+  const axisDisagreeWeights = {};
+
+  Object.keys(questionsByAxis).forEach((axis) => {
+    axisTotals[axis] = questionsByAxis[axis].reduce((total, question) => {
+      const score = calculateQuestionScore(question, answers[question._id]);
+      return typeof score === "number" ? total + score : total;
+    }, 0);
+
+    // Calculate agree weights (C) and disagree weights (B) for each axis
+    let totalAgreeWeight = 0;
+    let totalDisagreeWeight = 0;
+
+    questionsByAxis[axis].forEach((question) => {
+      totalAgreeWeight += question.weight_agree || question.weight || 1;
+      totalDisagreeWeight += question.weight_disagree || question.weight || 1;
+    });
+
+    axisAgreeWeights[axis] = totalAgreeWeight;
+    axisDisagreeWeights[axis] = totalDisagreeWeight;
+  });
+
+  // Axis configuration with min/max values
+  const axisConfig = {
+    "Equity vs. Free Market": { min: -61, max: 61 },
+    "Libertarian vs. Authoritarian": { min: -101, max: 101 },
+    "Progressive vs. Conservative": { min: -103, max: 103 },
+    "Secular vs. Religious": { min: -72, max: 72 },
+    "Globalism vs. Nationalism": { min: -86, max: 86 },
+  };
+
+  // Calculate normalized scores using new formula (-100 to 100%)
+  const axisPercentages = {};
+  const rawNormalizedScores = {};
+  const displayNormalizedScores = {};
+
+  Object.keys(axisTotals).forEach((axis) => {
+    if (!axisConfig[axis]) return;
+
+    const A = axisTotals[axis] || 0; // Raw score
+    const B = axisDisagreeWeights[axis] || 0; // Sum of disagree weights
+    const C = axisAgreeWeights[axis] || 0; // Sum of agree weights
+
+    // Calculate display scores for this axis
+    const displayScore = (A / C) * 50 + 50;
+
+    // Store percentages for each axis
+    axisPercentages[axis] = {
+      left: displayScore.toFixed(2),
+      right: (100 - displayScore).toFixed(2),
+    };
+
+    // Apply the formula: (A-B)/(B+C)*100 to get a percentage between -100% and 100%
+    // Handle division by zero by defaulting to 0
+    const denominator = B + C;
+    const normalizedRaw = denominator === 0 ? 0 : ((A - B) / denominator) * 100;
+
+    // Ensure we have a finite number
+    rawNormalizedScores[axis] = isFinite(normalizedRaw)
+      ? Math.max(-100, Math.min(100, normalizedRaw))
+      : 0;
+
+    // Convert to 0-100 scale for display
+    displayNormalizedScores[axis] = Math.round(
+      (rawNormalizedScores[axis] + 100) / 2
+    );
+  });
+
+  // Count questions per axis
+  const questionsPerAxis = {};
+  Object.keys(questionsByAxis).forEach((axis) => {
+    questionsPerAxis[axis] = questionsByAxis[axis].length;
+  });
 
   // Handle potentially invalid score values
   const validScore = typeof score === "number" && !isNaN(score) ? score : 50;
@@ -69,126 +298,122 @@ export default function AxisGraph({
   const safePositionStrength = positionStrength || "Weak";
 
   // Assign axis-specific colors based on position and the examples shown
-  let positionColor;
+  let leftSideColor = "bg-blue-600";
+  let rightSideColor = "bg-green-600";
 
-  // Determine colors based on axis and position
+  // Determine colors based on axis
   switch (canonicalName) {
     case "Equity vs. Free Market":
-      positionColor = validRawScore < 0 ? "bg-blue-600" : "bg-red-600"; // Blue for left (Equity), Red for right (Free Market)
+      leftSideColor = "bg-blue-600"; // Blue for left (Equity)
+      rightSideColor = "bg-green-600"; // Green for right (Free Market)
       break;
     case "Libertarian vs. Authoritarian":
-      positionColor = validRawScore < 0 ? "bg-blue-500" : "bg-orange-500"; // Blue for left (Libertarian), Orange for right (Authoritarian)
+      leftSideColor = "bg-blue-500"; // Blue for left (Libertarian)
+      rightSideColor = "bg-orange-500"; // Orange for right (Authoritarian)
       break;
     case "Progressive vs. Conservative":
-      positionColor = validRawScore < 0 ? "bg-green-500" : "bg-blue-400"; // Green for left (Progressive), Blue for right (Conservative)
+      leftSideColor = "bg-green-500"; // Green for left (Progressive)
+      rightSideColor = "bg-blue-400"; // Blue for right (Conservative)
       break;
     case "Secular vs. Religious":
-      positionColor = validRawScore < 0 ? "bg-yellow-400" : "bg-purple-500"; // Yellow for left (Secular), Purple for right (Religious)
+      leftSideColor = "bg-yellow-400"; // Yellow for left (Secular)
+      rightSideColor = "bg-purple-500"; // Purple for right (Religious)
       break;
     case "Globalism vs. Nationalism":
-      positionColor = validRawScore < 0 ? "bg-teal-500" : "bg-green-500"; // Teal for left (Globalism), Green for right (Nationalism)
+      leftSideColor = "bg-teal-500"; // Teal for left (Globalism)
+      rightSideColor = "bg-green-500"; // Green for right (Nationalism)
       break;
     default:
-      // Default color logic based on position strength
-      if (safeUserPosition !== "Centered") {
-        if (safePositionStrength === "Strong") {
-          positionColor = validRawScore < 0 ? "bg-blue-600" : "bg-red-600";
-        } else if (safePositionStrength === "Moderate") {
-          positionColor = validRawScore < 0 ? "bg-blue-500" : "bg-red-500";
-        } else {
-          // Weak
-          positionColor = validRawScore < 0 ? "bg-blue-400" : "bg-red-400";
-        }
-      } else {
-        positionColor = "bg-gray-500"; // Default for neutral/centered
-      }
+      // Default colors
+      leftSideColor = "bg-blue-600";
+      rightSideColor = "bg-green-600";
   }
 
-  // Calculate the width and position for the bar
-  // Calculate exactly to the position marker
-  let barWidth;
-  let barPosition;
+  // Get the axis-specific percentages
+  const axisSpecificPercentages = axisPercentages[canonicalName] || {
+    left: "50.00",
+    right: "50.00",
+  };
+  const leftPercent = axisSpecificPercentages.left;
+  const rightPercent = axisSpecificPercentages.right;
 
-  // The position marker is at (finalRawScore + 100) / 2 % from the left edge
-  // For negative values, we start from right and need to calculate width differently
-  if (validRawScore < 0) {
-    // For negative values (left)
-    // We need the distance from right edge to position marker
-    const markerPosition = (validRawScore + 100) / 2; // % from left
-    barWidth = `${100 - markerPosition}%`; // Distance from right edge
-    barPosition = "right-0"; // Start from right edge
-  } else if (validRawScore > 0) {
-    // For positive values (right)
-    // We need the distance from left edge to position marker
-    const markerPosition = (validRawScore + 100) / 2; // % from left
-    barWidth = `${markerPosition}%`; // Distance from left edge
-    barPosition = "left-0"; // Start from left edge
-  } else {
-    // For zero, we'll still show a small marker
-    barWidth = "2px";
-    barPosition = "left-1/2 -translate-x-1/2";
-  }
+  // Use the supplied position parameter for the current axis
+  // Instead of using displayNormalizedScores, use the actual score directly
+  const currentAxisScore = parseFloat(leftPercent);
+
+  // Special handling to ensure the marker is visible at edges
+  let markerVisiblePosition = currentAxisScore;
+  if (markerVisiblePosition <= 1) markerVisiblePosition = 1;
+  if (markerVisiblePosition >= 99) markerVisiblePosition = 99;
 
   return (
     <div className={`mb-8 ${className}`}>
-      {/* Add a data attribute for debugging */}
-      <div
-        className="flex justify-between items-center mb-2"
-        data-axis-name={name}
-      >
-        <h3 className="text-lg font-semibold">{canonicalName}</h3>
-        <div className="flex items-center gap-2">
+      {/* Axis Title */}
+      <h3 className="text-lg font-semibold mb-1">{canonicalName}</h3>
+
+      {/* Axis Labels */}
+      <div className="flex justify-between items-center">
+        <div className="text-xs font-medium">
           <span
-            className={`px-3 py-1 rounded-full text-white text-sm ${
-              safePositionStrength === "Weak" && validRawScore === 0
-                ? "bg-gray-500"
-                : positionColor
-            }`}
+            className={`px-2 py-0.5 rounded-full text-white ${leftSideColor}`}
           >
-            {validRawScore < 0
-              ? safeRightLabel
-              : validRawScore > 0
-              ? safeLeftLabel
-              : "Centered"}{" "}
-            {safePositionStrength && `(${safePositionStrength})`}
+            {safeLeftLabel}
           </span>
-          <span className="font-bold">{displayPosition}%</span>
+        </div>
+        <div className="text-xs font-medium">
+          <span
+            className={`px-2 py-0.5 rounded-full text-white ${rightSideColor}`}
+          >
+            {safeRightLabel} {positionStrength && `(${positionStrength})`}
+          </span>
         </div>
       </div>
 
-      {/* Axis bar - enhanced design */}
-      <div className="relative h-8 bg-gray-200 rounded-full overflow-hidden">
-        {/* Left and right labels directly on the axis */}
-        <div className="absolute top-0 left-2 text-xs font-semibold text-gray-600 z-10 leading-8">
-          {safeLeftLabel}
-        </div>
-        <div className="absolute top-0 right-2 text-xs font-semibold text-gray-600 z-10 leading-8">
-          {safeRightLabel}
+      {/* Axis bar - enhanced design with both sides colored */}
+      <div className="relative h-10 rounded-full overflow-hidden mt-1 border border-gray-200">
+        {/* Left side bar with percentage always visible */}
+        <div
+          className={`h-full ${leftSideColor} absolute left-0 z-10 flex items-center justify-center`}
+          style={{ width: `${leftPercent}%` }}
+        >
+          {/* Always show percentage */}
+          <span className="text-white font-bold text-center px-2 z-20">
+            {leftPercent}%
+          </span>
         </div>
 
-        {/* Position indicator bar */}
+        {/* Right side bar with percentage always visible */}
         <div
-          className={`h-full ${positionColor} transition-all duration-500 ease-out absolute ${barPosition}`}
-          style={{ width: barWidth }}
-        ></div>
+          className={`h-full ${rightSideColor} absolute right-0 z-10 flex items-center justify-center`}
+          style={{ width: `${rightPercent}%` }}
+        >
+          {/* Always show percentage */}
+          <span className="text-white font-bold text-center px-2 z-20">
+            {rightPercent}%
+          </span>
+        </div>
 
         {/* Marker for user's position */}
         <div
-          className="absolute top-0 bottom-0 w-2 h-full bg-white border-2 border-black z-20 transform -translate-x-1/2"
-          style={{ left: `${(validRawScore + 100) / 2}%` }}
+          className="absolute top-0 bottom-0 w-1 h-full bg-white border border-black z-30 transform -translate-x-1/2"
+          style={{ left: `${markerVisiblePosition}%` }}
         ></div>
       </div>
 
       {/* Axis scale indicators */}
-      <div className="flex justify-between mt-1 text-xs text-gray-500">
+      <div className="flex justify-between mt-1 text-xs text-gray-700">
         <div>-100%</div>
         <div>0%</div>
         <div>+100%</div>
       </div>
 
       {/* Position description */}
-      <div className="mt-3 text-sm text-gray-700">
-        {getPositionDescription(canonicalName, position, safePositionStrength)}
+      <div className="mt-2 text-sm text-gray-700">
+        {getPositionDescription(
+          canonicalName,
+          markerVisiblePosition,
+          safePositionStrength
+        )}
       </div>
     </div>
   );
