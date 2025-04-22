@@ -30,120 +30,6 @@ export default function AxisGraph({
     );
   }
 
-  // Archetype mapping
-  const archetypeMap = {
-    ELPSG: "The Utopian",
-    ELPSN: "The Reformer",
-    ELPRG: "The Prophet",
-    ELPRN: "The Firebrand",
-    ELCSG: "The Philosopher",
-    ELCSN: "The Localist",
-    ELCRG: "The Missionary",
-    ELCRN: "The Guardian",
-    EAPSG: "The Technocrat",
-    EAPSN: "The Enforcer",
-    EAPRG: "The Zealot",
-    EAPRN: "The Purist",
-    EACSG: "The Commander",
-    EACSN: "The Steward",
-    EACRG: "The Shepherd",
-    EACRN: "The High Priest",
-    FLPSG: "The Futurist",
-    FLPSN: "The Maverick",
-    FLPRG: "The Evangelist",
-    FLPRN: "The Dissident",
-    FLCSG: "The Globalist",
-    FLCSN: "The Patriot",
-    FLCRG: "The Traditionalist",
-    FLCRN: "The Traditionalist",
-    FAPSG: "The Overlord",
-    FAPSN: "The Corporatist",
-    FAPRG: "The Moralizer",
-    FAPRN: "The Builder",
-    FACSG: "The Executive",
-    FACSN: "The Iconoclast",
-    FACRG: "The Traditionalist",
-    FACRN: "The Crusader",
-  };
-
-  // Function to determine axis letter based on score
-  const getAxisLetter = (axis, score, rawScore) => {
-    // Handle axis aliases for consistent naming
-    const canonicalAxis = axisAliases[axis] || axis;
-
-    // Add special debug for equity axis
-    if (axis === "Equity vs. Free Market" || axis === "Equality vs. Markets") {
-      console.log(
-        `DebugTable - Getting letter for ${axis} with score ${score}, rawScore ${rawScore}`,
-        {
-          canonicalName: canonicalAxis,
-          usingRawScore: rawScore !== undefined,
-          willReturn:
-            rawScore !== undefined
-              ? rawScore < 0
-                ? "F"
-                : "E"
-              : score < 50
-              ? "F"
-              : "E",
-        }
-      );
-    }
-
-    // FIXED: Completely reversed the logic to match resultsCalculator.js
-    // Now negative raw scores (left side on graph) map to RIGHT side letters
-    // and positive raw scores (right side on graph) map to LEFT side letters
-    const isRightSide = rawScore !== undefined ? rawScore < 0 : score < 50;
-
-    // Use the score to determine if we're on right or left side
-    if (isRightSide) {
-      switch (canonicalAxis) {
-        case "Equity vs. Free Market":
-          return "F"; // Free Market
-        case "Libertarian vs. Authoritarian":
-          return "A"; // Authoritarian
-        case "Progressive vs. Conservative":
-          return "C"; // Conservative
-        case "Secular vs. Religious":
-          return "R"; // Religious
-        case "Globalism vs. Nationalism":
-          return "N"; // Nationalism
-        default:
-          return "?";
-      }
-    } else {
-      switch (canonicalAxis) {
-        case "Equity vs. Free Market":
-          return "E"; // Equity
-        case "Libertarian vs. Authoritarian":
-          return "L"; // Libertarian
-        case "Progressive vs. Conservative":
-          return "P"; // Progressive
-        case "Secular vs. Religious":
-          return "S"; // Secular
-        case "Globalism vs. Nationalism":
-          return "G"; // Globalism
-        default:
-          return "?";
-      }
-    }
-  };
-
-  // Simple mapping for direction/side
-  const getSide = (direction) => (direction === "Left" ? "Left" : "Right");
-
-  // Convert numeric answer to text
-  const answerToText = (value) => {
-    const map = {
-      "-2": "Strongly Disagree (-1.0)",
-      "-1": "Disagree (-0.5)",
-      0: "Neutral (0)",
-      1: "Agree (+0.5)",
-      2: "Strongly Agree (+1.0)",
-    };
-    return map[value?.toString()] || "Not answered";
-  };
-
   // Calculate the base value of the answer
   const getBaseValue = (answerValue) => {
     const baseValues = {
@@ -278,18 +164,9 @@ export default function AxisGraph({
   const validRawScore =
     typeof rawScore === "number" && !isNaN(rawScore) ? rawScore : 0;
 
-  // Calculate the position as a percentage (0-100) for the UI
-  const position = Math.max(0, Math.min(100, validScore));
-
   // Handle the canonical name for axes with aliases
   const canonicalName =
     name === "Equality vs. Markets" ? "Equity vs. Free Market" : name;
-
-  // Show normalized percentage in a more user-friendly way
-  const displayPosition =
-    validRawScore === 0
-      ? "0"
-      : (validRawScore > 0 ? "+" : "") + validRawScore.toFixed(0);
 
   // Make sure we have valid labels
   const safeLeftLabel = leftLabel || "Left";
@@ -401,11 +278,11 @@ export default function AxisGraph({
       </div>
 
       {/* Axis scale indicators */}
-      <div className="flex justify-between mt-1 text-xs text-gray-700">
+      {/* <div className="flex justify-between mt-1 text-xs text-gray-700">
         <div>-100%</div>
         <div>0%</div>
         <div>+100%</div>
-      </div>
+      </div> */}
 
       {/* Position description */}
       <div className="mt-2 text-sm text-gray-700">
