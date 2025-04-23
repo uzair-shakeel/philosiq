@@ -34,6 +34,7 @@ function ResultsContent({ results }) {
   const [emailSent, setEmailSent] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [showDebug, setShowDebug] = useState(false);
+  const [axisLetters, setAxisLetters] = useState({});
 
   // Get the raw data from session storage for debugging
   const [rawData, setRawData] = useState(null);
@@ -48,6 +49,38 @@ function ResultsContent({ results }) {
       console.error("Error loading raw quiz data:", err);
     }
   }, []);
+
+  // Function to handle the letter determined by each axis
+  const handleLetterDetermined = (axisName, letter) => {
+    setAxisLetters((prev) => ({
+      ...prev,
+      [axisName]: letter,
+    }));
+  };
+
+  // Log the axis letters when they change
+  useEffect(() => {
+    if (Object.keys(axisLetters).length > 0) {
+      console.log("Axis Letters:", axisLetters);
+
+      // If we have all 5 axis letters, form the code
+      if (Object.keys(axisLetters).length >= 5) {
+        const axisOrder = [
+          "Equity vs. Free Market",
+          "Libertarian vs. Authoritarian",
+          "Progressive vs. Conservative",
+          "Secular vs. Religious",
+          "Globalism vs. Nationalism",
+        ];
+
+        const archetypeCode = axisOrder
+          .map((axis) => axisLetters[axis] || "?")
+          .join("");
+
+        console.log("Archetype Code:", archetypeCode);
+      }
+    }
+  }, [axisLetters]);
 
   // Get the user's archetype information from results
   const archetype = results
@@ -119,15 +152,53 @@ function ResultsContent({ results }) {
           >
             <div className="p-8 text-white text-center">
               <h2 className="text-5xl font-bold mb-4">{archetype.name}</h2>
+
+              {/* Display the axis letters badges */}
               <div className="flex flex-wrap justify-center gap-3 mb-6">
-                {archetype.traits.map((trait, index) => (
-                  <span
-                    key={index}
-                    className="bg-white/20 px-4 py-1 rounded-full text-sm"
-                  >
-                    {trait}
-                  </span>
-                ))}
+                {Object.keys(axisLetters).length > 0
+                  ? Object.entries(axisLetters).map(([axis, letter]) => {
+                      // Determine the label based on the letter
+                      let label = "";
+                      switch (axis) {
+                        case "Equity vs. Free Market":
+                          label = letter === "E" ? "Equity" : "Free Market";
+                          break;
+                        case "Libertarian vs. Authoritarian":
+                          label =
+                            letter === "L" ? "Libertarian" : "Authoritarian";
+                          break;
+                        case "Progressive vs. Conservative":
+                          label =
+                            letter === "P" ? "Progressive" : "Conservative";
+                          break;
+                        case "Secular vs. Religious":
+                          label = letter === "S" ? "Secular" : "Religious";
+                          break;
+                        case "Globalism vs. Nationalism":
+                          label = letter === "G" ? "Globalism" : "Nationalism";
+                          break;
+                        default:
+                          label = letter;
+                      }
+
+                      return (
+                        <span
+                          key={axis}
+                          className="bg-white/20 px-4 py-1 rounded-full text-sm"
+                        >
+                          {label}
+                        </span>
+                      );
+                    })
+                  : // Fall back to the original traits if axis letters not yet available
+                    archetype.traits.map((trait, index) => (
+                      <span
+                        key={index}
+                        className="bg-white/20 px-4 py-1 rounded-full text-sm"
+                      >
+                        {trait}
+                      </span>
+                    ))}
               </div>
               <p className="text-xl max-w-3xl mx-auto">
                 {archetype.description}
@@ -196,6 +267,7 @@ function ResultsContent({ results }) {
                   rightLabel={axis.rightLabel}
                   userPosition={axis.userPosition}
                   positionStrength={axis.positionStrength}
+                  onLetterDetermined={handleLetterDetermined}
                   className={
                     index < results.axisResults.length - 1
                       ? "border-b border-gray-200 pb-6"

@@ -15,6 +15,7 @@ export default function AxisGraph({
   positionStrength,
   userPosition,
   className = "",
+  onLetterDetermined, // New callback for returning the axis letter
 }) {
   // Create axis aliases to handle alternative names
   const axisAliases = {
@@ -29,6 +30,50 @@ export default function AxisGraph({
       </div>
     );
   }
+
+  // Function to determine axis letter based on percentages
+  const getDominantAxisLetter = (axis, leftPercent, rightPercent) => {
+    // Convert percentages to numbers for comparison
+    const leftPercentNum = parseFloat(leftPercent);
+    const rightPercentNum = parseFloat(rightPercent);
+
+    // Handle axis aliases for consistent naming
+    const canonicalAxis = axisAliases[axis] || axis;
+
+    // If left side has higher percentage, return first letter of left-side label
+    // Otherwise return first letter of right-side label
+    if (leftPercentNum > rightPercentNum) {
+      switch (canonicalAxis) {
+        case "Equity vs. Free Market":
+          return "E"; // Equity
+        case "Libertarian vs. Authoritarian":
+          return "L"; // Libertarian
+        case "Progressive vs. Conservative":
+          return "P"; // Progressive
+        case "Secular vs. Religious":
+          return "S"; // Secular
+        case "Globalism vs. Nationalism":
+          return "G"; // Globalism
+        default:
+          return "?";
+      }
+    } else {
+      switch (canonicalAxis) {
+        case "Equity vs. Free Market":
+          return "F"; // Free Market
+        case "Libertarian vs. Authoritarian":
+          return "A"; // Authoritarian
+        case "Progressive vs. Conservative":
+          return "C"; // Conservative
+        case "Secular vs. Religious":
+          return "R"; // Religious
+        case "Globalism vs. Nationalism":
+          return "N"; // Nationalism
+        default:
+          return "?";
+      }
+    }
+  };
 
   // Calculate the base value of the answer
   const getBaseValue = (answerValue) => {
@@ -120,6 +165,7 @@ export default function AxisGraph({
   const axisPercentages = {};
   const rawNormalizedScores = {};
   const displayNormalizedScores = {};
+  const dominantAxisLetters = {}; // Store the dominant letter for each axis
 
   Object.keys(axisTotals).forEach((axis) => {
     if (!axisConfig[axis]) return;
@@ -132,10 +178,20 @@ export default function AxisGraph({
     const displayScore = (A / C) * 50 + 50;
 
     // Store percentages for each axis
+    const leftPercentage = displayScore.toFixed(2);
+    const rightPercentage = (100 - displayScore).toFixed(2);
+
     axisPercentages[axis] = {
-      left: displayScore.toFixed(2),
-      right: (100 - displayScore).toFixed(2),
+      left: leftPercentage,
+      right: rightPercentage,
     };
+
+    // Determine dominant letter for this axis
+    dominantAxisLetters[axis] = getDominantAxisLetter(
+      axis,
+      leftPercentage,
+      rightPercentage
+    );
 
     // Apply the formula: (A-B)/(B+C)*100 to get a percentage between -100% and 100%
     // Handle division by zero by defaulting to 0
@@ -214,6 +270,16 @@ export default function AxisGraph({
   const leftPercent = axisSpecificPercentages.left;
   const rightPercent = axisSpecificPercentages.right;
 
+  // Get the dominant letter for this axis
+  const axisDominantLetter = dominantAxisLetters[canonicalName] || "?";
+
+  // Send the letter to the parent component if callback provided
+  useEffect(() => {
+    if (onLetterDetermined && axisDominantLetter) {
+      onLetterDetermined(canonicalName, axisDominantLetter);
+    }
+  }, [canonicalName, axisDominantLetter, onLetterDetermined]);
+
   // Use the supplied position parameter for the current axis
   // Instead of using displayNormalizedScores, use the actual score directly
   const currentAxisScore = parseFloat(leftPercent);
@@ -255,7 +321,9 @@ export default function AxisGraph({
         >
           {/* Always show percentage */}
           <span className="text-white font-bold text-center px-2 z-20">
-            {leftPercent}%
+            {leftPercent}%{" "}
+            {parseFloat(leftPercent) > parseFloat(rightPercent) &&
+              `(${axisDominantLetter})`}
           </span>
         </div>
 
@@ -266,7 +334,9 @@ export default function AxisGraph({
         >
           {/* Always show percentage */}
           <span className="text-white font-bold text-center px-2 z-20">
-            {rightPercent}%
+            {rightPercent}%{" "}
+            {parseFloat(rightPercent) >= parseFloat(leftPercent) &&
+              `(${axisDominantLetter})`}
           </span>
         </div>
 
