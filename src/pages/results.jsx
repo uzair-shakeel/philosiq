@@ -35,6 +35,7 @@ function ResultsContent({ results }) {
   const [userEmail, setUserEmail] = useState("");
   const [showDebug, setShowDebug] = useState(false);
   const [axisLetters, setAxisLetters] = useState({});
+  const [secondaryArchetypes, setSecondaryArchetypes] = useState([]);
 
   // Get the raw data from session storage for debugging
   const [rawData, setRawData] = useState(null);
@@ -58,12 +59,12 @@ function ResultsContent({ results }) {
     }));
   };
 
-  // Log the axis letters when they change
+  // Log the axis letters when they change and calculate secondary archetypes
   useEffect(() => {
     if (Object.keys(axisLetters).length > 0) {
       console.log("Axis Letters:", axisLetters);
 
-      // If we have all 5 axis letters, form the code
+      // If we have all 5 axis letters, form the code and calculate secondary archetypes
       if (Object.keys(axisLetters).length >= 5) {
         const axisOrder = [
           "Equity vs. Free Market",
@@ -78,9 +79,143 @@ function ResultsContent({ results }) {
           .join("");
 
         console.log("Archetype Code:", archetypeCode);
+
+        // Calculate secondary archetypes
+        calculateSecondaryArchetypes(axisLetters, axisOrder);
       }
     }
   }, [axisLetters]);
+
+  // Calculate secondary archetypes based on primary archetype letters
+  const calculateSecondaryArchetypes = (letters, axisOrder) => {
+    if (!letters || Object.keys(letters).length < 5) return;
+
+    // Define opposite letters for each axis
+    const oppositeLetters = {
+      E: "F",
+      F: "E", // Equity vs. Free Market
+      L: "A",
+      A: "L", // Libertarian vs. Authoritarian
+      P: "C",
+      C: "P", // Progressive vs. Conservative
+      S: "R",
+      R: "S", // Secular vs. Religious
+      G: "N",
+      N: "G", // Globalism vs. Nationalism
+    };
+
+    // Get axis percentages to find which is closest to 50%
+    const axisPercentages = {};
+    results?.axisResults.forEach((axis) => {
+      const canonicalName =
+        axis.name === "Equality vs. Markets"
+          ? "Equity vs. Free Market"
+          : axis.name;
+      axisPercentages[canonicalName] = Math.abs(axis.score - 50);
+    });
+
+    // Sort axes by how close they are to 50%
+    const sortedAxes = [...axisOrder].sort((a, b) => {
+      return (axisPercentages[a] || 0) - (axisPercentages[b] || 0);
+    });
+
+    // Get the closest 2 axes to 50%
+    const closestAxes = sortedAxes.slice(0, 2);
+
+    // Create secondary archetypes by flipping the letter of the axes closest to 50%
+    const secondaries = [];
+
+    closestAxes.forEach((axisToFlip) => {
+      // Create a copy of the original letters
+      const newLetters = { ...letters };
+
+      // Flip the letter for the axis closest to 50%
+      if (newLetters[axisToFlip]) {
+        newLetters[axisToFlip] =
+          oppositeLetters[newLetters[axisToFlip]] || newLetters[axisToFlip];
+      }
+
+      // Generate the code for this secondary archetype
+      const secondaryCode = axisOrder
+        .map((axis) => newLetters[axis] || "?")
+        .join("");
+
+      // Get the name from the archetype map
+      const archetypeMap = {
+        ELPSG: "The Utopian",
+        ELPSN: "The Reformer",
+        ELPRG: "The Prophet",
+        ELPRN: "The Firebrand",
+        ELCSG: "The Philosopher",
+        ELCSN: "The Localist",
+        ELCRG: "The Missionary",
+        ELCRN: "The Guardian",
+        EAPSG: "The Technocrat",
+        EAPSN: "The Enforcer",
+        EAPRG: "The Zealot",
+        EAPRN: "The Purist",
+        EACSG: "The Commander",
+        EACSN: "The Steward",
+        EACRG: "The Shepherd",
+        EACRN: "The High Priest",
+        FLPSG: "The Futurist",
+        FLPSN: "The Maverick",
+        FLPRG: "The Evangelist",
+        FLPRN: "The Dissident",
+        FLCSG: "The Globalist",
+        FLCSN: "The Patriot",
+        FLCRG: "The Traditionalist",
+        FLCRN: "The Conservator",
+        FAPSG: "The Overlord",
+        FAPSN: "The Corporatist",
+        FAPRG: "The Moralizer",
+        FAPRN: "The Builder",
+        FACSG: "The Executive",
+        FACSN: "The Iconoclast",
+        FACRG: "The Authoritarian",
+        FACRN: "The Crusader",
+      };
+
+      // Calculate match percentage (just estimating based on how many letters were changed)
+      const matchPercent = 90 - 15 * closestAxes.indexOf(axisToFlip);
+
+      // Get traits based on the secondary archetype letters
+      const traits = axisOrder.map((axis) => {
+        let label = "";
+        const letter = newLetters[axis];
+
+        switch (axis) {
+          case "Equity vs. Free Market":
+            return letter === "E" ? "Equity" : "Free Market";
+          case "Libertarian vs. Authoritarian":
+            return letter === "L" ? "Libertarian" : "Authoritarian";
+          case "Progressive vs. Conservative":
+            return letter === "P" ? "Progressive" : "Conservative";
+          case "Secular vs. Religious":
+            return letter === "S" ? "Secular" : "Religious";
+          case "Globalism vs. Nationalism":
+            return letter === "G" ? "Globalism" : "Nationalism";
+          default:
+            return letter;
+        }
+      });
+
+      // Create the secondary archetype object
+      secondaries.push({
+        name: archetypeMap[secondaryCode] || "Alternative Archetype",
+        code: secondaryCode,
+        match: `${matchPercent}% match`,
+        traits: traits,
+        flippedAxis: axisToFlip,
+        slug: (archetypeMap[secondaryCode] || "alternative")
+          .toLowerCase()
+          .replace(/\s+/g, "-")
+          .replace(/[^\w\-]+/g, ""),
+      });
+    });
+
+    setSecondaryArchetypes(secondaries);
+  };
 
   // Get the user's archetype information from results
   const archetype = results
@@ -92,22 +227,6 @@ function ResultsContent({ results }) {
         color: getArchetypeColor(results.archetype?.name),
       }
     : null;
-
-  // Sample secondary archetypes - in production these would be calculated
-  const secondaryArchetypes = [
-    {
-      name: "The Maverick",
-      match: "85% match",
-      traits: ["Markets", "Democracy", "Secular", "Nationalism"],
-      slug: "maverick",
-    },
-    {
-      name: "The Steward",
-      match: "78% match",
-      traits: ["Markets", "Democracy", "Conservative", "Nationalism"],
-      slug: "steward",
-    },
-  ];
 
   const handleEmailSubmit = (e) => {
     e.preventDefault();
@@ -279,51 +398,67 @@ function ResultsContent({ results }) {
           </div>
         </div>
 
-        {/* Secondary Archetypes */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold mb-6 text-center">
-            Your Secondary Archetypes
-          </h2>
-          <p className="text-center text-gray-600 mb-8">
-            You also show strong alignment with these political archetypes
-          </p>
+        {/* Secondary Archetypes - Improved Design */}
+        {secondaryArchetypes.length > 0 && (
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold mb-6 text-center">
+              Your Secondary Archetypes
+            </h2>
+            <p className="text-center text-gray-600 mb-8">
+              You also show strong alignment with these political archetypes
+            </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {secondaryArchetypes.map((archetype, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-lg overflow-hidden"
-              >
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-2xl font-bold text-secondary-darkBlue">
-                      {archetype.name}
-                    </h3>
-                    <span className="bg-secondary-lightBlue text-white px-3 py-1 rounded-full text-sm">
-                      {archetype.match}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {archetype.traits.map((trait, i) => (
-                      <span
-                        key={i}
-                        className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700"
-                      >
-                        {trait}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {secondaryArchetypes.map((archetype, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-lg shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition-shadow duration-300"
+                >
+                  <div className="p-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-2xl font-bold text-secondary-darkBlue">
+                        {archetype.name}
+                      </h3>
+                      <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {archetype.match}
                       </span>
-                    ))}
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {archetype.traits.map((trait, i) => (
+                        <span
+                          key={i}
+                          className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700"
+                        >
+                          {trait}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="text-sm text-gray-600 mb-4">
+                      <span className="font-medium">
+                        Difference from primary:
+                      </span>{" "}
+                      Flipped position on{" "}
+                      {archetype.flippedAxis.replace(" vs. ", "/")}
+                    </div>
+
+                    <div className="text-sm text-gray-500 mb-4">
+                      {getArchetypeDescription(archetype.name)}
+                    </div>
+
+                    <Link
+                      href={`/archetypes/${archetype.slug}`}
+                      className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center text-sm font-medium"
+                    >
+                      View Details <FaArrowRight className="ml-1 text-xs" />
+                    </Link>
                   </div>
-                  <Link
-                    href={`/archetypes/${archetype.slug}`}
-                    className="text-primary-maroon hover:underline inline-flex items-center text-sm font-medium"
-                  >
-                    View Details <FaArrowRight className="ml-1 text-xs" />
-                  </Link>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Debug Section */}
         {rawData && (
