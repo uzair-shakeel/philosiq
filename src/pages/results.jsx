@@ -29,6 +29,8 @@ export default function ResultsPage() {
 
 // Separated content component to receive processed results as props
 function ResultsContent({ results }) {
+  console.log("ResultsContent component rendered", results);
+
   const router = useRouter();
 
   const [emailSent, setEmailSent] = useState(false);
