@@ -289,9 +289,13 @@ function ResultsContent({ results }) {
 
         {/* Primary Archetype Card */}
         <div className="mb-16">
-          <div className="bg-gray-50 rounded-lg shadow-md overflow-hidden">
-            <div className="p-8 text-center">
-              <h2 className="text-5xl font-bold mb-4 text-gray-800">
+          <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-lg overflow-hidden border border-gray-200">
+            <div className="p-8 text-center relative">
+              {/* Top decorative elements */}
+              <div className="absolute top-0 left-0 w-24 h-24 bg-blue-50 rounded-full opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
+              <div className="absolute top-0 right-0 w-16 h-16 bg-green-50 rounded-full opacity-30 translate-x-1/2 -translate-y-1/3"></div>
+
+              <h2 className="text-5xl font-bold mb-4 text-gray-800 relative">
                 {archetype.name}
               </h2>
 
@@ -391,15 +395,25 @@ function ResultsContent({ results }) {
                     })}
               </div>
 
+              {/* Description box */}
+              <div className=" p-2 mb-6  max-w-3xl mx-auto">
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  {archetype.description}
+                </p>
+              </div>
+
               <div className="mt-6">
                 <Link
                   href={`/archetypes/${archetype.id}`}
-                  className="btn-primary inline-flex items-center"
+                  className="btn-primary inline-flex items-center px-6 py-3 rounded-full transition-all hover:shadow-lg"
                 >
                   Learn More About Your Archetype{" "}
                   <FaArrowRight className="ml-2" />
                 </Link>
               </div>
+
+              {/* Bottom decorative element */}
+              <div className="absolute bottom-0 right-0 w-32 h-32 bg-yellow-50 rounded-full opacity-30 translate-x-1/3 translate-y-1/3"></div>
             </div>
           </div>
         </div>
@@ -481,21 +495,24 @@ function ResultsContent({ results }) {
               {secondaryArchetypes.map((archetype, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
+                  className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300"
                 >
-                  <div className="bg-gray-100 p-4">
-                    <div className="flex justify-between items-center">
+                  <div className="bg-gradient-to-r from-gray-100 to-gray-50 p-4 relative">
+                    {/* Decorative element */}
+                    <div className="absolute top-0 right-0 w-12 h-12 bg-blue-50 rounded-full opacity-30 translate-x-1/3 -translate-y-1/3"></div>
+
+                    <div className="flex justify-between items-center relative">
                       <h3 className="text-2xl font-bold text-gray-800">
                         {archetype.name}
                       </h3>
-                      <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                      <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-sm">
                         {archetype.match}
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-4">
-                    <div className="flex flex-wrap gap-1 mb-4">
+                  <div className="p-5">
+                    <div className="flex flex-wrap gap-2 mb-5">
                       {archetype.traits.map((trait, i) => {
                         // Define colors for different traits
                         let bgColor = "bg-gray-200";
@@ -524,7 +541,7 @@ function ResultsContent({ results }) {
                         return (
                           <span
                             key={i}
-                            className={`${bgColor} px-3 py-1 rounded-full text-sm`}
+                            className={`${bgColor} px-3 py-1 rounded-full text-sm font-medium shadow-sm`}
                           >
                             {trait}
                           </span>
@@ -532,19 +549,27 @@ function ResultsContent({ results }) {
                       })}
                     </div>
 
-                    <div className="text-sm text-gray-600 mb-3">
-                      <span className="font-medium">
-                        Difference from primary:
-                      </span>{" "}
-                      Flipped position on{" "}
-                      {archetype.flippedAxis.replace(" vs. ", "/")}
+                    <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-medium">
+                          Difference from primary:
+                        </span>{" "}
+                        Flipped position on{" "}
+                        <span className="font-semibold text-blue-700">
+                          {archetype.flippedAxis.replace(" vs. ", "/")}
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="text-sm text-gray-600 mb-4">
+                      {getArchetypeDescription(archetype.name)}
                     </div>
 
                     <Link
                       href={`/archetypes/${archetype.slug}`}
-                      className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center text-sm font-medium"
+                      className="inline-flex items-center justify-center text-blue-600 hover:text-blue-800 hover:underline font-medium text-sm bg-blue-50 px-4 py-2 rounded-full hover:bg-blue-100 transition-all"
                     >
-                      View Details <FaArrowRight className="ml-1 text-xs" />
+                      View Details <FaArrowRight className="ml-1.5" />
                     </Link>
                   </div>
                 </div>
