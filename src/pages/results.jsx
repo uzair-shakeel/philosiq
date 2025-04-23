@@ -17,6 +17,43 @@ import ResultsProcessor from "../components/ResultsProcessor";
 import AxisGraph from "../components/AxisGraph";
 import DebugResultsTable from "../components/DebugResultsTable";
 
+// Add this constant at the top level of the file, right after the imports
+// It will be accessible to all functions in the file
+const ARCHETYPE_MAP = [
+  { code: "ELPSG", label: "The Utopian" },
+  { code: "ELPSN", label: "The Reformer" },
+  { code: "ELPRG", label: "The Prophet" },
+  { code: "ELPRN", label: "The Firebrand" },
+  { code: "ELCSG", label: "The Philosopher" },
+  { code: "ELCSN", label: "The Localist" },
+  { code: "ELCRG", label: "The Missionary" },
+  { code: "ELCRN", label: "The Guardian" },
+  { code: "EAPSG", label: "The Technocrat" },
+  { code: "EAPSN", label: "The Enforcer" },
+  { code: "EAPRG", label: "The Zealot" },
+  { code: "EAPRN", label: "The Purist" },
+  { code: "EACSG", label: "The Commander" },
+  { code: "EACSN", label: "The Steward" },
+  { code: "EACRG", label: "The Shepherd" },
+  { code: "EACRN", label: "The High Priest" },
+  { code: "FLPSG", label: "The Futurist" },
+  { code: "FLPSN", label: "The Maverick" },
+  { code: "FLPRG", label: "The Evangelist" },
+  { code: "FLPRN", label: "The Dissenter" },
+  { code: "FLCSG", label: "The Globalist" },
+  { code: "FLCSN", label: "The Patriot" },
+  { code: "FLCRG", label: "The Industrialist" },
+  { code: "FLCRN", label: "The Traditionalist" },
+  { code: "FAPSG", label: "The Overlord" },
+  { code: "FAPSN", label: "The Corporatist" },
+  { code: "FAPRG", label: "The Moralizer" },
+  { code: "FAPRN", label: "The Builder" },
+  { code: "FACSG", label: "The Executive" },
+  { code: "FACSN", label: "The Ironhand" },
+  { code: "FACRG", label: "The Authoritarian" },
+  { code: "FACRN", label: "The Crusader" },
+];
+
 export default function ResultsPage() {
   return (
     <Layout title="Your Results - PhilosiQ">
@@ -82,11 +119,23 @@ function ResultsContent({ results }) {
 
         console.log("Archetype Code:", archetypeCode);
 
+        // Set the primary archetype based on the code
+        const primaryArchetype = ARCHETYPE_MAP.find(
+          (entry) => entry.code === archetypeCode
+        );
+        if (primaryArchetype) {
+          // Update the results archetype if present
+          if (results && results.archetype) {
+            results.archetype.name = primaryArchetype.label;
+            results.archetype.code = archetypeCode;
+          }
+        }
+
         // Calculate secondary archetypes
         calculateSecondaryArchetypes(axisLetters, axisOrder);
       }
     }
-  }, [axisLetters]);
+  }, [axisLetters, results]);
 
   // Calculate secondary archetypes based on primary archetype letters
   const calculateSecondaryArchetypes = (letters, axisOrder) => {
@@ -142,41 +191,13 @@ function ResultsContent({ results }) {
         .map((axis) => newLetters[axis] || "?")
         .join("");
 
-      // Get the name from the archetype map
-      const archetypeMap = {
-        ELPSG: "The Utopian",
-        ELPSN: "The Reformer",
-        ELPRG: "The Prophet",
-        ELPRN: "The Firebrand",
-        ELCSG: "The Philosopher",
-        ELCSN: "The Localist",
-        ELCRG: "The Missionary",
-        ELCRN: "The Guardian",
-        EAPSG: "The Technocrat",
-        EAPSN: "The Enforcer",
-        EAPRG: "The Zealot",
-        EAPRN: "The Purist",
-        EACSG: "The Commander",
-        EACSN: "The Steward",
-        EACRG: "The Shepherd",
-        EACRN: "The High Priest",
-        FLPSG: "The Futurist",
-        FLPSN: "The Maverick",
-        FLPRG: "The Evangelist",
-        FLPRN: "The Dissident",
-        FLCSG: "The Globalist",
-        FLCSN: "The Patriot",
-        FLCRG: "The Traditionalist",
-        FLCRN: "The Conservator",
-        FAPSG: "The Overlord",
-        FAPSN: "The Corporatist",
-        FAPRG: "The Moralizer",
-        FAPRN: "The Builder",
-        FACSG: "The Executive",
-        FACSN: "The Iconoclast",
-        FACRG: "The Authoritarian",
-        FACRN: "The Crusader",
-      };
+      // Find the matching archetype in the array
+      const archetypeEntry = ARCHETYPE_MAP.find(
+        (entry) => entry.code === secondaryCode
+      );
+      const archetypeName = archetypeEntry
+        ? archetypeEntry.label
+        : "Alternative Archetype";
 
       // Calculate match percentage (just estimating based on how many letters were changed)
       const matchPercent = 90 - 15 * closestAxes.indexOf(axisToFlip);
@@ -204,12 +225,12 @@ function ResultsContent({ results }) {
 
       // Create the secondary archetype object
       secondaries.push({
-        name: archetypeMap[secondaryCode] || "Alternative Archetype",
+        name: archetypeName,
         code: secondaryCode,
         match: `${matchPercent}% match`,
         traits: traits,
         flippedAxis: axisToFlip,
-        slug: (archetypeMap[secondaryCode] || "alternative")
+        slug: archetypeName
           .toLowerCase()
           .replace(/\s+/g, "-")
           .replace(/[^\w\-]+/g, ""),
@@ -268,11 +289,11 @@ function ResultsContent({ results }) {
 
         {/* Primary Archetype Card */}
         <div className="mb-16">
-          <div
-            className={`bg-gradient-to-r ${archetype.color} rounded-lg shadow-xl overflow-hidden`}
-          >
-            <div className="p-8 text-white text-center">
-              <h2 className="text-5xl font-bold mb-4">{archetype.name}</h2>
+          <div className="bg-gray-50 rounded-lg shadow-md overflow-hidden">
+            <div className="p-8 text-center">
+              <h2 className="text-5xl font-bold mb-4 text-gray-800">
+                {archetype.name}
+              </h2>
 
               {/* Display the axis letters badges */}
               <div className="flex flex-wrap justify-center gap-3 mb-6">
@@ -280,23 +301,45 @@ function ResultsContent({ results }) {
                   ? Object.entries(axisLetters).map(([axis, letter]) => {
                       // Determine the label based on the letter
                       let label = "";
+                      let bgColor = "bg-gray-200";
+
                       switch (axis) {
                         case "Equity vs. Free Market":
                           label = letter === "E" ? "Equity" : "Free Market";
+                          bgColor =
+                            letter === "E"
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-green-100 text-green-800";
                           break;
                         case "Libertarian vs. Authoritarian":
                           label =
                             letter === "L" ? "Libertarian" : "Authoritarian";
+                          bgColor =
+                            letter === "L"
+                              ? "bg-indigo-100 text-indigo-800"
+                              : "bg-orange-100 text-orange-800";
                           break;
                         case "Progressive vs. Conservative":
                           label =
                             letter === "P" ? "Progressive" : "Conservative";
+                          bgColor =
+                            letter === "P"
+                              ? "bg-purple-100 text-purple-800"
+                              : "bg-blue-100 text-blue-800";
                           break;
                         case "Secular vs. Religious":
                           label = letter === "S" ? "Secular" : "Religious";
+                          bgColor =
+                            letter === "S"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-purple-100 text-purple-800";
                           break;
                         case "Globalism vs. Nationalism":
                           label = letter === "G" ? "Globalism" : "Nationalism";
+                          bgColor =
+                            letter === "G"
+                              ? "bg-teal-100 text-teal-800"
+                              : "bg-red-100 text-red-800";
                           break;
                         default:
                           label = letter;
@@ -305,35 +348,59 @@ function ResultsContent({ results }) {
                       return (
                         <span
                           key={axis}
-                          className="bg-white/20 px-4 py-1 rounded-full text-sm"
+                          className={`${bgColor} px-4 py-1 rounded-full text-sm`}
                         >
                           {label}
                         </span>
                       );
                     })
                   : // Fall back to the original traits if axis letters not yet available
-                    archetype.traits.map((trait, index) => (
-                      <span
-                        key={index}
-                        className="bg-white/20 px-4 py-1 rounded-full text-sm"
-                      >
-                        {trait}
-                      </span>
-                    ))}
-              </div>
-              <p className="text-xl max-w-3xl mx-auto">
-                {archetype.description}
-              </p>
-            </div>
-          </div>
+                    archetype.traits.map((trait, index) => {
+                      // Determine color based on trait
+                      let bgColor = "bg-gray-200";
 
-          <div className="bg-white rounded-b-lg shadow-lg p-6 text-center">
-            <Link
-              href={`/archetypes/${archetype.id}`}
-              className="btn-primary inline-flex items-center"
-            >
-              Learn More About Your Archetype <FaArrowRight className="ml-2" />
-            </Link>
+                      if (trait === "Equity")
+                        bgColor = "bg-blue-100 text-blue-800";
+                      else if (trait === "Free Market")
+                        bgColor = "bg-green-100 text-green-800";
+                      else if (trait === "Libertarian")
+                        bgColor = "bg-indigo-100 text-indigo-800";
+                      else if (trait === "Authoritarian")
+                        bgColor = "bg-orange-100 text-orange-800";
+                      else if (trait === "Progressive")
+                        bgColor = "bg-purple-100 text-purple-800";
+                      else if (trait === "Conservative")
+                        bgColor = "bg-blue-100 text-blue-800";
+                      else if (trait === "Secular")
+                        bgColor = "bg-yellow-100 text-yellow-800";
+                      else if (trait === "Religious")
+                        bgColor = "bg-purple-100 text-purple-800";
+                      else if (trait === "Globalism")
+                        bgColor = "bg-teal-100 text-teal-800";
+                      else if (trait === "Nationalism")
+                        bgColor = "bg-red-100 text-red-800";
+
+                      return (
+                        <span
+                          key={index}
+                          className={`${bgColor} px-4 py-1 rounded-full text-sm`}
+                        >
+                          {trait}
+                        </span>
+                      );
+                    })}
+              </div>
+
+              <div className="mt-6">
+                <Link
+                  href={`/archetypes/${archetype.id}`}
+                  className="btn-primary inline-flex items-center"
+                >
+                  Learn More About Your Archetype{" "}
+                  <FaArrowRight className="ml-2" />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -414,39 +481,63 @@ function ResultsContent({ results }) {
               {secondaryArchetypes.map((archetype, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-lg shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition-shadow duration-300"
+                  className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
                 >
-                  <div className="p-6">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-2xl font-bold text-secondary-darkBlue">
+                  <div className="bg-gray-100 p-4">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-2xl font-bold text-gray-800">
                         {archetype.name}
                       </h3>
                       <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                         {archetype.match}
                       </span>
                     </div>
+                  </div>
 
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {archetype.traits.map((trait, i) => (
-                        <span
-                          key={i}
-                          className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700"
-                        >
-                          {trait}
-                        </span>
-                      ))}
+                  <div className="p-4">
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {archetype.traits.map((trait, i) => {
+                        // Define colors for different traits
+                        let bgColor = "bg-gray-200";
+
+                        if (trait === "Equity")
+                          bgColor = "bg-blue-100 text-blue-800";
+                        else if (trait === "Free Market")
+                          bgColor = "bg-green-100 text-green-800";
+                        else if (trait === "Libertarian")
+                          bgColor = "bg-indigo-100 text-indigo-800";
+                        else if (trait === "Authoritarian")
+                          bgColor = "bg-orange-100 text-orange-800";
+                        else if (trait === "Progressive")
+                          bgColor = "bg-purple-100 text-purple-800";
+                        else if (trait === "Conservative")
+                          bgColor = "bg-blue-100 text-blue-800";
+                        else if (trait === "Secular")
+                          bgColor = "bg-yellow-100 text-yellow-800";
+                        else if (trait === "Religious")
+                          bgColor = "bg-purple-100 text-purple-800";
+                        else if (trait === "Globalism")
+                          bgColor = "bg-teal-100 text-teal-800";
+                        else if (trait === "Nationalism")
+                          bgColor = "bg-red-100 text-red-800";
+
+                        return (
+                          <span
+                            key={i}
+                            className={`${bgColor} px-3 py-1 rounded-full text-sm`}
+                          >
+                            {trait}
+                          </span>
+                        );
+                      })}
                     </div>
 
-                    <div className="text-sm text-gray-600 mb-4">
+                    <div className="text-sm text-gray-600 mb-3">
                       <span className="font-medium">
                         Difference from primary:
                       </span>{" "}
                       Flipped position on{" "}
                       {archetype.flippedAxis.replace(" vs. ", "/")}
-                    </div>
-
-                    <div className="text-sm text-gray-500 mb-4">
-                      {getArchetypeDescription(archetype.name)}
                     </div>
 
                     <Link
