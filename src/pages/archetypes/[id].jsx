@@ -19,7 +19,7 @@ export default function ArchetypeDetail() {
       id: "the-utopian",
       name: "The Utopian",
       traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      description: "Imagine boldly. Innovate freely. Uplift all.",
       introduction:
         "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
       strengths: [
@@ -37,10 +37,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Atticus Finch", role: "To Kill a Mockingbird" },
+        { name: "'Aang", role: "Avatar: The Last Airbender" },
+        { name: "Amélie", role: "Amélie" },
+        { name: "Lisa Simpson", role: "The Simpsons" },
       ],
       axisPositions: [
         {
