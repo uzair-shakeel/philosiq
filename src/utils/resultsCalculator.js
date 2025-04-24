@@ -85,7 +85,7 @@ const ARCHETYPE_MAP = {
   FACSN: "The Ironhand",
   FACRG: "The Traditionalist",
   FACRN: "The Crusader",
-};
+}; 
 
 /**
  * Calculate the weighted score for a single answer
