@@ -37,9 +37,9 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Atticus Finch", role: "To Kill a Mockingbird" },
-        { name: "'Aang", role: "Avatar: The Last Airbender" },
-        { name: "Amélie", role: "Amélie" },
+        { name: "Jean-Luc Picard", role: "Star Trek: TNG" },
+        { name: "Aang", role: "Avatar: The Last Airbender" },
+        { name: "Hermione Granger", role: "Harry Potter" },
         { name: "Lisa Simpson", role: "The Simpsons" },
       ],
       axisPositions: [
@@ -93,10 +93,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Katniss Everdeen", role: "The Hunger Games" },
+        { name: "Steve Rogers", role: "Captain America" },
+        { name: "Moana", role: "Moana" },
+        { name: "Jon Snow", role: "Game of Thrones" },
       ],
       axisPositions: [
         {
@@ -149,10 +149,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Gandalf", role: "The Lord of the Rings" },
+        { name: "Obi-Wan Kenobi", role: "Star Wars" },
+        { name: "Aslan", role: "The Chronicles of Narnia" },
+        { name: "Samwise Gamgee", role: "The Lord of the Rings" },
       ],
       axisPositions: [
         {
@@ -205,10 +205,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Prince Zuko", role: "Avatar: The Last Airbender" },
+        { name: "Aragorn", role: "The Lord of the Rings" },
+        { name: "Wonder Woman", role: "Wonder Woman" },
+        { name: "Eowyn", role: "The Lord of the Rings" },
       ],
       axisPositions: [
         {
@@ -261,10 +261,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Tyrion Lannister", role: "Game of Thrones" },
+        { name: "Data", role: "Star Trek: TNG" },
+        { name: "Dr. Ian Malcolm", role: "Jurassic Park" },
+        { name: "Sherlock Holmes", role: "BBC Sherlock" },
       ],
       axisPositions: [
         {
@@ -317,10 +317,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Ron Swanson", role: "Parks and Recreation" },
+        { name: "Dwight Schrute", role: "The Office" },
+        { name: "Ned Stark", role: "Game of Thrones" },
+        { name: "Hank Hill", role: "King of the Hill" },
       ],
       axisPositions: [
         {
@@ -373,10 +373,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Uncle Iroh", role: "Avatar: The Last Airbender" },
+        { name: "Shepherd Book", role: "Firefly" },
+        { name: "Galadriel", role: "The Lord of the Rings" },
+        { name: "Master Splinter", role: "Teenage Mutant Ninja Turtles" },
       ],
       axisPositions: [
         {
@@ -429,10 +429,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Eddard Stark", role: "Game of Thrones" },
+        { name: "Faramir", role: "The Lord of the Rings" },
+        { name: "Mufasa", role: "The Lion King" },
+        { name: "Optimus Prime", role: "Transformers" },
       ],
       axisPositions: [
         {
@@ -485,10 +485,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Shuri", role: "Black Panther" },
+        { name: "Mr. Spock", role: "Star Trek" },
+        { name: "Lucius Fox", role: "The Dark Knight Trilogy" },
+        { name: "Bruce Banner", role: "Marvel MCU" },
       ],
       axisPositions: [
         {
@@ -541,10 +541,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Stannis Baratheon", role: "Game of Thrones" },
+        { name: "Mace Windu", role: "Star Wars" },
+        { name: "Amanda Waller", role: "Suicide Squad Animated" },
+        { name: "Brienne of Tarth", role: "Game of Thrones" },
       ],
       axisPositions: [
         {
@@ -597,10 +597,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Obi-Wan Kenobi", role: "Star Wars" },
+        { name: "Samwise Gamgee", role: "The Lord of the Rings" },
+        { name: "Eowyn", role: "The Lord of the Rings" },
+        { name: "Albus Dumbledore", role: "Harry Potter" },
       ],
       axisPositions: [
         {
@@ -653,10 +653,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Captain America", role: "Marvel — WWII" },
+        { name: "Mulan", role: "Mulan" },
+        { name: "Maximus Decimus Meridius", role: "Gladiator" },
+        { name: "Ned Flanders", role: "The Simpsons" },
       ],
       axisPositions: [
         {
@@ -709,10 +709,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Jeanine Matthews", role: "Divergent" },
+        { name: "Grand Moff Tarkin", role: "Star Wars" },
+        { name: "Admiral Adama", role: "Battlestar Galactica" },
+        { name: "Okabe Rintarou", role: "Steins;Gate" },
       ],
       axisPositions: [
         {
@@ -765,10 +765,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Tywin Lannister", role: "Game of Thrones" },
+        { name: "Lord Vetinari", role: "Discworld" },
+        { name: "Minister Rufus Scrimgeour", role: "Harry Potter" },
+        { name: "King Théoden", role: "The Lord of the Rings" },
       ],
       axisPositions: [
         {
@@ -821,10 +821,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Gandalf", role: "The Lord of the Rings" },
+        { name: "Professor X", role: "X-Men" },
+        { name: "Jonathan Kent", role: "Smallville" },
+        { name: "Master Splinter", role: "Teenage Mutant Ninja Turtles" },
       ],
       axisPositions: [
         {
@@ -877,10 +877,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "King Théoden", role: "The Lord of the Rings" },
+        { name: "Obi-Wan Kenobi", role: "Star Wars" },
+        { name: "Commander Shepard", role: "Mass Effect — Paragon" },
+        { name: "Samwise Gamgee", role: "The Lord of the Rings" },
       ],
       axisPositions: [
         {
@@ -933,10 +933,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Tony Stark", role: "Iron Man" },
+        { name: "Rick Sanchez", role: "Rick and Morty" },
+        { name: "Lucius Fox", role: "The Dark Knight Trilogy" },
+        { name: "Hank Pym", role: "Marvel MCU" },
       ],
       axisPositions: [
         {
@@ -989,10 +989,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Han Solo", role: "Star Wars" },
+        { name: "Malcolm Reynolds", role: "Firefly" },
+        { name: "Indiana Jones", role: "Indiana Jones" },
+        { name: "Peter Quill", role: "Guardians of the Galaxy" },
       ],
       axisPositions: [
         {
@@ -1045,10 +1045,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Charles Xavier", role: "X-Men" },
+        { name: "Shepherd Book", role: "Firefly" },
+        { name: "Morpheus", role: "The Matrix" },
+        { name: "Professor Oak", role: "Pokémon" },
       ],
       axisPositions: [
         {
@@ -1101,10 +1101,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Sirius Black", role: "Harry Potter" },
+        { name: "William Wallace", role: "Braveheart" },
+        { name: "Finn", role: "Star Wars" },
+        { name: "Ezio Auditore", role: "Assassin’s Creed" },
       ],
       axisPositions: [
         {
@@ -1157,10 +1157,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Bruce Wayne", role: "Batman" },
+        { name: "Nick Fury", role: "Marvel" },
+        { name: "Sherlock Holmes", role: "BBC Sherlock" },
+        { name: "Lara Croft", role: "Tomb Raider" },
       ],
       axisPositions: [
         {
@@ -1213,10 +1213,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Captain America", role: "Marvel" },
+        { name: "James Bond", role: "007 Franchise" },
+        { name: "Jack Bauer", role: "24" },
+        { name: "Jason Bourne", role: "Bourne Series" },
       ],
       axisPositions: [
         {
@@ -1269,10 +1269,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Howard Stark", role: "Marvel MCU" },
+        { name: "Tony Stark", role: "comics version" },
+        { name: "Bruce Wayne", role: "business side — comics" },
+        { name: "Lucius Fox", role: "tech/finance side" },
       ],
       axisPositions: [
         {
@@ -1325,10 +1325,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Ron Swanson", role: "Parks and Recreation" },
+        { name: "King Théoden", role: "The Lord of the Rings" },
+        { name: "Arthur Morgan", role: "Red Dead Redemption 2" },
+        { name: "William Adama", role: "Battlestar Galactica" },
       ],
       axisPositions: [
         {
@@ -1381,10 +1381,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Ozymandias", role: "Watchmen" },
+        { name: "Robert Ford", role: "Westworld" },
+        { name: "Sarek", role: "Star Trek" },
+        { name: "Lord Cutler Beckett", role: "Pirates of the Caribbean" },
       ],
       axisPositions: [
         {
@@ -1437,10 +1437,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Tywin Lannister", role: "Game of Thrones" },
+        { name: "Amanda Waller", role: "Suicide Squad Animated" },
+        { name: "Hank Scorpio", role: "The Simpsons" },
+        { name: "Frank Underwood", role: "House of Cards" },
       ],
       axisPositions: [
         {
@@ -1493,10 +1493,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Optimus Prime", role: "Transformers" },
+        { name: "Gandalf", role: "23rd U.S. President" },
+        { name: "Commander Shepard", role: "Mass Effect — Paragon" },
+        { name: "Jean-Luc Picard", role: "Star Trek TNG" },
       ],
       axisPositions: [
         {
@@ -1549,10 +1549,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Aragorn", role: "The Lord of the Rings" },
+        { name: "T’Challa", role: "Black Panther" },
+        { name: "Mulan", role: "Mulan" },
+        { name: "King Théoden", role: "The Lord of the Rings" },
       ],
       axisPositions: [
         {
@@ -1605,10 +1605,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Miranda Priestly", role: "The Devil Wears Prada" },
+        { name: "Tywin Lannister", role: "Game of Thrones" },
+        { name: "Gus Fring", role: "Breaking Bad" },
+        { name: "Irene Adler", role: "BBC Sherlock" },
       ],
       axisPositions: [
         {
@@ -1661,10 +1661,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Darth Vader", role: "Star Wars" },
+        { name: "Judge Dredd", role: "Judge Dredd" },
+        { name: "Brienne of Tarth", role: "Game of Thrones" },
+        { name: "Amanda Waller", role: "Suicide Squad Animated" },
       ],
       axisPositions: [
         {
@@ -1717,10 +1717,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Denethor", role: "The Lord of the Rings" },
+        { name: "Magneto", role: "X-Men" },
+        { name: "Robert Baratheon", role: "Game of Thrones" },
+        { name: "Lord Shen", role: "Kung Fu Panda 2" },
       ],
       axisPositions: [
         {
@@ -1773,10 +1773,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Jon Snow", role: "Game of Thrones" },
+        { name: "Achilles", role: "Troy 2004 movie" },
+        { name: "Thor", role: "Marvel" },
+        { name: "Leonidas", role: "300 movie" },
       ],
       axisPositions: [
         {
