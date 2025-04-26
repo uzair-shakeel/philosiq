@@ -1792,7 +1792,7 @@ export default function ArchetypeDetail() {
                   {archetype.name}
                 </h1>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {archetype.traits.map((trait, index) => (
+                  {archetype?.traits?.map((trait, index) => (
                     <span
                       key={index}
                       className="bg-white/20 px-3 py-1 rounded-full text-sm"
@@ -1878,7 +1878,7 @@ export default function ArchetypeDetail() {
                   Strengths
                 </h3>
                 <ul className="mb-8 space-y-2">
-                  {archetype.strengths.map((strength, index) => (
+                  {archetype?.strengths?.map((strength, index) => (
                     <li key={index} className="flex items-start">
                       <span className="text-green-500 mr-2">✓</span>
                       <span>{strength}</span>
@@ -1890,7 +1890,7 @@ export default function ArchetypeDetail() {
                   Weaknesses
                 </h3>
                 <ul className="space-y-2">
-                  {archetype.weaknesses.map((weakness, index) => (
+                  {archetype?.weaknesses?.map((weakness, index) => (
                     <li key={index} className="flex items-start">
                       <span className="text-red-500 mr-2">✗</span>
                       <span>{weakness}</span>
@@ -1907,7 +1907,7 @@ export default function ArchetypeDetail() {
                   <FaUsers className="mr-3 text-primary-maroon" /> Famous People
                 </h2>
                 <div className="space-y-8">
-                  {archetype.famousPeople.map((person, index) => (
+                  {archetype?.famousPeople?.map((person, index) => (
                     <div
                       key={index}
                       className="flex flex-col items-center text-center"
