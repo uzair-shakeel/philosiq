@@ -74,10 +74,10 @@ export default function ArchetypeDetail() {
     reformer: {
       id: "reformer",
       name: "The Reformer",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Nationalist"],
+      description: "Progress with roots. Freedom with unity.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an ELPSN (The Reformer), you likely value equity, personal freedom, and progress, while maintaining a strong sense of national identity. You tend to support policies that promote fairness and social change, but within the context of preserving cultural or national cohesion. With a generally secular worldview, you’re probably more focused on practical solutions than tradition, and you often see reform as the path to a better future—balancing innovation with a grounded sense of belonging.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -130,10 +130,10 @@ export default function ArchetypeDetail() {
     prophet: {
       id: "prophet",
       name: "The Prophet",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Libertarian", "Progressive", "Religious", "Globalist"],
+      description: "Guided by faith. Driven by justice.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an ELPRG (The Prophet), you likely believe in a future shaped by equity, freedom, and progress, guided by a strong moral or spiritual foundation. You tend to see personal liberty and global cooperation as essential to building a just world, and your religious or spiritual beliefs may inspire a deep sense of purpose and vision for what society could become. With a progressive mindset and a global outlook, you often view change not just as necessary, but as a calling—something rooted in both compassion and conviction.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -186,10 +186,10 @@ export default function ArchetypeDetail() {
     firebrand: {
       id: "firebrand",
       name: "The Firebrand",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Libertarian", "Progressive", "Religious", "Nationalist"],
+      description: "Change the world by conviction and fire.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an ELPRN (The Firebrand), you likely champion equity, freedom, and progress, while drawing strength from your religious or spiritual beliefs and a strong sense of national identity. You may see reform and justice as moral imperatives, driven by both personal conviction and a desire to uplift your community or nation. With a passion for change and a clear sense of purpose, you tend to challenge the status quo—believing that a better society is possible when values, tradition, and liberty work together.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -242,10 +242,10 @@ export default function ArchetypeDetail() {
     philosopher: {
       id: "philosopher",
       name: "The Philosopher",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Libertarian", "Conservative", "Secular", "Globalist"],
+      description: "Balance reason with purpose. Think deeper.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an ELCSG (The Philosopher), you likely value equity and individual freedom, while leaning toward a more cautious, thoughtful approach to change. With a secular perspective and a global outlook, you may believe that reason, dialogue, and shared responsibility are key to creating a stable and just society. You tend to appreciate tradition where it serves the common good, but you're also open to ideas that promote fairness and long-term progress. Your vision is often guided by a balance of principle, pragmatism, and curiosity about the bigger picture.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -298,10 +298,10 @@ export default function ArchetypeDetail() {
     localist: {
       id: "localist",
       name: "The Localist",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Libertarian", "Conservative", "Secular", "Nationalist"],
+      description: "Change begins at home. Tradition with care.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an ELCSN (The Localist), you likely value equity and personal freedom, while placing importance on tradition, community, and national identity. With a secular mindset, you may approach social issues through a practical and reasoned lens, favoring solutions that respect both individual rights and cultural cohesion. You tend to believe that meaningful change happens close to home, and that preserving local values can coexist with a commitment to fairness and opportunity. Your perspective often blends caution with care—seeking progress that’s grounded and sustainable.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -354,10 +354,10 @@ export default function ArchetypeDetail() {
     missionary: {
       id: "missionary",
       name: "The Missionary",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Libertarian", "Conservative", "Religious", "Globalist"],
+      description: "Serve with purpose. Lead with compassion.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an ELCRG (The Missionary), you likely believe in equity and individual freedom, guided by a strong moral or religious framework. You may value tradition and personal responsibility, while also embracing a global perspective that emphasizes compassion, service, and shared human dignity. With a thoughtful balance between faith and principle, you tend to see progress as something best achieved through purpose-driven action—uplifting others while staying true to core beliefs. Your vision often blends timeless values with a hope for a more just and connected world.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -410,10 +410,10 @@ export default function ArchetypeDetail() {
     guardian: {
       id: "guardian",
       name: "The Guardian",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Libertarian", "Conservative", "Religious", "Nationalist"],
+      description: "Honor the past. Protect the future.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an ELCRN (The Guardian), you likely hold equity and personal freedom in high regard, while also valuing tradition, faith, and a strong sense of national identity. Guided by a moral or religious framework, you may see your role as protecting what matters—whether it’s community, culture, or foundational values. You tend to believe that a just society is one that honors both individual dignity and collective responsibility. Your outlook often blends conviction with care, aiming to preserve what works while ensuring everyone has a fair chance to thrive.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -466,10 +466,10 @@ export default function ArchetypeDetail() {
     technocrat: {
       id: "technocrat",
       name: "The Technocrat",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Authoritarian", "Progressive", "Secular", "Globalist"],
+      description: "Lead with data. Build with vision.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an EAPSG (The Technocrat), you likely believe in equity and progress, with a focus on structure, expertise, and large-scale solutions. With a secular and globally-minded perspective, you may see data, science, and organized systems as key tools for building a fairer, more efficient society. You tend to value order and coordination when addressing complex challenges, aiming for outcomes that serve the greater good. Your approach often reflects a belief that meaningful progress comes from informed planning, innovation, and collective responsibility.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -522,10 +522,10 @@ export default function ArchetypeDetail() {
     enforcer: {
       id: "enforcer",
       name: "The Enforcer",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Authoritarian", "Progressive", "Secular", "Nationalist"],
+      description: "Discipline for justice. Order for equity.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an EAPSN (The Enforcer), you likely believe in equity and progress, paired with a strong sense of national identity and the importance of order. With a secular outlook, you may approach social change through a practical and structured lens, favoring decisive action and collective discipline to achieve fairness and stability. You tend to see a just society as one that protects its people, upholds shared values, and ensures that no one is left behind—even if that requires firm guidance and clear rules. Your vision often blends idealism with a focus on security and cohesion.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -578,10 +578,10 @@ export default function ArchetypeDetail() {
     zealot: {
       id: "zealot",
       name: "The Zealot",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Authoritarian", "Progressive", "Religious", "Globalist"],
+      description: "Faith fuels progress. Purpose drives power.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an EAPRG (The Zealot), you likely believe in equity and progress, driven by a deep moral or spiritual conviction. With a global perspective, you may see your values as part of a broader mission to uplift humanity and correct injustice. You tend to favor strong, coordinated efforts to bring about meaningful change, believing that structure and purpose are essential in achieving a better world. Your vision often blends faith, idealism, and determination—seeking transformation that reflects both moral clarity and a commitment to the common good.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -634,10 +634,10 @@ export default function ArchetypeDetail() {
     purist: {
       id: "purist",
       name: "The Purist",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Authoritarian", "Progressive", "Religious", "Nationalist"],
+      description: "Moral clarity. National strength.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an EAPRN (The Purist), you likely believe in equity and progress, guided by strong moral or religious principles and a deep sense of national identity. You may see structure, discipline, and shared values as essential to building a just and unified society. With a focus on moral clarity and collective purpose, you tend to support firm action in pursuit of what you see as a better, more righteous future. Your vision often blends conviction, tradition, and reform—seeking to uplift your community while holding true to the beliefs that ground it.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -690,10 +690,10 @@ export default function ArchetypeDetail() {
     commander: {
       id: "commander",
       name: "The Commander",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Authoritarian", "Conservative", "Secular", "Globalist"],
+      description: "Order, strength, and strategic vision.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an EACSG (The Commander), you likely value equity and stability, favoring order, structure, and strategic leadership to maintain social cohesion. With a secular and globally-minded perspective, you may see strong institutions and coordinated efforts as essential to addressing complex challenges. You tend to prefer steady, disciplined approaches to progress—believing that fairness is best achieved when systems are well-organized and responsibly managed. Your vision often combines a respect for tradition with a readiness to lead, especially when clarity and control are needed.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -746,10 +746,10 @@ export default function ArchetypeDetail() {
     steward: {
       id: "steward",
       name: "The Steward",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Authoritarian", "Conservative", "Secular", "Nationalist"],
+      description: "Preserve what works. Guide what grows.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an EACSN (The Steward), you likely believe in equity and order, with a strong respect for tradition, responsibility, and national cohesion. With a secular and pragmatic outlook, you may see your role as one of careful guidance—protecting what works while ensuring fairness and stability within your community or country. You tend to value structure and discipline, believing that a just society requires strong leadership and shared values. Your vision often emphasizes preservation with purpose—maintaining balance while looking out for the common good.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -802,10 +802,10 @@ export default function ArchetypeDetail() {
     shepherd: {
       id: "shepherd",
       name: "The Shepherd",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Authoritarian", "Conservative", "Religious", "Globalist"],
+      description: "Lead with faith. Guard with wisdom.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an EACRG (The Shepherd), you likely value equity and stability, guided by a strong moral or religious framework and a global sense of responsibility. You may believe that lasting order and fairness come from a combination of tradition, structure, and compassionate leadership. With a focus on guiding others and upholding shared values, you tend to support well-organized systems that serve the common good. Your vision often blends care and conviction—seeking to lead with purpose, protect what matters, and uplift society through faith and principled direction.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -858,10 +858,10 @@ export default function ArchetypeDetail() {
     highPriest: {
       id: "high-priest",
       name: "The High Priest",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Equity", "Authoritarian", "Conservative", "Religious", "Nationalist"],
+      description: "Guard the sacred. Govern with virtue.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As an EACRN (The High Priest), you likely value equity and order, deeply rooted in tradition, faith, and a strong sense of national identity. You may believe that a just and harmonious society is built through shared moral foundations, structured leadership, and cultural cohesion. With a guiding sense of purpose, you tend to support firm, principled action to preserve values and protect the community. Your vision often blends spiritual conviction with a sense of duty—seeking to uphold what’s sacred while ensuring fairness and stability for those you serve.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -914,10 +914,10 @@ export default function ArchetypeDetail() {
     futurist: {
       id: "futurist",
       name: "The Futurist",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "Invent the future. Believe in potential.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FLPSG (The Futurist), you likely believe in individual freedom, innovation, and progress, with a focus on global cooperation and a secular outlook. You may see open markets and technological advancement as key drivers of positive change, helping to create a more dynamic and equitable world. With a forward-looking mindset, you tend to embrace new ideas and bold solutions, trusting that creativity and personal liberty can work hand in hand to shape a better future. Your vision often blends optimism, openness, and a belief in human potential.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -970,10 +970,10 @@ export default function ArchetypeDetail() {
     maverick: {
       id: "maverick",
       name: "The Maverick",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Libertarian", "Progressive", "Secular", "Nationalist"],
+      description: "Think boldly. Speak freely. Stand firm.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FLPSN (The Maverick), you likely value personal freedom, innovation, and progress, while also holding a strong appreciation for national identity and cultural roots. With a secular and independent mindset, you may favor open markets and individual choice as engines for growth and change. You tend to challenge convention and think outside the box, believing that real progress happens when people are free to experiment, speak their minds, and chart their own path—within a framework that still honors community and country. Your vision often blends boldness with a grounded sense of belonging.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1026,10 +1026,10 @@ export default function ArchetypeDetail() {
     evangelist: {
       id: "evangelist",
       name: "The Evangelist",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Libertarian", "Progressive", "Religious", "Globalist"],
+      description: "Inspire through belief. Empower with vision.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FLPRG (The Evangelist), you likely believe in personal freedom, innovation, and global cooperation, all guided by a strong moral or religious foundation. You may see open markets and individual empowerment as tools for uplifting communities and driving meaningful progress. With a blend of spiritual conviction and forward-thinking ideals, you tend to promote change that honors both personal belief and collective well-being. Your vision often combines purpose, optimism, and outreach—seeking to inspire others and build a better world through both faith and freedom.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1082,10 +1082,10 @@ export default function ArchetypeDetail() {
     dissenter: {
       id: "dissenter",
       name: "The Dissenter",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Libertarian", "Progressive", "Religious", "Nationalist"],
+      description: "Defy the norm. Stand with conviction.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FLPRN (The Dissenter), you likely value personal freedom, innovation, and progress, while being grounded in your faith and a strong sense of national identity. You may see individual empowerment and open markets as essential to human flourishing, but you also believe that moral conviction and cultural heritage have an important role to play in shaping society. With a spirit of independence, you tend to challenge dominant narratives—pushing for change that aligns with both your principles and your community’s values. Your vision often blends courage, belief, and a commitment to charting your own path.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1138,10 +1138,10 @@ export default function ArchetypeDetail() {
     globalist: {
       id: "globalist",
       name: "The Globalist",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Libertarian", "Conservative", "Secular", "Globalist"],
+      description: "Freedom with cooperation. Tradition with progress.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FLCSG (The Globalist), you likely value personal freedom, open markets, and time-tested principles, all within a globally connected framework. With a secular and pragmatic outlook, you may believe that prosperity and stability come from responsible individualism, free enterprise, and international cooperation. You tend to favor gradual progress rooted in tradition, seeing global engagement as a way to promote opportunity, peace, and mutual benefit. Your vision often blends practicality with a broad perspective—seeking a world where freedom and order can thrive side by side.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1194,10 +1194,10 @@ export default function ArchetypeDetail() {
     patriot: {
       id: "patriot",
       name: "The Patriot",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Libertarian", "Conservative", "Secular", "Nationalist"],
+      description: "Pride in nation. Strength in liberty.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FLCSN (The Patriot), you likely value personal freedom, free markets, and traditional values, grounded in a strong sense of national pride and cultural identity. With a secular and pragmatic approach, you may see individual responsibility and economic liberty as keys to a thriving society. You tend to believe that preserving national character and sovereignty is important—even as the world changes—favoring a steady, principled path forward. Your vision often blends independence, heritage, and a belief in the strength of a self-reliant people.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1250,10 +1250,10 @@ export default function ArchetypeDetail() {
     industrialist: {
       id: "industrialist",
       name: "The Industrialist",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Libertarian", "Conservative", "Religious", "Globalist"],
+      description: "Work with values. Build across borders.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FLCRG (The Industrialist), you likely believe in personal freedom, open markets, and traditional values, guided by a strong moral or religious foundation and a global perspective. You may see enterprise, innovation, and discipline as driving forces behind prosperity—not just for individuals, but for society as a whole. With a focus on both principle and progress, you tend to support systems that reward effort, uphold values, and connect communities across borders. Your vision often blends faith, ambition, and pragmatism—seeking to build a better world through hard work and enduring ideals.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1306,10 +1306,10 @@ export default function ArchetypeDetail() {
     traditionalist: {
       id: "traditionalist",
       name: "The Traditionalist",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Libertarian", "Conservative", "Religious", "Nationalist"],
+      description: "Preserve the sacred. Empower the individual.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FLCRN (The Traditionalist), you likely value personal freedom, open markets, and enduring moral or religious principles, all rooted in a strong sense of national identity. You may believe that a healthy society thrives when individuals are empowered, communities are grounded in shared values, and cultural heritage is preserved. With a respect for time-tested ways and a belief in personal responsibility, you tend to favor steady progress that honors both faith and tradition. Your vision often blends independence, conviction, and a deep commitment to preserving what matters most.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1362,10 +1362,10 @@ export default function ArchetypeDetail() {
     overlord: {
       id: "overlord",
       name: "The Overlord",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Authoritarian", "Progressive", "Secular", "Globalist"],
+      description: "Control the chaos. Command the future.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FAPSG (The Overlord), you likely believe in progress and global cooperation, with an emphasis on structure, efficiency, and economic freedom. With a secular perspective and a strong belief in coordinated leadership, you may see centralized systems and strategic planning as essential tools for driving innovation and large-scale improvement. You tend to support bold, top-down solutions that aim to solve complex problems and elevate society. Your vision often blends ambition, order, and forward-thinking—focused on creating a more advanced and equitable world through strong direction and purposeful control.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1418,10 +1418,10 @@ export default function ArchetypeDetail() {
     corporatist: {
       id: "corporatist",
       name: "The Corporatist",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Authoritarian", "Progressive", "Secular", "Nationalist"],
+      description: "Strategize for power. Govern for progress.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FAPSN (The Corporatist), you likely value economic freedom and national strength, paired with a belief in structured, top-down approaches to progress. With a secular outlook and a focus on efficiency and order, you may see coordinated leadership—especially between state and industry—as key to driving innovation and stability. You tend to favor pragmatic solutions that serve both the nation and its economy, believing that prosperity and unity can be achieved through strategic planning and disciplined governance. Your vision often blends progress with control, aiming to build a strong and forward-moving society.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1474,10 +1474,10 @@ export default function ArchetypeDetail() {
     moralizer: {
       id: "moralizer",
       name: "The Moralizer",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Authoritarian", "Progressive", "Religious", "Globalist"],
+      description: "Construct with purpose. Lead with faith.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FAPRG (The Moralizer), you likely believe in progress and global cooperation, guided by strong moral or religious convictions and a belief in structured, purposeful leadership. You may see economic freedom and innovation as tools to uplift society—so long as they align with clear ethical principles. With a focus on discipline, order, and a higher sense of purpose, you tend to support firm but value-driven approaches to change. Your vision often blends faith, structure, and ambition—seeking to shape a better world through both moral clarity and decisive action.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1530,10 +1530,10 @@ export default function ArchetypeDetail() {
     builder: {
       id: "builder",
       name: "The Builder",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Authoritarian", "Progressive", "Religious", "Nationalist"],
+      description: "Construct with purpose. Lead with faith.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FAPRN (The Builder), you likely believe in progress and national strength, guided by a strong moral or religious foundation and a commitment to order and structure. You may see economic freedom and personal ambition as powerful forces—best harnessed through disciplined leadership and shared values. With a focus on development, tradition, and unity, you tend to support purposeful action that reinforces both moral principles and national identity. Your vision often blends faith, structure, and a hands-on drive to construct a society where strength and virtue go hand in hand.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1586,10 +1586,10 @@ export default function ArchetypeDetail() {
     executive: {
       id: "executive",
       name: "The Executive",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Authoritarian", "Conservative", "Secular", "Globalist"],
+      description: "Structure. Efficiency. Vision.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FACSG (The Executive), you likely value order, efficiency, and economic freedom, with a pragmatic, secular outlook and a global perspective. You may believe that well-structured systems and strong leadership are essential for maintaining stability and driving prosperity. With a preference for clear rules and strategic coordination, you tend to support disciplined approaches to governance and business alike. Your vision often blends tradition with ambition—seeking a world where productivity, responsibility, and long-term planning lead the way.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1642,10 +1642,10 @@ export default function ArchetypeDetail() {
     ironhand: {
       id: "ironhand",
       name: "The Ironhand",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Authoritarian", "Conservative", "Secular", "Nationalist"],
+      description: "Structure. Efficiency. Vision.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FACSN (The Ironhand), you likely believe in strength, order, and economic freedom, grounded in a secular worldview and a strong sense of national pride. You may see discipline, structure, and decisive leadership as essential to maintaining stability and protecting the values you hold dear. With a preference for tradition and strategic control, you tend to support firm but focused governance that prioritizes national unity and self-reliance. Your vision often blends authority with responsibility—aiming to build a society that is secure, resilient, and built to last.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1698,10 +1698,10 @@ export default function ArchetypeDetail() {
     regent: {
       id: "regent",
       name: "The Regent",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Authoritarian", "Conservative", "Religious", "Globalist"],
+      description: "Rule with wisdom. Preserve with strength.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FACRG (The Regent), you likely value order, faith, and economic freedom, guided by a strong moral framework and a global perspective. You may believe that prosperity and stability come from disciplined leadership, time-tested values, and responsible stewardship of both markets and institutions. With a focus on preserving what works while engaging with the wider world, you tend to support structured approaches that honor tradition while promoting long-term growth. Your vision often blends faith, structure, and purpose—seeking to uphold enduring principles in a rapidly changing world.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
@@ -1754,10 +1754,10 @@ export default function ArchetypeDetail() {
     crusader: {
       id: "crusader",
       name: "The Crusader",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      traits: ["Free Market", "Authoritarian", "Conservative", "Religious", "Nationalist"],
+      description: "Defend your values. Stand your ground.",
       introduction:
-        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+        "As a FACRN (The Crusader), you likely value strength, tradition, and economic freedom, rooted in deep moral or religious convictions and a strong sense of national identity. You may believe that a just and stable society is built through disciplined leadership, cultural preservation, and a firm commitment to shared values. With a focus on order and purpose, you tend to support decisive action in defense of both faith and country. Your vision often blends conviction, structure, and loyalty—seeking to protect and uphold a way of life you believe is worth preserving.",
       strengths: [
         "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
         "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
