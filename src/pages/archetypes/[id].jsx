@@ -1751,7 +1751,6 @@ export default function ArchetypeDetail() {
       ],
       color: "from-blue-600 to-green-500",
     },
-  };
     crusader: {
       id: "crusader",
       name: "The Crusader",
