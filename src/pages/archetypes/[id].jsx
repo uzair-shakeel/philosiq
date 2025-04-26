@@ -41,6 +41,9 @@ export default function ArchetypeDetail() {
         { name: "'Aang", role: "Avatar: The Last Airbender" },
         { name: "Amélie", role: "Amélie" },
         { name: "Lisa Simpson", role: "The Simpsons" },
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     reformer: {
       id: "reformer",
