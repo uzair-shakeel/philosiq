@@ -125,7 +125,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-green-600 to-blue-400",
     },
     prophet: {
       id: "prophet",
@@ -181,7 +181,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-indigo-700 to-purple-500",
     },
     firebrand: {
       id: "firebrand",
@@ -237,7 +237,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-red-600 to-orange-500",
     },
     philosopher: {
       id: "philosopher",
@@ -293,7 +293,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-gray-600 to-blue-400",
     },
     localist: {
       id: "localist",
@@ -349,7 +349,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-yellow-700 to-orange-400",
     },
     missionary: {
       id: "missionary",
@@ -405,7 +405,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-teal-600 to-green-400",
     },
     guardian: {
       id: "guardian",
@@ -461,7 +461,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-amber-700 to-red-400",
     },
     technocrat: {
       id: "technocrat",
@@ -517,7 +517,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-sky-600 to-cyan-400",
     },
     enforcer: {
       id: "enforcer",
@@ -573,7 +573,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-slate-700 to-gray-400",
     },
     zealot: {
       id: "zealot",
@@ -629,7 +629,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-purple-700 to-pink-500",
     },
     purist: {
       id: "purist",
@@ -685,7 +685,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-rose-700 to-red-500",
     },
     commander: {
       id: "commander",
@@ -741,7 +741,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-blue-800 to-gray-600",
     },
     steward: {
       id: "steward",
@@ -797,7 +797,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-amber-700 to-lime-500",
     },
     shepherd: {
       id: "shepherd",
@@ -853,7 +853,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-green-700 to-teal-400",
     },
     highPriest: {
       id: "high-priest",
@@ -909,7 +909,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-indigo-800 to-violet-600",
     },
     futurist: {
       id: "futurist",
@@ -965,7 +965,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-cyan-500 to-blue-400",
     },
     maverick: {
       id: "maverick",
@@ -1021,7 +1021,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-orange-600 to-yellow-400",
     },
     evangelist: {
       id: "evangelist",
@@ -1077,7 +1077,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-teal-600 to-blue-400",
     },
     dissenter: {
       id: "dissenter",
@@ -1133,7 +1133,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-red-600 to-rose-400",
     },
     globalist: {
       id: "globalist",
@@ -1189,7 +1189,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-blue-500 to-green-400",
     },
     patriot: {
       id: "patriot",
@@ -1245,7 +1245,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-red-700 to-blue-600",
     },
     industrialist: {
       id: "industrialist",
@@ -1301,7 +1301,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-yellow-600 to-gray-400",
     },
     traditionalist: {
       id: "traditionalist",
@@ -1357,7 +1357,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-amber-700 to-emerald-500",
     },
     overlord: {
       id: "overlord",
@@ -1413,7 +1413,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-black to-gray-700",
     },
     corporatist: {
       id: "corporatist",
@@ -1469,7 +1469,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-gray-700 to-blue-400",
     },
     moralizer: {
       id: "moralizer",
@@ -1525,7 +1525,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-purple-800 to-rose-600",
     },
     builder: {
       id: "builder",
@@ -1581,7 +1581,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-amber-700 to-yellow-400",
     },
     executive: {
       id: "executive",
@@ -1637,7 +1637,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-gray-800 to-blue-500",
     },
     ironhand: {
       id: "ironhand",
@@ -1693,7 +1693,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-slate-800 to-red-600",
     },
     regent: {
       id: "regent",
@@ -1749,7 +1749,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-indigo-800 to-emerald-500",
     },
     crusader: {
       id: "crusader",
@@ -1805,7 +1805,7 @@ export default function ArchetypeDetail() {
           description: "Strongly globalist perspective",
         },
       ],
-      color: "from-blue-600 to-green-500",
+      color: "from-red-800 to-amber-600",
     },
   };
 
