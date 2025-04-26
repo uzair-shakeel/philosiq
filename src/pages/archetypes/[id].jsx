@@ -41,35 +41,6 @@ export default function ArchetypeDetail() {
         { name: "'Aang", role: "Avatar: The Last Airbender" },
         { name: "Amélie", role: "Amélie" },
         { name: "Lisa Simpson", role: "The Simpsons" },
-      ],
-      axisPositions: [
-        {
-          axis: "Equality vs. Markets",
-          position: 85,
-          description: "Strongly favors equality-based policies",
-        },
-        {
-          axis: "Democracy vs. Authority",
-          position: 80,
-          description: "Strongly supports democratic institutions",
-        },
-        {
-          axis: "Progress vs. Tradition",
-          position: 90,
-          description: "Highly progressive outlook",
-        },
-        {
-          axis: "Secular vs. Religious",
-          position: 85,
-          description: "Strongly secular worldview",
-        },
-        {
-          axis: "Globalism vs. Nationalism",
-          position: 90,
-          description: "Strongly globalist perspective",
-        },
-      ],
-      color: "from-blue-600 to-green-500",
     },
     reformer: {
       id: "reformer",
