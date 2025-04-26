@@ -74,152 +74,1682 @@ export default function ArchetypeDetail() {
     reformer: {
       id: "reformer",
       name: "The Reformer",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     prophet: {
       id: "prophet",
       name: "The Prophet",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     firebrand: {
       id: "firebrand",
       name: "The Firebrand",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     philosopher: {
       id: "philosopher",
       name: "The Philosopher",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     localist: {
       id: "localist",
       name: "The Localist",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     missionary: {
       id: "missionary",
       name: "The Missionary",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     guardian: {
       id: "guardian",
       name: "The Guardian",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     technocrat: {
       id: "technocrat",
       name: "The Technocrat",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     enforcer: {
       id: "enforcer",
       name: "The Enforcer",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     zealot: {
       id: "zealot",
       name: "The Zealot",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     purist: {
       id: "purist",
       name: "The Purist",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     commander: {
       id: "commander",
       name: "The Commander",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     steward: {
       id: "steward",
       name: "The Steward",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     shepherd: {
       id: "shepherd",
       name: "The Shepherd",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     highPriest: {
       id: "high-priest",
       name: "The High Priest",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     futurist: {
       id: "futurist",
       name: "The Futurist",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     maverick: {
       id: "maverick",
       name: "The Maverick",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     evangelist: {
       id: "evangelist",
       name: "The Evangelist",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     dissenter: {
       id: "dissenter",
       name: "The Dissenter",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     globalist: {
       id: "globalist",
       name: "The Globalist",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     patriot: {
       id: "patriot",
       name: "The Patriot",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     industrialist: {
       id: "industrialist",
       name: "The Industrialist",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     traditionalist: {
       id: "traditionalist",
       name: "The Traditionalist",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     overlord: {
       id: "overlord",
       name: "The Overlord",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     corporatist: {
       id: "corporatist",
       name: "The Corporatist",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     moralizer: {
       id: "moralizer",
       name: "The Moralizer",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     builder: {
       id: "builder",
       name: "The Builder",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     executive: {
       id: "executive",
       name: "The Executive",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     ironhand: {
       id: "ironhand",
       name: "The Ironhand",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
     crusader: {
       id: "crusader",
       name: "The Crusader",
-      // Other fields will go here
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      description: "ELPSG",
+      introduction:
+        "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
+      strengths: [
+        "Equity-minded individuals are highly empathetic, valuing fairness and social responsibility.",
+        "Libertarian-minded individuals are highly principled and value personal freedom, resisting unnecessary control over others.",
+        "Progressive-minded individuals are open-minded and innovative, embracing change and new ideas.",
+        "Secular-minded individuals are rational and evidence-driven, relying on logic and scientific reasoning.",
+        "Globalist-minded individuals are cosmopolitan and adaptable, seeing themselves as part of a larger human community.",
+      ],
+      weaknesses: [
+        "Equity-minded individuals may sometimes overestimate the effectiveness of government intervention and underestimate unintended consequences.",
+        "Libertarian-minded individuals may struggle with collective action problems, finding it difficult to coordinate large-scale solutions to social issues.",
+        "Progressive-minded individuals may dismiss traditional wisdom too quickly, assuming that all change is inherently good.",
+        "Secular-minded individuals may lack appreciation for the emotional and communal aspects of faith, underestimating its importance in people’s lives.",
+        "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
+      ],
+      famousPeople: [
+        { name: "Bernie Sanders", role: "U.S. Senator" },
+        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
+        { name: "Karl Marx", role: "Political Theorist" },
+        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+      ],
+      axisPositions: [
+        {
+          axis: "Equality vs. Markets",
+          position: 85,
+          description: "Strongly favors equality-based policies",
+        },
+        {
+          axis: "Democracy vs. Authority",
+          position: 80,
+          description: "Strongly supports democratic institutions",
+        },
+        {
+          axis: "Progress vs. Tradition",
+          position: 90,
+          description: "Highly progressive outlook",
+        },
+        {
+          axis: "Secular vs. Religious",
+          position: 85,
+          description: "Strongly secular worldview",
+        },
+        {
+          axis: "Globalism vs. Nationalism",
+          position: 90,
+          description: "Strongly globalist perspective",
+        },
+      ],
+      color: "from-blue-600 to-green-500",
     },
   };
 
