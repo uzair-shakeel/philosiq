@@ -324,8 +324,8 @@ export default function ArchetypePage() {
       slug: "ironhand",
     },
     {
-      id: "traditionalist",
-      name: "The Traditionalist",
+      id: "regent",
+      name: "The Regent",
       traits: [
         "Markets",
         "Authority",
@@ -333,7 +333,7 @@ export default function ArchetypePage() {
         "Religious",
         "Globalist",
       ],
-      slug: "traditionalist",
+      slug: "regent",
     },
     {
       id: "crusader",
