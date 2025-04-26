@@ -19,7 +19,7 @@ export default function ArchetypeDetail() {
       id: "the-utopian",
       name: "The Utopian",
       traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
-      description: "ELPSG",
+      description: "Imagine boldly. Innovate freely. Uplift all.",
       introduction:
         "As an ELPSG (The Utopian), you likely envision a world shaped by fairness, freedom, and progress. You tend to support reducing economic inequality, protecting personal liberties, and embracing change as a path toward a better future. With a generally secular outlook and a broad, global perspective, you often see cooperation and innovation as important tools for addressing the world’s challenges. Your ideal society is probably one where individuals can thrive without oppressive systems, and where justice is thoughtfully balanced with opportunity.",
       strengths: [
@@ -37,10 +37,10 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the importance of local cultures and national identity, assuming that globalization is universally beneficial.",
       ],
       famousPeople: [
-        { name: "Bernie Sanders", role: "U.S. Senator" },
-        { name: "Franklin D. Roosevelt", role: "23rd U.S. President" },
-        { name: "Karl Marx", role: "Political Theorist" },
-        { name: "Alexandria Ocasio-Cortez", role: "U.S. Representative" },
+        { name: "Atticus Finch", role: "To Kill a Mockingbird" },
+        { name: "'Aang", role: "Avatar: The Last Airbender" },
+        { name: "Amélie", role: "Amélie" },
+        { name: "Lisa Simpson", role: "The Simpsons" },
       ],
       axisPositions: [
         {
@@ -1943,58 +1943,58 @@ export default function ArchetypeDetail() {
             </h2>
 
             <div className="space-y-8">
-              {/* Markets vs. Equality */}
+              {/* Equity vs. Free Market */}
               <div>
                 <h3 className="text-xl font-bold mb-2 text-green-600">
-                  Markets: The Power of Individual Enterprise and Competition
+                  Free Market: Freedom to compete. Freedom to succeed.
                 </h3>
                 <p className="text-gray-700">
                   {archetype.axisDescriptions?.markets ||
-                    "Success is not handed out; it is earned. High achievers understand that individual effort, innovation, and competition are the engines of economic growth and personal success. They believe in a merit-based system where those who provide the most value rise to the top. Rather than waiting for permission or relying on external help, they take control of their own destiny, leveraging their skills, knowledge, and work ethic to create opportunities."}
+                    "As someone who leans toward the Free Market side of the axis, you likely believe that economic prosperity thrives best when individuals and businesses operate with minimal interference from the government. You may see market forces, such as competition and entrepreneurship, as key drivers of innovation and economic growth. For you, the idea of success is often tied to the freedom to operate within an open market where supply and demand determine wages, prices, and policies. You might feel that too much government intervention can stifle productivity, limit personal ambition, and create inefficiencies. While you recognize the existence of inequalities, you may believe that the free market, with its emphasis on individual choice and competition, is the most effective way to generate wealth, improve quality of life, and promote overall prosperity."}
                 </p>
               </div>
 
-              {/* Democracy vs. Authority */}
+              {/* Libertarian vs. Authoritarian */}
               <div>
                 <h3 className="text-xl font-bold mb-2 text-blue-600">
-                  Democracy: Freedom as the Cornerstone of Opportunity
+                  Libertarian: The fewer the chains, the freer the mind.
                 </h3>
                 <p className="text-gray-700">
                   {archetype.axisDescriptions?.democracy ||
-                    "A thriving society—and by extension, a thriving business environment—depends on the ability of individuals to make choices, voice opinions, and pursue their ambitions without unnecessary interference. Those who succeed recognize that freedom, accountability, and fair competition foster innovation and long-term prosperity. They value a system where effort and ability determine outcomes, not arbitrary barriers."}
+                    "As someone who leans toward the Libertarian side of the axis, you likely place a high value on individual freedom and autonomy. You believe that people should have the right to make their own choices, without excessive interference from the government. Personal liberties, such as freedom of speech, the right to privacy, and the ability to engage in activities that don't harm others, are fundamental to your worldview. You may advocate for a minimal government that focuses only on protecting those rights, rather than regulating people's lives or intervening in markets. For you, the ideal society is one where individuals are free to pursue their interests and passions, express dissent, and live as they see fit—without the burden of state control or authoritarian oversight. You may view government restrictions, surveillance, and censorship as unnecessary encroachments on personal freedoms that stifle creativity, progress, and individual responsibility."}
+                </p>
+              </div>
+
+              {/* Progressive vs. Conservative */}
+              <div>
+                <h3 className="text-xl font-bold mb-2 text-yellow-600">
+                  Progressive: Tomorrow doesn’t wait. Neither should we
+                </h3>
+                <p className="text-gray-700">
+                  {archetype.axisDescriptions?.secular ||
+                    "As someone who leans toward the Progressive side of the axis, you tend to view societal change as not only inevitable but also necessary for a better future. You believe that social, cultural, and technological advancements should be embraced, even if they challenge long-standing traditions and norms. You value inclusivity, equality, and innovation, often advocating for policies that address systemic issues like inequality, environmental degradation, and discrimination. To you, progress is about creating a more just and compassionate society where everyone, regardless of their background, has the opportunity to thrive. You may support initiatives that promote sustainability, social justice, and the expansion of rights to marginalized groups. You see societal norms as flexible and adaptable, and you believe that embracing new ideas and reforms is crucial to fostering a society that is both resilient and fair. For you, the ideal society is one that evolves to meet the needs of its people and the planet, ensuring that progress and tradition can coexist in a way that benefits all."}
                 </p>
               </div>
 
               {/* Secular vs. Religious */}
               <div>
-                <h3 className="text-xl font-bold mb-2 text-yellow-600">
-                  Secular Rationality: Logic and Inclusivity Drive Growth
-                </h3>
-                <p className="text-gray-700">
-                  {archetype.axisDescriptions?.secular ||
-                    "Decisions must be based on rational analysis, not dogma. The most effective leaders and entrepreneurs embrace evidence-based thinking, ensuring that policies, strategies, and business decisions are guided by logic, inclusivity, and real-world data. They understand that success requires adaptability and a willingness to engage with diverse perspectives to solve complex problems."}
-                </p>
-              </div>
-
-              {/* Nationalism vs. Globalism */}
-              <div>
                 <h3 className="text-xl font-bold mb-2 text-red-600">
-                  Nationalism: Strength Through Self-Reliance
+                  Secular: Reason is our compass. Evidence is our guide.
                 </h3>
                 <p className="text-gray-700">
                   {archetype.axisDescriptions?.nationalism ||
-                    "Independence breeds resilience. Whether at the level of an individual, a business, or a nation, true power comes from the ability to stand on one's own, rather than depending on external forces. The most successful people and organizations take ownership of their outcomes, cultivate internal strength, and focus on sustainable long-term prosperity. They build systems, businesses, and skill sets that allow them to thrive, regardless of external challenges."}
+                    "As someone who leans toward the Secular side of the axis, you believe in the separation of religion and public life, advocating for policies that prioritize reason, science, and universal human rights over religious doctrines. You view government, education, and societal institutions as spaces where all individuals—regardless of their religious beliefs—should be treated equally and fairly. For you, morality can be grounded in humanistic and secular principles that are based on logic, empathy, and shared values, rather than religious teachings. You believe that decisions regarding laws, public policies, and social matters should be based on objective reasoning and evidence, ensuring that they reflect the diverse, pluralistic nature of society. While respecting individual freedom of belief, you see religious influence in public spaces—such as schools, government buildings, or public policy—as something that can hinder equality and inclusivity. In your ideal society, religion plays a private role in the lives of individuals, but it does not shape or impose on the broader public sphere."}
                 </p>
               </div>
 
-              {/* Progress vs. Tradition */}
+              {/* Globalism vs. Nationalism */}
               <div>
                 <h3 className="text-xl font-bold mb-2 text-purple-600">
-                  Progress: The Relentless Drive for Innovation
+                  Globalist: We’re stronger when we act as one world
                 </h3>
                 <p className="text-gray-700">
                   {archetype.axisDescriptions?.progress ||
-                    "Success is built on the ability to adapt, evolve, and push forward. High achievers recognize that progress is not just about change for its own sake—it's about finding better, faster, and smarter ways to solve problems. They embrace technology, challenge outdated norms, and seek continuous improvement in all areas of life. Rather than being confined by the past, they forge new paths, understanding that stagnation is the enemy of success. Those who thrive in competitive markets and dynamic industries are the ones who relentlessly pursue growth, knowing that the future belongs to those willing to build it."}
+                    "As someone who leans toward the Globalist side of the axis, you believe that cooperation and interconnectedness between nations are crucial for addressing the world’s most pressing issues. You see global challenges like climate change, economic inequality, and international security as problems that transcend national borders and require collective action. You advocate for open borders, free trade, and the free flow of ideas and resources, believing that these connections ultimately lead to greater prosperity, peace, and innovation for all. Your perspective emphasizes the importance of cultural exchange and understanding, and you see diversity as an asset rather than a threat. In your view, global cooperation is essential for tackling issues that cannot be solved by any one nation alone. Whether it’s through international organizations, treaties, or joint efforts to combat global crises, you support the idea of nations working together to build a more sustainable and just world. Your ideal society values collaboration over isolation, where countries prioritize the common good of humanity as a whole, and where global solutions are seen as integral to national success. You recognize that while national sovereignty is important, addressing the interconnectedness of the world’s problems requires a commitment to shared goals and mutual respect among nations."}
                 </p>
               </div>
             </div>

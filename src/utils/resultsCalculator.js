@@ -72,20 +72,20 @@ const ARCHETYPE_MAP = {
   FLPSG: "The Futurist",
   FLPSN: "The Maverick",
   FLPRG: "The Evangelist",
-  FLPRN: "The Dissident",
+  FLPRN: "The Dissenter",
   FLCSG: "The Globalist",
   FLCSN: "The Patriot",
-  FLCRG: "The Traditionalist",
+  FLCRG: "The Industrialist",
   FLCRN: "The Traditionalist",
   FAPSG: "The Overlord",
   FAPSN: "The Corporatist",
   FAPRG: "The Moralizer",
   FAPRN: "The Builder",
   FACSG: "The Executive",
-  FACSN: "The Iconoclast",
+  FACSN: "The Ironhand",
   FACRG: "The Traditionalist",
   FACRN: "The Crusader",
-};
+}; 
 
 /**
  * Calculate the weighted score for a single answer
