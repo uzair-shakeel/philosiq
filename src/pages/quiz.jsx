@@ -372,7 +372,7 @@ export default function QuizPage() {
                   </div>
                   <div className="p-6">
                     <p className="text-gray-600 mb-6">
-                      Our condensed political quiz offers a fast yet insightful look at your core beliefs. In just a few minutes, you'll answer a condensed set of questions designed to capture your general leanings across the major ideological axes. Perfect for those short on time, but be sure to come back to take the full quiz for more accurate results!
+                      Get a fast, high-level snapshot of your political leanings in just a few minutes.
                     </p>
                     <button
                       onClick={() => startQuiz("short")}
@@ -396,7 +396,7 @@ export default function QuizPage() {
                   </div>
                   <div className="p-6">
                     <p className="text-gray-600 mb-6">
-                     Our full-spectrum political assessment is designed to go beyond labels and capture the depth of your beliefs, values, and worldview. With 96 carefully crafted questions, you'll receive the most accurate and detailed profile available—mapping your position across five key ideological axes. Gain real insight into who you are, how you think, and where you fit within the broader landscape of political thought.
+                      Explore the full spectrum of your political beliefs with our comprehensive, in-depth test.
                     </p>
                     <button
                       onClick={() => startQuiz("full")}
