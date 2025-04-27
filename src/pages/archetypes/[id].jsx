@@ -71,7 +71,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-blue-600 to-green-500",
     },
-    reformer: {
+    elpsn: {
       id: "reformer",
       name: "The Reformer",
       traits: ["Equity", "Libertarian", "Progressive", "Secular", "Nationalist"],
@@ -127,7 +127,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-green-600 to-blue-400",
     },
-    prophet: {
+    elprg: {
       id: "prophet",
       name: "The Prophet",
       traits: ["Equity", "Libertarian", "Progressive", "Religious", "Globalist"],
@@ -183,7 +183,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-indigo-700 to-purple-500",
     },
-    firebrand: {
+    elprn: {
       id: "firebrand",
       name: "The Firebrand",
       traits: ["Equity", "Libertarian", "Progressive", "Religious", "Nationalist"],
@@ -239,7 +239,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-red-600 to-orange-500",
     },
-    philosopher: {
+    elcsg: {
       id: "philosopher",
       name: "The Philosopher",
       traits: ["Equity", "Libertarian", "Conservative", "Secular", "Globalist"],
@@ -295,7 +295,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-gray-600 to-blue-400",
     },
-    localist: {
+    elcsn: {
       id: "localist",
       name: "The Localist",
       traits: ["Equity", "Libertarian", "Conservative", "Secular", "Nationalist"],
@@ -351,7 +351,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-yellow-700 to-orange-400",
     },
-    missionary: {
+    elcrg: {
       id: "missionary",
       name: "The Missionary",
       traits: ["Equity", "Libertarian", "Conservative", "Religious", "Globalist"],
@@ -407,7 +407,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-teal-600 to-green-400",
     },
-    guardian: {
+    elcrn: {
       id: "guardian",
       name: "The Guardian",
       traits: ["Equity", "Libertarian", "Conservative", "Religious", "Nationalist"],
@@ -463,7 +463,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-amber-700 to-red-400",
     },
-    technocrat: {
+    eapsg: {
       id: "technocrat",
       name: "The Technocrat",
       traits: ["Equity", "Authoritarian", "Progressive", "Secular", "Globalist"],
@@ -519,7 +519,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-sky-600 to-cyan-400",
     },
-    enforcer: {
+    eapsn: {
       id: "enforcer",
       name: "The Enforcer",
       traits: ["Equity", "Authoritarian", "Progressive", "Secular", "Nationalist"],
@@ -575,7 +575,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-slate-700 to-gray-400",
     },
-    zealot: {
+    eaprg: {
       id: "zealot",
       name: "The Zealot",
       traits: ["Equity", "Authoritarian", "Progressive", "Religious", "Globalist"],
@@ -631,7 +631,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-purple-700 to-pink-500",
     },
-    purist: {
+    eaprn: {
       id: "purist",
       name: "The Purist",
       traits: ["Equity", "Authoritarian", "Progressive", "Religious", "Nationalist"],
@@ -687,7 +687,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-rose-700 to-red-500",
     },
-    commander: {
+    eacsg: {
       id: "commander",
       name: "The Commander",
       traits: ["Equity", "Authoritarian", "Conservative", "Secular", "Globalist"],
@@ -743,7 +743,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-blue-800 to-gray-600",
     },
-    steward: {
+    eacsn: {
       id: "steward",
       name: "The Steward",
       traits: ["Equity", "Authoritarian", "Conservative", "Secular", "Nationalist"],
@@ -799,7 +799,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-amber-700 to-lime-500",
     },
-    shepherd: {
+    eacrg: {
       id: "shepherd",
       name: "The Shepherd",
       traits: ["Equity", "Authoritarian", "Conservative", "Religious", "Globalist"],
@@ -855,7 +855,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-green-700 to-teal-400",
     },
-    "high-priest": {
+    eacrn: {
       id: "high-priest",
       name: "The High Priest",
       traits: ["Equity", "Authoritarian", "Conservative", "Religious", "Nationalist"],
@@ -911,7 +911,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-indigo-800 to-violet-600",
     },
-    futurist: {
+    flpsg: {
       id: "futurist",
       name: "The Futurist",
       traits: ["Free Market", "Libertarian", "Progressive", "Secular", "Globalist"],
@@ -967,7 +967,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-cyan-500 to-blue-400",
     },
-    maverick: {
+    flpsn: {
       id: "maverick",
       name: "The Maverick",
       traits: ["Free Market", "Libertarian", "Progressive", "Secular", "Nationalist"],
@@ -1023,7 +1023,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-orange-600 to-yellow-400",
     },
-    evangelist: {
+    flprg: {
       id: "evangelist",
       name: "The Evangelist",
       traits: ["Free Market", "Libertarian", "Progressive", "Religious", "Globalist"],
@@ -1079,7 +1079,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-teal-600 to-blue-400",
     },
-    dissenter: {
+    flprn: {
       id: "dissenter",
       name: "The Dissenter",
       traits: ["Free Market", "Libertarian", "Progressive", "Religious", "Nationalist"],
@@ -1135,7 +1135,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-red-600 to-rose-400",
     },
-    globalist: {
+    flcsg: {
       id: "globalist",
       name: "The Globalist",
       traits: ["Free Market", "Libertarian", "Conservative", "Secular", "Globalist"],
@@ -1191,7 +1191,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-blue-500 to-green-400",
     },
-    patriot: {
+    flcsn: {
       id: "patriot",
       name: "The Patriot",
       traits: ["Free Market", "Libertarian", "Conservative", "Secular", "Nationalist"],
@@ -1247,7 +1247,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-red-700 to-blue-600",
     },
-    industrialist: {
+    flcrg: {
       id: "industrialist",
       name: "The Industrialist",
       traits: ["Free Market", "Libertarian", "Conservative", "Religious", "Globalist"],
@@ -1303,7 +1303,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-yellow-600 to-gray-400",
     },
-    traditionalist: {
+    flcrn: {
       id: "traditionalist",
       name: "The Traditionalist",
       traits: ["Free Market", "Libertarian", "Conservative", "Religious", "Nationalist"],
@@ -1359,7 +1359,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-amber-700 to-emerald-500",
     },
-    overlord: {
+    fapsg: {
       id: "overlord",
       name: "The Overlord",
       traits: ["Free Market", "Authoritarian", "Progressive", "Secular", "Globalist"],
@@ -1415,7 +1415,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-black to-gray-700",
     },
-    corporatist: {
+    fapsn: {
       id: "corporatist",
       name: "The Corporatist",
       traits: ["Free Market", "Authoritarian", "Progressive", "Secular", "Nationalist"],
@@ -1471,7 +1471,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-gray-700 to-blue-400",
     },
-    moralizer: {
+    faprg: {
       id: "moralizer",
       name: "The Moralizer",
       traits: ["Free Market", "Authoritarian", "Progressive", "Religious", "Globalist"],
@@ -1527,7 +1527,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-purple-800 to-rose-600",
     },
-    builder: {
+    faprn: {
       id: "builder",
       name: "The Builder",
       traits: ["Free Market", "Authoritarian", "Progressive", "Religious", "Nationalist"],
@@ -1583,7 +1583,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-amber-700 to-yellow-400",
     },
-    executive: {
+    facsg: {
       id: "executive",
       name: "The Executive",
       traits: ["Free Market", "Authoritarian", "Conservative", "Secular", "Globalist"],
@@ -1639,7 +1639,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-gray-800 to-blue-500",
     },
-    ironhand: {
+    facsn: {
       id: "ironhand",
       name: "The Ironhand",
       traits: ["Free Market", "Authoritarian", "Conservative", "Secular", "Nationalist"],
@@ -1695,7 +1695,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-slate-800 to-red-600",
     },
-    regent: {
+    facrg: {
       id: "regent",
       name: "The Regent",
       traits: ["Free Market", "Authoritarian", "Conservative", "Religious", "Globalist"],
@@ -1751,7 +1751,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-indigo-800 to-emerald-500",
     },
-    crusader: {
+    facrn: {
       id: "crusader",
       name: "The Crusader",
       traits: ["Free Market", "Authoritarian", "Conservative", "Religious", "Nationalist"],
