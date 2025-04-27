@@ -83,7 +83,7 @@ const ARCHETYPE_MAP = {
   FAPRN: "The Builder",
   FACSG: "The Executive",
   FACSN: "The Ironhand",
-  FACRG: "The Traditionalist",
+  FACRG: "The Regent",
   FACRN: "The Crusader",
 }; 
 

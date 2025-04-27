@@ -50,7 +50,7 @@ const ARCHETYPE_MAP = [
   { code: "FAPRN", label: "The Builder" },
   { code: "FACSG", label: "The Executive" },
   { code: "FACSN", label: "The Ironhand" },
-  { code: "FACRG", label: "The Authoritarian" },
+  { code: "FACRG", label: "The Regent" },
   { code: "FACRN", label: "The Crusader" },
 ];
 

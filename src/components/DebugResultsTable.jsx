@@ -89,7 +89,7 @@ export default function DebugResultsTable({ questions, answers, results }) {
     { code: "FAPRN", label: "The Builder" },
     { code: "FACSG", label: "The Executive" },
     { code: "FACSN", label: "The Ironhand" },
-    { code: "FACRG", label: "The Traditionalist" },
+    { code: "FACRG", label: "The Regent" },
     { code: "FACRN", label: "The Crusader" },
   ];
 
