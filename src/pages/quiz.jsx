@@ -372,9 +372,7 @@ export default function QuizPage() {
                   </div>
                   <div className="p-6">
                     <p className="text-gray-600 mb-6">
-                      A condensed version of our political survey that covers
-                      the essential aspects of political ideology. Perfect if
-                      you're short on time.
+                      Get a fast, high-level snapshot of your political leanings in just a few minutes.
                     </p>
                     <button
                       onClick={() => startQuiz("short")}
@@ -393,14 +391,12 @@ export default function QuizPage() {
                       <FaClipboardCheck className="text-3xl" />
                     </div>
                     <p className="text-sm opacity-90">
-                      130 questions • ~30 minutes
+                      96 questions • ~25 minutes
                     </p>
                   </div>
                   <div className="p-6">
                     <p className="text-gray-600 mb-6">
-                      Our comprehensive political survey that explores the full
-                      spectrum of political thought. Provides the most accurate
-                      and detailed results.
+                      Explore the full spectrum of your political beliefs with our comprehensive, in-depth test.
                     </p>
                     <button
                       onClick={() => startQuiz("full")}
