@@ -8,7 +8,13 @@ export default function ArchetypePage() {
     {
       id: "utopian",
       name: "The Utopian",
-      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
+      traits: [
+        "Equity", 
+        "Libertarian", 
+        "Progressive", 
+        "Secular", 
+        "Globalist"
+      ],
       slug: "elpsg",
     },
     {
@@ -21,7 +27,7 @@ export default function ArchetypePage() {
         "Secular",
         "Nationalist",
       ],
-      slug: "reformer",
+      slug: "elpsn",
     },
     {
       id: "prophet",
@@ -33,7 +39,7 @@ export default function ArchetypePage() {
         "Religious",
         "Globalist",
       ],
-      slug: "prophet",
+      slug: "elprg",
     },
     {
       id: "firebrand",
@@ -45,13 +51,13 @@ export default function ArchetypePage() {
         "Religious",
         "Nationalist",
       ],
-      slug: "firebrand",
+      slug: "elprn",
     },
     {
       id: "philosopher",
       name: "The Philosopher",
       traits: ["Equity", "Libertarian", "Conservative", "Secular", "Globalist"],
-      slug: "philosopher",
+      slug: "elcsg",
     },
     {
       id: "localist",
@@ -63,7 +69,7 @@ export default function ArchetypePage() {
         "Secular",
         "Nationalist",
       ],
-      slug: "localist",
+      slug: "elcsn",
     },
     {
       id: "missionary",
@@ -75,7 +81,7 @@ export default function ArchetypePage() {
         "Religious",
         "Globalist",
       ],
-      slug: "missionary",
+      slug: "elcrg",
     },
     {
       id: "guardian",
@@ -87,7 +93,7 @@ export default function ArchetypePage() {
         "Religious",
         "Nationalist",
       ],
-      slug: "guardian",
+      slug: "elcrn",
     },
     {
       id: "technocrat",
@@ -99,7 +105,7 @@ export default function ArchetypePage() {
         "Secular",
         "Globalist",
       ],
-      slug: "technocrat",
+      slug: "eapsg",
     },
     {
       id: "enforcer",
@@ -111,7 +117,7 @@ export default function ArchetypePage() {
         "Secular",
         "Nationalist",
       ],
-      slug: "enforcer",
+      slug: "eapsn",
     },
     {
       id: "zealot",
@@ -123,7 +129,7 @@ export default function ArchetypePage() {
         "Religious",
         "Globalist",
       ],
-      slug: "zealot",
+      slug: "eaprg",
     },
     {
       id: "purist",
@@ -135,7 +141,7 @@ export default function ArchetypePage() {
         "Religious",
         "Nationalist",
       ],
-      slug: "purist",
+      slug: "eaprn",
     },
     {
       id: "commander",
@@ -147,7 +153,7 @@ export default function ArchetypePage() {
         "Secular",
         "Globalist",
       ],
-      slug: "commander",
+      slug: "eacsg",
     },
     {
       id: "steward",
@@ -159,7 +165,7 @@ export default function ArchetypePage() {
         "Secular",
         "Nationalist",
       ],
-      slug: "steward",
+      slug: "eacsn",
     },
     {
       id: "shepherd",
@@ -171,7 +177,7 @@ export default function ArchetypePage() {
         "Religious",
         "Globalist",
       ],
-      slug: "shepherd",
+      slug: "eacrg",
     },
     {
       id: "high-priest",
@@ -183,7 +189,7 @@ export default function ArchetypePage() {
         "Religious",
         "Nationalist",
       ],
-      slug: "high-priest",
+      slug: "eacrn",
     },
     {
       id: "futurist",
@@ -201,7 +207,7 @@ export default function ArchetypePage() {
         "Secular",
         "Nationalist",
       ],
-      slug: "maverick",
+      slug: "flpsn",
     },
     {
       id: "evangelist",
@@ -213,7 +219,7 @@ export default function ArchetypePage() {
         "Religious",
         "Globalist",
       ],
-      slug: "evangelist",
+      slug: "flprg",
     },
     {
       id: "dissenter",
@@ -225,7 +231,7 @@ export default function ArchetypePage() {
         "Religious",
         "Nationalist",
       ],
-      slug: "dissenter",
+      slug: "flprn",
     },
     {
       id: "globalist",
@@ -237,7 +243,7 @@ export default function ArchetypePage() {
         "Secular",
         "Globalist",
       ],
-      slug: "globalist",
+      slug: "flcsg",
     },
     {
       id: "patriot",
@@ -249,7 +255,7 @@ export default function ArchetypePage() {
         "Secular",
         "Nationalist",
       ],
-      slug: "patriot",
+      slug: "flcsn",
     },
     {
       id: "industrialist",
@@ -261,7 +267,7 @@ export default function ArchetypePage() {
         "Religious",
         "Globalist",
       ],
-      slug: "industrialist",
+      slug: "flcrg",
     },
     {
       id: "traditionalist",
@@ -273,25 +279,25 @@ export default function ArchetypePage() {
         "Religious",
         "Nationalist",
       ],
-      slug: "traditionalist",
+      slug: "flcrn",
     },
     {
       id: "overlord",
       name: "The Overlord",
       traits: ["Markets", "Authority", "Progressive", "Secular", "Globalist"],
-      slug: "overlord",
+      slug: "fapsg",
     },
     {
       id: "corporatist",
       name: "The Corporatist",
       traits: ["Markets", "Authority", "Progressive", "Secular", "Nationalist"],
-      slug: "corporatist",
+      slug: "fapsn",
     },
     {
       id: "moralizer",
       name: "The Moralizer",
       traits: ["Markets", "Authority", "Progressive", "Religious", "Globalist"],
-      slug: "moralizer",
+      slug: "faprg",
     },
     {
       id: "builder",
@@ -303,13 +309,13 @@ export default function ArchetypePage() {
         "Religious",
         "Nationalist",
       ],
-      slug: "builder",
+      slug: "faprn",
     },
     {
       id: "executive",
       name: "The Executive",
       traits: ["Markets", "Authority", "Conservative", "Secular", "Globalist"],
-      slug: "executive",
+      slug: "facsg",
     },
     {
       id: "ironhand",
@@ -321,7 +327,7 @@ export default function ArchetypePage() {
         "Secular",
         "Nationalist",
       ],
-      slug: "ironhand",
+      slug: "facsn",
     },
     {
       id: "regent",
@@ -333,7 +339,7 @@ export default function ArchetypePage() {
         "Religious",
         "Globalist",
       ],
-      slug: "regent",
+      slug: "facrg",
     },
     {
       id: "crusader",
@@ -345,7 +351,7 @@ export default function ArchetypePage() {
         "Religious",
         "Nationalist",
       ],
-      slug: "crusader",
+      slug: "facrn",
     },
   ];
 
