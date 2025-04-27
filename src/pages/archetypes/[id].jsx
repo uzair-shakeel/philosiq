@@ -15,7 +15,7 @@ export default function ArchetypeDetail() {
   const { id } = router.query;
 
   const archetypes = {
-    utopian: {
+    elpsg: {
       id: "the-utopian",
       name: "The Utopian",
       traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
