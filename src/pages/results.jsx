@@ -155,32 +155,49 @@ function ResultsContent({ results }) {
       N: "G", // Globalism vs. Nationalism
     };
 
-    // Get axis percentages to find which is closest to 50%
-    const axisPercentages = {};
+    // Get axis percentages and filter for those above 50%
+    const axisScores = {};
+    const axesAbove50 = [];
+
     results?.axisResults.forEach((axis) => {
       const canonicalName =
         axis.name === "Equality vs. Markets"
           ? "Equity vs. Free Market"
           : axis.name;
-      axisPercentages[canonicalName] = Math.abs(axis.score - 50);
+
+      axisScores[canonicalName] = axis.score;
+
+      // Only consider axes with scores above 50% for flipping
+      if (axis.score > 50) {
+        axesAbove50.push(canonicalName);
+      }
     });
 
-    // Sort axes by how close they are to 50%
-    const sortedAxes = [...axisOrder].sort((a, b) => {
-      return (axisPercentages[a] || 0) - (axisPercentages[b] || 0);
+    // If we don't have any axes above 50%, fallback to the original method
+    if (axesAbove50.length === 0) {
+      console.log(
+        "No axes above 50% found, no secondary archetypes generated."
+      );
+      setSecondaryArchetypes([]);
+      return;
+    }
+
+    // Sort axes by their score (highest first)
+    const sortedAxes = [...axesAbove50].sort((a, b) => {
+      return (axisScores[b] || 0) - (axisScores[a] || 0);
     });
 
-    // Get the closest 2 axes to 50%
-    const closestAxes = sortedAxes.slice(0, 2);
+    // Get up to 2 axes with highest scores above 50%
+    const axesToFlip = sortedAxes.slice(0, Math.min(2, sortedAxes.length));
 
-    // Create secondary archetypes by flipping the letter of the axes closest to 50%
+    // Create secondary archetypes by flipping the letter of the selected axes
     const secondaries = [];
 
-    closestAxes.forEach((axisToFlip) => {
+    axesToFlip.forEach((axisToFlip, index) => {
       // Create a copy of the original letters
       const newLetters = { ...letters };
 
-      // Flip the letter for the axis closest to 50%
+      // Flip the letter for the selected axis
       if (newLetters[axisToFlip]) {
         newLetters[axisToFlip] =
           oppositeLetters[newLetters[axisToFlip]] || newLetters[axisToFlip];
@@ -199,8 +216,10 @@ function ResultsContent({ results }) {
         ? archetypeEntry.label
         : "Alternative Archetype";
 
-      // Calculate match percentage (just estimating based on how many letters were changed)
-      const matchPercent = 90 - 15 * closestAxes.indexOf(axisToFlip);
+      // Calculate match percentage based on the score of the flipped axis
+      // Higher axis score means the trait is stronger, so flipping it results in a lower match percentage
+      const axisScore = axisScores[axisToFlip] || 50;
+      const matchPercent = Math.max(70, 100 - (axisScore - 50));
 
       // Get traits based on the secondary archetype letters
       const traits = axisOrder.map((axis) => {
@@ -405,7 +424,7 @@ function ResultsContent({ results }) {
               <div className="mt-6">
                 <Link
                   href={`/archetypes/${archetype.id}`}
-                  className="btn-primary inline-flex items-center px-6 py-3 rounded-full transition-all hover:shadow-lg"
+                  className="bg-red-600 text-white inline-flex items-center px-6 py-3 rounded-full transition-all hover:shadow-lg"
                 >
                   Learn More About Your Archetype{" "}
                   <FaArrowRight className="ml-2" />

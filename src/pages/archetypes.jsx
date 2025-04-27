@@ -174,7 +174,7 @@ export default function ArchetypePage() {
       slug: "shepherd",
     },
     {
-      id: "high-priest",
+      id: "priest",
       name: "The High Priest",
       traits: [
         "Equity",
@@ -183,7 +183,7 @@ export default function ArchetypePage() {
         "Religious",
         "Nationalist",
       ],
-      slug: "high-priest",
+      slug: "priest",
     },
     {
       id: "futurist",
