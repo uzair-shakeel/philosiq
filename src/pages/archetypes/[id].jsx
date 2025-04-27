@@ -42,7 +42,7 @@ export default function ArchetypeDetail() {
         { name: "Hermione Granger", role: "Harry Potter" },
         { name: "Lisa Simpson", role: "The Simpsons" },
       ],
-
+      
       color: "from-blue-600 to-green-500",
     },
     reformer: {
@@ -78,7 +78,7 @@ export default function ArchetypeDetail() {
         { name: "Moana", role: "Moana" },
         { name: "Jon Snow", role: "Game of Thrones" },
       ],
-
+      
       color: "from-green-600 to-blue-400",
     },
     prophet: {
@@ -114,7 +114,7 @@ export default function ArchetypeDetail() {
         { name: "Aslan", role: "The Chronicles of Narnia" },
         { name: "Samwise Gamgee", role: "The Lord of the Rings" },
       ],
-
+      
       color: "from-indigo-700 to-purple-500",
     },
     firebrand: {
@@ -150,7 +150,7 @@ export default function ArchetypeDetail() {
         { name: "Wonder Woman", role: "Wonder Woman" },
         { name: "Eowyn", role: "The Lord of the Rings" },
       ],
-
+      
       color: "from-red-600 to-orange-500",
     },
     philosopher: {
@@ -180,7 +180,7 @@ export default function ArchetypeDetail() {
         { name: "Dr. Ian Malcolm", role: "Jurassic Park" },
         { name: "Sherlock Holmes", role: "BBC Sherlock" },
       ],
-
+      
       color: "from-gray-600 to-blue-400",
     },
     localist: {
@@ -216,7 +216,7 @@ export default function ArchetypeDetail() {
         { name: "Ned Stark", role: "Game of Thrones" },
         { name: "Hank Hill", role: "King of the Hill" },
       ],
-
+      
       color: "from-yellow-700 to-orange-400",
     },
     missionary: {
@@ -252,7 +252,7 @@ export default function ArchetypeDetail() {
         { name: "Galadriel", role: "The Lord of the Rings" },
         { name: "Master Splinter", role: "Teenage Mutant Ninja Turtles" },
       ],
-
+      
       color: "from-teal-600 to-green-400",
     },
     guardian: {
@@ -288,7 +288,7 @@ export default function ArchetypeDetail() {
         { name: "Mufasa", role: "The Lion King" },
         { name: "Optimus Prime", role: "Transformers" },
       ],
-
+      
       color: "from-amber-700 to-red-400",
     },
     technocrat: {
@@ -324,7 +324,7 @@ export default function ArchetypeDetail() {
         { name: "Lucius Fox", role: "The Dark Knight Trilogy" },
         { name: "Bruce Banner", role: "Marvel MCU" },
       ],
-
+      
       color: "from-sky-600 to-cyan-400",
     },
     enforcer: {
@@ -360,7 +360,7 @@ export default function ArchetypeDetail() {
         { name: "Amanda Waller", role: "Suicide Squad Animated" },
         { name: "Brienne of Tarth", role: "Game of Thrones" },
       ],
-
+      
       color: "from-slate-700 to-gray-400",
     },
     zealot: {
@@ -396,7 +396,7 @@ export default function ArchetypeDetail() {
         { name: "Eowyn", role: "The Lord of the Rings" },
         { name: "Albus Dumbledore", role: "Harry Potter" },
       ],
-
+      
       color: "from-purple-700 to-pink-500",
     },
     purist: {
@@ -432,7 +432,7 @@ export default function ArchetypeDetail() {
         { name: "Maximus Decimus Meridius", role: "Gladiator" },
         { name: "Ned Flanders", role: "The Simpsons" },
       ],
-
+      
       color: "from-rose-700 to-red-500",
     },
     commander: {
@@ -468,7 +468,7 @@ export default function ArchetypeDetail() {
         { name: "Admiral Adama", role: "Battlestar Galactica" },
         { name: "Okabe Rintarou", role: "Steins;Gate" },
       ],
-
+      
       color: "from-blue-800 to-gray-600",
     },
     steward: {
@@ -504,7 +504,7 @@ export default function ArchetypeDetail() {
         { name: "Minister Rufus Scrimgeour", role: "Harry Potter" },
         { name: "King Théoden", role: "The Lord of the Rings" },
       ],
-
+      
       color: "from-amber-700 to-lime-500",
     },
     shepherd: {
@@ -540,7 +540,7 @@ export default function ArchetypeDetail() {
         { name: "Jonathan Kent", role: "Smallville" },
         { name: "Master Splinter", role: "Teenage Mutant Ninja Turtles" },
       ],
-
+    
       color: "from-green-700 to-teal-400",
     },
     priest: {
@@ -611,7 +611,7 @@ export default function ArchetypeDetail() {
         { name: "Lucius Fox", role: "The Dark Knight Trilogy" },
         { name: "Hank Pym", role: "Marvel MCU" },
       ],
-
+      
       color: "from-cyan-500 to-blue-400",
     },
     maverick: {
@@ -647,7 +647,7 @@ export default function ArchetypeDetail() {
         { name: "Indiana Jones", role: "Indiana Jones" },
         { name: "Peter Quill", role: "Guardians of the Galaxy" },
       ],
-
+      
       color: "from-orange-600 to-yellow-400",
     },
     evangelist: {
@@ -683,7 +683,7 @@ export default function ArchetypeDetail() {
         { name: "Morpheus", role: "The Matrix" },
         { name: "Professor Oak", role: "Pokémon" },
       ],
-
+      
       color: "from-teal-600 to-blue-400",
     },
     dissenter: {
@@ -719,7 +719,7 @@ export default function ArchetypeDetail() {
         { name: "Finn", role: "Star Wars" },
         { name: "Ezio Auditore", role: "Assassin's Creed" },
       ],
-
+      
       color: "from-red-600 to-rose-400",
     },
     globalist: {
@@ -755,7 +755,7 @@ export default function ArchetypeDetail() {
         { name: "Sherlock Holmes", role: "BBC Sherlock" },
         { name: "Lara Croft", role: "Tomb Raider" },
       ],
-
+      
       color: "from-blue-500 to-green-400",
     },
     patriot: {
@@ -791,7 +791,7 @@ export default function ArchetypeDetail() {
         { name: "Jack Bauer", role: "24" },
         { name: "Jason Bourne", role: "Bourne Series" },
       ],
-
+      
       color: "from-red-700 to-blue-600",
     },
     industrialist: {
@@ -827,7 +827,7 @@ export default function ArchetypeDetail() {
         { name: "Bruce Wayne", role: "business side — comics" },
         { name: "Lucius Fox", role: "tech/finance side" },
       ],
-
+      
       color: "from-yellow-600 to-gray-400",
     },
     traditionalist: {
@@ -863,7 +863,7 @@ export default function ArchetypeDetail() {
         { name: "Arthur Morgan", role: "Red Dead Redemption 2" },
         { name: "William Adama", role: "Battlestar Galactica" },
       ],
-
+      
       color: "from-amber-700 to-emerald-500",
     },
     overlord: {
@@ -899,7 +899,7 @@ export default function ArchetypeDetail() {
         { name: "Sarek", role: "Star Trek" },
         { name: "Lord Cutler Beckett", role: "Pirates of the Caribbean" },
       ],
-
+      
       color: "from-black to-gray-700",
     },
     corporatist: {
@@ -935,7 +935,7 @@ export default function ArchetypeDetail() {
         { name: "Hank Scorpio", role: "The Simpsons" },
         { name: "Frank Underwood", role: "House of Cards" },
       ],
-
+      
       color: "from-gray-700 to-blue-400",
     },
     moralizer: {
@@ -971,7 +971,7 @@ export default function ArchetypeDetail() {
         { name: "Commander Shepard", role: "Mass Effect — Paragon" },
         { name: "Jean-Luc Picard", role: "Star Trek TNG" },
       ],
-
+      
       color: "from-purple-800 to-rose-600",
     },
     builder: {
@@ -1007,7 +1007,7 @@ export default function ArchetypeDetail() {
         { name: "Mulan", role: "Mulan" },
         { name: "King Théoden", role: "The Lord of the Rings" },
       ],
-
+      
       color: "from-amber-700 to-yellow-400",
     },
     executive: {
@@ -1043,7 +1043,7 @@ export default function ArchetypeDetail() {
         { name: "Gus Fring", role: "Breaking Bad" },
         { name: "Irene Adler", role: "BBC Sherlock" },
       ],
-
+      
       color: "from-gray-800 to-blue-500",
     },
     ironhand: {
@@ -1079,7 +1079,7 @@ export default function ArchetypeDetail() {
         { name: "Brienne of Tarth", role: "Game of Thrones" },
         { name: "Amanda Waller", role: "Suicide Squad Animated" },
       ],
-
+      
       color: "from-slate-800 to-red-600",
     },
     regent: {
@@ -1115,7 +1115,7 @@ export default function ArchetypeDetail() {
         { name: "Robert Baratheon", role: "Game of Thrones" },
         { name: "Lord Shen", role: "Kung Fu Panda 2" },
       ],
-
+      
       color: "from-indigo-800 to-emerald-500",
     },
     crusader: {
@@ -1151,7 +1151,7 @@ export default function ArchetypeDetail() {
         { name: "Thor", role: "Marvel" },
         { name: "Leonidas", role: "300 movie" },
       ],
-
+      
       color: "from-red-800 to-amber-600",
     },
   };
@@ -1236,7 +1236,7 @@ export default function ArchetypeDetail() {
                     : archetype.axisDescriptions?.markets ||
                       "As someone who leans toward the Free Market side of the axis, you likely believe that economic prosperity thrives best when individuals and businesses operate with minimal interference from the government. You may see market forces, such as competition and entrepreneurship, as key drivers of innovation and economic growth. For you, the idea of success is often tied to the freedom to operate within an open market where supply and demand determine wages, prices, and policies. You might feel that too much government intervention can stifle productivity, limit personal ambition, and create inefficiencies. While you recognize the existence of inequalities, you may believe that the free market, with its emphasis on individual choice and competition, is the most effective way to generate wealth, improve quality of life, and promote overall prosperity."}
                 </p>
-              </div>
+                  </div>
 
               {/* Authority Axis: Libertarian vs. Authoritarian */}
               <div>
@@ -1252,7 +1252,7 @@ export default function ArchetypeDetail() {
                     : archetype.axisDescriptions?.authoritarian ||
                       "As someone who leans toward the Authoritarian side of the axis, you believe in the importance of a strong, centralized authority to maintain order, security, and stability. You likely value decisive leadership and clear structures that guide society toward common goals. In your view, individual freedoms may sometimes need to be limited for the greater good, ensuring that the collective needs of society are met. You might support strong national security measures, centralized economic planning, and robust institutions that can efficiently implement policies. For you, a well-functioning society requires a firm hand to protect it from both external threats and internal disorder. While you recognize the value of certain personal freedoms, you prioritize the security and stability that comes from having clear leadership and defined social order."}
                 </p>
-              </div>
+                  </div>
 
               {/* Social Axis: Progressive vs. Conservative */}
               <div>
@@ -1268,7 +1268,7 @@ export default function ArchetypeDetail() {
                     : archetype.axisDescriptions?.conservative ||
                       "As someone who leans toward the Conservative side of the axis, you value the preservation of traditions, cultural heritage, and established institutions. You believe that societies function best when they build upon time-tested values and practices rather than pursuing rapid change. For you, traditional frameworks—whether in family structure, governance, education, or social norms—provide a sense of stability, continuity, and meaning. You are likely cautious about social experiments and rapid transformations, preferring incremental changes that respect historical wisdom and cultural identity. You may see traditional values as anchors that help society weather challenges and believe that innovations should be adopted carefully and thoughtfully, ensuring they don't undermine the foundations that have sustained communities across generations."}
                 </p>
-              </div>
+                  </div>
 
               {/* Religion Axis: Secular vs. Religious */}
               <div>
@@ -1284,7 +1284,7 @@ export default function ArchetypeDetail() {
                     : archetype.axisDescriptions?.religious ||
                       "As someone who leans toward the Religious side of the axis, you believe that faith and spiritual principles provide essential guidance for both personal morality and societal organization. You likely view religious values as timeless foundations that offer wisdom, purpose, and ethical frameworks that have sustained communities for generations. For you, a transcendent moral order exists beyond human creation, and religious teachings help illuminate this truth. You may advocate for the protection of religious freedom and the recognition of faith's role in shaping culture, education, and even governance. While you might respect the diversity of beliefs, you see religious principles as providing crucial moral anchors that help society distinguish right from wrong and maintain a sense of purpose and meaning in an increasingly complex world."}
                 </p>
-              </div>
+                </div>
 
               {/* International Axis: Globalist vs. Nationalist */}
               <div>
@@ -1300,22 +1300,22 @@ export default function ArchetypeDetail() {
                     : archetype.axisDescriptions?.nationalist ||
                       "As someone who leans toward the Nationalist side of the axis, you prioritize your nation's sovereignty, identity, and the interests of its citizens above international concerns. You believe that a country should maintain strong borders, protect its cultural heritage, and ensure that its policies benefit its own people first and foremost. For you, national identity provides a crucial sense of belonging and shared purpose, and you may view certain aspects of globalization as potential threats to this identity. You likely support economic policies that protect domestic industries and workers, and you may be cautious about international agreements that could compromise national decision-making. While you might value beneficial international relationships, you believe that a nation's primary responsibility is to safeguard the wellbeing, security, and prosperity of its own citizens."}
                 </p>
-              </div>
+            </div>
             </div>
           </div>
 
-          {/* Introduction */}
-          <div className="lg:col-span-3">
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-bold mb-4 text-secondary-darkBlue flex items-center">
-                <FaLightbulb className="mr-3 text-primary-maroon" />{" "}
-                Introduction
-              </h2>
-              <p className="text-gray-700 leading-relaxed">
-                {archetype.introduction}
-              </p>
+            {/* Introduction */}
+            <div className="lg:col-span-3">
+              <div className="bg-white rounded-lg shadow-lg p-8">
+                <h2 className="text-2xl font-bold mb-4 text-secondary-darkBlue flex items-center">
+                  <FaLightbulb className="mr-3 text-primary-maroon" />{" "}
+                  Introduction
+                </h2>
+                <p className="text-gray-700 leading-relaxed">
+                  {archetype.introduction}
+                </p>
+              </div>
             </div>
-          </div>
 
           <div className="flex flex-col lg:flex-row gap-4 py-4">
             {/* Strengths and Weaknesses */}
