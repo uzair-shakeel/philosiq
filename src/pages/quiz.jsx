@@ -147,6 +147,11 @@ export default function QuizPage() {
       } else {
         // For full quiz, just fetch 130 questions
         fetchedQuestions = await fetchQuestions(130);
+
+        // Shuffle the questions for the full quiz as well
+        if (fetchedQuestions.length > 0) {
+          fetchedQuestions = shuffleArray(fetchedQuestions);
+        }
       }
 
       if (fetchedQuestions.length === 0) {
@@ -372,7 +377,8 @@ export default function QuizPage() {
                   </div>
                   <div className="p-6">
                     <p className="text-gray-600 mb-6">
-                      Get a fast, high-level snapshot of your political leanings in just a few minutes.
+                      Get a fast, high-level snapshot of your political leanings
+                      in just a few minutes.
                     </p>
                     <button
                       onClick={() => startQuiz("short")}
@@ -396,7 +402,8 @@ export default function QuizPage() {
                   </div>
                   <div className="p-6">
                     <p className="text-gray-600 mb-6">
-                      Explore the full spectrum of your political beliefs with our comprehensive, in-depth test.
+                      Explore the full spectrum of your political beliefs with
+                      our comprehensive, in-depth test.
                     </p>
                     <button
                       onClick={() => startQuiz("full")}
