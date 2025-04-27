@@ -8,13 +8,7 @@ export default function ArchetypePage() {
     {
       id: "utopian",
       name: "The Utopian",
-      traits: [
-        "Equity", 
-        "Libertarian", 
-        "Progressive", 
-        "Secular", 
-        "Globalist"
-      ],
+      traits: ["Equity", "Libertarian", "Progressive", "Secular", "Globalist"],
       slug: "elpsg",
     },
     {
@@ -180,7 +174,7 @@ export default function ArchetypePage() {
       slug: "eacrg",
     },
     {
-      id: "priest",
+      id: "high-priest",
       name: "The High Priest",
       traits: [
         "Equity",
