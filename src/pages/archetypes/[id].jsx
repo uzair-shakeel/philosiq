@@ -855,7 +855,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-green-700 to-teal-400",
     },
-    highPriest: {
+    high-priest: {
       id: "high-priest",
       name: "The High Priest",
       traits: ["Equity", "Authoritarian", "Conservative", "Religious", "Nationalist"],
