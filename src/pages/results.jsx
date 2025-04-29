@@ -525,7 +525,7 @@ function ResultsContent({ results }) {
                       })}
                     </div>
 
-                    {/* <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
+                    <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
                       <p className="text-sm text-gray-600">
                         <span className="font-medium">
                           Difference from primary:
@@ -535,7 +535,7 @@ function ResultsContent({ results }) {
                           {archetype.flippedAxis.replace(" vs. ", "/")}
                         </span>
                       </p>
-                    </div> */}
+                    </div>
 
                     <div className="text-sm text-gray-600 mb-4">
                       {getArchetypeDescription(archetype.name)}
