@@ -252,12 +252,21 @@ function ResultsContent({ results }) {
       // Calculate match percentage based on the score of the flipped axis
       const axisScore = axisScores[axisToFlip] || 50;
 
-      // For axes at exactly 50%, we consider them a perfect match
-      // For axes above 50%, the further from 50%, the lower the match percentage
-      const is50 = Math.abs(axisScore - 50) < 0.01;
-      const matchPercent = is50
-        ? 95 // If exactly 50%, it's an almost perfect match
-        : Math.max(70, 100 - (axisScore - 50));
+      // Use the formula: Percent Match = 100 - ((-FlippedAxisScore + 50) * 2)
+      // For exactly 50%, this gives 100% match
+      // For scores above 50%, the higher the score, the lower the match percentage
+      let matchPercent;
+      if (Math.abs(axisScore - 50) < 0.01) {
+        // For scores exactly at 50%
+        matchPercent = 100;
+      } else {
+        // Apply the formula: 100 - ((-FlippedAxisScore + 50) * 2)
+        // This converts the range from 50-100 to 100-0
+        matchPercent = Math.round(100 - (-axisScore + 50) * 2);
+
+        // Ensure the match percentage is between 60% and 95%
+        matchPercent = Math.min(95, Math.max(60, matchPercent));
+      }
 
       // Get traits based on the secondary archetype letters
       const traits = axisOrder.map((axis) => {
