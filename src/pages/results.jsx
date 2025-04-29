@@ -155,10 +155,10 @@ function ResultsContent({ results }) {
       N: "G", // Globalism vs. Nationalism
     };
 
-    // Get axis percentages and filter for those above 50% or exactly at 50%
+    // Get axis percentages and categorize them
     const axisScores = {};
-    const axesAbove50 = [];
-    const axesAt50 = [];
+    const axesAt50 = []; // Axes exactly at 50%
+    const axesAbove50 = []; // Axes above 50%
 
     results?.axisResults.forEach((axis) => {
       const canonicalName =
@@ -169,7 +169,8 @@ function ResultsContent({ results }) {
       axisScores[canonicalName] = axis.score;
 
       // Check if axis score is exactly 50%
-      if (axis.score === 50) {
+      if (Math.abs(axis.score - 50) < 0.01) {
+        // Use a small threshold to account for floating point precision
         axesAt50.push(canonicalName);
       }
       // Only consider axes with scores above 50% for flipping
@@ -178,13 +179,16 @@ function ResultsContent({ results }) {
       }
     });
 
-    // Combine axes above 50% with those at exactly 50%
-    // We prioritize axes above 50%, but include 50% axes if needed
-    let axesToConsider = [...axesAbove50];
+    console.log("Axes at 50%:", axesAt50);
+    console.log("Axes above 50%:", axesAbove50);
 
-    // If we don't have enough axes above 50%, add in the ones at exactly 50%
-    if (axesToConsider.length < 2 && axesAt50.length > 0) {
-      axesToConsider = [...axesToConsider, ...axesAt50];
+    // Prioritize axes exactly at 50% first, then add axes above 50%
+    // This is reversed from the previous approach
+    let axesToConsider = [...axesAt50];
+
+    // If we don't have enough axes at exactly 50%, add in axes above 50%
+    if (axesToConsider.length < 2) {
+      axesToConsider = [...axesToConsider, ...axesAbove50];
     }
 
     // If we still don't have any axes to consider, log and return empty
@@ -196,12 +200,27 @@ function ResultsContent({ results }) {
       return;
     }
 
-    // Sort axes by their score (highest first)
+    // Sort axes:
+    // 1. Exact 50% axes first (these are perfect candidates for flipping)
+    // 2. Then sort remaining axes by closeness to 50%
     const sortedAxes = [...axesToConsider].sort((a, b) => {
-      return (axisScores[b] || 0) - (axisScores[a] || 0);
+      const aIs50 = axesAt50.includes(a);
+      const bIs50 = axesAt50.includes(b);
+
+      // If one is at 50% and the other isn't, prioritize the 50% one
+      if (aIs50 && !bIs50) return -1;
+      if (!aIs50 && bIs50) return 1;
+
+      // If both are above 50%, sort by closeness to 50%
+      if (!aIs50 && !bIs50) {
+        return axisScores[a] - 50 - (axisScores[b] - 50);
+      }
+
+      // If both are at 50%, keep original order
+      return 0;
     });
 
-    // Get up to 2 axes with highest scores
+    // Get up to 2 axes with highest priority for flipping
     const axesToFlip = sortedAxes.slice(0, Math.min(2, sortedAxes.length));
 
     // Create secondary archetypes by flipping the letter of the selected axes
@@ -231,15 +250,14 @@ function ResultsContent({ results }) {
         : "Alternative Archetype";
 
       // Calculate match percentage based on the score of the flipped axis
-      // Higher axis score means the trait is stronger, so flipping it results in a lower match percentage
       const axisScore = axisScores[axisToFlip] || 50;
 
-      // For axes at exactly 50%, we consider them a perfect match (100%)
-      // For axes above 50%, we calculate as before
-      const matchPercent =
-        axisScore === 50
-          ? 95 // If exactly 50%, it's almost a perfect match
-          : Math.max(70, 100 - (axisScore - 50));
+      // For axes at exactly 50%, we consider them a perfect match
+      // For axes above 50%, the further from 50%, the lower the match percentage
+      const is50 = Math.abs(axisScore - 50) < 0.01;
+      const matchPercent = is50
+        ? 95 // If exactly 50%, it's an almost perfect match
+        : Math.max(70, 100 - (axisScore - 50));
 
       // Get traits based on the secondary archetype letters
       const traits = axisOrder.map((axis) => {
