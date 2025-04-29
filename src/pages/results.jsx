@@ -155,9 +155,10 @@ function ResultsContent({ results }) {
       N: "G", // Globalism vs. Nationalism
     };
 
-    // Get axis percentages and filter for those above 50%
+    // Get axis percentages and filter for those above 50% or exactly at 50%
     const axisScores = {};
     const axesAbove50 = [];
+    const axesAt50 = [];
 
     results?.axisResults.forEach((axis) => {
       const canonicalName =
@@ -167,27 +168,40 @@ function ResultsContent({ results }) {
 
       axisScores[canonicalName] = axis.score;
 
+      // Check if axis score is exactly 50%
+      if (axis.score === 50) {
+        axesAt50.push(canonicalName);
+      }
       // Only consider axes with scores above 50% for flipping
-      if (axis.score > 50) {
+      else if (axis.score > 50) {
         axesAbove50.push(canonicalName);
       }
     });
 
-    // If we don't have any axes above 50%, fallback to the original method
-    if (axesAbove50.length === 0) {
+    // Combine axes above 50% with those at exactly 50%
+    // We prioritize axes above 50%, but include 50% axes if needed
+    let axesToConsider = [...axesAbove50];
+
+    // If we don't have enough axes above 50%, add in the ones at exactly 50%
+    if (axesToConsider.length < 2 && axesAt50.length > 0) {
+      axesToConsider = [...axesToConsider, ...axesAt50];
+    }
+
+    // If we still don't have any axes to consider, log and return empty
+    if (axesToConsider.length === 0) {
       console.log(
-        "No axes above 50% found, no secondary archetypes generated."
+        "No axes above or at 50% found, no secondary archetypes generated."
       );
       setSecondaryArchetypes([]);
       return;
     }
 
     // Sort axes by their score (highest first)
-    const sortedAxes = [...axesAbove50].sort((a, b) => {
+    const sortedAxes = [...axesToConsider].sort((a, b) => {
       return (axisScores[b] || 0) - (axisScores[a] || 0);
     });
 
-    // Get up to 2 axes with highest scores above 50%
+    // Get up to 2 axes with highest scores
     const axesToFlip = sortedAxes.slice(0, Math.min(2, sortedAxes.length));
 
     // Create secondary archetypes by flipping the letter of the selected axes
@@ -219,7 +233,13 @@ function ResultsContent({ results }) {
       // Calculate match percentage based on the score of the flipped axis
       // Higher axis score means the trait is stronger, so flipping it results in a lower match percentage
       const axisScore = axisScores[axisToFlip] || 50;
-      const matchPercent = Math.max(70, 100 - (axisScore - 50));
+
+      // For axes at exactly 50%, we consider them a perfect match (100%)
+      // For axes above 50%, we calculate as before
+      const matchPercent =
+        axisScore === 50
+          ? 95 // If exactly 50%, it's almost a perfect match
+          : Math.max(70, 100 - (axisScore - 50));
 
       // Get traits based on the secondary archetype letters
       const traits = axisOrder.map((axis) => {
@@ -437,69 +457,6 @@ function ResultsContent({ results }) {
           </div>
         </div>
 
-        {/* Axis Breakdown */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold mb-6 text-center">
-            Your Political Axis Breakdown
-          </h2>
-          <p className="text-center text-gray-600 mb-8">
-            See where you stand on each political dimension
-          </p>
-
-          <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
-            {/* 
-              Display the axis results using our AxisGraph component
-              Note: "Progressive vs. Conservative" and "Libertarian vs. Authoritarian" axes
-              are filtered out in the resultsCalculator.js file
-            */}
-            {results.axisResults.map((axis, index) => {
-              // Only log a summary of which axes are being displayed
-              if (index === 0) {
-                console.log(
-                  `Displaying ${results.axisResults.length} axes in results chart:`,
-                  results.axisResults.map((a) => a)
-                );
-              }
-
-              // Additional debug for the Equity axis
-              if (
-                axis.name === "Equity vs. Free Market" ||
-                axis.name === "Equality vs. Markets"
-              ) {
-                console.log(`Results page - ${axis.name} data:`, {
-                  rawScore: axis.rawScore,
-                  score: axis.score,
-                  userPosition: axis.userPosition,
-                  positionStrength: axis.positionStrength,
-                  leftLabel: axis.leftLabel,
-                  rightLabel: axis.rightLabel,
-                });
-              }
-
-              return (
-                <AxisGraph
-                  key={index}
-                  name={axis.name}
-                  score={axis.score}
-                  questions={rawData?.questions}
-                  answers={rawData?.answers}
-                  rawScore={axis.rawScore}
-                  leftLabel={axis.leftLabel}
-                  rightLabel={axis.rightLabel}
-                  userPosition={axis.userPosition}
-                  positionStrength={axis.positionStrength}
-                  onLetterDetermined={handleLetterDetermined}
-                  className={
-                    index < results.axisResults.length - 1
-                      ? "border-b border-gray-200 pb-6"
-                      : ""
-                  }
-                />
-              );
-            })}
-          </div>
-        </div>
-
         {/* Secondary Archetypes - Improved Design */}
         {secondaryArchetypes.length > 0 && (
           <div className="mb-16">
@@ -568,7 +525,7 @@ function ResultsContent({ results }) {
                       })}
                     </div>
 
-                    <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
+                    {/* <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
                       <p className="text-sm text-gray-600">
                         <span className="font-medium">
                           Difference from primary:
@@ -578,7 +535,7 @@ function ResultsContent({ results }) {
                           {archetype.flippedAxis.replace(" vs. ", "/")}
                         </span>
                       </p>
-                    </div>
+                    </div> */}
 
                     <div className="text-sm text-gray-600 mb-4">
                       {getArchetypeDescription(archetype.name)}
@@ -624,6 +581,69 @@ function ResultsContent({ results }) {
             )}
           </div>
         )}
+
+        {/* Axis Breakdown */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold mb-6 text-center">
+            Your Political Axis Breakdown
+          </h2>
+          <p className="text-center text-gray-600 mb-8">
+            See where you stand on each political dimension
+          </p>
+
+          <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
+            {/* 
+              Display the axis results using our AxisGraph component
+              Note: "Progressive vs. Conservative" and "Libertarian vs. Authoritarian" axes
+              are filtered out in the resultsCalculator.js file
+            */}
+            {results.axisResults.map((axis, index) => {
+              // Only log a summary of which axes are being displayed
+              if (index === 0) {
+                console.log(
+                  `Displaying ${results.axisResults.length} axes in results chart:`,
+                  results.axisResults.map((a) => a)
+                );
+              }
+
+              // Additional debug for the Equity axis
+              if (
+                axis.name === "Equity vs. Free Market" ||
+                axis.name === "Equality vs. Markets"
+              ) {
+                console.log(`Results page - ${axis.name} data:`, {
+                  rawScore: axis.rawScore,
+                  score: axis.score,
+                  userPosition: axis.userPosition,
+                  positionStrength: axis.positionStrength,
+                  leftLabel: axis.leftLabel,
+                  rightLabel: axis.rightLabel,
+                });
+              }
+
+              return (
+                <AxisGraph
+                  key={index}
+                  name={axis.name}
+                  score={axis.score}
+                  questions={rawData?.questions}
+                  answers={rawData?.answers}
+                  rawScore={axis.rawScore}
+                  leftLabel={axis.leftLabel}
+                  rightLabel={axis.rightLabel}
+                  userPosition={axis.userPosition}
+                  positionStrength={axis.positionStrength}
+                  onLetterDetermined={handleLetterDetermined}
+                  className={
+                    index < results.axisResults.length - 1
+                      ? "border-b border-gray-200 pb-6"
+                      : ""
+                  }
+                />
+              );
+            })}
+          </div>
+        </div>
 
         {/* Share Results */}
         <div className="mb-16">
