@@ -582,7 +582,7 @@ export default function ArchetypeDetail() {
       id: "futrist",
       name: "The Futurist",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Libertarian", 
           "Progressive", 
           "Secular", 
@@ -617,7 +617,7 @@ export default function ArchetypeDetail() {
       id: "mavrick",
       name: "The Maverick",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Libertarian", 
           "Progressive", 
           "Secular", 
@@ -652,7 +652,7 @@ export default function ArchetypeDetail() {
       id: "evangelist",
       name: "The Evangelist",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Libertarian", 
           "Progressive", 
           "Religious", 
@@ -687,7 +687,7 @@ export default function ArchetypeDetail() {
       id: "dissenter",
       name: "The Dissenter",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Libertarian", 
           "Progressive", 
           "Religious", 
@@ -722,7 +722,7 @@ export default function ArchetypeDetail() {
       id: "globalist",
       name: "The Globalist",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Libertarian", 
           "Conservative",
           "Secular",
@@ -757,7 +757,7 @@ export default function ArchetypeDetail() {
       id: "patriot",
       name: "The Patriot",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Libertarian", 
           "Conservative",
           "Secular",
@@ -792,7 +792,7 @@ export default function ArchetypeDetail() {
       id: "industrialist",
       name: "The Industrialist",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Libertarian", 
           "Conservative",
           "Religious",
@@ -827,7 +827,7 @@ export default function ArchetypeDetail() {
       id: "traditionalist",
       name: "The Traditionalist",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Libertarian", 
           "Conservative",
           "Religious",
@@ -862,7 +862,7 @@ export default function ArchetypeDetail() {
       id: "overlord",
       name: "The Overlord",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Authority", 
           "Progressive",
           "Secular",
@@ -897,7 +897,7 @@ export default function ArchetypeDetail() {
       id: "corporatist",
       name: "The Corporatist",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Authority", 
           "Progressive",
           "Secular",
@@ -932,7 +932,7 @@ export default function ArchetypeDetail() {
       id: "moralizer",
       name: "The Moralizer",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Authority", 
           "Progressive",
           "Religious",
@@ -967,7 +967,7 @@ export default function ArchetypeDetail() {
       id: "builder",
       name: "The Builder",
       traits: [
-          "Markets", 
+          "Free Market", 
           "Authority", 
           "Progressive",
           "Religious",
