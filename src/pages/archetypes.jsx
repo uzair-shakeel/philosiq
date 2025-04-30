@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import Link from "next/link";
 
 export default function ArchetypePage() {
-  // Comprehensive list of all 31 unique archetypes
+  // Comprehensive list of all 32 unique archetypes
   const allArchetypes = [
     {
       id: "utopian",
