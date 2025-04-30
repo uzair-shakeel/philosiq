@@ -188,14 +188,14 @@ export default function ArchetypePage() {
     {
       id: "futurist",
       name: "The Futurist",
-      traits: ["Markets", "Libertarian", "Progressive", "Secular", "Globalist"],
+      traits: ["Free Market", "Libertarian", "Progressive", "Secular", "Globalist"],
       slug: "futurist",
     },
     {
       id: "maverick",
       name: "The Maverick",
       traits: [
-        "Markets",
+        "Free Market",
         "Libertarian",
         "Progressive",
         "Secular",
@@ -207,7 +207,7 @@ export default function ArchetypePage() {
       id: "evangelist",
       name: "The Evangelist",
       traits: [
-        "Markets",
+        "Free Market",
         "Libertarian",
         "Progressive",
         "Religious",
@@ -219,7 +219,7 @@ export default function ArchetypePage() {
       id: "dissenter",
       name: "The Dissenter",
       traits: [
-        "Markets",
+        "Free Market",
         "Libertarian",
         "Progressive",
         "Religious",
@@ -231,7 +231,7 @@ export default function ArchetypePage() {
       id: "globalist",
       name: "The Globalist",
       traits: [
-        "Markets",
+        "Free Market",
         "Libertarian",
         "Conservative",
         "Secular",
@@ -243,7 +243,7 @@ export default function ArchetypePage() {
       id: "patriot",
       name: "The Patriot",
       traits: [
-        "Markets",
+        "Free Market",
         "Libertarian",
         "Conservative",
         "Secular",
@@ -255,7 +255,7 @@ export default function ArchetypePage() {
       id: "industrialist",
       name: "The Industrialist",
       traits: [
-        "Markets",
+        "Free Market",
         "Libertarian",
         "Conservative",
         "Religious",
@@ -267,7 +267,7 @@ export default function ArchetypePage() {
       id: "traditionalist",
       name: "The Traditionalist",
       traits: [
-        "Markets",
+        "Free Market",
         "Libertarian",
         "Conservative",
         "Religious",
@@ -278,26 +278,26 @@ export default function ArchetypePage() {
     {
       id: "overlord",
       name: "The Overlord",
-      traits: ["Markets", "Authority", "Progressive", "Secular", "Globalist"],
+      traits: ["Free Market", "Authority", "Progressive", "Secular", "Globalist"],
       slug: "fapsg",
     },
     {
       id: "corporatist",
       name: "The Corporatist",
-      traits: ["Markets", "Authority", "Progressive", "Secular", "Nationalist"],
+      traits: ["Free Market", "Authority", "Progressive", "Secular", "Nationalist"],
       slug: "fapsn",
     },
     {
       id: "moralizer",
       name: "The Moralizer",
-      traits: ["Markets", "Authority", "Progressive", "Religious", "Globalist"],
+      traits: ["Free Market", "Authority", "Progressive", "Religious", "Globalist"],
       slug: "faprg",
     },
     {
       id: "builder",
       name: "The Builder",
       traits: [
-        "Markets",
+        "Free Market",
         "Authority",
         "Progressive",
         "Religious",
@@ -308,14 +308,14 @@ export default function ArchetypePage() {
     {
       id: "executive",
       name: "The Executive",
-      traits: ["Markets", "Authority", "Conservative", "Secular", "Globalist"],
+      traits: ["Free Market", "Authority", "Conservative", "Secular", "Globalist"],
       slug: "facsg",
     },
     {
       id: "ironhand",
       name: "The Ironhand",
       traits: [
-        "Markets",
+        "Free Market",
         "Authority",
         "Conservative",
         "Secular",
@@ -327,7 +327,7 @@ export default function ArchetypePage() {
       id: "regent",
       name: "The Regent",
       traits: [
-        "Markets",
+        "Free Market",
         "Authority",
         "Conservative",
         "Religious",
@@ -339,7 +339,7 @@ export default function ArchetypePage() {
       id: "crusader",
       name: "The Crusader",
       traits: [
-        "Markets",
+        "Free Market",
         "Authority",
         "Conservative",
         "Religious",
