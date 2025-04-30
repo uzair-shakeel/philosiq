@@ -40,7 +40,7 @@ export default function ArchetypePage() {
       name: "The Firebrand",
       traits: [
         "Equity",
-        "Libertariany",
+        "Libertarian",
         "Progressive",
         "Religious",
         "Nationalist",
