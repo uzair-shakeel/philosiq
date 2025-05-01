@@ -98,24 +98,7 @@ export default function DebugResultsTable({ questions, answers, results }) {
     // Handle axis aliases for consistent naming
     const canonicalAxis = axisAliases[axis] || axis;
 
-    // Add special debug for equity axis
-    if (axis === "Equity vs. Free Market" || axis === "Equality vs. Markets") {
-      console.log(
-        `DebugTable - Getting letter for ${axis} with score ${score}, rawScore ${rawScore}`,
-        {
-          canonicalName: canonicalAxis,
-          usingRawScore: rawScore !== undefined,
-          willReturn:
-            rawScore !== undefined
-              ? rawScore < 0
-                ? "F"
-                : "E"
-              : score < 50
-              ? "F"
-              : "E",
-        }
-      );
-    }
+    
 
     // FIXED: Completely reversed the logic to match resultsCalculator.js
     // Now negative raw scores (left side on graph) map to RIGHT side letters

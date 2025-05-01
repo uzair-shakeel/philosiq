@@ -43,7 +43,6 @@ export default function ResultsProcessor({ children }) {
       const axisNames = questions.map((q) => q.axis);
       const uniqueAxes = [...new Set(axisNames)];
 
-      console.log("ResultsProcessor - Unique axes in questions:", uniqueAxes);
 
       // Count questions per axis to ensure we have equity questions
       const axisCount = {};
@@ -51,7 +50,6 @@ export default function ResultsProcessor({ children }) {
         axisCount[axis] = (axisCount[axis] || 0) + 1;
       });
 
-      console.log("ResultsProcessor - Questions per axis:", axisCount);
 
       // Check for Equity vs. Free Market or Equality vs. Markets questions specifically
       const equityQuestions = questions.filter(
@@ -60,19 +58,8 @@ export default function ResultsProcessor({ children }) {
           q.axis === "Equality vs. Markets"
       );
 
-      console.log(
-        `ResultsProcessor - Found ${equityQuestions.length} equity-related questions`
-      );
 
-      if (equityQuestions.length === 0) {
-        console.warn("No equity-related questions found in the dataset");
-      } else {
-        // Log the first few to see what they look like
-        console.log(
-          "Sample equity questions:",
-          equityQuestions.slice(0, Math.min(3, equityQuestions.length))
-        );
-      }
+      
 
       // Calculate the results using our utility function
       const calculatedResults = calculateResults(questions, answers);
@@ -82,8 +69,7 @@ export default function ResultsProcessor({ children }) {
         (axis) => axis.name === "Equity vs. Free Market"
       );
 
-      console.log("ResultsProcessor - Has equity results:", hasEquityResults);
-
+      
       if (!hasEquityResults) {
         console.error(
           "Equity vs. Free Market axis is missing from calculated results"
@@ -91,8 +77,6 @@ export default function ResultsProcessor({ children }) {
 
         // Try to add it manually if we can determine the values
         if (equityQuestions.length > 0) {
-          console.log("Attempting to manually add Equity vs. Free Market axis");
-          // Create a placeholder for the missing axis with default values
           calculatedResults.axisResults.unshift({
             name: "Equity vs. Free Market",
             score: 50,

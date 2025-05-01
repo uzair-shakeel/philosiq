@@ -66,8 +66,6 @@ export default function ResultsPage() {
 
 // Separated content component to receive processed results as props
 function ResultsContent({ results }) {
-  console.log("ResultsContent component rendered", results);
-
   const router = useRouter();
 
   const [emailSent, setEmailSent] = useState(false);
@@ -75,9 +73,19 @@ function ResultsContent({ results }) {
   const [showDebug, setShowDebug] = useState(false);
   const [axisLetters, setAxisLetters] = useState({});
   const [secondaryArchetypes, setSecondaryArchetypes] = useState([]);
+  const [allPercents, setAllPercents] = useState([]);
 
   // Get the raw data from session storage for debugging
   const [rawData, setRawData] = useState(null);
+
+  const handleUpdate = (name, data) => {
+    setAllPercents((prev) => ({
+      ...prev,
+      [name]: data,
+    }));
+  };
+
+  console.log("this function is being called", allPercents);
 
   useEffect(() => {
     try {
@@ -101,8 +109,6 @@ function ResultsContent({ results }) {
   // Log the axis letters when they change and calculate secondary archetypes
   useEffect(() => {
     if (Object.keys(axisLetters).length > 0) {
-      console.log("Axis Letters:", axisLetters);
-
       // If we have all 5 axis letters, form the code and calculate secondary archetypes
       if (Object.keys(axisLetters).length >= 5) {
         const axisOrder = [
@@ -116,8 +122,6 @@ function ResultsContent({ results }) {
         const archetypeCode = axisOrder
           .map((axis) => axisLetters[axis] || "?")
           .join("");
-
-        console.log("Archetype Code:", archetypeCode);
 
         // Set the primary archetype based on the code
         const primaryArchetype = ARCHETYPE_MAP.find(
@@ -158,7 +162,7 @@ function ResultsContent({ results }) {
     // Get axis percentages and categorize them
     const axisScores = {};
     const axesAt50 = []; // Axes exactly at 50%
-    const axesAbove50 = []; // Axes above 50%
+    const axesOther = []; // All other axes
 
     results?.axisResults.forEach((axis) => {
       const canonicalName =
@@ -172,30 +176,23 @@ function ResultsContent({ results }) {
       if (Math.abs(axis.score - 50) < 0.01) {
         // Use a small threshold to account for floating point precision
         axesAt50.push(canonicalName);
-      }
-      // Only consider axes with scores above 50% for flipping
-      else if (axis.score > 50) {
-        axesAbove50.push(canonicalName);
+      } else {
+        // Consider all other axes for flipping, not just those above 50%
+        axesOther.push(canonicalName);
       }
     });
 
-    console.log("Axes at 50%:", axesAt50);
-    console.log("Axes above 50%:", axesAbove50);
-
-    // Prioritize axes exactly at 50% first, then add axes above 50%
-    // This is reversed from the previous approach
+    // Prioritize axes exactly at 50% first, then add all other axes
     let axesToConsider = [...axesAt50];
 
-    // If we don't have enough axes at exactly 50%, add in axes above 50%
+    // If we don't have enough axes at exactly 50%, add in all other axes
     if (axesToConsider.length < 2) {
-      axesToConsider = [...axesToConsider, ...axesAbove50];
+      axesToConsider = [...axesToConsider, ...axesOther];
     }
 
     // If we still don't have any axes to consider, log and return empty
     if (axesToConsider.length === 0) {
-      console.log(
-        "No axes above or at 50% found, no secondary archetypes generated."
-      );
+      console.log("No axes found, no secondary archetypes generated.");
       setSecondaryArchetypes([]);
       return;
     }
@@ -211,9 +208,9 @@ function ResultsContent({ results }) {
       if (aIs50 && !bIs50) return -1;
       if (!aIs50 && bIs50) return 1;
 
-      // If both are above 50%, sort by closeness to 50%
+      // If neither is at 50%, sort by closeness to 50% (absolute distance)
       if (!aIs50 && !bIs50) {
-        return axisScores[a] - 50 - (axisScores[b] - 50);
+        return Math.abs(axisScores[a] - 50) - Math.abs(axisScores[b] - 50);
       }
 
       // If both are at 50%, keep original order
@@ -250,19 +247,33 @@ function ResultsContent({ results }) {
         : "Alternative Archetype";
 
       // Calculate match percentage based on the score of the flipped axis
-      const axisScore = axisScores[axisToFlip] || 50;
+      // We need to always use the value that's less than or equal to 50% (the smaller side)
+      let axisScore;
+      if (allPercents[axisToFlip]) {
+        const leftValue = parseFloat(
+          allPercents[axisToFlip].leftPercent || "50"
+        );
+        const rightValue = parseFloat(
+          allPercents[axisToFlip].rightPercent || "50"
+        );
+        // Take the smaller value (which is always <= 50%)
+        axisScore = Math.min(leftValue, rightValue);
+      } else {
+        // Fallback if no percentages available
+        axisScore = axisScores[axisToFlip] || 50;
+      }
 
       // Use the formula: Percent Match = 100 - ((-FlippedAxisScore + 50) * 2)
       // For exactly 50%, this gives 100% match
-      // For scores above 50%, the higher the score, the lower the match percentage
+      // For scores below 50%, the lower the score, the lower the match percentage
       let matchPercent;
       if (Math.abs(axisScore - 50) < 0.01) {
         // For scores exactly at 50%
         matchPercent = 100;
       } else {
         // Apply the formula: 100 - ((-FlippedAxisScore + 50) * 2)
-        // This converts the range from 50-100 to 100-0
-        matchPercent = Math.round(100 - (-axisScore + 50) * 2);
+        // This converts the range from 0-50 to 100-0
+        matchPercent = Math.round(100 - (50 - axisScore) * 2);
 
         // Ensure the match percentage is between 60% and 95%
         matchPercent = Math.min(95, Math.max(60, matchPercent));
@@ -625,34 +636,12 @@ function ResultsContent({ results }) {
               are filtered out in the resultsCalculator.js file
             */}
             {results.axisResults.map((axis, index) => {
-              // Only log a summary of which axes are being displayed
-              if (index === 0) {
-                console.log(
-                  `Displaying ${results.axisResults.length} axes in results chart:`,
-                  results.axisResults.map((a) => a)
-                );
-              }
-
-              // Additional debug for the Equity axis
-              if (
-                axis.name === "Equity vs. Free Market" ||
-                axis.name === "Equality vs. Markets"
-              ) {
-                console.log(`Results page - ${axis.name} data:`, {
-                  rawScore: axis.rawScore,
-                  score: axis.score,
-                  userPosition: axis.userPosition,
-                  positionStrength: axis.positionStrength,
-                  leftLabel: axis.leftLabel,
-                  rightLabel: axis.rightLabel,
-                });
-              }
-
               return (
                 <AxisGraph
                   key={index}
                   name={axis.name}
                   score={axis.score}
+                  updatePercents={handleUpdate}
                   questions={rawData?.questions}
                   answers={rawData?.answers}
                   rawScore={axis.rawScore}

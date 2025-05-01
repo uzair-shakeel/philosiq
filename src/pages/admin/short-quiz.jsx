@@ -230,9 +230,7 @@ export default function ShortQuizManager() {
         .filter((q) => q.includeInShortQuiz)
         .map((q) => q._id);
 
-      console.log(
-        `Saving ${shortQuizQuestions.length} questions for short quiz`
-      );
+      
 
       // Save configuration
       const configResponse = await axios.post("/api/config/short-quiz", {
@@ -534,7 +532,7 @@ export default function ShortQuizManager() {
 export async function getServerSideProps(context) {
   const { getSession } = await import("next-auth/react");
   const session = await getSession(context);
-  console.log(session);
+  
 
   // if (!session || session.user.role !== "admin") {
   //   return {

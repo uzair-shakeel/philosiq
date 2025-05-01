@@ -59,14 +59,11 @@ export default function ContactMessages() {
         url += `&status=${filter}`;
       }
 
-      console.log("Fetching messages from:", url);
       const response = await axios.get(url);
-      console.log("Messages API response:", response.data);
 
       if (response.data.success) {
         setMessages(response.data.messages);
         setPagination(response.data.pagination);
-        console.log("Messages set in state:", response.data.messages.length);
       } else {
         throw new Error("Failed to fetch messages");
       }

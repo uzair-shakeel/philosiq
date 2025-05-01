@@ -9,7 +9,9 @@ export default function AxisGraph({
   score = 50,
   rawScore = 0, // This is the -100 to 100 score
   leftLabel,
+  updatePercents,
   rightLabel,
+  key,
   questions,
   answers,
   positionStrength,
@@ -269,6 +271,14 @@ export default function AxisGraph({
   };
   const leftPercent = axisSpecificPercentages.left;
   const rightPercent = axisSpecificPercentages.right;
+
+  useEffect(() => {
+    const leftPercent = axisSpecificPercentages.left;
+    const rightPercent = axisSpecificPercentages.right;
+
+    updatePercents(name, { leftPercent, rightPercent });
+  }, [axisSpecificPercentages]);
+
 
   // Get the dominant letter for this axis
   const axisDominantLetter = dominantAxisLetters[canonicalName] || "?";
