@@ -578,42 +578,426 @@ export default function ArchetypeDetail() {
       ],
       color: "from-purple-700 to-red-600",
     },
-    eacrg: {
-      id: "regent",
-      name: "The Regent",
+    eacrn: {
+      id: "futrist",
+      name: "The Futurist",
       traits: [
-        "Free Market",
-        "Authoritarian",
-        "Conservative",
-        "Religious",
-        "Globalist",
+          "Free Market", 
+          "Libertarian", 
+          "Progressive", 
+          "Secular", 
+          "Globalist"
       ],
-      description: "Rule with wisdom. Preserve with strength.",
+      description: "Invent the future. Believe in potential.",
       introduction:
-        "As a FACRG (The Regent), you likely value order, faith, and economic freedom, guided by a strong moral framework and a global perspective. You may believe that prosperity and stability come from disciplined leadership, time-tested values, and responsible stewardship of both markets and institutions. With a focus on preserving what works while engaging with the wider world, you tend to support structured approaches that honor tradition while promoting long-term growth. Your vision often blends faith, structure, and purpose—seeking to uphold enduring principles in a rapidly changing world.",
+        "As a FLPSG (The Futurist), you likely believe in individual freedom, innovation, and progress, with a focus on global cooperation and a secular outlook. You may see open markets and technological advancement as key drivers of positive change, helping to create a more dynamic and equitable world. With a forward-looking mindset, you tend to embrace new ideas and bold solutions, trusting that creativity and personal liberty can work hand in hand to shape a better future. Your vision often blends optimism, openness, and a belief in human potential.",
       strengths: [
-        "Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
-        "Authoritarian-minded individuals are pragmatic and order-driven, capable of mobilizing resources and coordinating complex efforts quickly, especially in times of crisis or large-scale societal challenges.",
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Libertarian-minded individuals are fiercely principled defenders of individual liberty, believing that personal freedom, voluntary association, and minimal coercion are essential to a just society.",
+        "Progressive-minded individuals are forward-thinking and adaptive, embracing innovation, social reform, and the pursuit of a better future through continual improvement and openness to new ideas.",
+        "Secular-minded individuals approach the world through critical thinking and empirical evidence, relying on rational inquiry, scientific understanding, and objective reasoning to guide decisions.",
+        "Globalist-minded individuals are globally aware and culturally flexible, recognizing interconnectedness across nations and embracing cooperation, mutual benefit, and diverse human experiences.",
+      ],
+      weaknesses: [
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Libertarian-minded individuals may struggle to address large-scale collective challenges—such as infrastructure, public health, or environmental crises—that require coordinated action beyond individual choice.",
+        "Progressive-minded individuals may too readily discard valuable traditions and historical lessons, sometimes embracing change for its own sake without fully considering long-term consequences.",
+        "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
+        "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
+      ],
+      famousPeople: [
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
+      ],
+      color: "from-cyan-500 to-blue-400",
+    },
+        flpsn: {
+      id: "mavrick",
+      name: "The Maverick",
+      traits: [
+          "Free Market", 
+          "Libertarian", 
+          "Progressive", 
+          "Secular", 
+          "Nationalist"
+      ],
+      description: "Think boldly. Speak freely. Stand firm.",
+      introduction:
+        "As a FLPSN (The Maverick), you likely value personal freedom, innovation, and progress, while also holding a strong appreciation for national identity and cultural roots. With a secular and independent mindset, you may favor open markets and individual choice as engines for growth and change. You tend to challenge convention and think outside the box, believing that real progress happens when people are free to experiment, speak their minds, and chart their own path—within a framework that still honors community and country. Your vision often blends boldness with a grounded sense of belonging.",
+      strengths: [
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Libertarian-minded individuals are fiercely principled defenders of individual liberty, believing that personal freedom, voluntary association, and minimal coercion are essential to a just society.",
+        "Progressive-minded individuals are forward-thinking and adaptive, embracing innovation, social reform, and the pursuit of a better future through continual improvement and openness to new ideas.",
+        "Secular-minded individuals approach the world through critical thinking and empirical evidence, relying on rational inquiry, scientific understanding, and objective reasoning to guide decisions.",
+        "Nationalist-minded individuals are deeply loyal and community-oriented, prioritizing national sovereignty, cultural heritage, and the protection of local traditions and interests against outside forces.",
+      ],
+      weaknesses: [
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Libertarian-minded individuals may struggle to address large-scale collective challenges—such as infrastructure, public health, or environmental crises—that require coordinated action beyond individual choice.",
+        "Progressive-minded individuals may too readily discard valuable traditions and historical lessons, sometimes embracing change for its own sake without fully considering long-term consequences.",
+        "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
+        "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
+      ],
+      famousPeople: [
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
+      ],
+      color: "from-orange-600 to-yellow-400",
+    },
+          flprg: {
+      id: "evangelist",
+      name: "The Evangelist",
+      traits: [
+          "Free Market", 
+          "Libertarian", 
+          "Progressive", 
+          "Religious", 
+          "Globalist"
+      ],
+      description: "Inspire through belief. Empower with vision.",
+      introduction:
+        "As a FLPRG (The Evangelist), you likely believe in personal freedom, innovation, and global cooperation, all guided by a strong moral or religious foundation. You may see open markets and individual empowerment as tools for uplifting communities and driving meaningful progress. With a blend of spiritual conviction and forward-thinking ideals, you tend to promote change that honors both personal belief and collective well-being. Your vision often combines purpose, optimism, and outreach—seeking to inspire others and build a better world through both faith and freedom.",
+      strengths: [
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Libertarian-minded individuals are fiercely principled defenders of individual liberty, believing that personal freedom, voluntary association, and minimal coercion are essential to a just society.",
+        "Progressive-minded individuals are forward-thinking and adaptive, embracing innovation, social reform, and the pursuit of a better future through continual improvement and openness to new ideas.",
+        "Religious-minded individuals are deeply rooted in moral conviction and community, drawing from faith-based principles that provide meaning, resilience, and a sense of shared purpose across generations.",
+        "Globalist-minded individuals are globally aware and culturally flexible, recognizing interconnectedness across nations and embracing cooperation, mutual benefit, and diverse human experiences.",
+      ],
+      weaknesses: [
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Libertarian-minded individuals may struggle to address large-scale collective challenges—such as infrastructure, public health, or environmental crises—that require coordinated action beyond individual choice.",
+        "Progressive-minded individuals may too readily discard valuable traditions and historical lessons, sometimes embracing change for its own sake without fully considering long-term consequences.",
+        "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
+        "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
+      ],
+      famousPeople: [
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
+      ],
+      color: "from-teal-600 to-blue-400",
+    },
+        flprn: {
+      id: "dissenter",
+      name: "The Dissenter",
+      traits: [
+          "Free Market", 
+          "Libertarian", 
+          "Progressive", 
+          "Religious", 
+          "Nationalist"
+      ],
+      description: "Defy the norm. Stand with conviction.",
+      introduction:
+        "As a FLPRN (The Dissenter), you likely value personal freedom, innovation, and progress, while being grounded in your faith and a strong sense of national identity. You may see individual empowerment and open markets as essential to human flourishing, but you also believe that moral conviction and cultural heritage have an important role to play in shaping society. With a spirit of independence, you tend to challenge dominant narratives—pushing for change that aligns with both your principles and your community’s values. Your vision often blends courage, belief, and a commitment to charting your own path.",
+      strengths: [
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Libertarian-minded individuals are fiercely principled defenders of individual liberty, believing that personal freedom, voluntary association, and minimal coercion are essential to a just society.",
+        "Progressive-minded individuals are forward-thinking and adaptive, embracing innovation, social reform, and the pursuit of a better future through continual improvement and openness to new ideas.",
+        "Religious-minded individuals are deeply rooted in moral conviction and community, drawing from faith-based principles that provide meaning, resilience, and a sense of shared purpose across generations.",
+        "Nationalist-minded individuals are deeply loyal and community-oriented, prioritizing national sovereignty, cultural heritage, and the protection of local traditions and interests against outside forces.",
+      ],
+      weaknesses: [
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Libertarian-minded individuals may struggle to address large-scale collective challenges—such as infrastructure, public health, or environmental crises—that require coordinated action beyond individual choice.",
+        "Progressive-minded individuals may too readily discard valuable traditions and historical lessons, sometimes embracing change for its own sake without fully considering long-term consequences.",
+        "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
+        "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
+      ],
+      famousPeople: [
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
+      ],
+      color: "from-red-600 to-rose-400",
+    },
+     flcsg: {
+      id: "globalist",
+      name: "The Globalist",
+      traits: [
+          "Free Market", 
+          "Libertarian", 
+          "Conservative",
+          "Secular",
+          "Globalist"
+      ],
+      description: "Freedom with cooperation. Tradition with progress.",
+      introduction:
+        "As a FLCSG (The Globalist), you likely value personal freedom, open markets, and time-tested principles, all within a globally connected framework. With a secular and pragmatic outlook, you may believe that prosperity and stability come from responsible individualism, free enterprise, and international cooperation. You tend to favor gradual progress rooted in tradition, seeing global engagement as a way to promote opportunity, peace, and mutual benefit. Your vision often blends practicality with a broad perspective—seeking a world where freedom and order can thrive side by side.",
+      strengths: [
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Libertarian-minded individuals are fiercely principled defenders of individual liberty, believing that personal freedom, voluntary association, and minimal coercion are essential to a just society.",
+        "Conservative-minded individuals are grounded in tradition and cautious by nature, valuing the hard-earned wisdom of past generations and striving to preserve stability, order, and social cohesion.",
+        "Secular-minded individuals approach the world through critical thinking and empirical evidence, relying on rational inquiry, scientific understanding, and objective reasoning to guide decisions.",
+        "Globalist-minded individuals are globally aware and culturally flexible, recognizing interconnectedness across nations and embracing cooperation, mutual benefit, and diverse human experiences.",
+      ],
+      weaknesses: [
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Libertarian-minded individuals may struggle to address large-scale collective challenges—such as infrastructure, public health, or environmental crises—that require coordinated action beyond individual choice.",
+        "Conservative-minded individuals may resist necessary reforms or fail to adapt to changing realities, risking stagnation or the entrenchment of outdated social structures.",
+        "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
+        "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
+      ],
+      famousPeople: [
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
+      ],
+      color: "from-blue-500 to-green-400",
+    },
+        flcsn: {
+      id: "patriot",
+      name: "The Patriot",
+      traits: [
+          "Free Market", 
+          "Libertarian", 
+          "Conservative",
+          "Secular",
+          "Nationalist"
+      ],
+      description: "Pride in nation. Strength in liberty.",
+      introduction:
+        "As a FLCSN (The Patriot), you likely value personal freedom, free markets, and traditional values, grounded in a strong sense of national pride and cultural identity. With a secular and pragmatic approach, you may see individual responsibility and economic liberty as keys to a thriving society. You tend to believe that preserving national character and sovereignty is important—even as the world changes—favoring a steady, principled path forward. Your vision often blends independence, heritage, and a belief in the strength of a self-reliant people.",
+      strengths: [
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Libertarian-minded individuals are fiercely principled defenders of individual liberty, believing that personal freedom, voluntary association, and minimal coercion are essential to a just society.",
+        "Conservative-minded individuals are grounded in tradition and cautious by nature, valuing the hard-earned wisdom of past generations and striving to preserve stability, order, and social cohesion.",
+        "Secular-minded individuals approach the world through critical thinking and empirical evidence, relying on rational inquiry, scientific understanding, and objective reasoning to guide decisions.",
+        "Nationalist-minded individuals are deeply loyal and community-oriented, prioritizing national sovereignty, cultural heritage, and the protection of local traditions and interests against outside forces.",
+      ],
+      weaknesses: [
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Libertarian-minded individuals may struggle to address large-scale collective challenges—such as infrastructure, public health, or environmental crises—that require coordinated action beyond individual choice.",
+        "Conservative-minded individuals may resist necessary reforms or fail to adapt to changing realities, risking stagnation or the entrenchment of outdated social structures.",
+        "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
+        "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
+      ],
+      famousPeople: [
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
+      ],
+      color: "from-red-700 to-blue-600",
+    }, 
+        flcrg: {
+      id: "industrialist",
+      name: "The Industrialist",
+      traits: [
+          "Free Market", 
+          "Libertarian", 
+          "Conservative",
+          "Religious",
+          "Globalist"
+      ],
+      description: "Work with values. Build across borders.",
+      introduction:
+        "As a FLCRG (The Industrialist), you likely believe in personal freedom, open markets, and traditional values, guided by a strong moral or religious foundation and a global perspective. You may see enterprise, innovation, and discipline as driving forces behind prosperity—not just for individuals, but for society as a whole. With a focus on both principle and progress, you tend to support systems that reward effort, uphold values, and connect communities across borders. Your vision often blends faith, ambition, and pragmatism—seeking to build a better world through hard work and enduring ideals.",
+      strengths: [
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Libertarian-minded individuals are fiercely principled defenders of individual liberty, believing that personal freedom, voluntary association, and minimal coercion are essential to a just society.",
         "Conservative-minded individuals are grounded in tradition and cautious by nature, valuing the hard-earned wisdom of past generations and striving to preserve stability, order, and social cohesion.",
         "Religious-minded individuals are deeply rooted in moral conviction and community, drawing from faith-based principles that provide meaning, resilience, and a sense of shared purpose across generations.",
         "Globalist-minded individuals are globally aware and culturally flexible, recognizing interconnectedness across nations and embracing cooperation, mutual benefit, and diverse human experiences.",
       ],
       weaknesses: [
-        "Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
-        "Authoritarian-minded individuals may suppress dissent and critical thought, risking the erosion of personal freedoms and fostering environments where power can be abused without accountability.",
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Libertarian-minded individuals may struggle to address large-scale collective challenges—such as infrastructure, public health, or environmental crises—that require coordinated action beyond individual choice.",
         "Conservative-minded individuals may resist necessary reforms or fail to adapt to changing realities, risking stagnation or the entrenchment of outdated social structures.",
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
       famousPeople: [
-        { name: "Denethor", role: "The Lord of the Rings" },
-        { name: "Magneto", role: "X-Men" },
-        { name: "Robert Baratheon", role: "Game of Thrones" },
-        { name: "Lord Shen", role: "Kung Fu Panda 2" },
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
       ],
-
-      color: "from-indigo-800 to-emerald-500",
+      color: "from-yellow-600 to-gray-400",
+    },     
+        flcrn: {
+      id: "traditionalist",
+      name: "The Traditionalist",
+      traits: [
+          "Free Market", 
+          "Libertarian", 
+          "Conservative",
+          "Religious",
+          "Nationalist"
+      ],
+      description: "Preserve the sacred. Empower the individual.",
+      introduction:
+        "As a FLCRN (The Traditionalist), you likely value personal freedom, open markets, and enduring moral or religious principles, all rooted in a strong sense of national identity. You may believe that a healthy society thrives when individuals are empowered, communities are grounded in shared values, and cultural heritage is preserved. With a respect for time-tested ways and a belief in personal responsibility, you tend to favor steady progress that honors both faith and tradition. Your vision often blends independence, conviction, and a deep commitment to preserving what matters most.",
+      strengths: [
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Libertarian-minded individuals are fiercely principled defenders of individual liberty, believing that personal freedom, voluntary association, and minimal coercion are essential to a just society.",
+        "Conservative-minded individuals are grounded in tradition and cautious by nature, valuing the hard-earned wisdom of past generations and striving to preserve stability, order, and social cohesion.",
+        "Religious-minded individuals are deeply rooted in moral conviction and community, drawing from faith-based principles that provide meaning, resilience, and a sense of shared purpose across generations.",
+        "Nationalist-minded individuals are deeply loyal and community-oriented, prioritizing national sovereignty, cultural heritage, and the protection of local traditions and interests against outside forces.",
+      ],
+      weaknesses: [
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Libertarian-minded individuals may struggle to address large-scale collective challenges—such as infrastructure, public health, or environmental crises—that require coordinated action beyond individual choice.",
+        "Conservative-minded individuals may resist necessary reforms or fail to adapt to changing realities, risking stagnation or the entrenchment of outdated social structures.",
+        "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
+        "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
+      ],
+      famousPeople: [
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
+      ],
+      color: "from-amber-700 to-emerald-500",
     },
+        fapsg: {
+      id: "overlord",
+      name: "The Overlord",
+      traits: [
+          "Free Market", 
+          "Authority", 
+          "Progressive",
+          "Secular",
+          "Globalist"
+      ],
+      description: "Control the chaos. Command the future.",
+      introduction:
+        "As a FAPSG (The Overlord), you likely believe in progress and global cooperation, with an emphasis on structure, efficiency, and economic freedom. With a secular perspective and a strong belief in coordinated leadership, you may see centralized systems and strategic planning as essential tools for driving innovation and large-scale improvement. You tend to support bold, top-down solutions that aim to solve complex problems and elevate society. Your vision often blends ambition, order, and forward-thinking—focused on creating a more advanced and equitable world through strong direction and purposeful control.",
+      strengths: [
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Authoritarian-minded individuals are pragmatic and order-driven, capable of mobilizing resources and coordinating complex efforts quickly, especially in times of crisis or large-scale societal challenges.",
+        "Progressive-minded individuals are forward-thinking and adaptive, embracing innovation, social reform, and the pursuit of a better future through continual improvement and openness to new ideas.",
+        "Secular-minded individuals approach the world through critical thinking and empirical evidence, relying on rational inquiry, scientific understanding, and objective reasoning to guide decisions.",
+        "Globalist-minded individuals are globally aware and culturally flexible, recognizing interconnectedness across nations and embracing cooperation, mutual benefit, and diverse human experiences.",
+      ],
+      weaknesses: [
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Authoritarian-minded individuals may suppress dissent and critical thought, risking the erosion of personal freedoms and fostering environments where power can be abused without accountability.",
+        "Progressive-minded individuals may too readily discard valuable traditions and historical lessons, sometimes embracing change for its own sake without fully considering long-term consequences.",
+        "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
+        "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
+      ],
+      famousPeople: [
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
+      ],
+      color: "from-black to-gray-700",
+    },
+        fapsn: {
+      id: "corporatist",
+      name: "The Corporatist",
+      traits: [
+          "Free Market", 
+          "Authority", 
+          "Progressive",
+          "Secular",
+          "Nationalist"
+      ],
+      description: "Strategize for power. Govern for progress.",
+      introduction:
+        "As a FAPSN (The Corporatist), you likely value economic freedom and national strength, paired with a belief in structured, top-down approaches to progress. With a secular outlook and a focus on efficiency and order, you may see coordinated leadership—especially between state and industry—as key to driving innovation and stability. You tend to favor pragmatic solutions that serve both the nation and its economy, believing that prosperity and unity can be achieved through strategic planning and disciplined governance. Your vision often blends progress with control, aiming to build a strong and forward-moving society.",
+      strengths: [
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Authoritarian-minded individuals are pragmatic and order-driven, capable of mobilizing resources and coordinating complex efforts quickly, especially in times of crisis or large-scale societal challenges.",
+        "Progressive-minded individuals are forward-thinking and adaptive, embracing innovation, social reform, and the pursuit of a better future through continual improvement and openness to new ideas.",
+        "Secular-minded individuals approach the world through critical thinking and empirical evidence, relying on rational inquiry, scientific understanding, and objective reasoning to guide decisions.",
+        "Nationalist-minded individuals are deeply loyal and community-oriented, prioritizing national sovereignty, cultural heritage, and the protection of local traditions and interests against outside forces.",
+      ],
+      weaknesses: [
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Authoritarian-minded individuals may suppress dissent and critical thought, risking the erosion of personal freedoms and fostering environments where power can be abused without accountability.",
+        "Progressive-minded individuals may too readily discard valuable traditions and historical lessons, sometimes embracing change for its own sake without fully considering long-term consequences.",
+        "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
+        "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
+      ],
+      famousPeople: [
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
+      ],
+      color: "from-gray-700 to-blue-400",
+    },
+        faprg: {
+      id: "moralizer",
+      name: "The Moralizer",
+      traits: [
+          "Free Market", 
+          "Authority", 
+          "Progressive",
+          "Religious",
+          "Globalist"
+      ],
+      description: "Construct with purpose. Lead with faith.",
+      introduction:
+        "As a FAPRG (The Moralizer), you likely believe in progress and global cooperation, guided by strong moral or religious convictions and a belief in structured, purposeful leadership. You may see economic freedom and innovation as tools to uplift society—so long as they align with clear ethical principles. With a focus on discipline, order, and a higher sense of purpose, you tend to support firm but value-driven approaches to change. Your vision often blends faith, structure, and ambition—seeking to shape a better world through both moral clarity and decisive action.",
+      strengths: [
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Authoritarian-minded individuals are pragmatic and order-driven, capable of mobilizing resources and coordinating complex efforts quickly, especially in times of crisis or large-scale societal challenges.",
+        "Progressive-minded individuals are forward-thinking and adaptive, embracing innovation, social reform, and the pursuit of a better future through continual improvement and openness to new ideas.",
+        "Religious-minded individuals are deeply rooted in moral conviction and community, drawing from faith-based principles that provide meaning, resilience, and a sense of shared purpose across generations.",
+        "Globalist-minded individuals are globally aware and culturally flexible, recognizing interconnectedness across nations and embracing cooperation, mutual benefit, and diverse human experiences.",
+      ],
+      weaknesses: [
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Authoritarian-minded individuals may suppress dissent and critical thought, risking the erosion of personal freedoms and fostering environments where power can be abused without accountability.",
+        "Progressive-minded individuals may too readily discard valuable traditions and historical lessons, sometimes embracing change for its own sake without fully considering long-term consequences.",
+        "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
+        "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
+      ],
+      famousPeople: [
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
+      ],
+      color: "from-purple-800 to-rose-600",
+    },
+        faprn: {
+      id: "builder",
+      name: "The Builder",
+      traits: [
+          "Free Market", 
+          "Authority", 
+          "Progressive",
+          "Religious",
+          "Nationalist"
+      ],
+      description: "Build with resolve. Shape with strength.",
+      introduction:
+        "As a FAPRN (The Builder), you likely believe in progress and national strength, guided by a strong moral or religious foundation and a commitment to order and structure. You may see economic freedom and personal ambition as powerful forces—best harnessed through disciplined leadership and shared values. With a focus on development, tradition, and unity, you tend to support purposeful action that reinforces both moral principles and national identity. Your vision often blends faith, structure, and a hands-on drive to construct a society where strength and virtue go hand in hand.",
+      strengths: [
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Authoritarian-minded individuals are pragmatic and order-driven, capable of mobilizing resources and coordinating complex efforts quickly, especially in times of crisis or large-scale societal challenges.",
+        "Progressive-minded individuals are forward-thinking and adaptive, embracing innovation, social reform, and the pursuit of a better future through continual improvement and openness to new ideas.",
+        "Religious-minded individuals are deeply rooted in moral conviction and community, drawing from faith-based principles that provide meaning, resilience, and a sense of shared purpose across generations.",
+        "Nationalist-minded individuals are deeply loyal and community-oriented, prioritizing national sovereignty, cultural heritage, and the protection of local traditions and interests against outside forces.",
+      ],
+      weaknesses: [
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Authoritarian-minded individuals may suppress dissent and critical thought, risking the erosion of personal freedoms and fostering environments where power can be abused without accountability.",
+        "Progressive-minded individuals may too readily discard valuable traditions and historical lessons, sometimes embracing change for its own sake without fully considering long-term consequences.",
+        "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
+        "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
+      ],
+      famousPeople: [
+        { name: "Lord Varys", role: "Game of Thrones" },
+        { name: "High Sparrow", role: "Game of Thrones" },
+        { name: "Cardinal Richelieu", role: "The Three Musketeers" },
+        { name: "Frollo", role: "The Hunchback of Notre Dame" },
+      ],
+      color: "from-amber-700 to-yellow-400",
+    },     
     facsg: {
       id: "executive",
       name: "The Executive",
@@ -628,14 +1012,14 @@ export default function ArchetypeDetail() {
       introduction:
         "As a FACSG (The Executive), you likely value order, efficiency, and economic freedom, with a pragmatic, secular outlook and a global perspective. You may believe that well-structured systems and strong leadership are essential for maintaining stability and driving prosperity. With a preference for clear rules and strategic coordination, you tend to support disciplined approaches to governance and business alike. Your vision often blends tradition with ambition—seeking a world where productivity, responsibility, and long-term planning lead the way.",
       strengths: [
-        "Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
         "Authoritarian-minded individuals are pragmatic and order-driven, capable of mobilizing resources and coordinating complex efforts quickly, especially in times of crisis or large-scale societal challenges.",
         "Conservative-minded individuals are grounded in tradition and cautious by nature, valuing the hard-earned wisdom of past generations and striving to preserve stability, order, and social cohesion.",
         "Secular-minded individuals approach the world through critical thinking and empirical evidence, relying on rational inquiry, scientific understanding, and objective reasoning to guide decisions.",
         "Globalist-minded individuals are globally aware and culturally flexible, recognizing interconnectedness across nations and embracing cooperation, mutual benefit, and diverse human experiences.",
       ],
       weaknesses: [
-        "Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
         "Authoritarian-minded individuals may suppress dissent and critical thought, risking the erosion of personal freedoms and fostering environments where power can be abused without accountability.",
         "Conservative-minded individuals may resist necessary reforms or fail to adapt to changing realities, risking stagnation or the entrenchment of outdated social structures.",
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
@@ -664,14 +1048,14 @@ export default function ArchetypeDetail() {
       introduction:
         "As a FACSN (The Ironhand), you likely believe in strength, order, and economic freedom, grounded in a secular worldview and a strong sense of national pride. You may see discipline, structure, and decisive leadership as essential to maintaining stability and protecting the values you hold dear. With a preference for tradition and strategic control, you tend to support firm but focused governance that prioritizes national unity and self-reliance. Your vision often blends authority with responsibility—aiming to build a society that is secure, resilient, and built to last.",
       strengths: [
-        "Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
         "Authoritarian-minded individuals are pragmatic and order-driven, capable of mobilizing resources and coordinating complex efforts quickly, especially in times of crisis or large-scale societal challenges.",
         "Conservative-minded individuals are grounded in tradition and cautious by nature, valuing the hard-earned wisdom of past generations and striving to preserve stability, order, and social cohesion.",
         "Secular-minded individuals approach the world through critical thinking and empirical evidence, relying on rational inquiry, scientific understanding, and objective reasoning to guide decisions.",
         "Nationalist-minded individuals are deeply loyal and community-oriented, prioritizing national sovereignty, cultural heritage, and the protection of local traditions and interests against outside forces.",
       ],
       weaknesses: [
-        "Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
         "Authoritarian-minded individuals may suppress dissent and critical thought, risking the erosion of personal freedoms and fostering environments where power can be abused without accountability.",
         "Conservative-minded individuals may resist necessary reforms or fail to adapt to changing realities, risking stagnation or the entrenchment of outdated social structures.",
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
@@ -700,14 +1084,14 @@ export default function ArchetypeDetail() {
       introduction:
         "As a FACRG (The Regent), you likely value order, faith, and economic freedom, guided by a strong moral framework and a global perspective. You may believe that prosperity and stability come from disciplined leadership, time-tested values, and responsible stewardship of both markets and institutions. With a focus on preserving what works while engaging with the wider world, you tend to support structured approaches that honor tradition while promoting long-term growth. Your vision often blends faith, structure, and purpose—seeking to uphold enduring principles in a rapidly changing world.",
       strengths: [
-        "Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
         "Authoritarian-minded individuals are pragmatic and order-driven, capable of mobilizing resources and coordinating complex efforts quickly, especially in times of crisis or large-scale societal challenges.",
         "Conservative-minded individuals are grounded in tradition and cautious by nature, valuing the hard-earned wisdom of past generations and striving to preserve stability, order, and social cohesion.",
         "Religious-minded individuals are deeply rooted in moral conviction and community, drawing from faith-based principles that provide meaning, resilience, and a sense of shared purpose across generations.",
         "Globalist-minded individuals are globally aware and culturally flexible, recognizing interconnectedness across nations and embracing cooperation, mutual benefit, and diverse human experiences.",
       ],
       weaknesses: [
-        "Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
         "Authoritarian-minded individuals may suppress dissent and critical thought, risking the erosion of personal freedoms and fostering environments where power can be abused without accountability.",
         "Conservative-minded individuals may resist necessary reforms or fail to adapt to changing realities, risking stagnation or the entrenchment of outdated social structures.",
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
@@ -736,14 +1120,14 @@ export default function ArchetypeDetail() {
       introduction:
         "As a FACRN (The Crusader), you likely value strength, tradition, and economic freedom, rooted in deep moral or religious convictions and a strong sense of national identity. You may believe that a just and stable society is built through disciplined leadership, cultural preservation, and a firm commitment to shared values. With a focus on order and purpose, you tend to support decisive action in defense of both faith and country. Your vision often blends conviction, structure, and loyalty—seeking to protect and uphold a way of life you believe is worth preserving.",
       strengths: [
-        "Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
+        "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
         "Authoritarian-minded individuals are pragmatic and order-driven, capable of mobilizing resources and coordinating complex efforts quickly, especially in times of crisis or large-scale societal challenges.",
         "Conservative-minded individuals are grounded in tradition and cautious by nature, valuing the hard-earned wisdom of past generations and striving to preserve stability, order, and social cohesion.",
         "Religious-minded individuals are deeply rooted in moral conviction and community, drawing from faith-based principles that provide meaning, resilience, and a sense of shared purpose across generations.",
         "Nationalist-minded individuals are deeply loyal and community-oriented, prioritizing national sovereignty, cultural heritage, and the protection of local traditions and interests against outside forces.",
       ],
       weaknesses: [
-        "Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
+        "Free Market-minded individuals may downplay systemic inequalities and external harms, assuming that free competition alone will correct imbalances without considering broader social costs.",
         "Authoritarian-minded individuals may suppress dissent and critical thought, risking the erosion of personal freedoms and fostering environments where power can be abused without accountability.",
         "Conservative-minded individuals may resist necessary reforms or fail to adapt to changing realities, risking stagnation or the entrenchment of outdated social structures.",
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
