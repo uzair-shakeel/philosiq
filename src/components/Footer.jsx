@@ -149,7 +149,7 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
-          <p>© {currentYear} PhilosiQ. All rights reserved.</p>
+          <p>© {currentYear} Philosiq. All rights reserved.</p>
         </div>
       </div>
     </footer>
