@@ -578,7 +578,7 @@ export default function ArchetypeDetail() {
       ],
       color: "from-purple-700 to-red-600",
     },
-    eacrn: {
+    flpsg: {
       id: "futrist",
       name: "The Futurist",
       traits: [
