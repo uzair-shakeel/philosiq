@@ -7,7 +7,7 @@ const ShortQuizConfigSchema = new mongoose.Schema(
       required: [true, "Total questions is required"],
       min: [5, "Minimum 5 questions required"],
       max: [100, "Maximum 100 questions allowed"],
-      default: 36,
+      default: 30,
     },
     questionsPerAxis: [
       {
