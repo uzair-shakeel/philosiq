@@ -377,8 +377,7 @@ export default function QuizPage() {
                   </div>
                   <div className="p-6">
                     <p className="text-gray-600 mb-6">
-                      Get a fast, high-level snapshot of your political leanings
-                      in just a few minutes.
+                      Get a fast, high-level snapshot of your political leanings in just a few minutes. This short quiz will likely yield more extreme results, as it determines your ideology based on only a few questions.
                     </p>
                     <button
                       onClick={() => startQuiz("short")}
@@ -402,8 +401,7 @@ export default function QuizPage() {
                   </div>
                   <div className="p-6">
                     <p className="text-gray-600 mb-6">
-                      Explore the full spectrum of your political beliefs with
-                      our comprehensive, in-depth test.
+                      Explore the full spectrum of your political beliefs with our comprehensive, in-depth test. This long quiz provides the most accurate results by covering a broad range of key topics across the ideological spectrum.
                     </p>
                     <button
                       onClick={() => startQuiz("full")}
