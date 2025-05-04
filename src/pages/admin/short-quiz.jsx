@@ -20,7 +20,7 @@ export default function ShortQuizManager() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterAxis, setFilterAxis] = useState("all");
   const [shortQuizConfig, setShortQuizConfig] = useState({
-    totalQuestions: 36,
+    totalQuestions: 30,
     questionsPerAxis: {},
   });
   const [changes, setChanges] = useState(false);
@@ -58,7 +58,7 @@ export default function ShortQuizManager() {
         if (configResponse.data.success) {
           setShortQuizConfig(
             configResponse.data.config || {
-              totalQuestions: 36,
+              totalQuestions: 30,
               questionsPerAxis: {},
             }
           );
@@ -301,7 +301,7 @@ export default function ShortQuizManager() {
                         ...shortQuizConfig,
                         totalQuestions: Math.max(
                           5,
-                          Math.min(100, parseInt(e.target.value) || 36)
+                          Math.min(100, parseInt(e.target.value) || 30)
                         ),
                       });
                       setChanges(true);
