@@ -143,10 +143,6 @@ const Footer = () => {
                   support@philosiq.com
                 </a>
               </li>
-              <li>
-                <p>1234 Democracy Ave</p>
-                <p>Washington, DC 20001</p>
-              </li>
             </ul>
           </div>
         </div>
