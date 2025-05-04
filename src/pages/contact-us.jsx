@@ -109,6 +109,7 @@ export default function ContactUs() {
                       <h3 className="font-bold mb-1">Phone</h3>
                       <p className="text-gray-300">(123) 456-7890</p>
                     </div>
+                  </div>
 
                   <div className="flex items-start">
                     <div className="bg-primary-maroon p-3 rounded-full mr-4">
@@ -123,7 +124,7 @@ export default function ContactUs() {
                       </p>
                     </div>
                   </div>
-                </div>                    
+                </div>
               </div>
             </div>
 
