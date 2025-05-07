@@ -189,7 +189,7 @@ export default function ArchetypePage() {
       id: "futurist",
       name: "The Futurist",
       traits: ["Free Market", "Libertarian", "Progressive", "Secular", "Globalist"],
-      slug: "futurist",
+      slug: "flpsg",
     },
     {
       id: "maverick",

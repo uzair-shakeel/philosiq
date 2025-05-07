@@ -3,9 +3,7 @@ import Layout from "../components/Layout";
 import axios from "axios";
 import {
   FaPaperPlane,
-  FaPhone,
   FaEnvelope,
-  FaMapMarkerAlt,
   FaSpinner,
 } from "react-icons/fa";
 
@@ -98,30 +96,6 @@ export default function ContactUs() {
                       >
                         support@philosiq.com
                       </a>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="bg-primary-maroon p-3 rounded-full mr-4">
-                      <FaPhone />
-                    </div>
-                    <div>
-                      <h3 className="font-bold mb-1">Phone</h3>
-                      <p className="text-gray-300">(123) 456-7890</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="bg-primary-maroon p-3 rounded-full mr-4">
-                      <FaMapMarkerAlt />
-                    </div>
-                    <div>
-                      <h3 className="font-bold mb-1">Address</h3>
-                      <p className="text-gray-300">
-                        1234 Democracy Ave
-                        <br />
-                        Washington, DC 20001
-                      </p>
                     </div>
                   </div>
                 </div>
