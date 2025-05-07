@@ -30,6 +30,7 @@ const Navbar = ({ user }) => {
     { name: "Home", path: "/" },
     { name: "Archetypes", path: "/archetypes" },
     { name: "Quiz", path: "/quiz" },
+    { name: "MindMap", path: "/mindmap" },
     { name: "Contact Us", path: "/contact-us" },
   ];
 

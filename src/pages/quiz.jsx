@@ -5,6 +5,7 @@ import {
   FaArrowLeft,
   FaClipboardList,
   FaClipboardCheck,
+  FaInfoCircle,
 } from "react-icons/fa";
 import axios from "axios";
 
@@ -216,16 +217,21 @@ export default function QuizPage() {
       };
     });
 
-    // Store results in sessionStorage for the results page
-    sessionStorage.setItem(
-      "quizResults",
-      JSON.stringify({
-        answers,
-        questions: processedQuestions,
-        axisScores,
-        totalQuestions: questions.length,
-      })
-    );
+    // Prepare the results data
+    const quizResultsData = JSON.stringify({
+      answers,
+      questions: processedQuestions,
+      axisScores,
+      totalQuestions: questions.length,
+      timestamp: new Date().toISOString(),
+      quizType,
+    });
+
+    // Store results in sessionStorage for the current session
+    sessionStorage.setItem("quizResults", quizResultsData);
+
+    // Also store in localStorage for persistence across browser sessions
+    localStorage.setItem("quizResults", quizResultsData);
 
     // Redirect to results page
     window.location.href = "/results";

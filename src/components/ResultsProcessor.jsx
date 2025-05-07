@@ -19,8 +19,13 @@ export default function ResultsProcessor({ children }) {
     try {
       setLoading(true);
 
-      // Get stored quiz data from session storage
-      const storedData = sessionStorage.getItem("quizResults");
+      // Try to get stored quiz data from session storage first (for current session)
+      let storedData = sessionStorage.getItem("quizResults");
+
+      // If not found in sessionStorage, try localStorage (persisted from previous sessions)
+      if (!storedData) {
+        storedData = localStorage.getItem("quizResults");
+      }
 
       if (!storedData) {
         setError("No quiz results found. Please take the quiz first.");
@@ -43,13 +48,11 @@ export default function ResultsProcessor({ children }) {
       const axisNames = questions.map((q) => q.axis);
       const uniqueAxes = [...new Set(axisNames)];
 
-
       // Count questions per axis to ensure we have equity questions
       const axisCount = {};
       axisNames.forEach((axis) => {
         axisCount[axis] = (axisCount[axis] || 0) + 1;
       });
-
 
       // Check for Equity vs. Free Market or Equality vs. Markets questions specifically
       const equityQuestions = questions.filter(
@@ -58,18 +61,26 @@ export default function ResultsProcessor({ children }) {
           q.axis === "Equality vs. Markets"
       );
 
-
-      
-
       // Calculate the results using our utility function
       const calculatedResults = calculateResults(questions, answers);
+
+      // Save results to localStorage for persistence across browser sessions
+      localStorage.setItem(
+        "quizResults",
+        JSON.stringify({
+          answers,
+          questions,
+          axisScores,
+          timestamp: new Date().toISOString(),
+          archetype: calculatedResults.archetype,
+        })
+      );
 
       // Check if we have equity results
       const hasEquityResults = calculatedResults.axisResults.some(
         (axis) => axis.name === "Equity vs. Free Market"
       );
 
-      
       if (!hasEquityResults) {
         console.error(
           "Equity vs. Free Market axis is missing from calculated results"

@@ -12,10 +12,13 @@ import {
   FaBug,
   FaChevronDown,
   FaChevronUp,
+  FaChartPie,
+  FaInfoCircle,
 } from "react-icons/fa";
 import ResultsProcessor from "../components/ResultsProcessor";
 import AxisGraph from "../components/AxisGraph";
 import DebugResultsTable from "../components/DebugResultsTable";
+import MindMapContributeModal from "../components/MindMapContributeModal";
 
 // Add this constant at the top level of the file, right after the imports
 // It will be accessible to all functions in the file
@@ -74,9 +77,34 @@ function ResultsContent({ results }) {
   const [axisLetters, setAxisLetters] = useState({});
   const [secondaryArchetypes, setSecondaryArchetypes] = useState([]);
   const [allPercents, setAllPercents] = useState([]);
+  const [showMindMapModal, setShowMindMapModal] = useState(false);
 
   // Get the raw data from session storage for debugging
   const [rawData, setRawData] = useState(null);
+
+  // Check if the quiz was a full quiz or short quiz
+  const [isFullQuiz, setIsFullQuiz] = useState(false);
+
+  // Add useEffect to check quiz type when component mounts
+  useEffect(() => {
+    try {
+      // Try to get stored quiz data from session storage first (for current session)
+      let storedData = sessionStorage.getItem("quizResults");
+
+      // If not found in sessionStorage, try localStorage
+      if (!storedData) {
+        storedData = localStorage.getItem("quizResults");
+      }
+
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        // Check if this was a full quiz (not a short quiz)
+        setIsFullQuiz(parsedData.quizType === "full");
+      }
+    } catch (err) {
+      console.error("Error determining quiz type:", err);
+    }
+  }, []);
 
   const handleUpdate = (name, data) => {
     setAllPercents((prev) => ({
@@ -630,11 +658,6 @@ function ResultsContent({ results }) {
           </p>
 
           <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
-            {/* 
-              Display the axis results using our AxisGraph component
-              Note: "Progressive vs. Conservative" and "Libertarian vs. Authoritarian" axes
-              are filtered out in the resultsCalculator.js file
-            */}
             {results.axisResults.map((axis, index) => {
               return (
                 <AxisGraph
@@ -660,6 +683,45 @@ function ResultsContent({ results }) {
             })}
           </div>
         </div>
+
+        {/* MindMap Contribute Section - Add this before the Share Results section */}
+        {isFullQuiz && (
+          <div className="mb-16 bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="bg-gradient-to-r from-primary-maroon to-secondary-darkBlue p-6 text-white">
+              <h2 className="text-2xl font-bold mb-2">Contribute to MindMap</h2>
+              <p>
+                Help us understand how demographics correlate with political
+                beliefs by anonymously contributing your data.
+              </p>
+              <p className="text-sm text-blue-600 mt-2">
+                <FaInfoCircle className="inline-block mr-1" />
+                This feature is exclusively available for full quiz results.
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row items-center justify-between">
+                <div className="mb-4 md:mb-0 md:mr-6">
+                  <h3 className="text-lg font-semibold mb-2">
+                    What is MindMap?
+                  </h3>
+                  <p className="text-gray-600">
+                    MindMap visualizes how demographic factors like age,
+                    education, and location correlate with political archetypes.
+                    Your anonymous contribution helps build a more comprehensive
+                    picture.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowMindMapModal(true)}
+                  className="bg-primary-maroon text-white px-6 py-3 rounded-full flex items-center text-start font-medium hover:shadow-lg transition-all"
+                >
+                  <FaChartPie size={27} className="mr-2 min-w-10" /> Contribute
+                  Anonymously
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Share Results */}
         <div className="mb-16">
@@ -754,6 +816,19 @@ function ResultsContent({ results }) {
           </Link>
         </div>
       </div>
+
+      {/* MindMap Contribute Modal */}
+      {isFullQuiz && (
+        <MindMapContributeModal
+          isOpen={showMindMapModal}
+          onClose={() => setShowMindMapModal(false)}
+          archetype={results?.archetype?.name}
+          axisScores={results?.axisResults?.reduce((acc, axis) => {
+            acc[axis.name] = axis.score;
+            return acc;
+          }, {})}
+        />
+      )}
     </div>
   );
 }
