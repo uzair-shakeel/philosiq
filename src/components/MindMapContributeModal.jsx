@@ -89,8 +89,7 @@ export default function MindMapContributeModal({
 
   const canProceedToStep2 =
     formData.education && formData.gender && formData.race;
-  const canProceedToStep3 =
-    formData.age && formData.zipCode && formData.votingTendency;
+  const canProceedToStep3 = formData.zipCode && formData.age;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -152,16 +151,6 @@ export default function MindMapContributeModal({
             <p className="text-gray-600 mb-6 text-lg">
               Your anonymous contribution helps build a more comprehensive
               picture of political beliefs across different demographics.
-            </p>
-            <div className="flex justify-center">
-              <div className="animate-pulse flex space-x-2 items-center">
-                <div className="h-2 w-2 bg-primary-maroon rounded-full"></div>
-                <div className="h-2 w-2 bg-primary-maroon rounded-full"></div>
-                <div className="h-2 w-2 bg-primary-maroon rounded-full"></div>
-              </div>
-            </div>
-            <p className="text-sm text-gray-500 mt-3">
-              Redirecting you to the MindMap...
             </p>
           </div>
         </div>
@@ -225,9 +214,6 @@ export default function MindMapContributeModal({
               </div>
             </div>
           ))}
-          <div className="absolute left-0 right-0 flex justify-center -z-10">
-            <div className="h-0.5 bg-gray-200 w-2/3 absolute top-5"></div>
-          </div>
         </div>
 
         {error && (
