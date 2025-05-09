@@ -106,29 +106,28 @@ export default function Home() {
                 How It Works
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Our scientifically designed survey helps you understand your
-                political beliefs in just a few simple steps.
+                  Discover where you truly stand—Importiq makes understanding your political views quick, accurate, and surprisingly revealing.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
-                  title: "Take the Survey",
+                  title: "Take the Quiz",
                   description:
-                    "Answer a series of questions about your political beliefs and values.",
+                    "Your responses help us map your values and beliefs with precision.",
                   number: "01",
                 },
                 {
                   title: "Get Your Results",
                   description:
-                    "Receive a detailed analysis of your political positioning across multiple dimensions.",
+                    "Importiq analyzes your answers and scores you on five major ideological axes.",
                   number: "02",
                 },
                 {
                   title: "Discover Your Archetype",
                   description:
-                    "Learn about your political archetype and how it compares to others.",
+                    "Explore how your unique combination of values forms a powerful political identity.",
                   number: "03",
                 },
               ].map((step, index) => (
