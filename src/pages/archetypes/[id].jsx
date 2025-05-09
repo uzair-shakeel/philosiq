@@ -582,11 +582,11 @@ export default function ArchetypeDetail() {
       id: "futrist",
       name: "The Futurist",
       traits: [
-          "Free Market", 
-          "Libertarian", 
-          "Progressive", 
-          "Secular", 
-          "Globalist"
+        "Free Market",
+        "Libertarian",
+        "Progressive",
+        "Secular",
+        "Globalist",
       ],
       description: "Invent the future. Believe in potential.",
       introduction:
@@ -613,15 +613,15 @@ export default function ArchetypeDetail() {
       ],
       color: "from-cyan-500 to-blue-400",
     },
-        flpsn: {
+    flpsn: {
       id: "mavrick",
       name: "The Maverick",
       traits: [
-          "Free Market", 
-          "Libertarian", 
-          "Progressive", 
-          "Secular", 
-          "Nationalist"
+        "Free Market",
+        "Libertarian",
+        "Progressive",
+        "Secular",
+        "Nationalist",
       ],
       description: "Think boldly. Speak freely. Stand firm.",
       introduction:
@@ -648,15 +648,15 @@ export default function ArchetypeDetail() {
       ],
       color: "from-orange-600 to-yellow-400",
     },
-          flprg: {
+    flprg: {
       id: "evangelist",
       name: "The Evangelist",
       traits: [
-          "Free Market", 
-          "Libertarian", 
-          "Progressive", 
-          "Religious", 
-          "Globalist"
+        "Free Market",
+        "Libertarian",
+        "Progressive",
+        "Religious",
+        "Globalist",
       ],
       description: "Inspire through belief. Empower with vision.",
       introduction:
@@ -683,15 +683,15 @@ export default function ArchetypeDetail() {
       ],
       color: "from-teal-600 to-blue-400",
     },
-        flprn: {
+    flprn: {
       id: "dissenter",
       name: "The Dissenter",
       traits: [
-          "Free Market", 
-          "Libertarian", 
-          "Progressive", 
-          "Religious", 
-          "Nationalist"
+        "Free Market",
+        "Libertarian",
+        "Progressive",
+        "Religious",
+        "Nationalist",
       ],
       description: "Defy the norm. Stand with conviction.",
       introduction:
@@ -718,15 +718,15 @@ export default function ArchetypeDetail() {
       ],
       color: "from-red-600 to-rose-400",
     },
-     flcsg: {
+    flcsg: {
       id: "globalist",
       name: "The Globalist",
       traits: [
-          "Free Market", 
-          "Libertarian", 
-          "Conservative",
-          "Secular",
-          "Globalist"
+        "Free Market",
+        "Libertarian",
+        "Conservative",
+        "Secular",
+        "Globalist",
       ],
       description: "Freedom with cooperation. Tradition with progress.",
       introduction:
@@ -753,15 +753,15 @@ export default function ArchetypeDetail() {
       ],
       color: "from-blue-500 to-green-400",
     },
-        flcsn: {
+    flcsn: {
       id: "patriot",
       name: "The Patriot",
       traits: [
-          "Free Market", 
-          "Libertarian", 
-          "Conservative",
-          "Secular",
-          "Nationalist"
+        "Free Market",
+        "Libertarian",
+        "Conservative",
+        "Secular",
+        "Nationalist",
       ],
       description: "Pride in nation. Strength in liberty.",
       introduction:
@@ -787,16 +787,16 @@ export default function ArchetypeDetail() {
         { name: "Frollo", role: "The Hunchback of Notre Dame" },
       ],
       color: "from-red-700 to-blue-600",
-    }, 
-        flcrg: {
+    },
+    flcrg: {
       id: "industrialist",
       name: "The Industrialist",
       traits: [
-          "Free Market", 
-          "Libertarian", 
-          "Conservative",
-          "Religious",
-          "Globalist"
+        "Free Market",
+        "Libertarian",
+        "Conservative",
+        "Religious",
+        "Globalist",
       ],
       description: "Work with values. Build across borders.",
       introduction:
@@ -822,16 +822,16 @@ export default function ArchetypeDetail() {
         { name: "Frollo", role: "The Hunchback of Notre Dame" },
       ],
       color: "from-yellow-600 to-gray-400",
-    },     
-        flcrn: {
+    },
+    flcrn: {
       id: "traditionalist",
       name: "The Traditionalist",
       traits: [
-          "Free Market", 
-          "Libertarian", 
-          "Conservative",
-          "Religious",
-          "Nationalist"
+        "Free Market",
+        "Libertarian",
+        "Conservative",
+        "Religious",
+        "Nationalist",
       ],
       description: "Preserve the sacred. Empower the individual.",
       introduction:
@@ -858,15 +858,15 @@ export default function ArchetypeDetail() {
       ],
       color: "from-amber-700 to-emerald-500",
     },
-        fapsg: {
+    fapsg: {
       id: "overlord",
       name: "The Overlord",
       traits: [
-          "Free Market", 
-          "Authority", 
-          "Progressive",
-          "Secular",
-          "Globalist"
+        "Free Market",
+        "Authority",
+        "Progressive",
+        "Secular",
+        "Globalist",
       ],
       description: "Control the chaos. Command the future.",
       introduction:
@@ -893,15 +893,15 @@ export default function ArchetypeDetail() {
       ],
       color: "from-black to-gray-700",
     },
-        fapsn: {
+    fapsn: {
       id: "corporatist",
       name: "The Corporatist",
       traits: [
-          "Free Market", 
-          "Authority", 
-          "Progressive",
-          "Secular",
-          "Nationalist"
+        "Free Market",
+        "Authority",
+        "Progressive",
+        "Secular",
+        "Nationalist",
       ],
       description: "Strategize for power. Govern for progress.",
       introduction:
@@ -928,15 +928,15 @@ export default function ArchetypeDetail() {
       ],
       color: "from-gray-700 to-blue-400",
     },
-        faprg: {
+    faprg: {
       id: "moralizer",
       name: "The Moralizer",
       traits: [
-          "Free Market", 
-          "Authority", 
-          "Progressive",
-          "Religious",
-          "Globalist"
+        "Free Market",
+        "Authority",
+        "Progressive",
+        "Religious",
+        "Globalist",
       ],
       description: "Construct with purpose. Lead with faith.",
       introduction:
@@ -963,15 +963,15 @@ export default function ArchetypeDetail() {
       ],
       color: "from-purple-800 to-rose-600",
     },
-        faprn: {
+    faprn: {
       id: "builder",
       name: "The Builder",
       traits: [
-          "Free Market", 
-          "Authority", 
-          "Progressive",
-          "Religious",
-          "Nationalist"
+        "Free Market",
+        "Authority",
+        "Progressive",
+        "Religious",
+        "Nationalist",
       ],
       description: "Build with resolve. Shape with strength.",
       introduction:
@@ -997,7 +997,7 @@ export default function ArchetypeDetail() {
         { name: "Frollo", role: "The Hunchback of Notre Dame" },
       ],
       color: "from-amber-700 to-yellow-400",
-    },     
+    },
     facsg: {
       id: "executive",
       name: "The Executive",
@@ -1285,22 +1285,6 @@ export default function ArchetypeDetail() {
             </div>
           </div>
 
-          {/* Comments section (placeholder) */}
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-            <h2 className="text-2xl font-bold mb-6 text-secondary-darkBlue flex items-center">
-              <FaComments className="mr-3 text-primary-maroon" /> Comments
-            </h2>
-            <div className="bg-neutral-light p-8 rounded-lg text-center">
-              <p className="text-gray-600">
-                Comments will be available after you create an account and log
-                in.
-              </p>
-              <Link href="/login" className="btn-primary inline-block mt-4">
-                Log In to Comment
-              </Link>
-            </div>
-          </div>
-
           {/* Axis Breakdown Section */}
           <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-bold mb-6 text-center">
@@ -1387,6 +1371,22 @@ export default function ArchetypeDetail() {
                       "As someone who leans toward the Nationalist side of the axis, you prioritize your nation's sovereignty, identity, and the interests of its citizens above international concerns. You believe that a country should maintain strong borders, protect its cultural heritage, and ensure that its policies benefit its own people first and foremost. For you, national identity provides a crucial sense of belonging and shared purpose, and you may view certain aspects of globalization as potential threats to this identity. You likely support economic policies that protect domestic industries and workers, and you may be cautious about international agreements that could compromise national decision-making. While you might value beneficial international relationships, you believe that a nation's primary responsibility is to safeguard the wellbeing, security, and prosperity of its own citizens."}
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* Comments section (placeholder) */}
+          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 className="text-2xl font-bold mb-6 text-secondary-darkBlue flex items-center">
+              <FaComments className="mr-3 text-primary-maroon" /> Comments
+            </h2>
+            <div className="bg-neutral-light p-8 rounded-lg text-center">
+              <p className="text-gray-600">
+                Comments will be available after you create an account and log
+                in.
+              </p>
+              <Link href="/login" className="btn-primary inline-block mt-4">
+                Log In to Comment
+              </Link>
             </div>
           </div>
         </div>

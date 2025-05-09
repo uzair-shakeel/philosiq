@@ -96,10 +96,10 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="#"
+                  href="/mindmap"
                   className="text-gray-300 hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
                 >
-                  Political Theory
+                  Mind Map
                 </Link>
               </li>
               <li>
