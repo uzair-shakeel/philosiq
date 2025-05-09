@@ -884,12 +884,40 @@ function getAllAxisTraits(axisResults) {
 // Helper function to get a description for the archetype
 function getArchetypeDescription(archetypeName) {
   const descriptions = {
-    "The Corporatist":
-      "You believe in economic freedom within a framework of national identity and democratic values while leaning conservative.",
-    "The Maverick":
-      "You value individual liberty and free markets, combined with a secular approach and strong national identity.",
-    "The Steward":
-      "You prioritize traditional values and market economics, with a balanced approach to authority and national sovereignty.",
+    
+  "The Utopian": "You envision a world rooted in equality, individual freedom, progressive change, secularism, and global cooperation.",
+  "The Reformer": "You champion social justice, personal liberty, and reform at home, grounded in secular ideals and national identity.",
+  "The Prophet": "You seek a just and free society guided by progressive and religious values, with a global sense of mission.",
+  "The Firebrand": "You are a passionate advocate for radical change and faith-based morality, driven by national identity and personal freedom.",
+  "The Philosopher": "You value intellectual freedom, equity, and tradition, guided by secular thought and a global perspective.",
+  "The Localist": "You prioritize community-centered equity and freedom, rooted in secular traditions and national loyalty.",
+  "The Missionary": "You believe in social compassion and religious morality, aiming to spread equity and freedom worldwide.",
+  "The Guardian": "You stand for faith, equity, and liberty, seeking to preserve traditional values within a sovereign nation.",
+  "The Technocrat": "You support structured equity and progress through systems and innovation, favoring secularism and international cooperation.",
+  "The Enforcer": "You believe in justice through order, guided by secular progressivism and national strength.",
+  "The Zealot": "You fight for a righteous and equal world, merging strong authority, progressive ideals, and religious conviction.",
+  "The Purist": "You envision a morally upright and equitable society, protected by national sovereignty and guided by faith.",
+  "The Commander": "You support strong leadership, economic equity, and conservative traditions, in service of a global order.",
+  "The Steward": "You prioritize traditional values and market economics, with a balanced approach to authority and national sovereignty.",
+  "The Shepherd": "You seek a stable society built on faith, tradition, and fairness, with global compassion and structure.",
+  "The High Priest": "You champion a sacred national order rooted in tradition, morality, and economic fairness through authority.",
+  "The Futurist": "You advocate for innovation, freedom, and global progress, guided by secular and market-oriented values.",
+  "The Maverick": "You support social freedom, innovation, and national self-determination, unbound by tradition or authority.",
+  "The Evangelist": "You believe in personal liberty and spiritual progress, spreading free-market ideals and global moral purpose.",
+  "The Dissenter": "You challenge authority and tradition, guided by faith, progress, and a patriotic spirit.",
+  "The Globalist": "You value free markets, personal liberty, and cultural heritage, with a focus on global engagement.",
+  "The Patriot": "You defend individual freedom and national traditions, driven by a belief in markets and sovereignty.",
+  "The Industrialist": "You believe in moral capitalism, traditional values, and spreading prosperity on a global scale.",
+  "The Traditionalist": "You uphold religion, market capitalism, and national heritage, guided by liberty and cultural continuity.",
+  "The Overlord": "You believe in order, free markets, and secular progress, enforced through centralized authority and global ambition.",
+  "The Corporatist": "You promote market-driven progress under firm national leadership, favoring order and secular development.",
+  "The Moralizer": "You envision a structured, prosperous society shaped by faith, authority, and progressive mission.",
+  "The Builder": "You believe in a strong, moral nation led by authority and innovation, grounded in market economics.",
+  "The Executive": "You value control, efficiency, and economic freedom, with a secular and global vision for stability.",
+  "The Ironhand": "You believe in discipline, free enterprise, and tradition, secured by national strength and centralized power.",
+  "The Regent": "You seek a structured and moral global order, guided by faith, tradition, and capitalist efficiency.",
+  "The Crusader": "You fight for a sacred national identity, upheld by tradition, authority, and free-market values."
+    
     // Add more descriptions as needed
     "Unknown Archetype":
       "Your unique combination of political values doesn't fit neatly into our defined archetypes.",
