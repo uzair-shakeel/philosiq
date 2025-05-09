@@ -29,8 +29,7 @@ export default function Home() {
                 Discover Your Political Identity
               </h1>
               <p className="text-xl md:text-2xl mb-8 text-gray-200">
-                Uncover the beliefs that shape your worldview with our in-depth
-                quiz and discover the unique archetype that defines you.
+                  Reveal the ideology behind your instincts. Our quiz maps your political DNA and introduces you to the archetype that fits you best.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
@@ -147,7 +146,7 @@ export default function Home() {
 
             <div className="text-center mt-12">
               <Link href="/quiz" className="btn-primary text-lg px-8 py-3">
-                Start Now
+                Start Quiz
               </Link>
             </div>
           </div>
@@ -164,7 +163,7 @@ export default function Home() {
             </h2>
             <p className="text-xl mb-8 max-w-3xl mx-auto">
               Join thousands of others who have gained insight into their
-              political beliefs through our comprehensive survey.
+              political beliefs through our comprehensive quiz.
             </p>
             <Link
               href="/quiz"
