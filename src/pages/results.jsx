@@ -884,7 +884,7 @@ function getAllAxisTraits(axisResults) {
 // Helper function to get a description for the archetype
 function getArchetypeDescription(archetypeName) {
   const descriptions = {
-    "The Patriot":
+    "The Corporatist":
       "You believe in economic freedom within a framework of national identity and democratic values while leaning conservative.",
     "The Maverick":
       "You value individual liberty and free markets, combined with a secular approach and strong national identity.",
