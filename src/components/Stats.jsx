@@ -7,7 +7,7 @@ export default function Stats() {
     {
       title: "1,000+",
       description:
-        "Our test has been taken over 1,000 times by people all over the world, resulting in each person receiving an Archetype.",
+        "Our quiz has been taken over 1,000 times by people all over the world, resulting in each person receiving an Archetype.",
       buttonText: "Values",
       buttonLink: "/archetypes",
       icon: <FaUsers className="text-white text-4xl" />,
