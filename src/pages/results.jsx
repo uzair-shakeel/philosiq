@@ -916,7 +916,7 @@ function getArchetypeDescription(archetypeName) {
   "The Executive": "You value control, efficiency, and economic freedom, with a secular and global vision for stability.",
   "The Ironhand": "You believe in discipline, free enterprise, and tradition, secured by national strength and centralized power.",
   "The Regent": "You seek a structured and moral global order, guided by faith, tradition, and capitalist efficiency.",
-  "The Crusader": "You fight for a sacred national identity, upheld by tradition, authority, and free-market values."
+  "The Crusader": "You fight for a sacred national identity, upheld by tradition, authority, and free-market values.",
     
     // Add more descriptions as needed
     "Unknown Archetype":
