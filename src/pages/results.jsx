@@ -388,7 +388,7 @@ function ResultsContent({ results }) {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-2">Your Quiz Results</h1>
           <p className="text-lg text-gray-600">
-            Based on your responses, we've identified your political archetype
+            Importiq has crunched the numbers—here's the political archetype that fits you best
           </p>
         </div>
 
