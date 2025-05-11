@@ -432,9 +432,9 @@ export async function getServerSideProps(context) {
   // }
 
   // Add isAdmin to the session user object
-  if (session.user) {
-    session.user.isAdmin = true; // For now, we'll assume all logged-in users are admins
-  }
+  // if (session.user) {
+  //   session.user.isAdmin = true; // For now, we'll assume all logged-in users are admins
+  // }
 
   return {
     props: { session },
