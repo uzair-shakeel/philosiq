@@ -96,28 +96,25 @@ export default function AdminMindMap() {
   const fetchMindMapData = async () => {
     setLoading(true);
     try {
-      // Convert filters to query string, excluding empty values
-      const filterParams = Object.entries(filters)
-        .filter(([_, value]) => value)
-        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-        .join("&");
+      const queryParams = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: "10",
+        ...filters,
+      });
 
-      const response = await fetch(
-        `/api/admin/mindmap?page=${currentPage}&limit=${ITEMS_PER_PAGE}${
-          filterParams ? `&${filterParams}` : ""
-        }`
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch MindMap data");
-      }
-
+      const response = await fetch(`/api/admin/mindmap?${queryParams}`);
       const data = await response.json();
-      setEntries(data.entries);
-      setTotalPages(Math.ceil(data.total / ITEMS_PER_PAGE));
-      setTotalEntries(data.total);
-    } catch (err) {
-      setError(err.message);
+
+      if (data.success) {
+        setEntries(data.entries || []);
+        setTotalPages(data.totalPages || 1);
+        setTotalEntries(data.total || 0);
+      } else {
+        setError(data.message || "Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("Error fetching mindmap data:", error);
+      setError("Failed to fetch data. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -420,23 +417,30 @@ export default function AdminMindMap() {
 }
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
+  try {
+    const session = await getSession(context);
 
-  // if (!session) {
-  //   return {
-  //     redirect: {
-  //       destination: "/auth/signin?callbackUrl=/admin/mindmap",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
+    if (!session) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
 
-  // Add isAdmin to the session user object
-  // if (session.user) {
-  //   session.user.isAdmin = true; // For now, we'll assume all logged-in users are admins
-  // }
-
-  return {
-    props: { session },
-  };
+    return {
+      props: {
+        session,
+      },
+    };
+  } catch (error) {
+    console.error("Error in getServerSideProps:", error);
+    return {
+      redirect: {
+        destination: "/error",
+        permanent: false,
+      },
+    };
+  }
 }
