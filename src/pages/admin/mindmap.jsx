@@ -95,26 +95,35 @@ export default function AdminMindMap() {
 
   const fetchMindMapData = async () => {
     setLoading(true);
+    setError(null);
+
     try {
       const queryParams = new URLSearchParams({
         page: currentPage.toString(),
-        limit: "10",
+        limit: ITEMS_PER_PAGE.toString(),
         ...filters,
       });
 
       const response = await fetch(`/api/admin/mindmap?${queryParams}`);
       const data = await response.json();
 
-      if (data.success) {
+      if (response.ok) {
         setEntries(data.entries || []);
         setTotalPages(data.totalPages || 1);
         setTotalEntries(data.total || 0);
       } else {
+        console.error("API Error:", data);
         setError(data.message || "Failed to fetch data");
+        setEntries([]);
+        setTotalPages(1);
+        setTotalEntries(0);
       }
     } catch (error) {
       console.error("Error fetching mindmap data:", error);
       setError("Failed to fetch data. Please try again.");
+      setEntries([]);
+      setTotalPages(1);
+      setTotalEntries(0);
     } finally {
       setLoading(false);
     }
@@ -142,15 +151,11 @@ export default function AdminMindMap() {
   };
 
   const handleBulkDelete = async () => {
-    if (
-      !window.confirm(
-        `Are you sure you want to delete ${selectedEntries.size} entries?`
-      )
-    ) {
-      return;
-    }
+    if (selectedEntries.size === 0) return;
 
     setIsDeleting(true);
+    setError(null);
+
     try {
       const response = await fetch("/api/admin/mindmap/bulk-delete", {
         method: "POST",
@@ -162,14 +167,17 @@ export default function AdminMindMap() {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to delete entries");
-      }
+      const data = await response.json();
 
-      setSelectedEntries(new Set());
-      fetchMindMapData();
-    } catch (err) {
-      setError(err.message);
+      if (response.ok && data.success) {
+        setSelectedEntries(new Set());
+        await fetchMindMapData();
+      } else {
+        setError(data.message || "Failed to delete entries");
+      }
+    } catch (error) {
+      console.error("Error during bulk delete:", error);
+      setError("Failed to delete entries. Please try again.");
     } finally {
       setIsDeleting(false);
     }

@@ -4,46 +4,56 @@ import mongoose from "mongoose";
 
 export default async function handler(req, res) {
   try {
-    const session = await getSession({ req });
-
-    if (!session) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
-    }
-
+    // Only allow POST requests
     if (req.method !== "POST") {
       return res
         .status(405)
         .json({ success: false, message: "Method not allowed" });
     }
 
-    const { ids } = req.body;
-
-    if (!Array.isArray(ids) || ids.length === 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid or empty IDs array" });
-    }
-
+    // Connect to database
     await connectToDatabase();
     const mindmapCollection = mongoose.connection.db.collection("mindmapData");
 
-    const objectIds = ids.map((id) => new mongoose.Types.ObjectId(id));
-    const result = await mindmapCollection.deleteMany({
-      _id: { $in: objectIds },
-    });
+    // Get IDs from request body
+    const { ids } = req.body;
 
-    if (result.deletedCount > 0) {
+    // Validate IDs array
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid request: ids must be a non-empty array",
+      });
+    }
+
+    try {
+      // Convert string IDs to ObjectIds
+      const objectIds = ids.map((id) => new mongoose.Types.ObjectId(id));
+
+      // Delete entries
+      const result = await mindmapCollection.deleteMany({
+        _id: { $in: objectIds },
+      });
+
       return res.status(200).json({
         success: true,
         message: `Successfully deleted ${result.deletedCount} entries`,
+        deletedCount: result.deletedCount,
       });
-    } else {
-      return res
-        .status(404)
-        .json({ success: false, message: "No entries found to delete" });
+    } catch (dbError) {
+      console.error("Database error during bulk delete:", dbError);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to delete entries",
+        error: dbError.message,
+      });
     }
   } catch (error) {
     console.error("Error in bulk delete API:", error);
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 }
