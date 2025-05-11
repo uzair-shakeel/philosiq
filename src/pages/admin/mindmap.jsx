@@ -420,14 +420,7 @@ export async function getServerSideProps(context) {
   try {
     const session = await getSession(context);
 
-    if (!session) {
-      return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
-        },
-      };
-    }
+    
 
     return {
       props: {
