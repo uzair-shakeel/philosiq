@@ -134,24 +134,53 @@ export default function AdminMindMap() {
       return;
     }
 
+    setIsDeleting(true);
+    setError(null);
+
     try {
       const response = await fetch(`/api/admin/mindmap/${id}`, {
         method: "DELETE",
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to delete entry");
-      }
+      const data = await response.json();
 
-      // Refresh the data
-      fetchMindMapData();
-    } catch (err) {
-      setError(err.message);
+      if (response.ok && data.success) {
+        // Remove the deleted entry from the current entries
+        setEntries(entries.filter((entry) => entry._id !== id));
+        // Update total entries count
+        setTotalEntries((prev) => prev - 1);
+        // Recalculate total pages
+        const newTotalPages = Math.ceil((totalEntries - 1) / ITEMS_PER_PAGE);
+        setTotalPages(newTotalPages);
+
+        // If current page is now empty and not the first page, go to previous page
+        if (entries.length === 1 && currentPage > 1) {
+          setCurrentPage((prev) => prev - 1);
+        } else {
+          // Otherwise just refresh the current page
+          await fetchMindMapData();
+        }
+      } else {
+        setError(data.message || "Failed to delete entry");
+      }
+    } catch (error) {
+      console.error("Error deleting entry:", error);
+      setError("Failed to delete entry. Please try again.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   const handleBulkDelete = async () => {
     if (selectedEntries.size === 0) return;
+
+    if (
+      !window.confirm(
+        `Are you sure you want to delete ${selectedEntries.size} entries?`
+      )
+    ) {
+      return;
+    }
 
     setIsDeleting(true);
     setError(null);
@@ -170,8 +199,25 @@ export default function AdminMindMap() {
       const data = await response.json();
 
       if (response.ok && data.success) {
+        // Clear selection
         setSelectedEntries(new Set());
-        await fetchMindMapData();
+
+        // Update total entries count
+        setTotalEntries((prev) => prev - data.deletedCount);
+
+        // Recalculate total pages
+        const newTotalPages = Math.ceil(
+          (totalEntries - data.deletedCount) / ITEMS_PER_PAGE
+        );
+        setTotalPages(newTotalPages);
+
+        // If current page would be empty, go to previous page
+        if (currentPage > 1 && selectedEntries.size === entries.length) {
+          setCurrentPage((prev) => prev - 1);
+        } else {
+          // Otherwise refresh current page
+          await fetchMindMapData();
+        }
       } else {
         setError(data.message || "Failed to delete entries");
       }

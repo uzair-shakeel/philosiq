@@ -3,39 +3,63 @@ import connectToDatabase from "../../../../lib/mongodb";
 import mongoose from "mongoose";
 
 export default async function handler(req, res) {
+  // Only allow DELETE requests
+  if (req.method !== "DELETE") {
+    return res.status(405).json({
+      success: false,
+      message: "Method not allowed",
+    });
+  }
+
   try {
-    const session = await getSession({ req });
-
-    if (!session) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
-    }
-
+    // Connect to database
     await connectToDatabase();
     const mindmapCollection = mongoose.connection.db.collection("mindmapData");
 
+    // Get the ID from the URL
     const { id } = req.query;
 
-    if (req.method === "DELETE") {
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing entry ID",
+      });
+    }
+
+    try {
+      // Convert string ID to ObjectId
+      const objectId = new mongoose.Types.ObjectId(id);
+
+      // Delete the entry
       const result = await mindmapCollection.deleteOne({
-        _id: new mongoose.Types.ObjectId(id),
+        _id: objectId,
       });
 
       if (result.deletedCount === 1) {
-        return res
-          .status(200)
-          .json({ success: true, message: "Entry deleted successfully" });
+        return res.status(200).json({
+          success: true,
+          message: "Entry deleted successfully",
+        });
       } else {
-        return res
-          .status(404)
-          .json({ success: false, message: "Entry not found" });
+        return res.status(404).json({
+          success: false,
+          message: "Entry not found",
+        });
       }
+    } catch (dbError) {
+      console.error("Database error during delete:", dbError);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to delete entry",
+        error: dbError.message,
+      });
     }
-
-    return res
-      .status(405)
-      .json({ success: false, message: "Method not allowed" });
   } catch (error) {
-    console.error("Error in mindmap API:", error);
-    return res.status(500).json({ success: false, message: error.message });
+    console.error("Error in delete API:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 }
