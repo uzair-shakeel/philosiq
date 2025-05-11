@@ -420,8 +420,6 @@ export async function getServerSideProps(context) {
   try {
     const session = await getSession(context);
 
-    
-
     return {
       props: {
         session,
