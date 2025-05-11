@@ -13,7 +13,7 @@ import {
 const FILTER_OPTIONS = {
   education: [
     "High School",
-    "Some College"
+    "Some College",
     "Bachelor's Degree",
     "Master's Degree",
     "PhD",
