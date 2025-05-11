@@ -6,6 +6,7 @@ import {
   FaChevronDown,
   FaChevronUp,
   FaSpinner,
+  FaTimes,
 } from "react-icons/fa";
 
 // Filter options
@@ -31,8 +32,8 @@ const FILTER_OPTIONS = {
 };
 
 export default function MindMap() {
-  const [activeFilter, setActiveFilter] = useState(null);
-  const [activeOption, setActiveOption] = useState(null);
+  const [filters, setFilters] = useState({});
+  const [showFilters, setShowFilters] = useState(false);
   const [filteredData, setFilteredData] = useState({});
   const [axisData, setAxisData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -44,17 +45,27 @@ export default function MindMap() {
   const [showDebug, setShowDebug] = useState(false);
 
   // Fetch mindmap data from the API
-  const fetchMindMapData = async (category, value) => {
+  const fetchMindMapData = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      // If no category is selected, just fetch overall statistics
-      const queryParams = category
-        ? `category=${category}${value ? `&value=${value}` : ""}`
-        : `category=all`; // Use "all" as a special case for the API
+      // Convert filters to query parameters
+      const queryParams = new URLSearchParams();
 
-      const response = await fetch(`/api/mindmap?${queryParams}`);
+      // If no filters are set, use 'all' category
+      if (Object.keys(filters).length === 0) {
+        queryParams.append("category", "all");
+      } else {
+        // Add each active filter to query params
+        Object.entries(filters).forEach(([category, value]) => {
+          if (value) {
+            queryParams.append(category, value);
+          }
+        });
+      }
+
+      const response = await fetch(`/api/mindmap?${queryParams.toString()}`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch data: ${response.statusText}`);
@@ -63,47 +74,19 @@ export default function MindMap() {
       const data = await response.json();
 
       if (data.success) {
-        // When using the "all" category or if this is a filter-specific call with a value
-        if (category === "all" || !category) {
-          // Update with global data
-          setFilteredData(data.data.archetypePercentages || {});
-          setAxisData(data.data.axisDistribution || {});
-          // Use total contributions as the count for the unfiltered view
-          setContributionCount(data.data.totalContributions || 0);
-        } else if (value) {
-          // Update with filtered data
-          setFilteredData(data.data.archetypePercentages || {});
-          setAxisData(data.data.axisDistribution || {});
+        setFilteredData(data.data.archetypePercentages || {});
+        setAxisData(data.data.axisDistribution || {});
+        setContributionCount(
+          data.data.contributionCount || data.data.totalContributions || 0
+        );
+        setTotalContributions(data.data.totalContributions || 0);
 
-          // Update contribution count for this filter
-          if (data.data.contributionCount) {
-            setContributionCount(data.data.contributionCount);
-          }
-        }
-
-        // Always update total contributions
-        if (data.data.totalContributions) {
-          setTotalContributions(data.data.totalContributions);
-        }
-
-        // Update available options if provided by the API
-        if (
-          data.data.availableOptions &&
-          data.data.availableOptions.length > 0
-        ) {
+        // Update available options if provided
+        if (data.data.availableOptions) {
           setAvailableOptions((prev) => ({
             ...prev,
-            [category]: data.data.availableOptions,
+            ...data.data.availableOptions,
           }));
-
-          // If the current activeOption isn't in the available options,
-          // update it to the first available option
-          if (
-            data.data.availableOptions.length > 0 &&
-            !data.data.availableOptions.includes(activeOption)
-          ) {
-            setActiveOption(data.data.availableOptions[0]);
-          }
         }
 
         setDataLoaded(true);
@@ -122,67 +105,44 @@ export default function MindMap() {
 
   // Initial data fetch on component mount
   useEffect(() => {
-    // Fetch data with the "all" category for initial view
-    fetchMindMapData("all", null);
+    fetchMindMapData();
 
     // Fetch available options for each filter category
     const fetchAllOptions = async () => {
       const options = {};
-
-      // Fetch options for each category
       for (const category of Object.keys(FILTER_OPTIONS)) {
-        try {
-          const response = await fetch(`/api/mindmap?category=${category}`);
-          if (response.ok) {
-            const data = await response.json();
-            if (data.success && data.data.availableOptions) {
-              options[category] = data.data.availableOptions;
-            } else {
-              // Fall back to predefined options if API doesn't return any
-              options[category] = FILTER_OPTIONS[category];
-            }
-          }
-        } catch (error) {
-          console.error(`Error fetching options for ${category}:`, error);
-          // Fall back to predefined options
-          options[category] = FILTER_OPTIONS[category];
-        }
+        options[category] = FILTER_OPTIONS[category];
       }
-
       setAvailableOptions(options);
     };
 
     fetchAllOptions();
   }, []);
 
-  // Update data when filter changes
+  // Update data when filters change
   useEffect(() => {
     if (dataLoaded) {
-      fetchMindMapData(activeFilter, activeOption);
+      fetchMindMapData();
     }
-  }, [activeFilter, activeOption]);
+  }, [filters]);
 
-  const handleFilterChange = (filter) => {
-    setActiveFilter(filter);
-
-    // Use the first option from available options or fall back to predefined options
-    const options = availableOptions[filter] || FILTER_OPTIONS[filter];
-    setActiveOption(options[0]);
-
-    // Trigger data load with the new filter
-    if (dataLoaded) {
-      fetchMindMapData(filter, options[0]);
-    }
+  const handleFilterChange = (category, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [category]: value,
+    }));
   };
 
-  const handleOptionChange = (option) => {
-    setActiveOption(option);
+  const clearFilters = () => {
+    setFilters({});
   };
 
   // Sort archetypes by percentage (descending)
   const sortedArchetypes = Object.entries(filteredData || {}).sort(
     ([, percentA], [, percentB]) => percentB - percentA
   );
+
+  const activeFiltersCount = Object.values(filters).filter(Boolean).length;
 
   return (
     <Layout title="MindMap - PhilosiQ">
@@ -198,12 +158,14 @@ export default function MindMap() {
               <div className="mt-4 p-2 bg-blue-50 text-blue-700 rounded-full inline-block px-4">
                 <span className="font-semibold">{totalContributions}</span>{" "}
                 total contributions in database
-                {activeFilter && contributionCount !== totalContributions && (
-                  <span className="ml-2">
-                    (<span className="font-semibold">{contributionCount}</span>{" "}
-                    matching {activeFilter} filter)
-                  </span>
-                )}
+                {activeFiltersCount > 0 &&
+                  contributionCount !== totalContributions && (
+                    <span className="ml-2">
+                      (
+                      <span className="font-semibold">{contributionCount}</span>{" "}
+                      matching current filters)
+                    </span>
+                  )}
               </div>
             )}
           </div>
@@ -220,64 +182,82 @@ export default function MindMap() {
 
           {/* Filter Section */}
           <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h2 className="text-xl font-bold mb-4 flex items-center">
-              <FaFilter className="mr-2 text-primary-maroon" /> Filter By
-            </h2>
-
-            <div className="flex flex-wrap gap-2 mb-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold flex items-center">
+                <FaFilter className="mr-2 text-primary-maroon" /> Filter Data
+              </h2>
               <button
-                onClick={() => {
-                  setActiveFilter(null);
-                  setActiveOption(null);
-                  // Explicitly fetch with the "all" category
-                  if (dataLoaded) {
-                    fetchMindMapData("all", null);
-                  }
-                }}
-                className={`px-4 py-2 rounded-full text-sm font-medium ${
-                  activeFilter === null
-                    ? "bg-primary-maroon text-white"
-                    : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                }`}
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
-                All Data
+                {showFilters ? <FaChevronUp /> : <FaChevronDown />}
+                {showFilters ? "Hide Filters" : "Show Filters"}
               </button>
-              {Object.keys(FILTER_OPTIONS).map((filter) => (
-                <button
-                  key={filter}
-                  onClick={() => handleFilterChange(filter)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium ${
-                    activeFilter === filter
-                      ? "bg-primary-maroon text-white"
-                      : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                  }`}
-                >
-                  {filter.charAt(0).toUpperCase() + filter.slice(1)}
-                </button>
-              ))}
             </div>
 
-            {activeFilter && (
-              <div className="flex flex-wrap gap-2">
-                {(
-                  availableOptions[activeFilter] || FILTER_OPTIONS[activeFilter]
-                ).map((option) => (
+            {/* Active Filters Display */}
+            {activeFiltersCount > 0 && (
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-gray-600">Active Filters:</span>
                   <button
-                    key={option}
-                    onClick={() => handleOptionChange(option)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium ${
-                      activeOption === option
-                        ? "bg-secondary-darkBlue text-white"
-                        : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                    }`}
+                    onClick={clearFilters}
+                    className="text-sm text-red-600 hover:text-red-800"
                   >
-                    {option}
+                    Clear All
                   </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(filters).map(([category, value]) => {
+                    if (!value) return null;
+                    return (
+                      <div
+                        key={category}
+                        className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm flex items-center"
+                      >
+                        <span className="capitalize">{category}</span>: {value}
+                        <button
+                          onClick={() => handleFilterChange(category, "")}
+                          className="ml-2 hover:text-blue-900"
+                        >
+                          <FaTimes />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Filter Options */}
+            {showFilters && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                {Object.entries(FILTER_OPTIONS).map(([category, options]) => (
+                  <div key={category} className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700 capitalize">
+                      {category.replace(/([A-Z])/g, " $1").trim()}
+                    </label>
+                    <select
+                      value={filters[category] || ""}
+                      onChange={(e) =>
+                        handleFilterChange(category, e.target.value)
+                      }
+                      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
+                    >
+                      <option value="">All</option>
+                      {options.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 ))}
               </div>
             )}
           </div>
 
+          {/* Rest of the component remains the same */}
           {loading ? (
             <div className="text-center py-12">
               <FaSpinner className="animate-spin text-4xl text-primary-maroon mx-auto mb-4" />
@@ -340,45 +320,23 @@ export default function MindMap() {
             </Link>
           </div>
 
-          {/* Debug Section (hidden by default) */}
-          <div className="mt-12 text-center">
-            <button
-              onClick={() => setShowDebug(!showDebug)}
-              className="text-sm text-gray-500 underline"
-            >
-              {showDebug ? "Hide Debug" : "Show Debug"}
-            </button>
-
-            {showDebug && (
-              <div className="mt-4 bg-gray-100 p-4 rounded-lg text-left max-w-2xl mx-auto">
-                <h3 className="font-bold mb-2">Debug Information:</h3>
-                <p>
-                  <strong>Total Contributions:</strong> {totalContributions}
-                </p>
-                <p>
-                  <strong>Filtered Contributions:</strong>{" "}
-                  {activeFilter ? contributionCount : totalContributions}
-                </p>
-                <p>
-                  <strong>Current Filter:</strong>{" "}
-                  {activeFilter
-                    ? `${activeFilter} = ${activeOption || "All"}`
-                    : "No filter (showing all data)"}
-                </p>
-                <p>
-                  <strong>Available Options:</strong>{" "}
-                  {JSON.stringify(availableOptions[activeFilter] || [])}
-                </p>
-                <hr className="my-2" />
-                <p>
-                  <strong>Archetype Data:</strong>
-                </p>
-                <pre className="text-xs overflow-auto max-h-40">
-                  {JSON.stringify(filteredData, null, 2)}
-                </pre>
-              </div>
-            )}
-          </div>
+          {/* Debug Section */}
+          {showDebug && (
+            <div className="mt-12 bg-gray-100 p-4 rounded-lg">
+              <pre className="text-xs overflow-auto">
+                {JSON.stringify(
+                  {
+                    filters,
+                    contributionCount,
+                    totalContributions,
+                    filteredData,
+                  },
+                  null,
+                  2
+                )}
+              </pre>
+            </div>
+          )}
         </div>
       </div>
     </Layout>

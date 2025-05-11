@@ -129,6 +129,17 @@ export default function AdminLayout({ children, title }) {
                 Short Quiz Config
               </Link>
             </li>
+            <li>
+              <Link
+                href="/admin/mindmap"
+                className={`flex items-center px-4 py-2 rounded-md ${isActive(
+                  "/admin/mindmap"
+                )}`}
+              >
+                <FaChartBar className="mr-3" />
+                MindMap Data
+              </Link>
+            </li>
             {/* <li>
               <Link
                 href="/admin/stats"
