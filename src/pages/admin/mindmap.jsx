@@ -422,14 +422,14 @@ export default function AdminMindMap() {
 export async function getServerSideProps(context) {
   const session = await getSession(context);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/auth/signin?callbackUrl=/admin/mindmap",
-        permanent: false,
-      },
-    };
-  }
+  // if (!session) {
+  //   return {
+  //     redirect: {
+  //       destination: "/auth/signin?callbackUrl=/admin/mindmap",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   // Add isAdmin to the session user object
   if (session.user) {
