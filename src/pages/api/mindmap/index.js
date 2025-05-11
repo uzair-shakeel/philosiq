@@ -1,15 +1,58 @@
 import connectToDatabase from "../../../lib/mongodb";
 import mongoose from "mongoose";
 
+// Define the axes and their positions in the archetype code
+const AXIS_POSITIONS = {
+  Economic: { position: 0, letters: ["E", "F"] },
+  Authority: { position: 1, letters: ["L", "A"] },
+  Social: { position: 2, letters: ["P", "C"] },
+  Religious: { position: 3, letters: ["S", "R"] },
+  National: { position: 4, letters: ["G", "N"] },
+};
+
+// Map archetype names to their codes
+const ARCHETYPE_MAP = [
+  { code: "ELPSG", label: "The Utopian" },
+  { code: "ELPSN", label: "The Reformer" },
+  { code: "ELPRG", label: "The Prophet" },
+  { code: "ELPRN", label: "The Firebrand" },
+  { code: "ELCSG", label: "The Philosopher" },
+  { code: "ELCSN", label: "The Localist" },
+  { code: "ELCRG", label: "The Missionary" },
+  { code: "ELCRN", label: "The Guardian" },
+  { code: "EAPSG", label: "The Technocrat" },
+  { code: "EAPSN", label: "The Enforcer" },
+  { code: "EAPRG", label: "The Zealot" },
+  { code: "EAPRN", label: "The Purist" },
+  { code: "EACSG", label: "The Commander" },
+  { code: "EACSN", label: "The Steward" },
+  { code: "EACRG", label: "The Shepherd" },
+  { code: "EACRN", label: "The High Priest" },
+  { code: "FLPSG", label: "The Futurist" },
+  { code: "FLPSN", label: "The Maverick" },
+  { code: "FLPRG", label: "The Evangelist" },
+  { code: "FLPRN", label: "The Dissenter" },
+  { code: "FLCSG", label: "The Globalist" },
+  { code: "FLCSN", label: "The Patriot" },
+  { code: "FLCRG", label: "The Industrialist" },
+  { code: "FLCRN", label: "The Traditionalist" },
+  { code: "FAPSG", label: "The Overlord" },
+  { code: "FAPSN", label: "The Corporatist" },
+  { code: "FAPRG", label: "The Moralizer" },
+  { code: "FAPRN", label: "The Builder" },
+  { code: "FACSG", label: "The Executive" },
+  { code: "FACSN", label: "The Ironhand" },
+  { code: "FACRG", label: "The Regent" },
+  { code: "FACRN", label: "The Crusader" },
+];
+
 export default async function handler(req, res) {
   if (req.method !== "GET") {
-    return res
-      .status(405)
-      .json({ success: false, message: "Method not allowed" });
+    return res.status(405).json({ success: false, message: "Method not allowed" });
   }
 
   try {
-    // Connect to the database
+    console.log("Connecting to database...");
     await connectToDatabase();
     const mindmapCollection = mongoose.connection.db.collection("mindmapData");
 
@@ -25,133 +68,94 @@ export default async function handler(req, res) {
     });
 
     // If no filters or category is "all", show all data
-    const showAllData =
-      Object.keys(matchConditions).length === 0 || category === "all";
+    const showAllData = Object.keys(matchConditions).length === 0 || category === "all";
 
-    let aggregationPipeline = [];
-
-    // Add match stage only if we have filters
-    if (!showAllData) {
-      aggregationPipeline.push({
-        $match: matchConditions,
-      });
-    }
-
-    // Group by archetype and calculate counts
-    aggregationPipeline.push(
-      {
-        $group: {
-          _id: "$archetype",
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $sort: { count: -1 },
-      }
-    );
-
-    const archetypeDistribution = await mindmapCollection
-      .aggregate(aggregationPipeline)
+    // Get all entries that match the filters
+    const entries = await mindmapCollection
+      .find(showAllData ? {} : matchConditions)
       .toArray();
 
-    // Calculate total entries for the current filters
-    const totalFilteredEntries = showAllData
-      ? await mindmapCollection.countDocuments({})
-      : await mindmapCollection.countDocuments(matchConditions);
-
-    // Get total entries in the collection
-    const totalEntries = await mindmapCollection.countDocuments({});
+    const totalEntries = entries.length;
 
     if (totalEntries === 0) {
       return res.status(404).json({
         success: false,
-        message:
-          "No MindMap data available yet. Please contribute data by taking the quiz.",
+        message: "No MindMap data available yet. Please contribute data by taking the quiz.",
       });
     }
 
-    // Convert counts to percentages
-    const archetypePercentages = {};
-    archetypeDistribution.forEach((item) => {
-      if (item._id) {
-        archetypePercentages[item._id] = +(
-          (item.count / totalFilteredEntries) *
-          100
-        ).toFixed(1);
+    // Initialize counters for each axis letter
+    const axisLetterCounts = {
+      Economic: { E: 0, F: 0 },
+      Authority: { L: 0, A: 0 },
+      Social: { P: 0, C: 0 },
+      Religious: { S: 0, R: 0 },
+      National: { G: 0, N: 0 }
+    };
+
+    // Count archetype occurrences
+    const archetypeCounts = {};
+
+    // Process each entry
+    entries.forEach((entry) => {
+      const archetype = entry.archetype;
+      
+      // Count archetype occurrences
+      archetypeCounts[archetype] = (archetypeCounts[archetype] || 0) + 1;
+
+      // Find the archetype code
+      const archetypeInfo = ARCHETYPE_MAP.find(a => a.label === archetype);
+      if (archetypeInfo) {
+        const code = archetypeInfo.code;
+        
+        // Count letters for each axis
+        axisLetterCounts.Economic[code[0]]++;
+        axisLetterCounts.Authority[code[1]]++;
+        axisLetterCounts.Social[code[2]]++;
+        axisLetterCounts.Religious[code[3]]++;
+        axisLetterCounts.National[code[4]]++;
       }
     });
 
-    // Calculate axis distribution for the filtered data
-    let axisDistribution = {};
+    // Calculate archetype percentages
+    const archetypePercentages = {};
+    Object.entries(archetypeCounts).forEach(([archetype, count]) => {
+      archetypePercentages[archetype] = +((count / totalEntries) * 100).toFixed(1);
+    });
 
-    // List of axes to aggregate
-    const axes = [
-      "Equity vs. Free Market",
-      "Libertarian vs. Authoritarian",
-      "Progressive vs. Conservative",
-      "Secular vs. Religious",
-      "Globalism vs. Nationalism",
-    ];
-
-    // For each axis, calculate distribution based on current filters
-    for (const axis of axes) {
-      const axisPipeline = [
-        // Apply the same filters if any
-        ...(showAllData ? [] : [{ $match: matchConditions }]),
-        {
-          $project: {
-            axisScore: `$axisScores.${axis.replace(/ /g, "_")}`,
-          },
-        },
-        {
-          $match: {
-            axisScore: { $exists: true, $ne: null },
-          },
-        },
-        {
-          $group: {
-            _id: {
-              $cond: {
-                if: { $lt: ["$axisScore", 50] },
-                then: "left",
-                else: "right",
-              },
-            },
-            count: { $sum: 1 },
-          },
-        },
-      ];
-
-      const axisResults = await mindmapCollection
-        .aggregate(axisPipeline)
-        .toArray();
-
-      const axisTotal = axisResults.reduce((sum, item) => sum + item.count, 0);
-
-      if (axisTotal > 0) {
-        const leftCount =
-          axisResults.find((item) => item._id === "left")?.count || 0;
-        const rightCount =
-          axisResults.find((item) => item._id === "right")?.count || 0;
-
-        axisDistribution[axis] = {
-          left: ((leftCount / axisTotal) * 100).toFixed(2),
-          right: ((rightCount / axisTotal) * 100).toFixed(2),
-        };
-      } else {
-        axisDistribution[axis] = {
-          left: "50.00",
-          right: "50.00",
-        };
+    // Calculate axis distribution percentages
+    const axisDistribution = {
+      Economic: {
+        E: ((axisLetterCounts.Economic.E / totalEntries) * 100).toFixed(1),
+        F: ((axisLetterCounts.Economic.F / totalEntries) * 100).toFixed(1)
+      },
+      Authority: {
+        L: ((axisLetterCounts.Authority.L / totalEntries) * 100).toFixed(1),
+        A: ((axisLetterCounts.Authority.A / totalEntries) * 100).toFixed(1)
+      },
+      Social: {
+        P: ((axisLetterCounts.Social.P / totalEntries) * 100).toFixed(1),
+        C: ((axisLetterCounts.Social.C / totalEntries) * 100).toFixed(1)
+      },
+      Religious: {
+        S: ((axisLetterCounts.Religious.S / totalEntries) * 100).toFixed(1),
+        R: ((axisLetterCounts.Religious.R / totalEntries) * 100).toFixed(1)
+      },
+      National: {
+        G: ((axisLetterCounts.National.G / totalEntries) * 100).toFixed(1),
+        N: ((axisLetterCounts.National.N / totalEntries) * 100).toFixed(1)
       }
-    }
+    };
+
+    console.log("Letter counts:", axisLetterCounts);
+    console.log("Axis distribution calculated:", axisDistribution);
 
     return res.status(200).json({
       success: true,
       data: {
         archetypePercentages,
         axisDistribution,
-        contributionCount: totalFilteredEntries,
+        contributionCount: totalEntries,
         totalContributions: totalEntries,
       },
     });

@@ -300,6 +300,127 @@ export default function MindMap() {
                   </div>
                 )}
               </div>
+
+              {/* Axis Letter Distribution */}
+              <div className="bg-white rounded-lg shadow-lg p-6 mt-8">
+                <h2 className="text-xl font-bold mb-6">Axis Distribution</h2>
+                {axisData && Object.keys(axisData).length > 0 ? (
+                  <div className="space-y-6">
+                    {Object.entries(axisData).map(([axis, distribution]) => {
+                      const letters = Object.entries(distribution);
+                      const [leftLetter, leftPercentage] = letters[0] || [];
+                      const [rightLetter, rightPercentage] = letters[1] || [];
+
+                      // Determine colors based on axis
+                      let leftSideColor = "bg-blue-600";
+                      let rightSideColor = "bg-green-600";
+
+                      switch (axis) {
+                        case "Economic":
+                          leftSideColor = "bg-blue-600"; // Blue for Equity
+                          rightSideColor = "bg-green-600"; // Green for Free Market
+                          break;
+                        case "Authority":
+                          leftSideColor = "bg-blue-500"; // Blue for Libertarian
+                          rightSideColor = "bg-orange-500"; // Orange for Authoritarian
+                          break;
+                        case "Social":
+                          leftSideColor = "bg-green-500"; // Green for Progressive
+                          rightSideColor = "bg-blue-400"; // Blue for Conservative
+                          break;
+                        case "Religious":
+                          leftSideColor = "bg-yellow-400"; // Yellow for Secular
+                          rightSideColor = "bg-purple-500"; // Purple for Religious
+                          break;
+                        case "National":
+                          leftSideColor = "bg-teal-500"; // Teal for Globalism
+                          rightSideColor = "bg-green-500"; // Green for Nationalism
+                          break;
+                      }
+
+                      // Get the full axis name and labels
+                      const getAxisInfo = (axis) => {
+                        switch (axis) {
+                          case "Economic":
+                            return {
+                              name: "Equity vs. Free Market",
+                              leftLabel: "Equity",
+                              rightLabel: "Free Market",
+                            };
+                          case "Authority":
+                            return {
+                              name: "Libertarian vs. Authoritarian",
+                              leftLabel: "Libertarian",
+                              rightLabel: "Authoritarian",
+                            };
+                          case "Social":
+                            return {
+                              name: "Progressive vs. Conservative",
+                              leftLabel: "Progressive",
+                              rightLabel: "Conservative",
+                            };
+                          case "Religious":
+                            return {
+                              name: "Secular vs. Religious",
+                              leftLabel: "Secular",
+                              rightLabel: "Religious",
+                            };
+                          case "National":
+                            return {
+                              name: "Globalism vs. Nationalism",
+                              leftLabel: "Globalist",
+                              rightLabel: "Nationalist",
+                            };
+                          default:
+                            return {
+                              name: axis,
+                              leftLabel: leftLetter,
+                              rightLabel: rightLetter,
+                            };
+                        }
+                      };
+
+                      const axisInfo = getAxisInfo(axis);
+
+                      return (
+                        <div key={axis} className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium">{axisInfo.name}</span>
+                          </div>
+                          <div className="relative h-6 rounded-full overflow-hidden bg-gray-200">
+                            <div
+                              className={`h-full ${leftSideColor} absolute left-0 transition-all duration-300`}
+                              style={{ width: `${leftPercentage}%` }}
+                            ></div>
+                            <div
+                              className={`h-full ${rightSideColor} absolute right-0 transition-all duration-300`}
+                              style={{ width: `${rightPercentage}%` }}
+                            ></div>
+                          </div>
+                          <div className="flex justify-between text-sm text-gray-600">
+                            <div>
+                              <span className="font-medium">
+                                {axisInfo.leftLabel}
+                              </span>
+                              <span className="ml-2">{leftPercentage}%</span>
+                            </div>
+                            <div>
+                              <span className="font-medium">
+                                {axisInfo.rightLabel}
+                              </span>
+                              <span className="ml-2">{rightPercentage}%</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-center py-4">
+                    No axis distribution data available for this filter yet.
+                  </p>
+                )}
+              </div>
             </>
           )}
 

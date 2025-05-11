@@ -12,6 +12,41 @@ import {
 import { format } from "date-fns";
 import { getSession } from "next-auth/react";
 
+const ARCHETYPE_MAP = [
+  { code: "ELPSG", label: "The Utopian" },
+  { code: "ELPSN", label: "The Reformer" },
+  { code: "ELPRG", label: "The Prophet" },
+  { code: "ELPRN", label: "The Firebrand" },
+  { code: "ELCSG", label: "The Philosopher" },
+  { code: "ELCSN", label: "The Localist" },
+  { code: "ELCRG", label: "The Missionary" },
+  { code: "ELCRN", label: "The Guardian" },
+  { code: "EAPSG", label: "The Technocrat" },
+  { code: "EAPSN", label: "The Enforcer" },
+  { code: "EAPRG", label: "The Zealot" },
+  { code: "EAPRN", label: "The Purist" },
+  { code: "EACSG", label: "The Commander" },
+  { code: "EACSN", label: "The Steward" },
+  { code: "EACRG", label: "The Shepherd" },
+  { code: "EACRN", label: "The High Priest" },
+  { code: "FLPSG", label: "The Futurist" },
+  { code: "FLPSN", label: "The Maverick" },
+  { code: "FLPRG", label: "The Evangelist" },
+  { code: "FLPRN", label: "The Dissenter" },
+  { code: "FLCSG", label: "The Globalist" },
+  { code: "FLCSN", label: "The Patriot" },
+  { code: "FLCRG", label: "The Industrialist" },
+  { code: "FLCRN", label: "The Traditionalist" },
+  { code: "FAPSG", label: "The Overlord" },
+  { code: "FAPSN", label: "The Corporatist" },
+  { code: "FAPRG", label: "The Moralizer" },
+  { code: "FAPRN", label: "The Builder" },
+  { code: "FACSG", label: "The Executive" },
+  { code: "FACSN", label: "The Ironhand" },
+  { code: "FACRG", label: "The Regent" },
+  { code: "FACRN", label: "The Crusader" },
+];
+
 export default function AdminMindMap() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -274,6 +309,9 @@ export default function AdminMindMap() {
                   Archetype
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Code
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Demographics
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -287,7 +325,7 @@ export default function AdminMindMap() {
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-4 text-center">
+                  <td colSpan="6" className="px-6 py-4 text-center">
                     <FaSpinner className="animate-spin inline-block mr-2" />
                     Loading...
                   </td>
@@ -295,46 +333,58 @@ export default function AdminMindMap() {
               ) : entries.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="5"
+                    colSpan="6"
                     className="px-6 py-4 text-center text-gray-500"
                   >
                     No entries found
                   </td>
                 </tr>
               ) : (
-                entries.map((entry) => (
-                  <tr key={entry._id}>
-                    <td className="px-6 py-4">
-                      <input
-                        type="checkbox"
-                        checked={selectedEntries.has(entry._id)}
-                        onChange={() => toggleEntrySelection(entry._id)}
-                        className="rounded border-gray-300"
-                      />
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="font-medium">{entry.archetype}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm">
-                        <p>Age: {entry.demographics.age}</p>
-                        <p>Education: {entry.demographics.education}</p>
-                        <p>Gender: {entry.demographics.gender}</p>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm">
-                      {format(new Date(entry.createdAt), "MMM d, yyyy")}
-                    </td>
-                    <td className="px-6 py-4">
-                      <button
-                        onClick={() => handleDelete(entry._id)}
-                        className="text-red-600 hover:text-red-800"
-                      >
-                        <FaTrash />
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                entries.map((entry) => {
+                  // Find the archetype code from the map
+                  const archetypeInfo = ARCHETYPE_MAP.find(
+                    (a) => a.label === entry.archetype
+                  ) || { code: "Unknown" };
+
+                  return (
+                    <tr key={entry._id}>
+                      <td className="px-6 py-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedEntries.has(entry._id)}
+                          onChange={() => toggleEntrySelection(entry._id)}
+                          className="rounded border-gray-300"
+                        />
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="font-medium">{entry.archetype}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="font-mono bg-gray-100 px-2 py-1 rounded">
+                          {archetypeInfo.code}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm">
+                          <p>Age: {entry.demographics.age}</p>
+                          <p>Education: {entry.demographics.education}</p>
+                          <p>Gender: {entry.demographics.gender}</p>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-sm">
+                        {format(new Date(entry.createdAt), "MMM d, yyyy")}
+                      </td>
+                      <td className="px-6 py-4">
+                        <button
+                          onClick={() => handleDelete(entry._id)}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          <FaTrash />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
