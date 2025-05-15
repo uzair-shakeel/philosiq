@@ -38,33 +38,35 @@ const Navbar = ({ user }) => {
     navLinks.push({ name: "Questions", path: "/questions" });
   }
 
+  const isHomePage = router.pathname === "/";
+
   return (
     <>
-      {/* Top Banner */}
-      {showBanner && (
-        <div className="bg-yellow-100 text-center text-sm text-black py-2 px-4 fixed top-0 w-full z-[60] flex justify-center items-center">
-          <span className="mr-4">🚧 This website is currently in Beta 1.0! Please go to the "Contact Us" page to provide feedback!🚧</span>
+      {/* Top Banner - only on homepage */}
+      {showBanner && isHomePage && (
+        <div className="bg-yellow-100 text-center text-sm text-black py-2 px-4 fixed top-0 w-full z-[60] flex justify-center items-center flex-wrap">
+          <span className="mr-4">
+            🚧 This website is currently in beta! If you spot any bugs or have suggestions, please email us at <strong>support@example.com</strong>.
+          </span>
           <button
             onClick={() => setShowBanner(false)}
-            className="text-black text-lg font-bold hover:text-red-600"
+            className="text-black text-lg font-bold hover:text-red-600 ml-2"
           >
             &times;
           </button>
         </div>
       )}
 
-      {/* Adjusted navbar with offset if banner is showing */}
       <nav
         className={`fixed w-full transition-all duration-300 z-50 ${
           scrolled ? "bg-white shadow-md py-4" : "bg-white/70 py-4"
-        } ${showBanner ? "top-10" : "top-0"}`}
+        } ${showBanner && isHomePage ? "top-10" : "top-0"}`}
       >
         <div className="container-custom flex justify-between items-center">
           <Link href="/" className="flex items-center">
             <img src="/Website header.png" alt="logo" className="h-12 w-auto" />
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
@@ -81,7 +83,6 @@ const Navbar = ({ user }) => {
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             className="md:hidden text-neutral-dark focus:outline-none"
             onClick={toggleMenu}
@@ -90,7 +91,6 @@ const Navbar = ({ user }) => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {isOpen && (
           <div className="md:hidden bg-white shadow-lg absolute top-full left-0 right-0 py-4 px-6 flex flex-col space-y-4">
             {navLinks.map((link) => (
