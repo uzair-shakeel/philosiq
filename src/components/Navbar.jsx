@@ -43,7 +43,7 @@ const Navbar = ({ user }) => {
       {/* Top Banner */}
       {showBanner && (
         <div className="bg-yellow-100 text-center text-sm text-black py-2 px-4 fixed top-0 w-full z-[60] flex justify-center items-center">
-          <span className="mr-4">📣 Don't miss our latest updates and features!</span>
+          <span className="mr-4">🚧 This website is currently in Beta 1.0! Please go to the "Contact Us" page to provide feedback!🚧</span>
           <button
             onClick={() => setShowBanner(false)}
             className="text-black text-lg font-bold hover:text-red-600"
