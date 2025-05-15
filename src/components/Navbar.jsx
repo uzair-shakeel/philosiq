@@ -46,7 +46,7 @@ const Navbar = ({ user }) => {
       {showBanner && isHomePage && (
         <div className="bg-yellow-100 text-center text-sm text-black py-2 px-4 fixed top-0 w-full z-[60] flex justify-center items-center flex-wrap">
           <span className="mr-4">
-            🚧 This website is currently in beta! If you spot any bugs or have suggestions, please email us at <strong>support@example.com</strong>.
+            🚧 This website is currently in Beta 1.0! If you spot any bugs or have suggestions, please email or fill out the form on the Contact Us page!</strong>.
           </span>
           <button
             onClick={() => setShowBanner(false)}
