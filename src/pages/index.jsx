@@ -67,38 +67,42 @@ export default function Home() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                   "Equity Vs. Free Market",
-                    "Libertarian Vs. Authoritarian",
-                    "Progressive Vs. Conservative",
-                    "Secular Vs. Religious",
-                    "Globalist Vs. Nationalist",
-                ].map((axis, index, array) => {
-                    const isCenteredRow = index >= 3 && array.length - index <= 2; // boxes 4 & 5
-                    return (
-                      <div
-                        key={index}
-                        className={`${
-                          isCenteredRow ? "sm:col-span-2 lg:col-span-3 flex justify-center" : ""
-                        }`}
-                      >
-                        <div
-                          className="bg-neutral-light p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border-t-4 border-primary-maroon flex flex-col items-center text-center w-full max-w-md"
-                        >
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary-maroon to-secondary-darkBlue flex items-center justify-center text-white font-bold text-xl mb-4">
-                            {index + 1}
-                          </div>
-                          <h3 className="text-xl font-bold mb-2 text-secondary-darkBlue">
-                            {axis}
-                          </h3>
-                          <p className="text-gray-600">
-                            Measures your stance on the spectrum between{" "}
-                            {axis.split(" Vs. ")[0].toLowerCase()} and{" "}
-                            {axis.split(" Vs. ")[1].toLowerCase()}
-                          </p>
+                  "Equity Vs. Free Market",
+                  "Libertarian Vs. Authoritarian",
+                  "Progressive Vs. Conservative",
+                  "Secular Vs. Religious",
+                  "Globalist Vs. Nationalist",
+                ].map((axis, index) => {
+                  const baseClasses =
+                    "bg-neutral-light p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border-t-4 border-primary-maroon flex flex-col items-center text-center";
+                
+                  // Special styling for item 4 to center row 2
+                  const gridItemClasses =
+                    index === 3
+                      ? "lg:col-start-2" // Center first item in second row
+                      : "";
+                
+                  return (
+                    <div
+                      key={index}
+                      className={`w-full ${gridItemClasses}`}
+                    >
+                      <div className={baseClasses}>
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary-maroon to-secondary-darkBlue flex items-center justify-center text-white font-bold text-xl mb-4">
+                          {index + 1}
                         </div>
+                        <h3 className="text-xl font-bold mb-2 text-secondary-darkBlue">
+                          {axis}
+                        </h3>
+                        <p className="text-gray-600">
+                          Measures your stance on the spectrum between{" "}
+                          {axis.split(" Vs. ")[0].toLowerCase()} and{" "}
+                          {axis.split(" Vs. ")[1].toLowerCase()}
+                        </p>
                       </div>
-                    );
-                  })}
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </section>
