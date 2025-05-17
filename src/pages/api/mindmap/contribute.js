@@ -23,6 +23,7 @@ export default async function handler(req, res) {
       votingTendency,
       archetype,
       axisScores,
+      location,
     } = req.body;
 
     // Validate required fields
@@ -41,6 +42,13 @@ export default async function handler(req, res) {
       });
     }
 
+    // Extract location details for filtering
+    const city = location?.city || "Unknown";
+    const state = location?.state || "Unknown";
+    const country = location?.country || "Unknown";
+    const countryCode = location?.country_code || "";
+    const stateCode = location?.state_code || "";
+
     // Create document to store
     const mindmapEntry = {
       demographics: {
@@ -50,6 +58,14 @@ export default async function handler(req, res) {
         zipCode,
         age,
         votingTendency,
+        // Add location details for filtering
+        city,
+        state,
+        country,
+        countryCode,
+        stateCode,
+        // Store the full location object for reference
+        location,
       },
       archetype,
       axisScores: axisScores || {},

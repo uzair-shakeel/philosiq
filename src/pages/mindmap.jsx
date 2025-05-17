@@ -7,6 +7,7 @@ import {
   FaChevronUp,
   FaSpinner,
   FaTimes,
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 
 // Filter options
@@ -26,7 +27,6 @@ const FILTER_OPTIONS = {
     "Asian",
     "Other",
   ],
-  zipCode: ["Urban", "Suburban", "Rural"], // Simplified for location analysis
   age: ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
   votingTendency: ["Left Leaning", "Right Leaning", "Other/Independent"],
 };
@@ -43,6 +43,11 @@ export default function MindMap() {
   const [contributionCount, setContributionCount] = useState(0);
   const [totalContributions, setTotalContributions] = useState(0);
   const [showDebug, setShowDebug] = useState(false);
+  const [locationOptions, setLocationOptions] = useState({
+    cities: [],
+    states: [],
+    countries: [],
+  });
 
   // Fetch mindmap data from the API
   const fetchMindMapData = async () => {
@@ -87,6 +92,11 @@ export default function MindMap() {
             ...prev,
             ...data.data.availableOptions,
           }));
+        }
+
+        // Update location options if provided
+        if (data.data.availableLocations) {
+          setLocationOptions(data.data.availableLocations);
         }
 
         setDataLoaded(true);
@@ -231,28 +241,112 @@ export default function MindMap() {
 
             {/* Filter Options */}
             {showFilters && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                {Object.entries(FILTER_OPTIONS).map(([category, options]) => (
-                  <div key={category} className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 capitalize">
-                      {category.replace(/([A-Z])/g, " $1").trim()}
-                    </label>
-                    <select
-                      value={filters[category] || ""}
-                      onChange={(e) =>
-                        handleFilterChange(category, e.target.value)
-                      }
-                      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
-                    >
-                      <option value="">All</option>
-                      {options.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
+              <div>
+                {/* Demographic Filters */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  {Object.entries(FILTER_OPTIONS).map(([field, options]) => (
+                    <div key={field}>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {field.charAt(0).toUpperCase() + field.slice(1)}
+                      </label>
+                      <select
+                        value={filters[field] || ""}
+                        onChange={(e) =>
+                          handleFilterChange(field, e.target.value)
+                        }
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
+                      >
+                        <option value="">All</option>
+                        {options.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Location Filters */}
+                <div className="mt-4 border-t pt-4">
+                  <h3 className="text-md font-medium text-gray-700 mb-3 flex items-center">
+                    <FaMapMarkerAlt className="mr-2 text-primary-maroon" />
+                    Location Filters
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Country Filter */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Country
+                      </label>
+                      <select
+                        value={filters.country || ""}
+                        onChange={(e) =>
+                          handleFilterChange("country", e.target.value)
+                        }
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
+                      >
+                        <option value="">All Countries</option>
+                        {locationOptions.countries.sort().map((country) => (
+                          <option key={country} value={country}>
+                            {country}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* State Filter */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        State/Province
+                      </label>
+                      <select
+                        value={filters.state || ""}
+                        onChange={(e) =>
+                          handleFilterChange("state", e.target.value)
+                        }
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
+                      >
+                        <option value="">All States</option>
+                        {locationOptions.states.sort().map((state) => (
+                          <option key={state} value={state}>
+                            {state}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* City Filter */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        City
+                      </label>
+                      <select
+                        value={filters.city || ""}
+                        onChange={(e) =>
+                          handleFilterChange("city", e.target.value)
+                        }
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
+                      >
+                        <option value="">All Cities</option>
+                        {locationOptions.cities.sort().map((city) => (
+                          <option key={city} value={city}>
+                            {city}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                ))}
+                </div>
+
+                <div className="mt-4 flex justify-end">
+                  <button
+                    onClick={clearFilters}
+                    className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                  >
+                    Clear Filters
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -451,6 +545,7 @@ export default function MindMap() {
                     contributionCount,
                     totalContributions,
                     filteredData,
+                    locationOptions,
                   },
                   null,
                   2

@@ -6,6 +6,9 @@ import {
   FaCheck,
   FaInfoCircle,
   FaMapMarkedAlt,
+  FaSpinner,
+  FaCheckCircle,
+  FaTimesCircle,
 } from "react-icons/fa";
 
 export default function MindMapContributeModal({
@@ -25,12 +28,17 @@ export default function MindMapContributeModal({
     zipCode: "",
     age: "",
     votingTendency: "",
+    location: null,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [axisScores, setAxisScores] = useState({});
+
+  const [validatingZipcode, setValidatingZipcode] = useState(false);
+  const [zipcodeError, setZipcodeError] = useState("");
+  const [locationData, setLocationData] = useState(null);
 
   // Load axis scores from props or stored results when component mounts
   useEffect(() => {
@@ -71,12 +79,99 @@ export default function MindMapContributeModal({
     }
   }, [providedAxisScores]);
 
-  const handleChange = (e) => {
+  // Function to validate zipcode
+  const validateZipcode = async (zipcode) => {
+    if (!zipcode) {
+      setZipcodeError("Please enter a postal code");
+      setLocationData(null);
+      return false;
+    }
+
+    setValidatingZipcode(true);
+    setZipcodeError("");
+
+    try {
+      // Use the zipcode-proxy API which will auto-detect the country
+      const response = await fetch(`/api/zipcode-proxy?zipcode=${zipcode}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Could not validate postal code");
+      }
+
+      if (data.isValid && data.location) {
+        setZipcodeError("");
+        setLocationData(data.location);
+        setFormData((prev) => ({
+          ...prev,
+          location: data.location,
+        }));
+        return true;
+      } else {
+        throw new Error(data.error || "Invalid postal code");
+      }
+    } catch (error) {
+      console.error("Error validating postal code:", error);
+      setZipcodeError(error.message || "Failed to validate postal code");
+      setLocationData(null);
+      return false;
+    } finally {
+      setValidatingZipcode(false);
+    }
+  };
+
+  // Add this function to handle manual override
+  const handleManualOverride = () => {
+    if (!formData.zipCode) return;
+
+    // Create a simple manual location object
+    const manualLocation = {
+      zipcode: formData.zipCode,
+      city: "Manual Entry",
+      state: "Manual Entry",
+      state_code: "",
+      country: "Manual Entry",
+      country_code: "",
+      latitude: "0",
+      longitude: "0",
+      isManualEntry: true,
+    };
+
+    setLocationData(manualLocation);
+    setFormData((prev) => ({
+      ...prev,
+      location: manualLocation,
+    }));
+    setZipcodeError("");
+  };
+
+  // Modify handleChange to include zipcode validation
+  const handleChange = async (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+
+    if (name === "zipCode") {
+      // Update the form data with the zipcode
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+
+      // Clear any previous location data when zipcode changes
+      if (!value || value.length < 3) {
+        setLocationData(null);
+        setZipcodeError("");
+      } else if (value.length >= 5) {
+        // Validate complete zipcodes with a small delay
+        setTimeout(() => {
+          validateZipcode(value);
+        }, 300);
+      }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const nextStep = () => {
@@ -89,7 +184,7 @@ export default function MindMapContributeModal({
 
   const canProceedToStep2 =
     formData.education && formData.gender && formData.race;
-  const canProceedToStep3 = formData.zipCode && formData.age;
+  const canProceedToStep3 = formData.age && formData.location && !zipcodeError;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -97,7 +192,6 @@ export default function MindMapContributeModal({
     setError(null);
 
     try {
-      // Real API call to save the contribution
       const response = await fetch("/api/mindmap/contribute", {
         method: "POST",
         headers: {
@@ -117,11 +211,8 @@ export default function MindMapContributeModal({
       }
 
       setSuccess(true);
-
-      // After successful submission, store a flag in localStorage
       localStorage.setItem("hasContributedToMindMap", "true");
 
-      // Redirect to mind map page
       setTimeout(() => {
         router.push("/mindmap");
       }, 2000);
@@ -329,23 +420,94 @@ export default function MindMapContributeModal({
               {/* Zip Code */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Zip Code
+                  Postal/Zip Code
                 </label>
-                <input
-                  type="text"
-                  name="zipCode"
-                  value={formData.zipCode}
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
-                  placeholder="Enter your zip code"
-                  pattern="[0-9]{5}"
-                  title="Five digit zip code"
-                  required
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Your specific location will not be stored, only aggregated
-                  regional data.
-                </p>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="zipCode"
+                    value={formData.zipCode}
+                    onChange={handleChange}
+                    className={`w-full p-3 pr-10 border rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent ${
+                      zipcodeError
+                        ? "border-red-500"
+                        : locationData
+                        ? "border-green-500"
+                        : "border-gray-300"
+                    }`}
+                    placeholder="Enter your postal/zip code"
+                    maxLength={10}
+                    required
+                  />
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                    {validatingZipcode ? (
+                      <FaSpinner className="animate-spin text-gray-400" />
+                    ) : locationData ? (
+                      <FaCheckCircle className="text-green-500" />
+                    ) : zipcodeError ? (
+                      <FaTimesCircle className="text-red-500" />
+                    ) : null}
+                  </div>
+                </div>
+                {zipcodeError && (
+                  <div className="mt-1">
+                    <p className="text-sm text-red-600 mb-2">{zipcodeError}</p>
+                    <button
+                      type="button"
+                      onClick={handleManualOverride}
+                      className="bg-blue-50 text-blue-600 text-sm px-3 py-1 rounded-md hover:bg-blue-100 hover:text-blue-700 transition-colors flex items-center"
+                    >
+                      <FaInfoCircle className="mr-1" />
+                      Enter manually
+                    </button>
+                  </div>
+                )}
+                {locationData && (
+                  <div
+                    className={`mt-2 p-3 ${
+                      locationData.isManualEntry
+                        ? "bg-yellow-50 border-yellow-200"
+                        : "bg-green-50 border-green-200"
+                    } border rounded-md`}
+                  >
+                    <div className="flex items-center mb-1">
+                      <FaCheckCircle
+                        className={`${
+                          locationData.isManualEntry
+                            ? "text-yellow-500"
+                            : "text-green-500"
+                        } mr-2`}
+                      />
+                      <span
+                        className={`font-medium ${
+                          locationData.isManualEntry
+                            ? "text-yellow-700"
+                            : "text-green-700"
+                        }`}
+                      >
+                        {locationData.isManualEntry
+                          ? "Manual Entry"
+                          : "Location Verified"}
+                      </span>
+                    </div>
+                    <p
+                      className={`text-sm ${
+                        locationData.isManualEntry
+                          ? "text-yellow-700"
+                          : "text-green-700"
+                      }`}
+                    >
+                      {locationData.city}, {locationData.state}{" "}
+                      {locationData.zipcode} ({locationData.country})
+                    </p>
+                  </div>
+                )}
+                <div className="mt-2">
+                  <p className="text-xs text-gray-500">
+                    Your specific location will not be stored, only aggregated
+                    regional data.
+                  </p>
+                </div>
               </div>
 
               {/* Age Group */}

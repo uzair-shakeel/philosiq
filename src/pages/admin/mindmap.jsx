@@ -8,6 +8,7 @@ import {
   FaChevronRight,
   FaSearch,
   FaInfoCircle,
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 import { format } from "date-fns";
 import { getSession } from "next-auth/react";
@@ -60,11 +61,19 @@ export default function AdminMindMap() {
     race: "",
     age: "",
     votingTendency: "",
+    city: "",
+    state: "",
+    country: "",
   });
   const [showFilters, setShowFilters] = useState(false);
   const [totalEntries, setTotalEntries] = useState(0);
   const [selectedEntries, setSelectedEntries] = useState(new Set());
   const [isDeleting, setIsDeleting] = useState(false);
+  const [locationOptions, setLocationOptions] = useState({
+    cities: [],
+    states: [],
+    countries: [],
+  });
 
   const ITEMS_PER_PAGE = 10;
 
@@ -91,7 +100,28 @@ export default function AdminMindMap() {
 
   useEffect(() => {
     fetchMindMapData();
+    fetchLocationOptions();
   }, [currentPage, filters]);
+
+  const fetchLocationOptions = async () => {
+    try {
+      const response = await fetch("/api/admin/mindmap/locations");
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setLocationOptions(
+            data.locations || {
+              cities: [],
+              states: [],
+              countries: [],
+            }
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching location options:", error);
+    }
+  };
 
   const fetchMindMapData = async () => {
     setLoading(true);
@@ -245,6 +275,9 @@ export default function AdminMindMap() {
       race: "",
       age: "",
       votingTendency: "",
+      city: "",
+      state: "",
+      country: "",
     });
     setCurrentPage(1);
   };
@@ -299,7 +332,7 @@ export default function AdminMindMap() {
         {/* Filters Panel */}
         {showFilters && (
           <div className="mb-6 p-4 bg-white rounded-lg shadow">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               {Object.entries(filterOptions).map(([field, options]) => (
                 <div key={field}>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -320,6 +353,77 @@ export default function AdminMindMap() {
                 </div>
               ))}
             </div>
+
+            {/* Location Filters */}
+            <div className="mt-4 border-t pt-4">
+              <h3 className="text-md font-medium text-gray-700 mb-3 flex items-center">
+                <FaMapMarkerAlt className="mr-2 text-primary-maroon" />
+                Location Filters
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Country Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Country
+                  </label>
+                  <select
+                    value={filters.country || ""}
+                    onChange={(e) =>
+                      handleFilterChange("country", e.target.value)
+                    }
+                    className="w-full p-2 border rounded-lg"
+                  >
+                    <option value="">All Countries</option>
+                    {locationOptions.countries.sort().map((country) => (
+                      <option key={country} value={country}>
+                        {country}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* State Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    State/Province
+                  </label>
+                  <select
+                    value={filters.state || ""}
+                    onChange={(e) =>
+                      handleFilterChange("state", e.target.value)
+                    }
+                    className="w-full p-2 border rounded-lg"
+                  >
+                    <option value="">All States</option>
+                    {locationOptions.states.sort().map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* City Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    City
+                  </label>
+                  <select
+                    value={filters.city || ""}
+                    onChange={(e) => handleFilterChange("city", e.target.value)}
+                    className="w-full p-2 border rounded-lg"
+                  >
+                    <option value="">All Cities</option>
+                    {locationOptions.cities.sort().map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
             <div className="mt-4 flex justify-end">
               <button
                 onClick={clearFilters}
@@ -366,6 +470,9 @@ export default function AdminMindMap() {
                   Demographics
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Location
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Date Added
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -376,7 +483,7 @@ export default function AdminMindMap() {
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
                 <tr>
-                  <td colSpan="6" className="px-6 py-4 text-center">
+                  <td colSpan="7" className="px-6 py-4 text-center">
                     <FaSpinner className="animate-spin inline-block mr-2" />
                     Loading...
                   </td>
@@ -384,7 +491,7 @@ export default function AdminMindMap() {
               ) : entries.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="6"
+                    colSpan="7"
                     className="px-6 py-4 text-center text-gray-500"
                   >
                     No entries found
@@ -420,6 +527,22 @@ export default function AdminMindMap() {
                           <p>Age: {entry.demographics.age}</p>
                           <p>Education: {entry.demographics.education}</p>
                           <p>Gender: {entry.demographics.gender}</p>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm">
+                          <p>
+                            <span className="font-medium">City:</span>{" "}
+                            {entry.demographics.city || "Unknown"}
+                          </p>
+                          <p>
+                            <span className="font-medium">State:</span>{" "}
+                            {entry.demographics.state || "Unknown"}
+                          </p>
+                          <p>
+                            <span className="font-medium">Country:</span>{" "}
+                            {entry.demographics.country || "Unknown"}
+                          </p>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm">
