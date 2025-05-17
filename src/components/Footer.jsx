@@ -98,6 +98,7 @@ const Footer = () => {
                 <Link
                   href="/mindmap"
                   className="text-gray-300 hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
+                  shallow={false}
                 >
                   Mind Map
                 </Link>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -13,6 +13,7 @@ import {
 export default function ArchetypeDetail() {
   const router = useRouter();
   const { id } = router.query;
+  const [currentArchetype, setCurrentArchetype] = useState(null);
 
   const archetypes = {
     elpsg: {
@@ -695,7 +696,7 @@ export default function ArchetypeDetail() {
       ],
       description: "Defy the norm. Stand with conviction.",
       introduction:
-        "As a FLPRN (The Dissenter), you likely value personal freedom, innovation, and progress, while being grounded in your faith and a strong sense of national identity. You may see individual empowerment and open markets as essential to human flourishing, but you also believe that moral conviction and cultural heritage have an important role to play in shaping society. With a spirit of independence, you tend to challenge dominant narratives—pushing for change that aligns with both your principles and your community’s values. Your vision often blends courage, belief, and a commitment to charting your own path.",
+        "As a FLPRN (The Dissenter), you likely value personal freedom, innovation, and progress, while being grounded in your faith and a strong sense of national identity. You may see individual empowerment and open markets as essential to human flourishing, but you also believe that moral conviction and cultural heritage have an important role to play in shaping society. With a spirit of independence, you tend to challenge dominant narratives—pushing for change that aligns with both your principles and your community's values. Your vision often blends courage, belief, and a commitment to charting your own path.",
       strengths: [
         "Free Market-minded individuals are highly entrepreneurial and innovative, valuing personal initiative, competition, and the freedom to create wealth and drive progress without excessive external interference.",
         "Libertarian-minded individuals are fiercely principled defenders of individual liberty, believing that personal freedom, voluntary association, and minimal coercion are essential to a just society.",
@@ -1144,15 +1145,28 @@ export default function ArchetypeDetail() {
     },
   };
 
-  const archetype = archetypes[id];
+  // This effect will run whenever the id parameter changes
+  useEffect(() => {
+    if (id) {
+      // Find the matching archetype based on the ID
+      const archetypeKey = Object.keys(archetypes).find(
+        (key) =>
+          key === id.toLowerCase() || archetypes[key].id === id.toLowerCase()
+      );
 
-  if (!archetype) {
+      if (archetypeKey) {
+        setCurrentArchetype(archetypes[archetypeKey]);
+      }
+    }
+  }, [id]);
+
+  // If the page is still loading or no archetype is found
+  if (!currentArchetype && id) {
     return (
-      <Layout title="Loading Archetype - PhilosiQ">
-        <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
+      <Layout title="Loading Archetype...">
+        <div className="container mx-auto px-4 py-12">
           <div className="text-center">
-            <div className="w-16 h-16 border-4 border-primary-maroon border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-lg">Loading archetype information...</p>
+            <p>Loading archetype information...</p>
           </div>
         </div>
       </Layout>
@@ -1160,7 +1174,9 @@ export default function ArchetypeDetail() {
   }
 
   return (
-    <Layout title={`${archetype.name} - Political Archetype | PhilosiQ`}>
+    <Layout
+      title={`${currentArchetype?.name} - Political Archetype | PhilosiQ`}
+    >
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
           {/* Back button */}
@@ -1175,15 +1191,15 @@ export default function ArchetypeDetail() {
 
           {/* Hero section */}
           <div
-            className={`bg-gradient-to-r ${archetype.color} text-white rounded-lg shadow-lg p-8 mb-8`}
+            className={`bg-gradient-to-r ${currentArchetype?.color} text-white rounded-lg shadow-lg p-8 mb-8`}
           >
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div>
                 <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                  {archetype.name}
+                  {currentArchetype?.name}
                 </h1>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {archetype?.traits?.map((trait, index) => (
+                  {currentArchetype?.traits?.map((trait, index) => (
                     <span
                       key={index}
                       className="bg-white/20 px-3 py-1 rounded-full text-sm"
@@ -1192,12 +1208,12 @@ export default function ArchetypeDetail() {
                     </span>
                   ))}
                 </div>
-                <p className="text-xl">{archetype.description}</p>
+                <p className="text-xl">{currentArchetype?.description}</p>
               </div>
               <div className="mt-6 md:mt-0 w-48 h-48 bg-white/10 rounded-full flex items-center justify-center">
                 {/* Placeholder for archetype icon/image */}
                 <span className="text-6xl font-bold">
-                  {archetype.name.charAt(0)}
+                  {currentArchetype?.name.charAt(0)}
                 </span>
               </div>
             </div>
@@ -1211,7 +1227,7 @@ export default function ArchetypeDetail() {
                 Introduction
               </h2>
               <p className="text-gray-700 leading-relaxed">
-                {archetype.introduction}
+                {currentArchetype?.introduction}
               </p>
             </div>
           </div>
@@ -1228,7 +1244,7 @@ export default function ArchetypeDetail() {
                   Strengths
                 </h3>
                 <ul className="mb-8 space-y-2">
-                  {archetype?.strengths?.map((strength, index) => (
+                  {currentArchetype?.strengths?.map((strength, index) => (
                     <li key={index} className="flex items-start">
                       <span className="text-green-500 mr-2">✓</span>
                       <span>{strength}</span>
@@ -1240,7 +1256,7 @@ export default function ArchetypeDetail() {
                   Weaknesses
                 </h3>
                 <ul className="space-y-2">
-                  {archetype?.weaknesses?.map((weakness, index) => (
+                  {currentArchetype?.weaknesses?.map((weakness, index) => (
                     <li key={index} className="flex items-start">
                       <span className="text-red-500 mr-2">✗</span>
                       <span>{weakness}</span>
@@ -1256,7 +1272,7 @@ export default function ArchetypeDetail() {
                   <FaUsers className="mr-3 text-primary-maroon" /> Famous People
                 </h2>
                 <div className="space-y-8">
-                  {archetype?.famousPeople?.map((person, index) => (
+                  {currentArchetype?.famousPeople?.map((person, index) => (
                     <div
                       key={index}
                       className="flex flex-col items-center text-center"
@@ -1295,15 +1311,17 @@ export default function ArchetypeDetail() {
               {/* Economic Axis: Equity vs. Free Market */}
               <div>
                 <h3 className="text-xl font-bold mb-2 text-green-600">
-                  {archetype.traits && archetype.traits[0] === "Equity"
+                  {currentArchetype?.traits &&
+                  currentArchetype.traits[0] === "Equity"
                     ? "Equity: Balance the scales. Ensure fairness for all."
                     : "Free Market: Freedom to compete. Freedom to succeed."}
                 </h3>
                 <p className="text-gray-700">
-                  {archetype.traits && archetype.traits[0] === "Equity"
-                    ? archetype.axisDescriptions?.equity ||
+                  {currentArchetype?.traits &&
+                  currentArchetype.traits[0] === "Equity"
+                    ? currentArchetype.axisDescriptions?.equity ||
                       "As someone who leans toward the Equity side of the axis, you believe that economic systems should prioritize fairness and equality. You likely support policies that reduce wealth disparities through government intervention, such as progressive taxation, social welfare programs, and labor protections. You view systemic inequalities as issues that require correction through collective action and policy. For you, a fair distribution of resources and opportunities is essential to a functioning society, and you believe that unchecked market forces often lead to exploitation and inequality. While you recognize the value of economic freedom, you prioritize ensuring that all individuals, regardless of their background, have access to essential services and a reasonable quality of life."
-                    : archetype.axisDescriptions?.markets ||
+                    : currentArchetype.axisDescriptions?.markets ||
                       "As someone who leans toward the Free Market side of the axis, you likely believe that economic prosperity thrives best when individuals and businesses operate with minimal interference from the government. You may see market forces, such as competition and entrepreneurship, as key drivers of innovation and economic growth. For you, the idea of success is often tied to the freedom to operate within an open market where supply and demand determine wages, prices, and policies. You might feel that too much government intervention can stifle productivity, limit personal ambition, and create inefficiencies. While you recognize the existence of inequalities, you may believe that the free market, with its emphasis on individual choice and competition, is the most effective way to generate wealth, improve quality of life, and promote overall prosperity."}
                 </p>
               </div>
@@ -1311,15 +1329,17 @@ export default function ArchetypeDetail() {
               {/* Authority Axis: Libertarian vs. Authoritarian */}
               <div>
                 <h3 className="text-xl font-bold mb-2 text-blue-600">
-                  {archetype.traits && archetype.traits[1] === "Libertarian"
+                  {currentArchetype?.traits &&
+                  currentArchetype.traits[1] === "Libertarian"
                     ? "Libertarian: The fewer the chains, the freer the mind."
                     : "Authoritarian: Order through structure. Security through strength."}
                 </h3>
                 <p className="text-gray-700">
-                  {archetype.traits && archetype.traits[1] === "Libertarian"
-                    ? archetype.axisDescriptions?.libertarian ||
+                  {currentArchetype?.traits &&
+                  currentArchetype.traits[1] === "Libertarian"
+                    ? currentArchetype.axisDescriptions?.libertarian ||
                       "As someone who leans toward the Libertarian side of the axis, you likely place a high value on individual freedom and autonomy. You believe that people should have the right to make their own choices, without excessive interference from the government. Personal liberties, such as freedom of speech, the right to privacy, and the ability to engage in activities that don't harm others, are fundamental to your worldview. You may advocate for a minimal government that focuses only on protecting those rights, rather than regulating people's lives or intervening in markets. For you, the ideal society is one where individuals are free to pursue their interests and passions, express dissent, and live as they see fit—without the burden of state control or authoritarian oversight."
-                    : archetype.axisDescriptions?.authoritarian ||
+                    : currentArchetype.axisDescriptions?.authoritarian ||
                       "As someone who leans toward the Authoritarian side of the axis, you believe in the importance of a strong, centralized authority to maintain order, security, and stability. You likely value decisive leadership and clear structures that guide society toward common goals. In your view, individual freedoms may sometimes need to be limited for the greater good, ensuring that the collective needs of society are met. You might support strong national security measures, centralized economic planning, and robust institutions that can efficiently implement policies. For you, a well-functioning society requires a firm hand to protect it from both external threats and internal disorder. While you recognize the value of certain personal freedoms, you prioritize the security and stability that comes from having clear leadership and defined social order."}
                 </p>
               </div>
@@ -1327,15 +1347,17 @@ export default function ArchetypeDetail() {
               {/* Social Axis: Progressive vs. Conservative */}
               <div>
                 <h3 className="text-xl font-bold mb-2 text-yellow-600">
-                  {archetype.traits && archetype.traits[2] === "Progressive"
+                  {currentArchetype?.traits &&
+                  currentArchetype.traits[2] === "Progressive"
                     ? "Progressive: Tomorrow doesn't wait. Neither should we."
                     : "Conservative: Honor what works. Protect what matters."}
                 </h3>
                 <p className="text-gray-700">
-                  {archetype.traits && archetype.traits[2] === "Progressive"
-                    ? archetype.axisDescriptions?.progressive ||
+                  {currentArchetype?.traits &&
+                  currentArchetype.traits[2] === "Progressive"
+                    ? currentArchetype.axisDescriptions?.progressive ||
                       "As someone who leans toward the Progressive side of the axis, you tend to view societal change as not only inevitable but also necessary for a better future. You believe that social, cultural, and technological advancements should be embraced, even if they challenge long-standing traditions and norms. You value inclusivity, equality, and innovation, often advocating for policies that address systemic issues like inequality, environmental degradation, and discrimination. To you, progress is about creating a more just and compassionate society where everyone, regardless of their background, has the opportunity to thrive. You may support initiatives that promote sustainability, social justice, and the expansion of rights to marginalized groups."
-                    : archetype.axisDescriptions?.conservative ||
+                    : currentArchetype.axisDescriptions?.conservative ||
                       "As someone who leans toward the Conservative side of the axis, you value the preservation of traditions, cultural heritage, and established institutions. You believe that societies function best when they build upon time-tested values and practices rather than pursuing rapid change. For you, traditional frameworks—whether in family structure, governance, education, or social norms—provide a sense of stability, continuity, and meaning. You are likely cautious about social experiments and rapid transformations, preferring incremental changes that respect historical wisdom and cultural identity. You may see traditional values as anchors that help society weather challenges and believe that innovations should be adopted carefully and thoughtfully, ensuring they don't undermine the foundations that have sustained communities across generations."}
                 </p>
               </div>
@@ -1343,15 +1365,17 @@ export default function ArchetypeDetail() {
               {/* Religion Axis: Secular vs. Religious */}
               <div>
                 <h3 className="text-xl font-bold mb-2 text-red-600">
-                  {archetype.traits && archetype.traits[3] === "Secular"
+                  {currentArchetype?.traits &&
+                  currentArchetype.traits[3] === "Secular"
                     ? "Secular: Reason is our compass. Evidence is our guide."
                     : "Religious: Faith illuminates the path to truth."}
                 </h3>
                 <p className="text-gray-700">
-                  {archetype.traits && archetype.traits[3] === "Secular"
-                    ? archetype.axisDescriptions?.secular ||
+                  {currentArchetype?.traits &&
+                  currentArchetype.traits[3] === "Secular"
+                    ? currentArchetype.axisDescriptions?.secular ||
                       "As someone who leans toward the Secular side of the axis, you believe in the separation of religion and public life, advocating for policies that prioritize reason, science, and universal human rights over religious doctrines. You view government, education, and societal institutions as spaces where all individuals—regardless of their religious beliefs—should be treated equally and fairly. For you, morality can be grounded in humanistic and secular principles that are based on logic, empathy, and shared values, rather than religious teachings. You believe that decisions regarding laws, public policies, and social matters should be based on objective reasoning and evidence, ensuring that they reflect the diverse, pluralistic nature of society."
-                    : archetype.axisDescriptions?.religious ||
+                    : currentArchetype.axisDescriptions?.religious ||
                       "As someone who leans toward the Religious side of the axis, you believe that faith and spiritual principles provide essential guidance for both personal morality and societal organization. You likely view religious values as timeless foundations that offer wisdom, purpose, and ethical frameworks that have sustained communities for generations. For you, a transcendent moral order exists beyond human creation, and religious teachings help illuminate this truth. You may advocate for the protection of religious freedom and the recognition of faith's role in shaping culture, education, and even governance. While you might respect the diversity of beliefs, you see religious principles as providing crucial moral anchors that help society distinguish right from wrong and maintain a sense of purpose and meaning in an increasingly complex world."}
                 </p>
               </div>
@@ -1359,15 +1383,17 @@ export default function ArchetypeDetail() {
               {/* International Axis: Globalist vs. Nationalist */}
               <div>
                 <h3 className="text-xl font-bold mb-2 text-purple-600">
-                  {archetype.traits && archetype.traits[4] === "Globalist"
+                  {currentArchetype?.traits &&
+                  currentArchetype.traits[4] === "Globalist"
                     ? "Globalist: We're stronger when we act as one world."
                     : "Nationalist: A nation's first duty is to its people."}
                 </h3>
                 <p className="text-gray-700">
-                  {archetype.traits && archetype.traits[4] === "Globalist"
-                    ? archetype.axisDescriptions?.globalist ||
+                  {currentArchetype?.traits &&
+                  currentArchetype.traits[4] === "Globalist"
+                    ? currentArchetype.axisDescriptions?.globalist ||
                       "As someone who leans toward the Globalist side of the axis, you believe that cooperation and interconnectedness between nations are crucial for addressing the world's most pressing issues. You see global challenges like climate change, economic inequality, and international security as problems that transcend national borders and require collective action. You advocate for open borders, free trade, and the free flow of ideas and resources, believing that these connections ultimately lead to greater prosperity, peace, and innovation for all. Your perspective emphasizes the importance of cultural exchange and understanding, and you see diversity as an asset rather than a threat. In your view, global cooperation is essential for tackling issues that cannot be solved by any one nation alone."
-                    : archetype.axisDescriptions?.nationalist ||
+                    : currentArchetype.axisDescriptions?.nationalist ||
                       "As someone who leans toward the Nationalist side of the axis, you prioritize your nation's sovereignty, identity, and the interests of its citizens above international concerns. You believe that a country should maintain strong borders, protect its cultural heritage, and ensure that its policies benefit its own people first and foremost. For you, national identity provides a crucial sense of belonging and shared purpose, and you may view certain aspects of globalization as potential threats to this identity. You likely support economic policies that protect domestic industries and workers, and you may be cautious about international agreements that could compromise national decision-making. While you might value beneficial international relationships, you believe that a nation's primary responsibility is to safeguard the wellbeing, security, and prosperity of its own citizens."}
                 </p>
               </div>

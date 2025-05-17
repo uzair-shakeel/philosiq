@@ -30,7 +30,7 @@ const Navbar = ({ user }) => {
     { name: "Home", path: "/" },
     { name: "Archetypes", path: "/archetypes" },
     { name: "Quiz", path: "/quiz" },
-    { name: "MindMap", path: "/mindmap" },
+    { name: "MindMap", path: "/mindmap", useFullNavigation: true },
     { name: "Contact Us", path: "/contact-us" },
   ];
 
@@ -46,7 +46,9 @@ const Navbar = ({ user }) => {
       {showBanner && isHomePage && (
         <div className="bg-yellow-100 text-center text-sm text-black py-2 px-4 fixed top-0 w-full z-[60] flex justify-center items-center flex-wrap">
           <span className="mr-4">
-            🚧 This website is currently in Beta 1.0! If you spot any bugs or have suggestions, please email or fill out the form on the Contact Us page!
+            🚧 This website is currently in Beta 1.0! If you spot any bugs or
+            have suggestions, please email or fill out the form on the Contact
+            Us page!
           </span>
           <button
             onClick={() => setShowBanner(false)}
@@ -63,7 +65,7 @@ const Navbar = ({ user }) => {
         } ${showBanner && isHomePage ? "top-10" : "top-0"}`}
       >
         <div className="container-custom flex justify-between items-center">
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center" shallow={false}>
             <img src="/Website header.png" alt="logo" className="h-12 w-auto" />
           </Link>
 
@@ -77,6 +79,13 @@ const Navbar = ({ user }) => {
                     ? "text-primary-maroon border-b-2 border-primary-maroon"
                     : "text-neutral-dark hover:text-primary-maroon"
                 }`}
+                shallow={false}
+                onClick={(e) => {
+                  if (link.useFullNavigation) {
+                    e.preventDefault();
+                    window.location.href = link.path;
+                  }
+                }}
               >
                 {link.name}
               </Link>
@@ -102,7 +111,14 @@ const Navbar = ({ user }) => {
                     ? "text-primary-maroon"
                     : "text-neutral-dark hover:text-primary-maroon"
                 }`}
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => {
+                  setIsOpen(false);
+                  if (link.useFullNavigation) {
+                    e.preventDefault();
+                    window.location.href = link.path;
+                  }
+                }}
+                shallow={false}
               >
                 {link.name}
               </Link>

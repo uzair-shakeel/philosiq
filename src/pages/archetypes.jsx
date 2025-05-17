@@ -188,7 +188,13 @@ export default function ArchetypePage() {
     {
       id: "futurist",
       name: "The Futurist",
-      traits: ["Free Market", "Libertarian", "Progressive", "Secular", "Globalist"],
+      traits: [
+        "Free Market",
+        "Libertarian",
+        "Progressive",
+        "Secular",
+        "Globalist",
+      ],
       slug: "flpsg",
     },
     {
@@ -278,19 +284,37 @@ export default function ArchetypePage() {
     {
       id: "overlord",
       name: "The Overlord",
-      traits: ["Free Market", "Authority", "Progressive", "Secular", "Globalist"],
+      traits: [
+        "Free Market",
+        "Authority",
+        "Progressive",
+        "Secular",
+        "Globalist",
+      ],
       slug: "fapsg",
     },
     {
       id: "corporatist",
       name: "The Corporatist",
-      traits: ["Free Market", "Authority", "Progressive", "Secular", "Nationalist"],
+      traits: [
+        "Free Market",
+        "Authority",
+        "Progressive",
+        "Secular",
+        "Nationalist",
+      ],
       slug: "fapsn",
     },
     {
       id: "moralizer",
       name: "The Moralizer",
-      traits: ["Free Market", "Authority", "Progressive", "Religious", "Globalist"],
+      traits: [
+        "Free Market",
+        "Authority",
+        "Progressive",
+        "Religious",
+        "Globalist",
+      ],
       slug: "faprg",
     },
     {
@@ -308,7 +332,13 @@ export default function ArchetypePage() {
     {
       id: "executive",
       name: "The Executive",
-      traits: ["Free Market", "Authority", "Conservative", "Secular", "Globalist"],
+      traits: [
+        "Free Market",
+        "Authority",
+        "Conservative",
+        "Secular",
+        "Globalist",
+      ],
       slug: "facsg",
     },
     {
@@ -372,7 +402,8 @@ export default function ArchetypePage() {
                 <Link
                   href={`/archetypes/${archetype.slug}`}
                   key={archetype.id}
-                  className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-300 hover:border-primary-maroon bg-white"
+                  className="flex flex-col h-full bg-white rounded-lg shadow-md overflow-hidden transform transition-all hover:scale-102 hover:shadow-lg"
+                  shallow={false}
                 >
                   <h3 className="text-xl font-bold mb-4 text-primary-maroon">
                     {archetype.name}

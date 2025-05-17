@@ -376,7 +376,7 @@ export default function MindMapContributeModal({
       localStorage.setItem("hasContributedToMindMap", "true");
 
       setTimeout(() => {
-        router.push("/mindmap");
+        window.location.href = "/mindmap";
       }, 2000);
     } catch (error) {
       console.error("Error submitting demographic data:", error);

@@ -601,6 +601,7 @@ export default function MindMap() {
             <Link
               href="/quiz"
               className="bg-primary-maroon text-white px-6 py-3 rounded-full hover:shadow-lg transition-all"
+              shallow={false}
             >
               Take the Quiz & Contribute
             </Link>
