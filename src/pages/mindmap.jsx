@@ -14,17 +14,19 @@ import {
 const FILTER_OPTIONS = {
   education: [
     "High School",
+    "Some College",
     "Bachelor's Degree",
     "Master's Degree",
     "PhD",
     "Other",
   ],
-  gender: ["Male", "Female", "Non-binary/Other"],
+  gender: ["Male", "Female", "Transgender/Non-binary/Other"],
   race: [
     "White/Caucasian",
-    "Black/African American",
     "Hispanic/Latino",
+    "Black/African American",
     "Asian",
+    "Native American",
     "Other",
   ],
   age: ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
