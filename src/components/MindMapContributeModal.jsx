@@ -91,7 +91,7 @@ export default function MindMapContributeModal({
     setZipcodeError("");
 
     try {
-      // Use the zipcode-proxy API which will auto-detect the country
+      // Use the enhanced zipcode-proxy API
       const response = await fetch(`/api/zipcode-proxy?zipcode=${zipcode}`);
       const data = await response.json();
 
@@ -101,18 +101,60 @@ export default function MindMapContributeModal({
 
       if (data.isValid && data.location) {
         setZipcodeError("");
-        setLocationData(data.location);
+
+        // Check if the location has "Unknown" values
+        const hasUnknownValues =
+          (data.location.city === "Unknown" &&
+            data.location.state === "Unknown") ||
+          (!data.location.city && !data.location.state);
+
+        // If using fallback with unknown values, show a warning but still accept
+        if (data.source === "fallback" && hasUnknownValues) {
+          setZipcodeError(
+            `We recognized this as a ${data.location.country} postal code, but couldn't find specific location details. You can proceed or enter manually.`
+          );
+        }
+
+        // Add a flag if this is using fallback data
+        const locationWithSource = {
+          ...data.location,
+          source: data.source || "api",
+        };
+
+        setLocationData(locationWithSource);
         setFormData((prev) => ({
           ...prev,
-          location: data.location,
+          location: locationWithSource,
         }));
         return true;
       } else {
-        throw new Error(data.error || "Invalid postal code");
+        // If the API says it's invalid but we have a location, use it anyway
+        if (data.location) {
+          const locationWithSource = {
+            ...data.location,
+            source: "fallback",
+          };
+
+          setLocationData(locationWithSource);
+          setFormData((prev) => ({
+            ...prev,
+            location: locationWithSource,
+          }));
+
+          setZipcodeError(
+            "This postal code format was recognized, but we couldn't verify the exact location. You can proceed or enter manually."
+          );
+          return true;
+        }
+
+        throw new Error(data.error || "Invalid postal code format");
       }
     } catch (error) {
       console.error("Error validating postal code:", error);
-      setZipcodeError(error.message || "Failed to validate postal code");
+      setZipcodeError(
+        error.message ||
+          "Failed to validate postal code. You can enter location manually."
+      );
       setLocationData(null);
       return false;
     } finally {
@@ -120,20 +162,140 @@ export default function MindMapContributeModal({
     }
   };
 
-  // Add this function to handle manual override
+  // Update the handleManualOverride function to better support international postal codes
   const handleManualOverride = () => {
     if (!formData.zipCode) return;
 
-    // Create a simple manual location object
+    // Try to detect the country from the zipcode format
+    const zipcode = formData.zipCode.trim();
+    let countryCode = "US";
+    let countryName = "United States";
+    let cityName = "Manual City";
+    let stateName = "Manual Region";
+
+    // Simple detection based on format
+    if (/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(zipcode)) {
+      // Canadian postal code
+      countryCode = "CA";
+      countryName = "Canada";
+
+      // Try to determine province from first letter
+      const firstLetter = zipcode.substring(0, 1).toUpperCase();
+      switch (firstLetter) {
+        case "A":
+          stateName = "Newfoundland and Labrador";
+          break;
+        case "B":
+          stateName = "Nova Scotia";
+          break;
+        case "C":
+          stateName = "Prince Edward Island";
+          break;
+        case "E":
+          stateName = "New Brunswick";
+          break;
+        case "G":
+        case "H":
+        case "J":
+          stateName = "Quebec";
+          break;
+        case "K":
+        case "L":
+        case "M":
+        case "N":
+        case "P":
+          stateName = "Ontario";
+          break;
+        case "R":
+          stateName = "Manitoba";
+          break;
+        case "S":
+          stateName = "Saskatchewan";
+          break;
+        case "T":
+          stateName = "Alberta";
+          break;
+        case "V":
+          stateName = "British Columbia";
+          break;
+        case "X":
+          stateName = "Northern Territories";
+          break;
+        case "Y":
+          stateName = "Yukon";
+          break;
+      }
+      cityName = `${stateName} Region`;
+    } else if (/^[A-Za-z]{1,2}\d[A-Za-z\d]?[ ]?\d[A-Za-z]{2}$/.test(zipcode)) {
+      // UK postal code
+      countryCode = "GB";
+      countryName = "United Kingdom";
+      stateName = "United Kingdom";
+      cityName = "UK Location";
+    } else if (/^\d{5}$/.test(zipcode)) {
+      // Could be US, Pakistan, or others - check first digit
+
+      // For US, try to determine the region from the first 3 digits
+      countryCode = "US";
+      countryName = "United States";
+
+      const prefix = zipcode.substring(0, 3);
+      const prefixNum = parseInt(prefix, 10);
+
+      // Map ZIP code prefixes to general regions
+      if (prefixNum >= 0 && prefixNum <= 99) {
+        stateName = "US Territories";
+        cityName = "US Territory";
+      } else if (prefixNum >= 100 && prefixNum <= 199) {
+        stateName = "Northeast US";
+        cityName = "Northeast Region";
+      } else if (prefixNum >= 200 && prefixNum <= 299) {
+        stateName = "Mid-Atlantic US";
+        cityName = "Mid-Atlantic Region";
+      } else if (prefixNum >= 300 && prefixNum <= 399) {
+        stateName = "Southeast US";
+        cityName = "Southeast Region";
+      } else if (prefixNum >= 400 && prefixNum <= 499) {
+        stateName = "Midwest US";
+        cityName = "Midwest Region";
+      } else if (prefixNum >= 500 && prefixNum <= 599) {
+        stateName = "Central US";
+        cityName = "Central Region";
+      } else if (prefixNum >= 600 && prefixNum <= 699) {
+        stateName = "Central US";
+        cityName = "Central Region";
+      } else if (prefixNum >= 700 && prefixNum <= 799) {
+        stateName = "South Central US";
+        cityName = "South Central Region";
+      } else if (prefixNum >= 800 && prefixNum <= 899) {
+        stateName = "Western US";
+        cityName = "Western Region";
+      } else if (prefixNum >= 900 && prefixNum <= 999) {
+        stateName = "West Coast US";
+        cityName = "West Coast Region";
+      }
+    } else if (/^\d{6}$/.test(zipcode)) {
+      // Indian postal code
+      countryCode = "IN";
+      countryName = "India";
+      stateName = "India";
+      cityName = "India Location";
+    } else if (/^\d{4}$/.test(zipcode)) {
+      // Australian postal code
+      countryCode = "AU";
+      countryName = "Australia";
+      stateName = "Australia";
+      cityName = "Australia Location";
+    }
+
+    // Create a manual location object
     const manualLocation = {
-      zipcode: formData.zipCode,
-      city: "Manual Entry",
-      state: "Manual Entry",
-      state_code: "",
-      country: "Manual Entry",
-      country_code: "",
-      latitude: "0",
-      longitude: "0",
+      zipcode: zipcode,
+      city: cityName,
+      state: stateName,
+      state_code: countryCode,
+      country: countryName,
+      country_code: countryCode,
       isManualEntry: true,
     };
 
@@ -420,7 +582,7 @@ export default function MindMapContributeModal({
               {/* Zip Code */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Postal/Zip Code
+                  Postal/Zip Code (International formats supported)
                 </label>
                 <div className="relative">
                   <input
@@ -467,6 +629,9 @@ export default function MindMapContributeModal({
                     className={`mt-2 p-3 ${
                       locationData.isManualEntry
                         ? "bg-yellow-50 border-yellow-200"
+                        : locationData.source === "fallback" ||
+                          locationData.isFallback
+                        ? "bg-blue-50 border-blue-200"
                         : "bg-green-50 border-green-200"
                     } border rounded-md`}
                   >
@@ -475,6 +640,9 @@ export default function MindMapContributeModal({
                         className={`${
                           locationData.isManualEntry
                             ? "text-yellow-500"
+                            : locationData.source === "fallback" ||
+                              locationData.isFallback
+                            ? "text-blue-500"
                             : "text-green-500"
                         } mr-2`}
                       />
@@ -482,11 +650,17 @@ export default function MindMapContributeModal({
                         className={`font-medium ${
                           locationData.isManualEntry
                             ? "text-yellow-700"
+                            : locationData.source === "fallback" ||
+                              locationData.isFallback
+                            ? "text-blue-700"
                             : "text-green-700"
                         }`}
                       >
                         {locationData.isManualEntry
                           ? "Manual Entry"
+                          : locationData.source === "fallback" ||
+                            locationData.isFallback
+                          ? "Location Identified"
                           : "Location Verified"}
                       </span>
                     </div>
@@ -494,18 +668,50 @@ export default function MindMapContributeModal({
                       className={`text-sm ${
                         locationData.isManualEntry
                           ? "text-yellow-700"
+                          : locationData.source === "fallback" ||
+                            locationData.isFallback
+                          ? "text-blue-700"
                           : "text-green-700"
                       }`}
                     >
-                      {locationData.city}, {locationData.state}{" "}
+                      {locationData.city && locationData.city !== "Unknown"
+                        ? locationData.city
+                        : locationData.country === "Pakistan"
+                        ? "Pakistan Region"
+                        : locationData.country === "India"
+                        ? "India Region"
+                        : "Region"}
+                      ,{" "}
+                      {locationData.state && locationData.state !== "Unknown"
+                        ? locationData.state
+                        : locationData.country}{" "}
                       {locationData.zipcode} ({locationData.country})
                     </p>
+                    {(locationData.source === "fallback" ||
+                      locationData.isFallback) && (
+                      <p className="text-xs text-blue-600 mt-1">
+                        {locationData.city === "Unknown" ||
+                        locationData.state === "Unknown"
+                          ? "We couldn't find exact details for this postal code, but we've identified the country. You can proceed or enter manually if needed."
+                          : "Using approximate location data based on your postal code format. You can proceed or enter manually if needed."}
+                      </p>
+                    )}
+                    {locationData.isManualEntry && (
+                      <p className="text-xs text-yellow-600 mt-1">
+                        Using manually entered location. Your regional data will
+                        still be helpful for our research.
+                      </p>
+                    )}
                   </div>
                 )}
                 <div className="mt-2">
                   <p className="text-xs text-gray-500">
                     Your specific location will not be stored, only aggregated
                     regional data.
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Examples: US (12345), Canada (A1A 1A1), UK (SW1A 1AA),
+                    Pakistan (44000), India (110001), Australia (2000)
                   </p>
                 </div>
               </div>
