@@ -50,6 +50,7 @@ export default function MindMap() {
     states: [],
     countries: [],
   });
+  const [isLoadingLocations, setIsLoadingLocations] = useState(false);
 
   // Fetch mindmap data from the API
   const fetchMindMapData = async () => {
@@ -115,20 +116,43 @@ export default function MindMap() {
     }
   };
 
+  // Fetch location options based on selected country and state
+  const fetchLocationOptions = async (country = null, state = null) => {
+    setIsLoadingLocations(true);
+    try {
+      const queryParams = new URLSearchParams();
+      if (country) queryParams.append("country", country);
+      if (state) queryParams.append("state", state);
+
+      const response = await fetch(
+        `/api/admin/mindmap/locations?${queryParams.toString()}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch locations: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Only update the relevant parts of locationOptions
+        setLocationOptions((prevOptions) => ({
+          countries: data.locations.countries || prevOptions.countries,
+          states: data.locations.states || [],
+          cities: data.locations.cities || [],
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching location options:", error);
+    } finally {
+      setIsLoadingLocations(false);
+    }
+  };
+
   // Initial data fetch on component mount
   useEffect(() => {
     fetchMindMapData();
-
-    // Fetch available options for each filter category
-    const fetchAllOptions = async () => {
-      const options = {};
-      for (const category of Object.keys(FILTER_OPTIONS)) {
-        options[category] = FILTER_OPTIONS[category];
-      }
-      setAvailableOptions(options);
-    };
-
-    fetchAllOptions();
+    fetchLocationOptions(); // Fetch all countries initially
   }, []);
 
   // Update data when filters change
@@ -137,6 +161,37 @@ export default function MindMap() {
       fetchMindMapData();
     }
   }, [filters]);
+
+  // Handle country selection to update states
+  useEffect(() => {
+    if (filters.country) {
+      fetchLocationOptions(filters.country);
+
+      // Clear state and city when country changes
+      if (filters.state) {
+        setFilters((prev) => ({
+          ...prev,
+          state: "",
+          city: "",
+        }));
+      }
+    }
+  }, [filters.country]);
+
+  // Handle state selection to update cities
+  useEffect(() => {
+    if (filters.country && filters.state) {
+      fetchLocationOptions(filters.country, filters.state);
+
+      // Clear city when state changes
+      if (filters.city) {
+        setFilters((prev) => ({
+          ...prev,
+          city: "",
+        }));
+      }
+    }
+  }, [filters.state]);
 
   const handleFilterChange = (category, value) => {
     setFilters((prev) => ({
@@ -147,6 +202,8 @@ export default function MindMap() {
 
   const clearFilters = () => {
     setFilters({});
+    // Refetch all location options
+    fetchLocationOptions();
   };
 
   // Sort archetypes by percentage (descending)
@@ -155,6 +212,88 @@ export default function MindMap() {
   );
 
   const activeFiltersCount = Object.values(filters).filter(Boolean).length;
+
+  const renderLocationFilters = () => (
+    <div className="mt-4 border-t pt-4">
+      <h3 className="text-md font-medium text-gray-700 mb-3 flex items-center">
+        <FaMapMarkerAlt className="mr-2 text-primary-maroon" />
+        Location Filters
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Country Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Country
+          </label>
+          <select
+            value={filters.country || ""}
+            onChange={(e) => handleFilterChange("country", e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
+            disabled={isLoadingLocations}
+          >
+            <option value="">All Countries</option>
+            {locationOptions.countries.sort().map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* State Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            State/Province
+          </label>
+          <select
+            value={filters.state || ""}
+            onChange={(e) => handleFilterChange("state", e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
+            disabled={!filters.country || isLoadingLocations}
+          >
+            <option value="">All States</option>
+            {locationOptions.states.sort().map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
+          {!filters.country && (
+            <p className="text-xs text-gray-500 mt-1">Select a country first</p>
+          )}
+        </div>
+
+        {/* City Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            City
+          </label>
+          <select
+            value={filters.city || ""}
+            onChange={(e) => handleFilterChange("city", e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
+            disabled={!filters.state || isLoadingLocations}
+          >
+            <option value="">All Cities</option>
+            {locationOptions.cities.sort().map((city) => (
+              <option key={city} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
+          {!filters.state && (
+            <p className="text-xs text-gray-500 mt-1">Select a state first</p>
+          )}
+        </div>
+      </div>
+      {isLoadingLocations && (
+        <div className="mt-2 text-sm text-gray-500 flex items-center">
+          <FaSpinner className="animate-spin mr-2" /> Loading location
+          options...
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <Layout title="MindMap - PhilosiQ">
@@ -269,77 +408,7 @@ export default function MindMap() {
                   ))}
                 </div>
 
-                {/* Location Filters */}
-                <div className="mt-4 border-t pt-4">
-                  <h3 className="text-md font-medium text-gray-700 mb-3 flex items-center">
-                    <FaMapMarkerAlt className="mr-2 text-primary-maroon" />
-                    Location Filters
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* Country Filter */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Country
-                      </label>
-                      <select
-                        value={filters.country || ""}
-                        onChange={(e) =>
-                          handleFilterChange("country", e.target.value)
-                        }
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
-                      >
-                        <option value="">All Countries</option>
-                        {locationOptions.countries.sort().map((country) => (
-                          <option key={country} value={country}>
-                            {country}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* State Filter */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        State/Province
-                      </label>
-                      <select
-                        value={filters.state || ""}
-                        onChange={(e) =>
-                          handleFilterChange("state", e.target.value)
-                        }
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
-                      >
-                        <option value="">All States</option>
-                        {locationOptions.states.sort().map((state) => (
-                          <option key={state} value={state}>
-                            {state}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* City Filter */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        City
-                      </label>
-                      <select
-                        value={filters.city || ""}
-                        onChange={(e) =>
-                          handleFilterChange("city", e.target.value)
-                        }
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
-                      >
-                        <option value="">All Cities</option>
-                        {locationOptions.cities.sort().map((city) => (
-                          <option key={city} value={city}>
-                            {city}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                </div>
+                {renderLocationFilters()}
 
                 <div className="mt-4 flex justify-end">
                   <button

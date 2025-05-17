@@ -59,7 +59,7 @@ export default async function handler(req, res) {
     const mindmapCollection = mongoose.connection.db.collection("mindmapData");
 
     // Get all query parameters except special ones
-    const { category, ...filters } = req.query;
+    const { category, country, state, ...filters } = req.query;
 
     // Build match conditions for multiple filters
     const matchConditions = {};
@@ -73,6 +73,15 @@ export default async function handler(req, res) {
         }
       }
     });
+
+    // Add location filters if provided
+    if (country) {
+      matchConditions["demographics.country"] = country;
+    }
+
+    if (state) {
+      matchConditions["demographics.state"] = state;
+    }
 
     // If no filters or category is "all", show all data
     const showAllData =
@@ -158,23 +167,41 @@ export default async function handler(req, res) {
       },
     };
 
-    // Collect available location options for filters
+    // Build location filter queries
+    let statesQuery = {};
+    let citiesQuery = {};
+
+    if (country) {
+      statesQuery = { "demographics.country": country };
+      citiesQuery = { "demographics.country": country };
+    }
+
+    if (state) {
+      citiesQuery = { ...citiesQuery, "demographics.state": state };
+    }
+
+    // Get available location options for filters
+    const countries = await mindmapCollection.distinct("demographics.country", {
+      "demographics.country": { $ne: null, $ne: "" },
+    });
+    const states = await mindmapCollection.distinct("demographics.state", {
+      ...statesQuery,
+      "demographics.state": { $ne: null, $ne: "" },
+    });
+    const cities = await mindmapCollection.distinct("demographics.city", {
+      ...citiesQuery,
+      "demographics.city": { $ne: null, $ne: "" },
+    });
+
+    // Filter out null, undefined, or "Unknown" values
+    const filteredCountries = countries.filter((c) => c && c !== "Unknown");
+    const filteredStates = states.filter((s) => s && s !== "Unknown");
+    const filteredCities = cities.filter((c) => c && c !== "Unknown");
+
     const availableLocations = {
-      cities: [
-        ...new Set(
-          entries.map((entry) => entry.demographics?.city).filter(Boolean)
-        ),
-      ],
-      states: [
-        ...new Set(
-          entries.map((entry) => entry.demographics?.state).filter(Boolean)
-        ),
-      ],
-      countries: [
-        ...new Set(
-          entries.map((entry) => entry.demographics?.country).filter(Boolean)
-        ),
-      ],
+      cities: filteredCities,
+      states: filteredStates,
+      countries: filteredCountries,
     };
 
     console.log("Letter counts:", axisLetterCounts);

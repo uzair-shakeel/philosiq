@@ -74,6 +74,7 @@ export default function AdminMindMap() {
     states: [],
     countries: [],
   });
+  const [isLoadingLocations, setIsLoadingLocations] = useState(false);
 
   const ITEMS_PER_PAGE = 10;
 
@@ -103,25 +104,64 @@ export default function AdminMindMap() {
     fetchLocationOptions();
   }, [currentPage, filters]);
 
-  const fetchLocationOptions = async () => {
+  // Fetch location options based on selected country and state
+  const fetchLocationOptions = async (country = null, state = null) => {
+    setIsLoadingLocations(true);
     try {
-      const response = await fetch("/api/admin/mindmap/locations");
+      const queryParams = new URLSearchParams();
+      if (country) queryParams.append("country", country);
+      if (state) queryParams.append("state", state);
+
+      const response = await fetch(`/api/admin/mindmap/locations?${queryParams.toString()}`);
+      
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
-          setLocationOptions(
-            data.locations || {
-              cities: [],
-              states: [],
-              countries: [],
-            }
-          );
+          // Only update the relevant parts of locationOptions
+          setLocationOptions(prevOptions => ({
+            countries: data.locations.countries || prevOptions.countries,
+            states: data.locations.states || [],
+            cities: data.locations.cities || [],
+          }));
         }
       }
     } catch (error) {
       console.error("Error fetching location options:", error);
+    } finally {
+      setIsLoadingLocations(false);
     }
   };
+
+  // Handle country selection to update states
+  useEffect(() => {
+    if (filters.country) {
+      fetchLocationOptions(filters.country);
+      
+      // Clear state and city when country changes
+      if (filters.state) {
+        setFilters(prev => ({
+          ...prev,
+          state: "",
+          city: ""
+        }));
+      }
+    }
+  }, [filters.country]);
+
+  // Handle state selection to update cities
+  useEffect(() => {
+    if (filters.country && filters.state) {
+      fetchLocationOptions(filters.country, filters.state);
+      
+      // Clear city when state changes
+      if (filters.city) {
+        setFilters(prev => ({
+          ...prev,
+          city: ""
+        }));
+      }
+    }
+  }, [filters.state]);
 
   const fetchMindMapData = async () => {
     setLoading(true);
@@ -280,6 +320,7 @@ export default function AdminMindMap() {
       country: "",
     });
     setCurrentPage(1);
+    fetchLocationOptions(); // Reset location options
   };
 
   const toggleSelectAll = () => {
@@ -299,6 +340,88 @@ export default function AdminMindMap() {
     }
     setSelectedEntries(newSelected);
   };
+
+  // Render the location filters section
+  const renderLocationFilters = () => (
+    <div className="mt-4 border-t pt-4">
+      <h3 className="text-md font-medium text-gray-700 mb-3 flex items-center">
+        <FaMapMarkerAlt className="mr-2 text-primary-maroon" />
+        Location Filters
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Country Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Country
+          </label>
+          <select
+            value={filters.country || ""}
+            onChange={(e) => handleFilterChange("country", e.target.value)}
+            className="w-full p-2 border rounded-lg"
+            disabled={isLoadingLocations}
+          >
+            <option value="">All Countries</option>
+            {locationOptions.countries.sort().map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* State Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            State/Province
+          </label>
+          <select
+            value={filters.state || ""}
+            onChange={(e) => handleFilterChange("state", e.target.value)}
+            className="w-full p-2 border rounded-lg"
+            disabled={!filters.country || isLoadingLocations}
+          >
+            <option value="">All States</option>
+            {locationOptions.states.sort().map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
+          {!filters.country && (
+            <p className="text-xs text-gray-500 mt-1">Select a country first</p>
+          )}
+        </div>
+
+        {/* City Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            City
+          </label>
+          <select
+            value={filters.city || ""}
+            onChange={(e) => handleFilterChange("city", e.target.value)}
+            className="w-full p-2 border rounded-lg"
+            disabled={!filters.state || isLoadingLocations}
+          >
+            <option value="">All Cities</option>
+            {locationOptions.cities.sort().map((city) => (
+              <option key={city} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
+          {!filters.state && (
+            <p className="text-xs text-gray-500 mt-1">Select a state first</p>
+          )}
+        </div>
+      </div>
+      {isLoadingLocations && (
+        <div className="mt-2 text-sm text-gray-500 flex items-center">
+          <FaSpinner className="animate-spin mr-2" /> Loading location options...
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <AdminLayout title="MindMap Management">
@@ -355,74 +478,7 @@ export default function AdminMindMap() {
             </div>
 
             {/* Location Filters */}
-            <div className="mt-4 border-t pt-4">
-              <h3 className="text-md font-medium text-gray-700 mb-3 flex items-center">
-                <FaMapMarkerAlt className="mr-2 text-primary-maroon" />
-                Location Filters
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Country Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Country
-                  </label>
-                  <select
-                    value={filters.country || ""}
-                    onChange={(e) =>
-                      handleFilterChange("country", e.target.value)
-                    }
-                    className="w-full p-2 border rounded-lg"
-                  >
-                    <option value="">All Countries</option>
-                    {locationOptions.countries.sort().map((country) => (
-                      <option key={country} value={country}>
-                        {country}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* State Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    State/Province
-                  </label>
-                  <select
-                    value={filters.state || ""}
-                    onChange={(e) =>
-                      handleFilterChange("state", e.target.value)
-                    }
-                    className="w-full p-2 border rounded-lg"
-                  >
-                    <option value="">All States</option>
-                    {locationOptions.states.sort().map((state) => (
-                      <option key={state} value={state}>
-                        {state}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* City Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    City
-                  </label>
-                  <select
-                    value={filters.city || ""}
-                    onChange={(e) => handleFilterChange("city", e.target.value)}
-                    className="w-full p-2 border rounded-lg"
-                  >
-                    <option value="">All Cities</option>
-                    {locationOptions.cities.sort().map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
+            {renderLocationFilters()}
 
             <div className="mt-4 flex justify-end">
               <button
