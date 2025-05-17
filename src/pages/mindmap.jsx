@@ -8,6 +8,7 @@ import {
   FaSpinner,
   FaTimes,
   FaMapMarkerAlt,
+  FaArrowRight,
 } from "react-icons/fa";
 
 // Filter options
@@ -32,6 +33,42 @@ const FILTER_OPTIONS = {
   age: ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
   votingTendency: ["Left Leaning", "Right Leaning", "Other/Independent"],
 };
+
+// Map archetype names to their codes
+const ARCHETYPE_MAP = [
+  { code: "ELPSG", label: "The Utopian" },
+  { code: "ELPSN", label: "The Reformer" },
+  { code: "ELPRG", label: "The Prophet" },
+  { code: "ELPRN", label: "The Firebrand" },
+  { code: "ELCSG", label: "The Philosopher" },
+  { code: "ELCSN", label: "The Localist" },
+  { code: "ELCRG", label: "The Missionary" },
+  { code: "ELCRN", label: "The Guardian" },
+  { code: "EAPSG", label: "The Technocrat" },
+  { code: "EAPSN", label: "The Enforcer" },
+  { code: "EAPRG", label: "The Zealot" },
+  { code: "EAPRN", label: "The Purist" },
+  { code: "EACSG", label: "The Commander" },
+  { code: "EACSN", label: "The Steward" },
+  { code: "EACRG", label: "The Shepherd" },
+  { code: "EACRN", label: "The High Priest" },
+  { code: "FLPSG", label: "The Futurist" },
+  { code: "FLPSN", label: "The Maverick" },
+  { code: "FLPRG", label: "The Evangelist" },
+  { code: "FLPRN", label: "The Dissenter" },
+  { code: "FLCSG", label: "The Globalist" },
+  { code: "FLCSN", label: "The Patriot" },
+  { code: "FLCRG", label: "The Industrialist" },
+  { code: "FLCRN", label: "The Traditionalist" },
+  { code: "FAPSG", label: "The Overlord" },
+  { code: "FAPSN", label: "The Corporatist" },
+  { code: "FAPRG", label: "The Moralizer" },
+  { code: "FAPRN", label: "The Builder" },
+  { code: "FACSG", label: "The Executive" },
+  { code: "FACSN", label: "The Ironhand" },
+  { code: "FACRG", label: "The Regent" },
+  { code: "FACRN", label: "The Crusader" },
+];
 
 export default function MindMap() {
   const [filters, setFilters] = useState({});
@@ -212,6 +249,12 @@ export default function MindMap() {
   );
 
   const activeFiltersCount = Object.values(filters).filter(Boolean).length;
+
+  // Function to get archetype code from name
+  const getArchetypeCode = (archetypeName) => {
+    const archetype = ARCHETYPE_MAP.find((a) => a.label === archetypeName);
+    return archetype ? archetype.code.toLowerCase() : "";
+  };
 
   const renderLocationFilters = () => (
     <div className="mt-4 border-t pt-4">
@@ -452,14 +495,24 @@ export default function MindMap() {
                             {percentage.toFixed(1)}%
                           </span>
                         </div>
-                        <div className="relative h-6 rounded-full overflow-hidden bg-gray-200">
+                        <a
+                          href={`/archetypes/${getArchetypeCode(archetype)}`}
+                          className="block relative h-6 rounded-full overflow-hidden bg-gray-200 hover:shadow-md transition-all duration-300 group"
+                          title={`View ${archetype} details`}
+                        >
                           <div
-                            className="h-full bg-primary-maroon absolute left-0"
+                            className="h-full bg-primary-maroon absolute left-0 group-hover:bg-primary-darkMaroon transition-colors"
                             style={{
                               width: `${percentage}%`,
                             }}
                           ></div>
-                        </div>
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="text-xs text-white font-medium flex items-center">
+                              View Details{" "}
+                              <FaArrowRight className="ml-1" size={10} />
+                            </span>
+                          </div>
+                        </a>
                       </div>
                     ))}
                   </div>

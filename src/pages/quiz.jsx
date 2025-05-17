@@ -20,22 +20,129 @@ export default function QuizPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Fallback questions in case the API fails
+  const FALLBACK_QUESTIONS = [
+    {
+      _id: "fallback1",
+      question:
+        "The government should provide universal healthcare for all citizens.",
+      axis: "Equity vs. Free Market",
+      direction: "Left",
+      weight: 1,
+    },
+    {
+      _id: "fallback2",
+      question:
+        "Private businesses should be able to operate with minimal government regulation.",
+      axis: "Equity vs. Free Market",
+      direction: "Right",
+      weight: 1,
+    },
+    {
+      _id: "fallback3",
+      question:
+        "Individual freedoms should be prioritized over national security concerns.",
+      axis: "Libertarian vs. Authoritarian",
+      direction: "Left",
+      weight: 1,
+    },
+    {
+      _id: "fallback4",
+      question:
+        "Strong government authority is necessary to maintain social order.",
+      axis: "Libertarian vs. Authoritarian",
+      direction: "Right",
+      weight: 1,
+    },
+    {
+      _id: "fallback5",
+      question: "Society should embrace progressive social changes.",
+      axis: "Progressive vs. Conservative",
+      direction: "Left",
+      weight: 1,
+    },
+    {
+      _id: "fallback6",
+      question: "Traditional values and customs should be preserved.",
+      axis: "Progressive vs. Conservative",
+      direction: "Right",
+      weight: 1,
+    },
+    {
+      _id: "fallback7",
+      question: "Religion should be kept separate from government policy.",
+      axis: "Secular vs. Religious",
+      direction: "Left",
+      weight: 1,
+    },
+    {
+      _id: "fallback8",
+      question: "Religious principles should guide government decisions.",
+      axis: "Secular vs. Religious",
+      direction: "Right",
+      weight: 1,
+    },
+    {
+      _id: "fallback9",
+      question:
+        "International cooperation should be prioritized over national interests.",
+      axis: "Globalism vs. Nationalism",
+      direction: "Left",
+      weight: 1,
+    },
+    {
+      _id: "fallback10",
+      question:
+        "A country should prioritize its own citizens' needs over global concerns.",
+      axis: "Globalism vs. Nationalism",
+      direction: "Right",
+      weight: 1,
+    },
+  ];
+
   // Function to fetch questions from the API
-  const fetchQuestions = async (limit) => {
+  const fetchQuestions = async (limit, includeInShortQuiz = false) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await axios.get(`/api/questions?limit=${limit}`);
+      // Use the public endpoint instead of the authenticated one
+      const url = `/api/questions/public?limit=${limit}&includeInShortQuiz=${includeInShortQuiz}`;
+      console.log(`Fetching questions from: ${url}`);
+
+      const response = await axios.get(url);
+
       if (response.data.success) {
+        console.log(
+          `Successfully fetched ${response.data.questions.length} questions`
+        );
         return response.data.questions || [];
       } else {
-        throw new Error("Failed to fetch questions");
+        console.error("API returned success: false", response.data);
+        throw new Error(response.data.message || "Failed to fetch questions");
       }
     } catch (error) {
       console.error("Error fetching questions:", error);
-      setError("Failed to load questions. Please try again later.");
-      return [];
+      setError(
+        `Failed to load questions from API: ${
+          error.message || "Unknown error"
+        }. Using fallback questions.`
+      );
+
+      // Return fallback questions if API fails
+      if (includeInShortQuiz) {
+        // For short quiz, return all fallback questions
+        return FALLBACK_QUESTIONS;
+      } else {
+        // For full quiz, duplicate the fallback questions to get more
+        const duplicatedQuestions = [];
+        for (let i = 0; i < 10; i++) {
+          duplicatedQuestions.push(
+            ...FALLBACK_QUESTIONS.map((q) => ({ ...q, _id: `${q._id}_${i}` }))
+          );
+        }
+        return duplicatedQuestions;
+      }
     } finally {
       setIsLoading(false);
     }
@@ -60,9 +167,8 @@ export default function QuizPage() {
       let fetchedQuestions = [];
 
       if (type === "short") {
-        // For short quiz, we want an equal number of questions from each axis
-        // First, fetch all questions
-        const allQuestions = await fetchQuestions(200); // Fetch more than needed to ensure we have enough from each axis
+        // For short quiz, fetch questions marked for inclusion in the short quiz
+        const allQuestions = await fetchQuestions(200, true);
 
         if (allQuestions.length === 0) {
           setError("Not enough questions available. Please try again later.");
@@ -73,13 +179,11 @@ export default function QuizPage() {
         // Group questions by axis
         const questionsByAxis = {};
         allQuestions.forEach((question) => {
-          // Only include questions marked for inclusion in the short quiz
-          if (question.includeInShortQuiz === true) {
-            if (!questionsByAxis[question.axis]) {
-              questionsByAxis[question.axis] = [];
-            }
-            questionsByAxis[question.axis].push(question);
+          // All questions should already be marked for short quiz from the API
+          if (!questionsByAxis[question.axis]) {
+            questionsByAxis[question.axis] = [];
           }
+          questionsByAxis[question.axis].push(question);
         });
 
         // Get axes available
@@ -383,7 +487,11 @@ export default function QuizPage() {
                   </div>
                   <div className="p-6">
                     <p className="text-gray-600 mb-6">
-                      Get a fast, high-level snapshot of your political leanings in just a few minutes. This short quiz may yield more extreme results, as it determines your ideology based on only a few questions. Take the full quiz when you have more time!
+                      Get a fast, high-level snapshot of your political leanings
+                      in just a few minutes. This short quiz may yield more
+                      extreme results, as it determines your ideology based on
+                      only a few questions. Take the full quiz when you have
+                      more time!
                     </p>
                     <button
                       onClick={() => startQuiz("short")}
@@ -407,7 +515,10 @@ export default function QuizPage() {
                   </div>
                   <div className="p-6">
                     <p className="text-gray-600 mb-6">
-                      Explore the full spectrum of your political beliefs with our comprehensive, in-depth test. This full quiz provides the most accurate results by covering a broad range of key topics across the ideological spectrum.
+                      Explore the full spectrum of your political beliefs with
+                      our comprehensive, in-depth test. This full quiz provides
+                      the most accurate results by covering a broad range of key
+                      topics across the ideological spectrum.
                     </p>
                     <button
                       onClick={() => startQuiz("full")}

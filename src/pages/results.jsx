@@ -513,6 +513,10 @@ function ResultsContent({ results }) {
                   href={`/archetypes/${archetype.id}`}
                   className="bg-red-600 text-white inline-flex items-center px-6 py-3 rounded-full transition-all hover:shadow-lg"
                   shallow={false}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = `/archetypes/${archetype.id}`;
+                  }}
                 >
                   Learn More About Your Archetype{" "}
                   <FaArrowRight className="ml-2" />
@@ -613,6 +617,10 @@ function ResultsContent({ results }) {
                       href={`/archetypes/${archetype.slug}`}
                       className="inline-flex items-center justify-center text-blue-600 hover:text-blue-800 hover:underline font-medium text-sm bg-blue-50 px-4 py-2 rounded-full hover:bg-blue-100 transition-all"
                       shallow={false}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href = `/archetypes/${archetype.slug}`;
+                      }}
                     >
                       View Details <FaArrowRight className="ml-1.5" />
                     </Link>
@@ -714,14 +722,19 @@ function ResultsContent({ results }) {
                     picture.
                   </p>
                   <button
-                    onClick={() => (window.location.href = "/mindmap")}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.location.href = "/mindmap";
+                    }}
                     className="mt-3 text-primary-maroon hover:text-primary-darkMaroon flex items-center"
                   >
                     <span>View MindMap</span> <FaArrowRight className="ml-1" />
                   </button>
                 </div>
                 <button
-                  onClick={() => setShowMindMapModal(true)}
+                  onClick={() => {
+                    setShowMindMapModal(true);
+                  }}
                   className="bg-primary-maroon text-white px-6 py-3 rounded-full flex items-center text-start font-medium hover:shadow-lg transition-all"
                 >
                   <FaChartPie size={27} className="mr-2 min-w-10" /> Contribute
@@ -820,7 +833,14 @@ function ResultsContent({ results }) {
 
         {/* Take Quiz Again Button */}
         <div className="text-center">
-          <Link href="/quiz" className="btn-secondary inline-flex items-center">
+          <Link
+            href="/quiz"
+            className="btn-secondary inline-flex items-center"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = "/quiz";
+            }}
+          >
             Take Quiz Again <FaArrowRight className="ml-2" />
           </Link>
         </div>
