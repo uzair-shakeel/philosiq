@@ -38,7 +38,7 @@ export default function Testimonials() {
     {
       name: "Ziggy McFarelene",
       role: " ",
-      text: "Philosi1 offers a comprehensive analysis that goes beyond the typical left-right spectrum. I learned a lot about the complexity of political ideology.",
+      text: "Philosiq offers a comprehensive analysis that goes beyond the typical left-right spectrum. I learned a lot about the complexity of political ideology.",
       stars: 5,
       avatar: "/images/testimonial-5.jpg",
     },
