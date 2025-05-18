@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Layout from "../components/Layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -14,11 +14,14 @@ import {
   FaChevronUp,
   FaChartPie,
   FaInfoCircle,
+  FaSpinner,
 } from "react-icons/fa";
 import ResultsProcessor from "../components/ResultsProcessor";
 import AxisGraph from "../components/AxisGraph";
 import DebugResultsTable from "../components/DebugResultsTable";
 import MindMapContributeModal from "../components/MindMapContributeModal";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 // Add this constant at the top level of the file, right after the imports
 // It will be accessible to all functions in the file
@@ -70,6 +73,7 @@ export default function ResultsPage() {
 // Separated content component to receive processed results as props
 function ResultsContent({ results }) {
   const router = useRouter();
+  const resultsRef = useRef(null);
 
   const [emailSent, setEmailSent] = useState(false);
   const [userEmail, setUserEmail] = useState("");
@@ -78,6 +82,7 @@ function ResultsContent({ results }) {
   const [secondaryArchetypes, setSecondaryArchetypes] = useState([]);
   const [allPercents, setAllPercents] = useState([]);
   const [showMindMapModal, setShowMindMapModal] = useState(false);
+  const [isPdfGenerating, setIsPdfGenerating] = useState(false);
 
   // Get the raw data from session storage for debugging
   const [rawData, setRawData] = useState(null);
@@ -367,17 +372,259 @@ function ResultsContent({ results }) {
     }, 1000);
   };
 
-  const handleDownloadPDF = () => {
-    // In a real app, this would generate and download a PDF
-    console.log("Downloading PDF...");
-    alert("PDF download functionality would be implemented here");
+  const handleDownloadPDF = async () => {
+    setIsPdfGenerating(true);
+
+    try {
+      // Create a new PDF document with minimal styling
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4",
+      });
+
+      // Set initial position
+      let y = 40; // Starting y position
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const margin = 40;
+      const contentWidth = pageWidth - margin * 2;
+
+      // Helper function to add text with word wrap
+      const addWrappedText = (text, x, y, maxWidth, lineHeight) => {
+        const lines = pdf.splitTextToSize(text, maxWidth);
+        pdf.text(lines, x, y);
+        return y + lines.length * lineHeight;
+      };
+
+      // Helper function to add a separator
+      const addSeparator = (y) => {
+        return y + 20; // Just add space instead of drawing a line
+      };
+
+      // Add title
+      pdf.setFontSize(16);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("PhilosiQ Political Archetype Results", margin, y);
+      y += 20;
+
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
+      pdf.text(`Generated on ${new Date().toLocaleDateString()}`, margin, y);
+      y = addSeparator(y + 10);
+
+      // Add primary archetype
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
+      y += 10;
+      pdf.text(
+        `Your Archetype: ${results.archetype?.name || "Unknown"}`,
+        margin,
+        y
+      );
+      y += 20;
+
+      // Add traits
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
+
+      const traits = [];
+      if (Object.keys(axisLetters).length > 0) {
+        Object.entries(axisLetters).forEach(([axis, letter]) => {
+          let trait = "";
+          switch (axis) {
+            case "Equity vs. Free Market":
+              trait = letter === "E" ? "Equity" : "Free Market";
+              break;
+            case "Libertarian vs. Authoritarian":
+              trait = letter === "L" ? "Libertarian" : "Authoritarian";
+              break;
+            case "Progressive vs. Conservative":
+              trait = letter === "P" ? "Progressive" : "Conservative";
+              break;
+            case "Secular vs. Religious":
+              trait = letter === "S" ? "Secular" : "Religious";
+              break;
+            case "Globalism vs. Nationalism":
+              trait = letter === "G" ? "Globalism" : "Nationalism";
+              break;
+          }
+          traits.push(trait);
+        });
+      }
+
+      pdf.text(`Traits: ${traits.join(", ")}`, margin, y);
+      y += 15;
+
+      // Add description
+      const description = getArchetypeDescription(results.archetype?.name);
+      pdf.setFontSize(11);
+      y = addWrappedText(description, margin, y, contentWidth, 15);
+      y = addSeparator(y);
+
+      // Add axis breakdown section
+      y += 10;
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Your Political Axis Breakdown", margin, y);
+      y += 20;
+
+      // Add each axis
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
+
+      results.axisResults.forEach((axis, index) => {
+        // Check if we need to add a new page
+        if (y > pdf.internal.pageSize.getHeight() - 80) {
+          pdf.addPage();
+          y = 40;
+        }
+
+        pdf.setFont("helvetica", "bold");
+        pdf.text(axis.name, margin, y);
+        y += 15;
+
+        pdf.setFont("helvetica", "normal");
+
+        // Simple text representation of the axis position
+        const leftPercent = axis.score <= 50 ? axis.score : 100 - axis.score;
+        const rightPercent = axis.score >= 50 ? axis.score : 100 - axis.score;
+
+        pdf.text(`${axis.leftLabel}: ${leftPercent}%`, margin, y);
+        y += 15;
+        pdf.text(`${axis.rightLabel}: ${rightPercent}%`, margin, y);
+        y += 15;
+
+        // Add a simple text indicator of position
+        let positionText = "";
+        if (axis.score < 40) {
+          positionText = `Strong ${axis.leftLabel} leaning`;
+        } else if (axis.score < 48) {
+          positionText = `Moderate ${axis.leftLabel} leaning`;
+        } else if (axis.score > 60) {
+          positionText = `Strong ${axis.rightLabel} leaning`;
+        } else if (axis.score > 52) {
+          positionText = `Moderate ${axis.rightLabel} leaning`;
+        } else {
+          positionText = "Centrist position";
+        }
+
+        pdf.text(`Position: ${positionText}`, margin, y);
+        y += 20;
+
+        if (index < results.axisResults.length - 1) {
+          y = addSeparator(y);
+        }
+      });
+
+      // Add secondary archetypes if they exist
+      if (secondaryArchetypes && secondaryArchetypes.length > 0) {
+        // Check if we need to add a new page
+        if (y > pdf.internal.pageSize.getHeight() - 120) {
+          pdf.addPage();
+          y = 40;
+        }
+
+        y = addSeparator(y);
+        y += 10;
+
+        pdf.setFontSize(14);
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Your Secondary Archetypes", margin, y);
+        y += 20;
+
+        pdf.setFontSize(11);
+        pdf.setFont("helvetica", "normal");
+        pdf.text(
+          "You also show strong alignment with these political archetypes:",
+          margin,
+          y
+        );
+        y += 20;
+
+        secondaryArchetypes.forEach((archetype, index) => {
+          // Check if we need to add a new page
+          if (y > pdf.internal.pageSize.getHeight() - 150) {
+            pdf.addPage();
+            y = 40;
+          }
+
+          pdf.setFont("helvetica", "bold");
+          pdf.text(`${archetype.name} (${archetype.match})`, margin, y);
+          y += 15;
+
+          pdf.setFont("helvetica", "normal");
+          pdf.text(`Traits: ${(archetype.traits || []).join(", ")}`, margin, y);
+          y += 15;
+
+          pdf.text(
+            `Difference from primary: Flipped position on ${
+              archetype.flippedAxis
+                ? archetype.flippedAxis.replace(" vs. ", "/")
+                : ""
+            }`,
+            margin,
+            y
+          );
+          y += 15;
+
+          const secondaryDescription = getArchetypeDescription(archetype.name);
+          y = addWrappedText(secondaryDescription, margin, y, contentWidth, 15);
+
+          if (index < secondaryArchetypes.length - 1) {
+            y = addSeparator(y);
+          }
+        });
+      }
+
+      // Add page numbers
+      const totalPages = pdf.internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(10);
+        pdf.text(
+          `Page ${i} of ${totalPages}`,
+          pageWidth / 2,
+          pdf.internal.pageSize.getHeight() - 20,
+          { align: "center" }
+        );
+      }
+
+      // Add footer on last page
+      pdf.setPage(totalPages);
+      pdf.setFontSize(10);
+      pdf.setFont("helvetica", "italic");
+      const footerText =
+        "Visit philosiq.com to learn more about your political archetype";
+      pdf.text(
+        footerText,
+        pageWidth / 2,
+        pdf.internal.pageSize.getHeight() - 40,
+        { align: "center" }
+      );
+
+      // Generate a filename with the archetype name and date
+      const archetypeName = results.archetype?.name || "Results";
+      const date = new Date().toISOString().split("T")[0];
+      const filename = `PhilosiQ-${archetypeName.replace(
+        /\s+/g,
+        "-"
+      )}-${date}.pdf`;
+
+      // Save the PDF
+      pdf.save(filename);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Failed to generate PDF. Please try again.");
+    } finally {
+      setIsPdfGenerating(false);
+    }
   };
 
   // If no results are passed, the ResultsProcessor component will handle it
   if (!results) return null;
 
   return (
-    <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
+    <div className="pt-24 pb-16 min-h-screen bg-neutral-light" ref={resultsRef}>
       <div className="container-custom">
         {/* Logo for PDF sharing */}
         <div className="absolute top-28 right-8 opacity-70">
@@ -633,7 +880,7 @@ function ResultsContent({ results }) {
 
         {/* Debug Section */}
         {rawData && (
-          <div className="mb-16">
+          <div className="mb-16 no-print">
             <button
               onClick={() => setShowDebug(!showDebug)}
               className="w-full bg-gray-100 hover:bg-gray-200 p-4 rounded-lg flex items-center justify-center font-medium text-gray-700"
@@ -697,7 +944,7 @@ function ResultsContent({ results }) {
 
         {/* MindMap Contribute Section - Add this before the Share Results section */}
         {isFullQuiz && (
-          <div className="mb-16 bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="mb-16 bg-white rounded-lg shadow-lg overflow-hidden no-print">
             <div className="bg-gradient-to-r from-primary-maroon to-secondary-darkBlue p-6 text-white">
               <h2 className="text-2xl font-bold mb-2">Contribute to MindMap</h2>
               <p>
@@ -746,7 +993,7 @@ function ResultsContent({ results }) {
         )}
 
         {/* Share Results */}
-        <div className="mb-16">
+        <div className="mb-16 no-print">
           <h2 className="text-3xl font-bold mb-8 text-center">
             Share Your Results
           </h2>
@@ -806,9 +1053,17 @@ function ResultsContent({ results }) {
                 </p>
                 <button
                   onClick={handleDownloadPDF}
-                  className="w-full btn-primary-outline"
+                  disabled={isPdfGenerating}
+                  className="w-full btn-primary-outline flex justify-center items-center"
                 >
-                  Download PDF
+                  {isPdfGenerating ? (
+                    <>
+                      <FaSpinner className="animate-spin mr-2" /> Generating
+                      PDF...
+                    </>
+                  ) : (
+                    "Download PDF"
+                  )}
                 </button>
               </div>
             </div>
@@ -832,7 +1087,7 @@ function ResultsContent({ results }) {
         </div>
 
         {/* Take Quiz Again Button */}
-        <div className="text-center">
+        <div className="text-center no-print">
           <Link
             href="/quiz"
             className="btn-secondary inline-flex items-center"

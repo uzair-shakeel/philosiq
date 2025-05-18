@@ -300,7 +300,7 @@ export default function AxisGraph({
   if (markerVisiblePosition >= 99) markerVisiblePosition = 99;
 
   return (
-    <div className={`mb-8 ${className}`}>
+    <div className={`mb-8 axis-graph ${className || ""}`}>
       {/* Axis Title */}
       <h3 className="text-lg font-semibold mb-1">{canonicalName}</h3>
 
