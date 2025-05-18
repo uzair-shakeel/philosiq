@@ -16,7 +16,7 @@ const Footer = () => {
               <img src="/footer logo.png" alt="logo" className="h-12 w-auto" />
             </Link>
             <p className="text-gray-300 text-sm">
-              Discover your political identity through our comprehensive survey
+              Discover your political identity through our comprehensive quiz
               and explore the nuances of political thought.
             </p>
             <div className="flex space-x-4">
@@ -33,7 +33,7 @@ const Footer = () => {
                 <FaTwitter size={20} />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/philosiq"
                 className="hover:text-primary-lightMaroon transition-colors duration-300"
               >
                 <FaInstagram size={20} />

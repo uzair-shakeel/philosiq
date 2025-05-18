@@ -8,37 +8,37 @@ import "swiper/css/navigation";
 export default function Testimonials() {
   const testimonialsData = [
     {
-      name: "Sarah Johnson",
-      role: "Political Analyst",
-      text: "PhilosiQ's survey gave me incredible insights into my political beliefs. The results were surprisingly accurate and helped me understand my stance on various issues.",
+      name: "John Santucci",
+      role: " ",
+      text: "Philosiq's quiz gave me incredible insights into my political beliefs. The results were surprisingly accurate and helped me understand my stance on various issues.",
       stars: 5,
       avatar: "/images/testimonial-1.jpg",
     },
     {
-      name: "Michael Anderson",
-      role: "University Student",
-      text: "I was skeptical at first, but the depth of analysis in my results was impressive. PhilosiQ excels at capturing the nuances of political thought.",
+      name: "Nick Maglio",
+      role: " ",
+      text: "I was skeptical at first, but the depth of analysis in my results was impressive. Philosiq excels at capturing the nuances of political thought.",
       stars: 4,
       avatar: "/images/testimonial-2.jpg",
     },
     {
-      name: "Emily Williams",
-      role: "Social Activist",
-      text: "Taking the PhilosiQ survey was eye-opening. It helped me articulate beliefs I've held but struggled to define. Highly recommended for anyone interested in politics.",
+      name: "Lauren Palmer",
+      role: " ",
+      text: "Taking the Philosiq quiz was eye-opening. It helped me articulate beliefs I've held but struggled to define. Highly recommended for anyone interested in politics.",
       stars: 5,
       avatar: "/images/testimonial-3.jpg",
     },
     {
-      name: "John Doe",
-      role: "Educator",
+      name: "Matthew Henderson",
+      role: " ",
       text: "The quiz was thought-provoking and made me reconsider some of my positions. The archetype I received accurately reflected my political outlook.",
-      stars: 4,
+      stars: 5,
       avatar: "/images/testimonial-4.jpg",
     },
     {
-      name: "Jane Smith",
-      role: "Policy Researcher",
-      text: "PhilosiQ offers a comprehensive analysis that goes beyond the typical left-right spectrum. I learned a lot about the complexity of political ideology.",
+      name: "Ziggy McFarelene",
+      role: " ",
+      text: "Philosiq offers a comprehensive analysis that goes beyond the typical left-right spectrum. I learned a lot about the complexity of political ideology.",
       stars: 5,
       avatar: "/images/testimonial-5.jpg",
     },
@@ -50,7 +50,7 @@ export default function Testimonials() {
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Users Say</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Discover how PhilosiQ has helped people understand their political identity
+            Discover how Philosiq has helped people understand their political identity
           </p>
         </div>
 

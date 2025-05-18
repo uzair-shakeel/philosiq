@@ -624,7 +624,11 @@ function ResultsContent({ results }) {
   if (!results) return null;
 
   return (
-    <div className="pt-24 pb-16 min-h-screen bg-neutral-light" ref={resultsRef}>
+    <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
+      {/* 🚨 Screenshot warning banner */}
+      <div className="bg-yellow-200 text-yellow-900 text-center py-3 px-4 font-medium shadow-md">
+        📸 Please screenshot your results — they will not be saved. We're working on a fix for this!
+      </div>      
       <div className="container-custom">
         {/* Logo for PDF sharing */}
         <div className="absolute top-28 right-8 opacity-70">
