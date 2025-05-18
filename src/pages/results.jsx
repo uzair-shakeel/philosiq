@@ -370,7 +370,7 @@ function ResultsContent({ results }) {
   const handleDownloadPDF = () => {
     // In a real app, this would generate and download a PDF
     console.log("Downloading PDF...");
-    alert("PDF download functionality would be implemented here");
+    alert("PDF download functionality is being worked on. This feature will be added in Beta 1.1.");
   };
 
   // If no results are passed, the ResultsProcessor component will handle it
