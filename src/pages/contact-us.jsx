@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout";
 import axios from "axios";
-import {
-  FaPaperPlane,
-  FaEnvelope,
-  FaSpinner,
-} from "react-icons/fa";
+import { FaPaperPlane, FaEnvelope, FaSpinner } from "react-icons/fa";
 
 export default function ContactUs() {
   const [formData, setFormData] = useState({
@@ -41,7 +37,7 @@ export default function ContactUs() {
         setSubmitStatus("success");
         setSubmitMessage(
           response.data.message ||
-            "Thank you for your message! We will get back to you soon."
+            "Thank you for your message! We have sent a notification to our team and will get back to you soon."
         );
         setFormData({
           name: "",
@@ -91,10 +87,10 @@ export default function ContactUs() {
                     <div>
                       <h3 className="font-bold mb-1">Email</h3>
                       <a
-                        href="mailto:support@philosiq.com"
+                        href="mailto:info@philosiq.com"
                         className="text-gray-300 hover:text-white transition-colors"
                       >
-                        support@philosiq.com
+                        info@philosiq.com
                       </a>
                     </div>
                   </div>

@@ -3,6 +3,7 @@ import { authOptions } from "../auth/[...nextauth]";
 import connectToDatabase from "../../../lib/mongodb";
 import Contact from "../../../models/Contact";
 import mongoose from "mongoose";
+import { sendContactNotification } from "../../../utils/email";
 
 export default async function handler(req, res) {
   // Connect to the database
@@ -102,6 +103,16 @@ export default async function handler(req, res) {
       console.log("Attempting to save contact message:", newMessage);
       await newMessage.save();
       console.log("Contact message saved successfully!");
+
+      // Send email notification
+      try {
+        await sendContactNotification({ name, email, subject, message });
+        console.log("Email notification sent successfully!");
+      } catch (emailError) {
+        console.error("Failed to send email notification:", emailError);
+        // We don't want to fail the request if just the email fails
+        // The message is still saved in the database
+      }
 
       return res.status(201).json({
         success: true,
