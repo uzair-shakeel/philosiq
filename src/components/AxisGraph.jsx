@@ -393,14 +393,14 @@ function getPositionDescription(axis, score, strength) {
 
   const descriptions = {
     "Equity vs. Free Market": {
-      left: {
+      right: {
         weak: "You have a slight preference for economic equality and redistributive policies, but you also see value in market mechanisms.",
         moderate:
           "You believe economic equality is important and favor policies that reduce wealth disparities through government intervention.",
         strong:
           "You strongly favor economic equality and robust government intervention to ensure fair distribution of resources.",
       },
-      right: {
+      left: {
         weak: "You have a slight preference for free markets, while recognizing the need for some economic regulations.",
         moderate:
           "You favor market-based solutions and believe economic freedom leads to greater innovation and prosperity.",
@@ -409,14 +409,14 @@ function getPositionDescription(axis, score, strength) {
       },
     },
     "Libertarian vs. Authoritarian": {
-      left: {
+      right: {
         weak: "You generally favor individual liberties with limited government authority, but recognize the need for some regulations.",
         moderate:
           "You value individual freedoms and prefer a government with limited powers over personal matters.",
         strong:
           "You strongly prioritize individual liberties and believe government authority should be highly restricted.",
       },
-      right: {
+      left: {
         weak: "You believe in balanced governance with some authority, while still respecting individual rights.",
         moderate:
           "You favor stronger governmental authority to maintain order and implement effective policies.",
@@ -425,14 +425,14 @@ function getPositionDescription(axis, score, strength) {
       },
     },
     "Progressive vs. Conservative": {
-      left: {
+      right: {
         weak: "You generally favor gradual social change while respecting some traditional values.",
         moderate:
           "You embrace social progress and are open to reforming institutions to better serve evolving societal needs.",
         strong:
           "You strongly advocate for social change and believe in continuously reforming institutions to address injustices.",
       },
-      right: {
+      left: {
         weak: "You value some traditional practices while being open to moderate social changes.",
         moderate:
           "You value traditional institutions and believe in preserving established social structures and practices.",
@@ -441,14 +441,14 @@ function getPositionDescription(axis, score, strength) {
       },
     },
     "Secular vs. Religious": {
-      left: {
+      right: {
         weak: "You generally favor secular reasoning in governance while respecting religious beliefs in society.",
         moderate:
           "You believe public policy should be guided by secular reasoning, separate from religious doctrine.",
         strong:
           "You strongly advocate for secular governance and clear separation between religious institutions and state functions.",
       },
-      right: {
+      left: {
         weak: "You recognize the value of religious perspectives in public life, while supporting basic separation of church and state.",
         moderate:
           "You believe religious values and traditions should inform public policy and social norms.",
@@ -457,14 +457,14 @@ function getPositionDescription(axis, score, strength) {
       },
     },
     "Globalism vs. Nationalism": {
-      left: {
+      right: {
         weak: "You generally support international cooperation while maintaining important national interests.",
         moderate:
           "You value international institutions and favor cooperation between nations on global challenges.",
         strong:
           "You strongly prioritize global solutions and believe nations should increasingly integrate into international frameworks.",
       },
-      right: {
+      left: {
         weak: "You believe in protecting national interests while engaging in beneficial international cooperation.",
         moderate:
           "You prioritize national sovereignty and believe countries should put their citizens' interests first.",
