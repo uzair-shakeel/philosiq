@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Layout from "../components/Layout";
 import axios from "axios";
 import { FaPaperPlane, FaEnvelope, FaSpinner } from "react-icons/fa";
+import { track } from "@vercel/analytics";
 
 export default function ContactUs() {
   const [formData, setFormData] = useState({
@@ -34,6 +35,9 @@ export default function ContactUs() {
       const response = await axios.post("/api/contact", formData);
 
       if (response.data.success) {
+        // Track successful contact form submission
+        track("contact_form_submitted", { subject: formData.subject });
+        
         setSubmitStatus("success");
         setSubmitMessage(
           response.data.message ||
@@ -50,6 +54,12 @@ export default function ContactUs() {
       }
     } catch (error) {
       console.error("Error submitting contact form:", error);
+      
+      // Track form submission errors
+      track("contact_form_error", { 
+        error: error.message || "Unknown error" 
+      });
+      
       setSubmitStatus("error");
       setSubmitMessage(
         error.response?.data?.message ||

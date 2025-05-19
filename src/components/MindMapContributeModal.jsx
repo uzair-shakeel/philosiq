@@ -10,6 +10,7 @@ import {
   FaCheckCircle,
   FaTimesCircle,
 } from "react-icons/fa";
+import { track } from "@vercel/analytics";
 
 export default function MindMapContributeModal({
   isOpen,
@@ -354,6 +355,9 @@ export default function MindMapContributeModal({
     setError(null);
 
     try {
+      // Track contribution start
+      track("mindmap_contribution_started", { archetype });
+
       const response = await fetch("/api/mindmap/contribute", {
         method: "POST",
         headers: {
@@ -372,6 +376,18 @@ export default function MindMapContributeModal({
         throw new Error(result.message || "Failed to submit data");
       }
 
+      // Track successful contribution
+      track("mindmap_contribution_completed", {
+        archetype,
+        demographics: {
+          age: formData.age,
+          gender: formData.gender,
+          education: formData.education,
+          votingTendency: formData.votingTendency,
+          country: formData.location?.country || "Unknown",
+        },
+      });
+
       setSuccess(true);
       localStorage.setItem("hasContributedToMindMap", "true");
 
@@ -380,6 +396,13 @@ export default function MindMapContributeModal({
       }, 2000);
     } catch (error) {
       console.error("Error submitting demographic data:", error);
+
+      // Track contribution error
+      track("mindmap_contribution_error", {
+        error: error.message || "Unknown error",
+        archetype,
+      });
+
       setError(
         error.message || "Failed to submit your data. Please try again."
       );

@@ -22,6 +22,7 @@ import DebugResultsTable from "../components/DebugResultsTable";
 import MindMapContributeModal from "../components/MindMapContributeModal";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import { track } from "@vercel/analytics";
 
 // Add this constant at the top level of the file, right after the imports
 // It will be accessible to all functions in the file
@@ -110,6 +111,16 @@ function ResultsContent({ results }) {
       console.error("Error determining quiz type:", err);
     }
   }, []);
+
+  // Track when results are viewed
+  useEffect(() => {
+    if (results && results.archetype) {
+      track("results_viewed", {
+        archetype: results.archetype.name,
+        quizType: isFullQuiz ? "full" : "short",
+      });
+    }
+  }, [results, isFullQuiz]);
 
   const handleUpdate = (name, data) => {
     setAllPercents((prev) => ({
@@ -376,6 +387,11 @@ function ResultsContent({ results }) {
     setIsPdfGenerating(true);
 
     try {
+      // Track PDF download start
+      track("pdf_download_started", {
+        archetype: results.archetype?.name || "Unknown",
+      });
+
       // Create a new PDF document with minimal styling
       const pdf = new jsPDF({
         orientation: "portrait",
@@ -612,9 +628,20 @@ function ResultsContent({ results }) {
 
       // Save the PDF
       pdf.save(filename);
+
+      // Track successful PDF download
+      track("pdf_download_completed", {
+        archetype: results.archetype?.name || "Unknown",
+      });
     } catch (error) {
       console.error("Error generating PDF:", error);
       alert("Failed to generate PDF. Please try again.");
+
+      // Track PDF generation error
+      track("pdf_download_error", {
+        error: error.message || "Unknown error",
+        archetype: results.archetype?.name || "Unknown",
+      });
     } finally {
       setIsPdfGenerating(false);
     }
@@ -627,8 +654,9 @@ function ResultsContent({ results }) {
     <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
       {/* 🚨 Screenshot warning banner */}
       <div className="bg-yellow-200 text-yellow-900 text-center py-3 px-4 font-medium shadow-md">
-        📸 Please screenshot your results — they will not be saved. We're working on a fix for this!
-      </div>      
+        📸 Please screenshot your results — they will not be saved. We're
+        working on a fix for this!
+      </div>
       <div className="container-custom">
         {/* Logo for PDF sharing */}
         <div className="absolute top-28 right-8 opacity-70">

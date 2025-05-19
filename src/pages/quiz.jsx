@@ -8,6 +8,7 @@ import {
   FaInfoCircle,
 } from "react-icons/fa";
 import axios from "axios";
+import { track } from "@vercel/analytics";
 
 export default function QuizPage() {
   const [quizStarted, setQuizStarted] = useState(false);
@@ -160,6 +161,9 @@ export default function QuizPage() {
 
   // Function to start the quiz
   const startQuiz = async (type) => {
+    // Track quiz start event
+    track("quiz_started", { type });
+
     setQuizType(type);
     setIsLoading(true);
 
@@ -336,6 +340,13 @@ export default function QuizPage() {
 
     // Also store in localStorage for persistence across browser sessions
     localStorage.setItem("quizResults", quizResultsData);
+
+    // Track quiz completion
+    track("quiz_completed", {
+      type: quizType,
+      questionsAnswered: Object.keys(answers).length,
+      totalQuestions: questions.length,
+    });
 
     // Redirect to results page
     window.location.href = "/results";
