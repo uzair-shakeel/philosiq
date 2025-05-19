@@ -100,7 +100,7 @@ export default function ContactUs() {
                         href="mailto:info@philosiq.com"
                         className="text-gray-300 hover:text-white transition-colors"
                       >
-                        info@philosiq.com
+                        support@philosiq.com
                       </a>
                     </div>
                   </div>
