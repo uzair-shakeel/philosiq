@@ -351,10 +351,7 @@ function ResultsContent({ results }) {
         match: `${matchPercent}% match`,
         traits: traits,
         flippedAxis: axisToFlip,
-        slug: archetypeName
-          .toLowerCase()
-          .replace(/\s+/g, "-")
-          .replace(/[^\w\-]+/g, ""),
+        slug: secondaryCode.toLowerCase(),
       });
     });
 
