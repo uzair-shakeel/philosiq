@@ -42,9 +42,14 @@ export default function AxisGraph({
     // Handle axis aliases for consistent naming
     const canonicalAxis = axisAliases[axis] || axis;
 
-    // If left side has higher percentage, return first letter of left-side label
-    // Otherwise return first letter of right-side label
-    if (leftPercentNum > rightPercentNum) {
+    // Determine if we're on the right side (right percentage is higher)
+    // This matches the logic in resultsCalculator.js where negative raw scores
+    // correspond to right-side letters and positive raw scores to left-side letters
+    const isRightSide = rightPercentNum >= leftPercentNum;
+
+    // If left side has higher percentage, return left-side letter
+    // Otherwise return right-side letter
+    if (!isRightSide) {
       switch (canonicalAxis) {
         case "Equity vs. Free Market":
           return "E"; // Equity
@@ -279,7 +284,6 @@ export default function AxisGraph({
     updatePercents(name, { leftPercent, rightPercent });
   }, [axisSpecificPercentages]);
 
-
   // Get the dominant letter for this axis
   const axisDominantLetter = dominantAxisLetters[canonicalName] || "?";
 
@@ -310,14 +314,20 @@ export default function AxisGraph({
           <span
             className={`px-2 py-0.5 rounded-full text-white ${leftSideColor}`}
           >
-            {safeLeftLabel}
+            {safeLeftLabel}{" "}
+            {parseFloat(leftPercent) > parseFloat(rightPercent) &&
+              positionStrength &&
+              `(${positionStrength})`}
           </span>
         </div>
         <div className="text-xs font-medium">
           <span
             className={`px-2 py-0.5 rounded-full text-white ${rightSideColor}`}
           >
-            {safeRightLabel} {positionStrength && `(${positionStrength})`}
+            {safeRightLabel}{" "}
+            {parseFloat(rightPercent) >= parseFloat(leftPercent) &&
+              positionStrength &&
+              `(${positionStrength})`}
           </span>
         </div>
       </div>
