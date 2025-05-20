@@ -272,13 +272,15 @@ export default function AxisGraph({
   // Calculate the strength based on percentage
   const getStrengthFromPercentage = (percent) => {
     const distanceFromCenter = Math.abs(percent - 50);
-
+    
     if (distanceFromCenter <= 9) {
-      return "Weak";
-    } else if (distanceFromCenter <= 25) {
-      return "Moderate";
+      return "Leaning";
+    } else if (distanceFromCenter <= 19) {
+      return "Inclined";
+    } else if (distanceFromCenter <= 29) {
+      return "Committed";
     } else {
-      return "Strong";
+      return "Extreme";
     }
   };
 

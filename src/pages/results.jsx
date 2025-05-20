@@ -510,13 +510,17 @@ function ResultsContent({ results }) {
         // Add a simple text indicator of position
         let positionText = "";
         if (axis.score < 40) {
-          positionText = `Strong ${axis.leftLabel} leaning`;
-        } else if (axis.score < 48) {
-          positionText = `Moderate ${axis.leftLabel} leaning`;
+          positionText = `Extreme ${axis.leftLabel} leaning`;
+        } else if (axis.score < 45) {
+          positionText = `Committed ${axis.leftLabel} leaning`;
+        } else if (axis.score < 50) {
+          positionText = `Inclined ${axis.leftLabel} leaning`;
         } else if (axis.score > 60) {
-          positionText = `Strong ${axis.rightLabel} leaning`;
-        } else if (axis.score > 52) {
-          positionText = `Moderate ${axis.rightLabel} leaning`;
+          positionText = `Extreme ${axis.rightLabel} leaning`;
+        } else if (axis.score > 55) {
+          positionText = `Committed ${axis.rightLabel} leaning`;
+        } else if (axis.score > 50) {
+          positionText = `Inclined ${axis.rightLabel} leaning`;
         } else {
           positionText = "Centrist position";
         }

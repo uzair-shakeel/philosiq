@@ -327,15 +327,18 @@ function determinePositionStrengths(
       const absRawDistance = Math.abs(rawScore);
 
       // Updated thresholds for raw scores (-100 to 100 scale)
-      // 0-18 = Weak (corresponds to 50-59% on 0-100 scale)
-      // 18-50 = Moderate (corresponds to 59-75% on 0-100 scale)
-      // 50-100 = Strong (corresponds to 75-100% on 0-100 scale)
+      // 0-18 = Leaning (corresponds to 50-59% on 0-100 scale)
+      // 18-38 = Inclined (corresponds to 60-69% on 0-100 scale)
+      // 38-58 = Committed (corresponds to 70-79% on 0-100 scale)
+      // 58-100 = Extreme (corresponds to 80-100% on 0-100 scale)
       if (absRawDistance < 18) {
-        strengths[axis] = "Weak";
-      } else if (absRawDistance < 50) {
-        strengths[axis] = "Moderate";
+        strengths[axis] = "Leaning";
+      } else if (absRawDistance < 38) {
+        strengths[axis] = "Inclined";
+      } else if (absRawDistance < 58) {
+        strengths[axis] = "Committed";
       } else {
-        strengths[axis] = "Strong";
+        strengths[axis] = "Extreme";
       }
     } else {
       // Fallback to using normalized scores if raw not available
@@ -343,15 +346,18 @@ function determinePositionStrengths(
       const distanceFromCenter = Math.abs(displayScore - 50);
 
       // Updated thresholds for normalized scores (0-100 scale)
-      // 0-9 from center (41-59) = Weak
-      // 9-25 from center (25-41 or 59-75) = Moderate
-      // 25+ from center (0-25 or 75-100) = Strong
+      // 0-9 from center (41-59) = Leaning
+      // 9-19 from center (31-41 or 59-69) = Inclined
+      // 19-29 from center (21-31 or 69-79) = Committed
+      // 29+ from center (0-21 or 79-100) = Extreme
       if (distanceFromCenter <= 9) {
-        strengths[axis] = "Weak";
-      } else if (distanceFromCenter <= 25) {
-        strengths[axis] = "Moderate";
+        strengths[axis] = "Leaning";
+      } else if (distanceFromCenter <= 19) {
+        strengths[axis] = "Inclined";
+      } else if (distanceFromCenter <= 29) {
+        strengths[axis] = "Committed";
       } else {
-        strengths[axis] = "Strong";
+        strengths[axis] = "Extreme";
       }
     }
   });
