@@ -21,54 +21,54 @@ export default function QuizPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Fallback questions in case the API fails
   const FALLBACK_QUESTIONS = [
     {
       _id: "fallback1",
-      question: "The government should provide universal healthcare for all citizens.",
+      question:
+        "The government should provide universal healthcare for all citizens.",
       axis: "Equity vs. Free Market",
       direction: "Left",
       weight: 1,
     },
-    // ... (same fallback questions as before)
-  ];
-
-  const fetchQuestions = async (limit, includeInShortQuiz) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      let url = `/api/questions/public?limit=${limit}`;
-      if (includeInShortQuiz === true) {
-        url += `&includeInShortQuiz=true`;
-      }
-
-      console.log(`Fetching questions from: ${url}`);
-      const response = await axios.get(url);
-
-      if (response.data.success) {
-        console.log(`Successfully fetched ${response.data.questions.length} questions`);
-        return response.data.questions || [];
-      } else {
-        console.error("API returned success: false", response.data);
-        throw new Error(response.data.message || "Failed to fetch questions");
-      }
-    } catch (error) {
-      console.error("Error fetching questions:", error);
-      setError(`Failed to load questions from API: ${error.message || "Unknown error"}. Using fallback questions.`);
-
-      if (includeInShortQuiz) {
-        return FALLBACK_QUESTIONS;
-      } else {
-        const duplicatedQuestions = [];
-        for (let i = 0; i < 10; i++) {
-          duplicatedQuestions.push(...FALLBACK_QUESTIONS.map((q) => ({ ...q, _id: `${q._id}_${i}` })));
-        }
-        return duplicatedQuestions;
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  }
+    {
+      _id: "fallback2",
+      question:
+        "Private businesses should be able to operate with minimal government regulation.",
+      axis: "Equity vs. Free Market",
+      direction: "Right",
+      weight: 1,
+    },
+    {
+      _id: "fallback3",
+      question:
+        "Individual freedoms should be prioritized over national security concerns.",
+      axis: "Libertarian vs. Authoritarian",
+      direction: "Left",
+      weight: 1,
+    },
+    {
+      _id: "fallback4",
+      question:
+        "Strong government authority is necessary to maintain social order.",
+      axis: "Libertarian vs. Authoritarian",
+      direction: "Right",
+      weight: 1,
+    },
+    {
+      _id: "fallback5",
+      question: "Society should embrace progressive social changes.",
+      axis: "Progressive vs. Conservative",
+      direction: "Left",
+      weight: 1,
+    },
+    {
+      _id: "fallback6",
+      question: "Traditional values and customs should be preserved.",
+      axis: "Progressive vs. Conservative",
+      direction: "Right",
+      weight: 1,
+    },
     {
       _id: "fallback7",
       question: "Religion should be kept separate from government policy.",
