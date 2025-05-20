@@ -255,7 +255,7 @@ export default function QuizPage() {
         fetchedQuestions = shuffleArray(selectedQuestions);
       } else {
         // For full quiz, just fetch 130 questions
-        fetchedQuestions = await fetchQuestions(130);
+        fetchedQuestions = await fetchQuestions(130, null); // or `undefined`
 
         // Shuffle the questions for the full quiz as well
         if (fetchedQuestions.length > 0) {
