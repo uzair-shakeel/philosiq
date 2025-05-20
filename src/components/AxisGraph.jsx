@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 /**
  * Component to display a visual representation of a political axis
@@ -269,13 +269,35 @@ export default function AxisGraph({
       rightSideColor = "bg-green-600";
   }
 
-  // Get the axis-specific percentages
+  // Calculate the strength based on percentage
+  const getStrengthFromPercentage = (percent) => {
+    const distanceFromCenter = Math.abs(percent - 50);
+
+    if (distanceFromCenter <= 9) {
+      return "Weak";
+    } else if (distanceFromCenter <= 25) {
+      return "Moderate";
+    } else {
+      return "Strong";
+    }
+  };
+
+  // Calculate the axis-specific percentages
   const axisSpecificPercentages = axisPercentages[canonicalName] || {
     left: "50.00",
     right: "50.00",
   };
   const leftPercent = axisSpecificPercentages.left;
   const rightPercent = axisSpecificPercentages.right;
+
+  // Calculate strength based on actual percentages
+  const leftPercentNum = parseFloat(leftPercent);
+  const rightPercentNum = parseFloat(rightPercent);
+
+  // Determine which side is dominant and calculate its strength
+  const isDominantLeft = leftPercentNum > rightPercentNum;
+  const dominantPercent = isDominantLeft ? leftPercentNum : rightPercentNum;
+  const strengthLabel = getStrengthFromPercentage(dominantPercent);
 
   useEffect(() => {
     const leftPercent = axisSpecificPercentages.left;
@@ -314,20 +336,14 @@ export default function AxisGraph({
           <span
             className={`px-2 py-0.5 rounded-full text-white ${leftSideColor}`}
           >
-            {safeLeftLabel}{" "}
-            {parseFloat(leftPercent) > parseFloat(rightPercent) &&
-              positionStrength &&
-              `(${positionStrength})`}
+            {safeLeftLabel} {isDominantLeft && `(${strengthLabel})`}
           </span>
         </div>
         <div className="text-xs font-medium">
           <span
             className={`px-2 py-0.5 rounded-full text-white ${rightSideColor}`}
           >
-            {safeRightLabel}{" "}
-            {parseFloat(rightPercent) >= parseFloat(leftPercent) &&
-              positionStrength &&
-              `(${positionStrength})`}
+            {safeRightLabel} {!isDominantLeft && `(${strengthLabel})`}
           </span>
         </div>
       </div>
@@ -341,9 +357,7 @@ export default function AxisGraph({
         >
           {/* Always show percentage */}
           <span className="text-white font-bold text-center px-2 z-20">
-            {leftPercent}%{" "}
-            {parseFloat(leftPercent) > parseFloat(rightPercent) &&
-              `(${axisDominantLetter})`}
+            {leftPercent}% {isDominantLeft && `(${axisDominantLetter})`}
           </span>
         </div>
 
@@ -354,9 +368,7 @@ export default function AxisGraph({
         >
           {/* Always show percentage */}
           <span className="text-white font-bold text-center px-2 z-20">
-            {rightPercent}%{" "}
-            {parseFloat(rightPercent) >= parseFloat(leftPercent) &&
-              `(${axisDominantLetter})`}
+            {rightPercent}% {!isDominantLeft && `(${axisDominantLetter})`}
           </span>
         </div>
 

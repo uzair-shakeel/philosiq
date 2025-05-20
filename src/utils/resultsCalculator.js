@@ -85,7 +85,7 @@ const ARCHETYPE_MAP = {
   FACSN: "The Ironhand",
   FACRG: "The Regent",
   FACRN: "The Crusader",
-}; 
+};
 
 /**
  * Calculate the weighted score for a single answer
@@ -317,7 +317,7 @@ function determinePositionStrengths(
     // Handle aliases for consistent axis naming
     const canonicalAxis = AXIS_ALIASES[axis] || axis;
 
-    // FIXED: Use raw score if available to determine strength
+    // Use raw score if available to determine strength
     // This aligns with the visual representation
     const rawScore = rawNormalizedScores[axis];
     const displayScore = normalizedScores[axis];
@@ -326,14 +326,13 @@ function determinePositionStrengths(
       // Calculate absolute distance from center on -100 to 100 scale
       const absRawDistance = Math.abs(rawScore);
 
-      // Determine strength based on absolute distance from 0
-      // For -100 to 100 scale:
-      // 0-30 = Weak
-      // 30-70 = Moderate
-      // 70-100 = Strong
-      if (absRawDistance < 30) {
+      // Updated thresholds for raw scores (-100 to 100 scale)
+      // 0-18 = Weak (corresponds to 50-59% on 0-100 scale)
+      // 18-50 = Moderate (corresponds to 59-75% on 0-100 scale)
+      // 50-100 = Strong (corresponds to 75-100% on 0-100 scale)
+      if (absRawDistance < 18) {
         strengths[axis] = "Weak";
-      } else if (absRawDistance < 70) {
+      } else if (absRawDistance < 50) {
         strengths[axis] = "Moderate";
       } else {
         strengths[axis] = "Strong";
@@ -343,13 +342,13 @@ function determinePositionStrengths(
       // Calculate distance from center (50 on the 0-100 scale)
       const distanceFromCenter = Math.abs(displayScore - 50);
 
-      // For 0-100 scale:
-      // 0-15 from center (35-65) = Weak
-      // 15-35 from center (15-35 or 65-85) = Moderate
-      // 35+ from center (0-15 or 85-100) = Strong
-      if (distanceFromCenter < 15) {
+      // Updated thresholds for normalized scores (0-100 scale)
+      // 0-9 from center (41-59) = Weak
+      // 9-25 from center (25-41 or 59-75) = Moderate
+      // 25+ from center (0-25 or 75-100) = Strong
+      if (distanceFromCenter <= 9) {
         strengths[axis] = "Weak";
-      } else if (distanceFromCenter < 35) {
+      } else if (distanceFromCenter <= 25) {
         strengths[axis] = "Moderate";
       } else {
         strengths[axis] = "Strong";
