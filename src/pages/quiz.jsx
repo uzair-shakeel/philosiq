@@ -251,12 +251,6 @@ export default function QuizPage() {
           }
         }
 
-        // Final shuffle to mix questions from different axes
-        fetchedQuestions = shuffleArray(selectedQuestions);
-      } else {
-        // For full quiz, just fetch 130 questions
-        fetchedQuestions = await fetchQuestions(130);
-
         // Shuffle the questions for the full quiz as well
         if (fetchedQuestions.length > 0) {
           fetchedQuestions = shuffleArray(fetchedQuestions);
