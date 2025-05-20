@@ -402,7 +402,7 @@ export default function ArchetypePage() {
                 <Link
                   href={`/archetypes/${archetype.slug}`}
                   key={archetype.id}
-                  className="flex flex-col h-full bg-white rounded-lg shadow-md overflow-hidden transform transition-all hover:scale-102 hover:shadow-lg"
+                  className="flex p-8 flex-col h-full bg-white rounded-lg shadow-md overflow-hidden transform transition-all hover:scale-102 hover:shadow-lg"
                   shallow={false}
                 >
                   <h3 className="text-xl font-bold mb-4 text-primary-maroon">
