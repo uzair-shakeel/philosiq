@@ -202,8 +202,8 @@ export default function QuizPage() {
         }
 
         // Calculate how many questions to take from each axis
-        // We want 36 questions total, distributed evenly
-        const questionsPerAxis = Math.floor(36 / axes.length);
+        // We want 30 questions total, distributed evenly
+        const questionsPerAxis = Math.floor(30 / axes.length);
 
         // Select questions from each axis
         let selectedQuestions = [];
@@ -222,8 +222,8 @@ export default function QuizPage() {
           }
         });
 
-        // If we still need more questions to reach 36, take from any axis
-        if (selectedQuestions.length < 36) {
+        // If we still need more questions to reach 30, take from any axis
+        if (selectedQuestions.length < 30) {
           // Create a pool of all remaining questions
           const remainingQuestions = [];
           axes.forEach((axis) => {
@@ -243,7 +243,7 @@ export default function QuizPage() {
           // Shuffle and take what we need
           if (remainingQuestions.length > 0) {
             const shuffled = shuffleArray(remainingQuestions);
-            const needed = 36 - selectedQuestions.length;
+            const needed = 30 - selectedQuestions.length;
             selectedQuestions = [
               ...selectedQuestions,
               ...shuffled.slice(0, needed),
@@ -493,7 +493,7 @@ export default function QuizPage() {
                       <FaClipboardList className="text-3xl" />
                     </div>
                     <p className="text-sm opacity-90">
-                      36 questions • ~10 minutes
+                      30 questions • ~10 minutes
                     </p>
                   </div>
                   <div className="p-6">
