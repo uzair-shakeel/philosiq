@@ -346,14 +346,13 @@ function ResultsContent({ results }) {
 
       // Create the secondary archetype object
       secondaries.push({
-        secondaries.push({
-          name: archetypeName,
-          code: secondaryCode,
-          match: `${matchPercent}% match`,
-          traits: traits,
-          flippedAxis: axisToFlip,
-          slug: secondaryCode.toLowerCase(),
-        });
+        name: archetypeName,
+        code: secondaryCode,
+        match: `${matchPercent}% match`,
+        traits: traits,
+        flippedAxis: axisToFlip,
+        slug: secondaryCode.toLowerCase(),
+      });
     });
 
     setSecondaryArchetypes(secondaries);
