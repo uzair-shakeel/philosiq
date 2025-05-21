@@ -272,7 +272,7 @@ export default function AxisGraph({
   // Calculate the strength based on percentage
   const getStrengthFromPercentage = (percent) => {
     const distanceFromCenter = Math.abs(percent - 50);
-    
+
     if (distanceFromCenter <= 9) {
       return "Leaning";
     } else if (distanceFromCenter <= 19) {
@@ -393,7 +393,7 @@ export default function AxisGraph({
         {getPositionDescription(
           canonicalName,
           markerVisiblePosition,
-          safePositionStrength
+          strengthLabel
         )}
       </div>
     </div>
@@ -404,9 +404,6 @@ export default function AxisGraph({
  * Helper function to generate a description of the user's position on the axis
  */
 function getPositionDescription(axis, score, strength) {
-  const position = score < 50 ? "left" : "right";
-  const intensity = strength?.toLowerCase() || "moderate";
-
   // Define axis aliases
   const AXIS_ALIASES = {
     "Equality vs. Markets": "Equity vs. Free Market",
@@ -415,92 +412,154 @@ function getPositionDescription(axis, score, strength) {
   // Use canonical axis name if an alias exists
   const canonicalAxis = AXIS_ALIASES[axis] || axis;
 
+  // Get the appropriate side label based on the score
+  let sideLabel;
+  if (canonicalAxis === "Equity vs. Free Market") {
+    sideLabel = score < 50 ? "Free Market" : "Equity";
+  } else if (canonicalAxis === "Libertarian vs. Authoritarian") {
+    sideLabel = score < 50 ? "Authoritarian" : "Libertarian";
+  } else if (canonicalAxis === "Progressive vs. Conservative") {
+    sideLabel = score < 50 ? "Conservative" : "Progressive";
+  } else if (canonicalAxis === "Secular vs. Religious") {
+    sideLabel = score < 50 ? "Religious" : "Secular";
+  } else if (canonicalAxis === "Globalism vs. Nationalism") {
+    sideLabel = score < 50 ? "Nationalist" : "Globalist";
+  } else {
+    return "Your position on this axis reflects a balance between the opposing viewpoints.";
+  }
+
+  // Map the strength to the new categories
+  let strengthCategory;
+  if (!strength) {
+    strengthCategory = "Leaning"; // Default
+  } else if (strength === "Leaning") {
+    strengthCategory = "Leaning";
+  } else if (strength === "Inclined") {
+    strengthCategory = "Inclined";
+  } else if (strength === "Committed") {
+    strengthCategory = "Committed";
+  } else if (strength === "Extreme") {
+    strengthCategory = "Extreme";
+  } else {
+    // For backward compatibility with old strength values
+    if (strength.toLowerCase() === "weak") {
+      strengthCategory = "Leaning";
+    } else if (strength.toLowerCase() === "moderate") {
+      strengthCategory = "Inclined";
+    } else if (strength.toLowerCase() === "strong") {
+      strengthCategory = "Committed";
+    } else {
+      strengthCategory = "Leaning"; // Default fallback
+    }
+  }
+
+  // Comprehensive descriptions for each position and strength level
   const descriptions = {
-    "Equity vs. Free Market": {
-      right: {
-        weak: "You have a slight preference for economic equality and redistributive policies, but you also see value in market mechanisms.",
-        moderate:
-          "You believe economic equality is important and favor policies that reduce wealth disparities through government intervention.",
-        strong:
-          "You strongly favor economic equality and robust government intervention to ensure fair distribution of resources.",
-      },
-      left: {
-        weak: "You have a slight preference for free markets, while recognizing the need for some economic regulations.",
-        moderate:
-          "You favor market-based solutions and believe economic freedom leads to greater innovation and prosperity.",
-        strong:
-          "You strongly support free markets with minimal government intervention and believe market forces should determine economic outcomes.",
-      },
+    Equity: {
+      Leaning:
+        "You lean toward equity-based solutions, valuing social safety nets while recognizing a role for market mechanisms.",
+      Inclined:
+        "You prefer policies that reduce inequality and emphasize redistribution, though you may still support some free market elements.",
+      Committed:
+        "You strongly support economic systems that prioritize fairness, wealth redistribution, and robust social programs.",
+      Extreme:
+        "You advocate for a radically equitable society, with markets heavily regulated or replaced to ensure complete economic justice.",
     },
-    "Libertarian vs. Authoritarian": {
-      right: {
-        weak: "You generally favor individual liberties with limited government authority, but recognize the need for some regulations.",
-        moderate:
-          "You value individual freedoms and prefer a government with limited powers over personal matters.",
-        strong:
-          "You strongly prioritize individual liberties and believe government authority should be highly restricted.",
-      },
-      left: {
-        weak: "You believe in balanced governance with some authority, while still respecting individual rights.",
-        moderate:
-          "You favor stronger governmental authority to maintain order and implement effective policies.",
-        strong:
-          "You strongly believe in the necessity of centralized authority to ensure order, security, and effective governance.",
-      },
+    "Free Market": {
+      Leaning:
+        "You lean toward market-based solutions, believing economic freedom drives progress but should be balanced with fairness.",
+      Inclined:
+        "You prefer limited government involvement in the economy, trusting markets to create innovation and prosperity.",
+      Committed:
+        "You strongly support laissez-faire principles, seeing regulation and redistribution as threats to economic freedom.",
+      Extreme:
+        "You believe the free market should be the sole driver of economic life, with minimal or no state intervention.",
     },
-    "Progressive vs. Conservative": {
-      right: {
-        weak: "You generally favor gradual social change while respecting some traditional values.",
-        moderate:
-          "You embrace social progress and are open to reforming institutions to better serve evolving societal needs.",
-        strong:
-          "You strongly advocate for social change and believe in continuously reforming institutions to address injustices.",
-      },
-      left: {
-        weak: "You value some traditional practices while being open to moderate social changes.",
-        moderate:
-          "You value traditional institutions and believe in preserving established social structures and practices.",
-        strong:
-          "You strongly prioritize traditional values and believe in preserving established institutions against rapid change.",
-      },
+    Libertarian: {
+      Leaning:
+        "You lean toward individual freedom and civil liberties, but accept some level of government oversight when necessary.",
+      Inclined:
+        "You prefer limited government power, strong personal freedoms, and checks on state authority.",
+      Committed:
+        "You strongly oppose state control, believing personal autonomy and minimal government are essential to a free society.",
+      Extreme:
+        "You advocate for maximum individual liberty, with the state reduced to a minimal or even non-existent role.",
     },
-    "Secular vs. Religious": {
-      right: {
-        weak: "You generally favor secular reasoning in governance while respecting religious beliefs in society.",
-        moderate:
-          "You believe public policy should be guided by secular reasoning, separate from religious doctrine.",
-        strong:
-          "You strongly advocate for secular governance and clear separation between religious institutions and state functions.",
-      },
-      left: {
-        weak: "You recognize the value of religious perspectives in public life, while supporting basic separation of church and state.",
-        moderate:
-          "You believe religious values and traditions should inform public policy and social norms.",
-        strong:
-          "You strongly believe religious principles should guide governance and play a central role in public life.",
-      },
+    Authoritarian: {
+      Leaning:
+        "You believe a bit more order and structure from the government is important, though personal freedoms still matter.",
+      Inclined:
+        "You support strong government authority to maintain order, national unity, or enforce values.",
+      Committed:
+        "You believe state power is essential to guide society, enforce laws, and protect against chaos or division.",
+      Extreme:
+        "You favor a powerful, centralized state with strict control, viewing individual freedoms as secondary to stability and authority.",
     },
-    "Globalism vs. Nationalism": {
-      right: {
-        weak: "You generally support international cooperation while maintaining important national interests.",
-        moderate:
-          "You value international institutions and favor cooperation between nations on global challenges.",
-        strong:
-          "You strongly prioritize global solutions and believe nations should increasingly integrate into international frameworks.",
-      },
-      left: {
-        weak: "You believe in protecting national interests while engaging in beneficial international cooperation.",
-        moderate:
-          "You prioritize national sovereignty and believe countries should put their citizens' interests first.",
-        strong:
-          "You strongly believe in national independence and prioritizing citizens' interests over international obligations.",
-      },
+    Progressive: {
+      Leaning:
+        "You lean toward change and reform, believing that adapting to new ideas can improve society.",
+      Inclined:
+        "You support modernization and social progress, often favoring inclusivity, innovation, and cultural evolution.",
+      Committed:
+        "You strongly advocate for societal transformation, viewing tradition as secondary to justice, equity, and modern values.",
+      Extreme:
+        "You believe society must be radically restructured to eliminate outdated systems and fully embrace change and reform.",
+    },
+    Conservative: {
+      Leaning:
+        "You value tradition and stability, but are open to gradual change when it's necessary.",
+      Inclined:
+        "You prefer preserving cultural norms and time-tested institutions, favoring careful, deliberate change.",
+      Committed:
+        "You strongly believe in traditional values, social order, and continuity with the past.",
+      Extreme:
+        "You advocate for a return to deeply rooted customs and structures, opposing modern changes that disrupt established ways.",
+    },
+    Secular: {
+      Leaning:
+        "You lean toward a secular worldview, favoring a clear separation between religion and public life.",
+      Inclined:
+        "You believe religion should remain personal, and that laws and policies should be based on reason and universal principles.",
+      Committed:
+        "You strongly support a society guided by secular ethics and rationalism, viewing religious influence in politics as inappropriate.",
+      Extreme:
+        "You advocate for the complete removal of religious influence from public institutions, favoring a fully secular society based on reason and science.",
+    },
+    Religious: {
+      Leaning:
+        "You see value in religious traditions and believe they can offer moral guidance, even if not always central.",
+      Inclined:
+        "You believe faith plays a meaningful role in shaping society and values, and should be respected in public life.",
+      Committed:
+        "You believe religion is essential to moral order and community, and should influence laws and cultural norms.",
+      Extreme:
+        "You advocate for a society deeply rooted in religious teachings, where faith shapes law, governance, and public life.",
+    },
+    Globalist: {
+      Leaning:
+        "You lean toward international cooperation and believe global challenges require shared solutions.",
+      Inclined:
+        "You support interconnected economies, cultural exchange, and collaborative governance across borders.",
+      Committed:
+        "You believe humanity benefits most when nations work together, and that global identity should take precedence over national borders.",
+      Extreme:
+        "You advocate for a world united beyond national boundaries, with global institutions and values overriding national sovereignty.",
+    },
+    Nationalist: {
+      Leaning:
+        "You lean toward prioritizing your country's interests, while still recognizing the value of international partnerships.",
+      Inclined:
+        "You believe national identity, sovereignty, and self-determination should come before global obligations.",
+      Committed:
+        "You strongly prioritize your nation's culture, interests, and independence, often viewing global influence with skepticism.",
+      Extreme:
+        "You advocate for complete national self-reliance and cultural preservation, opposing external influence and global integration.",
     },
   };
 
-  // Return appropriate description or a default message if not found
+  // Return the appropriate description or a default message if not found
   return (
-    descriptions[canonicalAxis]?.[position]?.[intensity] ||
+    descriptions[sideLabel]?.[strengthCategory] ||
     "Your position on this axis reflects a balance between the opposing viewpoints."
   );
 }
