@@ -521,7 +521,7 @@ export default function QuizPage() {
                       <FaClipboardCheck className="text-3xl" />
                     </div>
                     <p className="text-sm opacity-90">
-                      92 questions • ~25 minutes
+                      90 questions • ~25 minutes
                     </p>
                   </div>
                   <div className="p-6">
