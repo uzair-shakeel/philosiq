@@ -912,7 +912,7 @@ function ResultsContent({ results }) {
         )}
 
         {/* Debug Section */}
-        {rawData && (
+        {/* {rawData && (
           <div className="mb-16 no-print">
             <button
               onClick={() => setShowDebug(!showDebug)}
@@ -937,7 +937,7 @@ function ResultsContent({ results }) {
               </div>
             )}
           </div>
-        )}
+        )} */}
 
         {/* Axis Breakdown */}
         <div className="mb-16">

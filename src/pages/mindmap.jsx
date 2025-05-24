@@ -22,7 +22,7 @@ const FILTER_OPTIONS = {
     "Other",
   ],
   gender: ["Male", "Female", "Transgender/Non-binary/Other"],
-  race: [
+  ethnicity: [
     "White/Caucasian",
     "Hispanic/Latino",
     "Black/African American",
@@ -30,7 +30,7 @@ const FILTER_OPTIONS = {
     "Native American",
     "Other",
   ],
-  age: ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
+  age: ["0-18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
   votingTendency: ["Left Leaning", "Right Leaning", "Other/Independent"],
 };
 

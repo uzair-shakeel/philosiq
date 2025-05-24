@@ -25,7 +25,7 @@ export default function MindMapContributeModal({
   const [formData, setFormData] = useState({
     education: "",
     gender: "",
-    race: "",
+    ethnicity: "",
     zipCode: "",
     age: "",
     votingTendency: "",
@@ -346,7 +346,7 @@ export default function MindMapContributeModal({
   };
 
   const canProceedToStep2 =
-    formData.education && formData.gender && formData.race;
+    formData.education && formData.gender && formData.ethnicity;
   const canProceedToStep3 = formData.age && formData.location && !zipcodeError;
 
   const handleSubmit = async (e) => {
@@ -565,19 +565,19 @@ export default function MindMapContributeModal({
                 </select>
               </div>
 
-              {/* Race/Ethnicity */}
+              {/* Ethnicity */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Race/Ethnicity
+                  Ethnicity
                 </label>
                 <select
-                  name="race"
-                  value={formData.race}
+                  name="ethnicity"
+                  value={formData.ethnicity}
                   onChange={handleChange}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
                   required
                 >
-                  <option value="">Select race/ethnicity</option>
+                  <option value="">Select ethnicity</option>
                   <option value="White/Caucasian">White/Caucasian</option>
                   <option value="Black/African American">
                     Black/African American
@@ -752,6 +752,7 @@ export default function MindMapContributeModal({
                   required
                 >
                   <option value="">Select age group</option>
+                  <option value="0-18">0-18</option>
                   <option value="18-24">18-24</option>
                   <option value="25-34">25-34</option>
                   <option value="35-44">35-44</option>

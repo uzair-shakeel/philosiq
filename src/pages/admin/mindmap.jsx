@@ -95,7 +95,7 @@ export default function AdminMindMap() {
       "Asian",
       "Other",
     ],
-    age: ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
+    age: ["0-18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
     votingTendency: ["Left Leaning", "Right Leaning", "Other/Independent"],
   };
 
@@ -112,13 +112,15 @@ export default function AdminMindMap() {
       if (country) queryParams.append("country", country);
       if (state) queryParams.append("state", state);
 
-      const response = await fetch(`/api/admin/mindmap/locations?${queryParams.toString()}`);
-      
+      const response = await fetch(
+        `/api/admin/mindmap/locations?${queryParams.toString()}`
+      );
+
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
           // Only update the relevant parts of locationOptions
-          setLocationOptions(prevOptions => ({
+          setLocationOptions((prevOptions) => ({
             countries: data.locations.countries || prevOptions.countries,
             states: data.locations.states || [],
             cities: data.locations.cities || [],
@@ -136,13 +138,13 @@ export default function AdminMindMap() {
   useEffect(() => {
     if (filters.country) {
       fetchLocationOptions(filters.country);
-      
+
       // Clear state and city when country changes
       if (filters.state) {
-        setFilters(prev => ({
+        setFilters((prev) => ({
           ...prev,
           state: "",
-          city: ""
+          city: "",
         }));
       }
     }
@@ -152,12 +154,12 @@ export default function AdminMindMap() {
   useEffect(() => {
     if (filters.country && filters.state) {
       fetchLocationOptions(filters.country, filters.state);
-      
+
       // Clear city when state changes
       if (filters.city) {
-        setFilters(prev => ({
+        setFilters((prev) => ({
           ...prev,
-          city: ""
+          city: "",
         }));
       }
     }
@@ -417,7 +419,8 @@ export default function AdminMindMap() {
       </div>
       {isLoadingLocations && (
         <div className="mt-2 text-sm text-gray-500 flex items-center">
-          <FaSpinner className="animate-spin mr-2" /> Loading location options...
+          <FaSpinner className="animate-spin mr-2" /> Loading location
+          options...
         </div>
       )}
     </div>

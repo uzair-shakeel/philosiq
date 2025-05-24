@@ -254,13 +254,50 @@ export default function QuizPage() {
         // Final shuffle to mix questions from different axes
         fetchedQuestions = shuffleArray(selectedQuestions);
       } else {
-        // For full quiz, just fetch 130 questions
-        fetchedQuestions = await fetchQuestions(130, null); // or `undefined`
+        // For full quiz, fetch questions and ensure no duplicates
+        const allQuestions = await fetchQuestions(200, false);
 
-        // Shuffle the questions for the full quiz as well
-        if (fetchedQuestions.length > 0) {
-          fetchedQuestions = shuffleArray(fetchedQuestions);
+        if (allQuestions.length === 0) {
+          setError("Not enough questions available. Please try again later.");
+          setIsLoading(false);
+          return;
         }
+
+        // Remove duplicates by question text
+        const uniqueQuestions = Array.from(
+          new Map(allQuestions.map((q) => [q.question, q])).values()
+        );
+
+        // Group questions by axis to ensure balanced distribution
+        const questionsByAxis = {};
+        uniqueQuestions.forEach((question) => {
+          if (!questionsByAxis[question.axis]) {
+            questionsByAxis[question.axis] = [];
+          }
+          questionsByAxis[question.axis].push(question);
+        });
+
+        // Calculate how many questions to take from each axis
+        const axes = Object.keys(questionsByAxis);
+        const targetQuestionsPerAxis = Math.ceil(130 / axes.length);
+
+        // Select questions from each axis
+        let selectedQuestions = [];
+        axes.forEach((axis) => {
+          const axisQuestions = questionsByAxis[axis];
+          const shuffled = shuffleArray([...axisQuestions]);
+          selectedQuestions = [
+            ...selectedQuestions,
+            ...shuffled.slice(0, targetQuestionsPerAxis),
+          ];
+        });
+
+        // If we have more than 130 questions, trim the excess
+        if (selectedQuestions.length > 130) {
+          selectedQuestions = shuffleArray(selectedQuestions).slice(0, 130);
+        }
+
+        fetchedQuestions = shuffleArray(selectedQuestions);
       }
 
       if (fetchedQuestions.length === 0) {
