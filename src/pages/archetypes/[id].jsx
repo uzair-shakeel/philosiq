@@ -38,7 +38,11 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
       famousPeople: [
-        { name: "Jean-Luc Picard", role: "Star Trek: TNG" },
+        {
+          name: "Jean-Luc Picard",
+          role: "Star Trek: TNG",
+          image: "/images/famous-people/jean-luc-picard.png",
+        },
         { name: "Aang", role: "Avatar: The Last Airbender" },
         { name: "Hermione Granger", role: "Harry Potter" },
         { name: "Lisa Simpson", role: "The Simpsons" },
@@ -1191,10 +1195,10 @@ export default function ArchetypeDetail() {
 
           {/* Hero section */}
           <div
-            className={`bg-gradient-to-r ${currentArchetype?.color} text-white rounded-lg shadow-lg p-8 mb-8`}
+            className={`bg-gradient-to-r ${currentArchetype?.color} text-white rounded-lg shadow-lg p-8 mb-8 relative overflow-hidden`}
           >
-            <div className="flex flex-col md:flex-row items-center justify-between">
-              <div>
+            <div className="flex flex-col md:flex-row items-center justify-between relative z-10">
+              <div className="md:w-2/3">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4">
                   {currentArchetype?.name}
                 </h1>
@@ -1210,13 +1214,28 @@ export default function ArchetypeDetail() {
                 </div>
                 <p className="text-xl">{currentArchetype?.description}</p>
               </div>
-              <div className="mt-6 md:mt-0 w-48 h-48 bg-white/10 rounded-full flex items-center justify-center">
-                {/* Placeholder for archetype icon/image */}
-                <span className="text-6xl font-bold">
-                  {currentArchetype?.name.charAt(0)}
-                </span>
+              <div className="mt-6 md:mt-0 md:w-1/3 flex justify-center items-center">
+                <div className="w-64 h-64 relative">
+                  {/* Character image */}
+                  <img
+                    src={`/images/archetypes/${currentArchetype?.id}.png`}
+                    alt={currentArchetype?.name}
+                    className="w-full h-full object-contain drop-shadow-lg"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `/images/archetypes/placeholder.png`;
+                    }}
+                  />
+                </div>
               </div>
             </div>
+            {/* Add a subtle overlay pattern */}
+            <div
+              className="absolute inset-0 opacity-10 z-0"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`,
+              }}
+            />
           </div>
 
           {/* Introduction */}
@@ -1282,7 +1301,7 @@ export default function ArchetypeDetail() {
                           <img
                             src={person.image}
                             alt={person.name}
-                            className="w-full h-auto"
+                            className="w-full h-full object-contain"
                           />
                         ) : (
                           <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
