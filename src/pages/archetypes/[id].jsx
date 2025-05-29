@@ -41,9 +41,11 @@ export default function ArchetypeDetail() {
         {
           name: "Jean-Luc Picard",
           role: "Star Trek: TNG",
-          image: "/images/famous-people/jean-luc-picard.png",
         },
-        { name: "Aang", role: "Avatar: The Last Airbender" },
+        { name: "Aang", 
+          role: "Avatar: The Last Airbender",
+          image: "/images/famous-people/aang.png"
+        },
         { name: "Hermione Granger", role: "Harry Potter" },
         { name: "Lisa Simpson", role: "The Simpsons" },
       ],
