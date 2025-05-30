@@ -814,9 +814,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/rick-grimes.png",
               },
               {
-                name: "Gaius",
-                role: "Battlestar Galactica",
-                image: "/images/famous-people/gaius.png",
+                name: "Bernard Holland",
+                role: "Silo",
+                image: "/images/famous-people/bernard-holland.png",
               },
               {
                 name: "Mother Abbess",
