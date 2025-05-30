@@ -48,11 +48,11 @@ export default function ArchetypeDetail() {
           image: "/images/famous-people/aang.png",
         },
         { name: "Hermione Granger", 
-         role: "Harry Potter" 
+         role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
         { name: "Galadrieln", 
-         role: "The Rings of Power" 
+         role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
         },
       ],
