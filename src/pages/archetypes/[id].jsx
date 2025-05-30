@@ -342,9 +342,9 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Wonder Woman",
-                role: "Wonder Woman",
-                image: "/images/famous-people/wonder-woman.png",
+                name: "Saul Berenson",
+                role: "Homeland",
+                image: "/images/famous-people/saul-berenson.png",
               },
               {
                 name: "Jon Snow",
