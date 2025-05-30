@@ -194,7 +194,7 @@ export default function ArchetypeDetail() {
             {
               name: "Prince Zuko",
               role: "Avatar: The Last Airbender",
-              image: "/images/famous-people/prine-zuko.png",
+              image: "/images/famous-people/prince-zuko.png",
             },
             {
               name: "Katniss Everdeen",
