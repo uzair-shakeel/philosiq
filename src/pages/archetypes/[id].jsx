@@ -192,9 +192,9 @@ export default function ArchetypeDetail() {
       ],
           famousPeople: [
             {
-              name: "V",
-              role: "V for Vendetta",
-              image: "/images/famous-people/v.png",
+              name: "Prince Zuko",
+              role: "Avatar: The Last Airbender",
+              image: "/images/famous-people/prine-zuko.png",
             },
             {
               name: "Katniss Everdeen",
@@ -202,9 +202,9 @@ export default function ArchetypeDetail() {
               image: "/images/famous-people/katniss-everdeen.png",
             },
             {
-              name: "Killmonger",
-              role: "Black Panther",
-              image: "/images/famous-people/killmonger.png",
+              name: "Aragorn",
+              role: "The Lord of the Rings",
+              image: "/images/famous-people/aragorn.png",
             },
             {
               name: "Ragnar Lothbrok",
