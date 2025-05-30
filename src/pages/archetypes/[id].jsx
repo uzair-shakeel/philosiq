@@ -809,9 +809,9 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Reverend Matt Jamison",
-                role: "The Leftovers",
-                image: "/images/famous-people/reverend-matt-jamison.png",
+                name: "Rick Grimes",
+                role: "The Walking Dead",
+                image: "/images/famous-people/rick-grimes.png",
               },
               {
                 name: "Gaius",
