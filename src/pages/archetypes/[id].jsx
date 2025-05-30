@@ -86,25 +86,28 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
+          famousPeople: [
+            {
+              name: "Atticus Finch",
+              role: "To Kill a Mockingbird",
+              image: "/images/famous-people/atticus-finch.png",
+            },
+            {
+              name: "Sam Seaborn",
+              role: "The West Wing",
+              image: "/images/famous-people/sam-seaborn.png",
+            },
+            {
+              name: "Peggy Olson",
+              role: "Mad Men",
+              image: "/images/famous-people/peggy-olson.png",
+            },
+            {
+              name: "T'Challa",
+              role: "Black Panther",
+              image: "/images/famous-people/tchalla.png",
+            }
+          ],
       
       color: "from-green-600 to-blue-400",
     },
@@ -135,26 +138,29 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+        famousPeople: [
+          {
+            name: "Morpheus",
+            role: "The Matrix",
+            image: "/images/famous-people/morpheus.png",
+          },
+          {
+            name: "Bran Stark",
+            role: "Game of Thrones",
+            image: "/images/famous-people/bran-stark.png",
+          },
+          {
+            name: "River Tam",
+            role: "Firefly",
+            image: "/images/famous-people/river-tam.png",
+          },
+          {
+            name: "Obi-Wan Kenobi",
+            role: "Star Wars",
+            image: "/images/famous-people/obi-wan-kenobi.png",
+          }
+        ],
+     
       color: "from-indigo-700 to-purple-500",
     },
     elprn: {
@@ -184,26 +190,29 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+          famousPeople: [
+            {
+              name: "V",
+              role: "V for Vendetta",
+              image: "/images/famous-people/v.png",
+            },
+            {
+              name: "Katniss Everdeen",
+              role: "The Hunger Games",
+              image: "/images/famous-people/katniss-everdeen.png",
+            },
+            {
+              name: "Killmonger",
+              role: "Black Panther",
+              image: "/images/famous-people/killmonger.png",
+            },
+            {
+              name: "Ragnar Lothbrok",
+              role: "Vikings",
+              image: "/images/famous-people/ragnar-lothbrok.png",
+            }
+          ],
+
       color: "from-red-600 to-orange-500",
     },
     elcsg: {
@@ -227,26 +236,29 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+          famousPeople: [
+            {
+              name: "Jean-Luc Picard",
+              role: "Star Trek: TNG",
+              image: "/images/famous-people/jean-luc-picard.png",
+            },
+            {
+              name: "Lisa Simpson",
+              role: "The Simpsons",
+              image: "/images/famous-people/lisa-simpson.png",
+            },
+            {
+              name: "Chidi Anagonye",
+              role: "The Good Place",
+              image: "/images/famous-people/chidi-anagonye.png",
+            },
+            {
+              name: "Simone",
+              role: "The Good Place",
+              image: "/images/famous-people/simone.png",
+            }
+          ],
+
       color: "from-gray-600 to-blue-400",
     },
     elcsn: {
@@ -276,26 +288,29 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Ron Swanson",
+                role: "Parks and Recreation",
+                image: "/images/famous-people/ron-swanson.png",
+              },
+              {
+                name: "John Dutton",
+                role: "Yellowstone",
+                image: "/images/famous-people/john-dutton.png",
+              },
+              {
+                name: "Hank Hill",
+                role: "King of the Hill",
+                image: "/images/famous-people/hank-hill.png",
+              },
+              {
+                name: "Andy Taylor",
+                role: "The Andy Griffith Show",
+                image: "/images/famous-people/andy-taylor.png",
+              }
+            ],
+
       color: "from-yellow-700 to-orange-400",
     },
     elcrg: {
@@ -325,26 +340,29 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Wonder Woman",
+                role: "Wonder Woman",
+                image: "/images/famous-people/wonder-woman.png",
+              },
+              {
+                name: "Jon Snow",
+                role: "Game of Thrones",
+                image: "/images/famous-people/jon-snow.png",
+              },
+              {
+                name: "Leslie Knope",
+                role: "Parks and Recreation",
+                image: "/images/famous-people/leslie-knope.png",
+              },
+              {
+                name: "Alma Garret",
+                role: "Deadwood",
+                image: "/images/famous-people/alma-garret.png",
+              }
+            ],
+
       color: "from-teal-600 to-green-400",
     },
     elcrn: {
@@ -374,26 +392,29 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Brienne of Tarth",
+                role: "Game of Thrones",
+                image: "/images/famous-people/brienne-of-tarth.png",
+              },
+              {
+                name: "Hopper",
+                role: "Stranger Things",
+                image: "/images/famous-people/hopper.png",
+              },
+              {
+                name: "Uncle Iroh",
+                role: "Avatar: The Last Airbender",
+                image: "/images/famous-people/uncle-iroh.png",
+              },
+              {
+                name: "Teal'c",
+                role: "Stargate SG-1",
+                image: "/images/famous-people/tealc.png",
+              }
+            ],
+
       color: "from-amber-700 to-red-400",
     },
     eapsg: {
@@ -423,26 +444,29 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Spock",
+                role: "Star Trek",
+                image: "/images/famous-people/spock.png",
+              },
+              {
+                name: "Harold Finch",
+                role: "Person of Interest",
+                image: "/images/famous-people/harold-finch.png",
+              },
+              {
+                name: "J.A.R.V.I.S.",
+                role: "Iron Man",
+                image: "/images/famous-people/jarvis.png",
+              },
+              {
+                name: "Chloe O’Brian",
+                role: "24",
+                image: "/images/famous-people/chloe-obrian.png",
+              }
+            ],
+
       color: "from-sky-600 to-cyan-400",
     },
     eapsn: {
@@ -472,26 +496,29 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Jack Bauer",
+                role: "24",
+                image: "/images/famous-people/jack-bauer.png",
+              },
+              {
+                name: "Vic Mackey",
+                role: "The Shield",
+                image: "/images/famous-people/vic-mackey.png",
+              },
+              {
+                name: "Frank Castle",
+                role: "The Punisher",
+                image: "/images/famous-people/frank-castle.png",
+              },
+              {
+                name: "Elliot Stabler",
+                role: "Law & Order: SVU",
+                image: "/images/famous-people/elliot-stabler.png",
+              }
+            ],
+
       color: "from-slate-700 to-gray-400",
     },
     eaprg: {
@@ -521,26 +548,28 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-
+            famousPeople: [
+              {
+                name: "John Locke",
+                role: "Lost",
+                image: "/images/famous-people/john-locke.png",
+              },
+              {
+                name: "Eli Sunday",
+                role: "There Will Be Blood",
+                image: "/images/famous-people/eli-sunday.png",
+              },
+              {
+                name: "Lysa Arryn",
+                role: "Game of Thrones",
+                image: "/images/famous-people/lysa-arryn.png",
+              },
+              {
+                name: "Serena Joy Waterford",
+                role: "The Handmaid’s Tale",
+                image: "/images/famous-people/serena-joy-waterford.png",
+              }
+            ],
       color: "from-purple-700 to-pink-500",
     },
     eaprn: {
@@ -570,25 +599,28 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
+            famousPeople: [
+              {
+                name: "Dolores Umbridge",
+                role: "Harry Potter",
+                image: "/images/famous-people/dolores-umbridge.png",
+              },
+              {
+                name: "Margaery Tyrell",
+                role: "Game of Thrones",
+                image: "/images/famous-people/margaery-tyrell.png",
+              },
+              {
+                name: "Ned Flanders",
+                role: "The Simpsons",
+                image: "/images/famous-people/ned-flanders.png",
+              },
+              {
+                name: "Sybil Crawley",
+                role: "Downton Abbey",
+                image: "/images/famous-people/sybil-crawley.png",
+              }
+            ],
 
       color: "from-rose-700 to-red-500",
     },
@@ -619,25 +651,28 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
+            famousPeople: [
+              {
+                name: "Amanda Waller",
+                role: "Peacemaker",
+                image: "/images/famous-people/amanda-waller.png",
+              },
+              {
+                name: "General Leia",
+                role: "Star Wars",
+                image: "/images/famous-people/general-leia.png",
+              },
+              {
+                name: "Commander Shepard",
+                role: "Mass Effect",
+                image: "/images/famous-people/commander-shepard.png",
+              },
+              {
+                name: "William Adama",
+                role: "Battlestar Galactica",
+                image: "/images/famous-people/william-adama.png",
+              }
+            ],
 
       color: "from-blue-800 to-gray-600",
     },
@@ -668,25 +703,28 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
+            famousPeople: [
+              {
+                name: "Samwise Gamgee",
+                role: "LOTR",
+                image: "/images/famous-people/samwise-gamgee.png",
+              },
+              {
+                name: "Jim Halpert",
+                role: "The Office",
+                image: "/images/famous-people/jim-halpert.png",
+              },
+              {
+                name: "Ben Wyatt",
+                role: "Parks and Recreation",
+                image: "/images/famous-people/ben-wyatt.png",
+              },
+              {
+                name: "Carson",
+                role: "Downton Abbey",
+                image: "/images/famous-people/carson.png",
+              }
+            ],
 
       color: "from-amber-700 to-lime-500",
     },
@@ -717,25 +755,28 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
+            famousPeople: [
+              {
+                name: "Father Brown",
+                role: "Father Brown",
+                image: "/images/famous-people/father-brown.png",
+              },
+              {
+                name: "Reverend TimTom",
+                role: "The Middle",
+                image: "/images/famous-people/reverend-timtom.png",
+              },
+              {
+                name: "Claire Fraser",
+                role: "Outlander",
+                image: "/images/famous-people/claire-fraser.png",
+              },
+              {
+                name: "John Book",
+                role: "Witness",
+                image: "/images/famous-people/john-book.png",
+              }
+            ],
 
       color: "from-green-700 to-teal-400",
     },
@@ -766,26 +807,29 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Reverend Matt Jamison",
+                role: "The Leftovers",
+                image: "/images/famous-people/reverend-matt-jamison.png",
+              },
+              {
+                name: "Gaius",
+                role: "Battlestar Galactica",
+                image: "/images/famous-people/gaius.png",
+              },
+              {
+                name: "Mother Abbess",
+                role: "The Sound of Music",
+                image: "/images/famous-people/mother-abbess.png",
+              },
+              {
+                name: "Sister Aloysius",
+                role: "Doubt",
+                image: "/images/famous-people/sister-aloysius.png",
+              }
+            ],
+
       color: "from-purple-700 to-red-600",
     },
     flpsg: {
@@ -815,26 +859,29 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Dolores Abernathy",
+                role: "Westworld",
+                image: "/images/famous-people/dolores-abernathy.png",
+              },
+              {
+                name: "Michael Burnham",
+                role: "Star Trek: Discovery",
+                image: "/images/famous-people/michael-burnham.png",
+              },
+              {
+                name: "Nathan Bateman",
+                role: "Ex Machina",
+                image: "/images/famous-people/nathan-bateman.png",
+              },
+              {
+                name: "Angela Abar",
+                role: "Watchmen",
+                image: "/images/famous-people/angela-abar.png",
+              }
+            ],
+
       color: "from-cyan-500 to-blue-400",
     },
     flpsn: {
@@ -864,26 +911,29 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Malcolm Reynolds",
+                role: "Firefly",
+                image: "/images/famous-people/malcolm-reynolds.png",
+              },
+              {
+                name: "Tony Stark",
+                role: "Iron Man",
+                image: "/images/famous-people/tony-stark.png",
+              },
+              {
+                name: "Jessica Jones",
+                role: "Jessica Jones",
+                image: "/images/famous-people/jessica-jones.png",
+              },
+              {
+                name: "Geralt of Rivia",
+                role: "The Witcher",
+                image: "/images/famous-people/geralt-of-rivia.png",
+              }
+            ],
+
       color: "from-orange-600 to-yellow-400",
     },
     flprg: {
@@ -913,26 +963,29 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Elphaba",
+                role: "Wicked",
+                image: "/images/famous-people/elphaba.png",
+              },
+              {
+                name: "Saul Goodman",
+                role: "Better Call Saul",
+                image: "/images/famous-people/saul-goodman.png",
+              },
+              {
+                name: "Harriet Tubman",
+                role: "Underground",
+                image: "/images/famous-people/harriet-tubman.png",
+              },
+              {
+                name: "Kunta Kinte",
+                role: "Roots",
+                image: "/images/famous-people/kunta-kinte.png",
+              }
+            ],
+
       color: "from-teal-600 to-blue-400",
     },
     flprn: {
@@ -962,26 +1015,29 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Lisbeth Salander",
+                role: "The Girl with the Dragon Tattoo",
+                image: "/images/famous-people/lisbeth-salander.png",
+              },
+              {
+                name: "Clarisse McClellan",
+                role: "Fahrenheit 451",
+                image: "/images/famous-people/clarisse-mcclellan.png",
+              },
+              {
+                name: "Howard Beale",
+                role: "Network",
+                image: "/images/famous-people/howard-beale.png",
+              },
+              {
+                name: "Elliot Alderson",
+                role: "Mr. Robot",
+                image: "/images/famous-people/elliot-alderson.png",
+              }
+            ],
+
       color: "from-red-600 to-rose-400",
     },
     flcsg: {
@@ -1011,26 +1067,29 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "President Jed Bartlet",
+                role: "The West Wing",
+                image: "/images/famous-people/president-jed-bartlet.png",
+              },
+              {
+                name: "Jean-Michel Basquiat",
+                role: "Basquiat",
+                image: "/images/famous-people/jean-michel-basquiat.png",
+              },
+              {
+                name: "Maeve Millay",
+                role: "Westworld",
+                image: "/images/famous-people/maeve-millay.png",
+              },
+              {
+                name: "Lara Croft",
+                role: "Tomb Raider",
+                image: "/images/famous-people/lara-croft.png",
+              }
+            ],
+
       color: "from-blue-500 to-green-400",
     },
     flcsn: {
@@ -1060,26 +1119,29 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Jack Ryan",
+                role: "Jack Ryan",
+                image: "/images/famous-people/jack-ryan.png",
+              },
+              {
+                name: "Steve Rogers",
+                role: "Captain America",
+                image: "/images/famous-people/steve-rogers.png",
+              },
+              {
+                name: "Francis Underwood",
+                role: "House of Cards",
+                image: "/images/famous-people/francis-underwood.png",
+              },
+              {
+                name: "George Washington",
+                role: "Turn: Washington’s Spies",
+                image: "/images/famous-people/george-washington.png",
+              }
+            ],
+
       color: "from-red-700 to-blue-600",
     },
     flcrg: {
@@ -1109,26 +1171,29 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Tony Stark Sr.",
+                role: "Marvel Universe",
+                image: "/images/famous-people/tony-stark-sr.png",
+              },
+              {
+                name: "Hank Rearden",
+                role: "Atlas Shrugged",
+                image: "/images/famous-people/hank-rearden.png",
+              },
+              {
+                name: "Lucious Lyon",
+                role: "Empire",
+                image: "/images/famous-people/lucious-lyon.png",
+              },
+              {
+                name: "Logan Roy",
+                role: "Succession",
+                image: "/images/famous-people/logan-roy.png",
+              }
+            ],
+
       color: "from-yellow-600 to-gray-400",
     },
     flcrn: {
@@ -1158,26 +1223,29 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Cora Crawley",
+                role: "Downton Abbey",
+                image: "/images/famous-people/cora-crawley.png",
+              },
+              {
+                name: "Robert Crawley",
+                role: "Downton Abbey",
+                image: "/images/famous-people/robert-crawley.png",
+              },
+              {
+                name: "Marilla Cuthbert",
+                role: "Anne with an E",
+                image: "/images/famous-people/marilla-cuthbert.png",
+              },
+              {
+                name: "Red Forman",
+                role: "That '70s Show",
+                image: "/images/famous-people/red-forman.png",
+              }
+            ],
+
       color: "from-amber-700 to-emerald-500",
     },
     fapsg: {
@@ -1207,26 +1275,29 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Tywin Lannister",
+                role: "Game of Thrones",
+                image: "/images/famous-people/tywin-lannister.png",
+              },
+              {
+                name: "Miranda Priestly",
+                role: "The Devil Wears Prada",
+                image: "/images/famous-people/miranda-priestly.png",
+              },
+              {
+                name: "Lord Vetinari",
+                role: "Discworld",
+                image: "/images/famous-people/lord-vetinari.png",
+              },
+              {
+                name: "Frank Underwood Sr.",
+                role: "Fan theory/extension",
+                image: "/images/famous-people/frank-underwood-sr.png",
+              }
+            ],
+
       color: "from-black to-gray-700",
     },
     fapsn: {
@@ -1256,26 +1327,29 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Raymond Reddington",
+                role: "The Blacklist",
+                image: "/images/famous-people/raymond-reddington.png",
+              },
+              {
+                name: "Daniel Plainview",
+                role: "There Will Be Blood",
+                image: "/images/famous-people/daniel-plainview.png",
+              },
+              {
+                name: "Christina Yang",
+                role: "Grey's Anatomy",
+                image: "/images/famous-people/christina-yang.png",
+              },
+              {
+                name: "Arthur Jensen",
+                role: "Network",
+                image: "/images/famous-people/arthur-jensen.png",
+              }
+            ],
+
       color: "from-gray-700 to-blue-400",
     },
     faprg: {
@@ -1305,26 +1379,29 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Sheldon Cooper",
+                role: "The Big Bang Theory",
+                image: "/images/famous-people/sheldon-cooper.png",
+              },
+              {
+                name: "Judge Claude Frollo",
+                role: "Hunchback of Notre Dame",
+                image: "/images/famous-people/judge-claude-frollo.png",
+              },
+              {
+                name: "Skyler White",
+                role: "Breaking Bad",
+                image: "/images/famous-people/skyler-white.png",
+              },
+              {
+                name: "Monk",
+                role: "Monk",
+                image: "/images/famous-people/monk.png",
+              }
+            ],
+
       color: "from-purple-800 to-rose-600",
     },
     faprn: {
@@ -1354,26 +1431,29 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
-      
+            famousPeople: [
+              {
+                name: "Bob the Builder",
+                role: "Bob the Builder",
+                image: "/images/famous-people/bob-the-builder.png",
+              },
+              {
+                name: "Fix-It Felix",
+                role: "Wreck-It Ralph",
+                image: "/images/famous-people/fix-it-felix.png",
+              },
+              {
+                name: "Frank",
+                role: "Hearts Beat Loud",
+                image: "/images/famous-people/frank-hearts-beat-loud.png",
+              },
+              {
+                name: "Mike Baxter",
+                role: "Last Man Standing",
+                image: "/images/famous-people/mike-baxter.png",
+              }
+            ],
+
       color: "from-amber-700 to-yellow-400",
     },
     facsg: {
@@ -1403,25 +1483,28 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
+            famousPeople: [
+              {
+                name: "Olivia Pope",
+                role: "Scandal",
+                image: "/images/famous-people/olivia-pope.png",
+              },
+              {
+                name: "Logan Roy Jr.",
+                role: "Succession",
+                image: "/images/famous-people/logan-roy-jr.png",
+              },
+              {
+                name: "Harvey Specter",
+                role: "Suits",
+                image: "/images/famous-people/harvey-specter.png",
+              },
+              {
+                name: "Joan Holloway",
+                role: "Mad Men",
+                image: "/images/famous-people/joan-holloway.png",
+              }
+            ],
 
       color: "from-gray-800 to-blue-500",
     },
@@ -1452,25 +1535,28 @@ export default function ArchetypeDetail() {
         "Secular-minded individuals may undervalue the emotional, cultural, and ethical frameworks provided by religious traditions, sometimes alienating those who seek meaning beyond empirical reasoning.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
+            famousPeople: [
+              {
+                name: "Gustavo Fring",
+                role: "Breaking Bad",
+                image: "/images/famous-people/gustavo-fring.png",
+              },
+              {
+                name: "Amanda Waller",
+                role: "Suicide Squad (alt version)",
+                image: "/images/famous-people/amanda-waller-alt.png",
+              },
+              {
+                name: "Judge Dredd",
+                role: "Dredd",
+                image: "/images/famous-people/judge-dredd.png",
+              },
+              {
+                name: "Tywin Lannister",
+                role: "Game of Thrones (alt interpretation)",
+                image: "/images/famous-people/tywin-lannister-alt.png",
+              }
+            ],
 
       color: "from-slate-800 to-red-600",
     },
@@ -1501,25 +1587,28 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
+            famousPeople: [
+              {
+                name: "Queen Elizabeth II",
+                role: "The Crown",
+                image: "/images/famous-people/queen-elizabeth-ii.png",
+              },
+              {
+                name: "King T’Chaka",
+                role: "Black Panther",
+                image: "/images/famous-people/king-tchaka.png",
+              },
+              {
+                name: "Prince Zuko",
+                role: "Avatar: The Last Airbender",
+                image: "/images/famous-people/prince-zuko.png",
+              },
+              {
+                name: "Viserys",
+                role: "House of the Dragon",
+                image: "/images/famous-people/viserys.png",
+              }
+            ],
 
       color: "from-indigo-800 to-emerald-500",
     },
@@ -1550,25 +1639,28 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
-      famousPeople: [
-        {
-          name: "Ted Lasso",
-          role: "Ted Lasso",
-          image: "/images/famous-people/ted-lasso.png",
-        },
-        { name: "Aang", 
-          role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png",
-        },
-        { name: "Hermione Granger", 
-         role: "Harry Potter", 
-         image: "/images/famous-people/hermione-granger.png",
-        },
-        { name: "Galadriel", 
-         role: "The Rings of Power", 
-         image: "/images/famous-people/galadriel.png",        
-        }
-      ],
+            famousPeople: [
+              {
+                name: "Buffy Summers",
+                role: "Buffy the Vampire Slayer",
+                image: "/images/famous-people/buffy-summers.png",
+              },
+              {
+                name: "Arya Stark",
+                role: "Game of Thrones",
+                image: "/images/famous-people/arya-stark.png",
+              },
+              {
+                name: "Maximus",
+                role: "Gladiator",
+                image: "/images/famous-people/maximus.png",
+              },
+              {
+                name: "Kara Danvers / Supergirl",
+                role: "Supergirl",
+                image: "/images/famous-people/kara-danvers-supergirl.png",
+              }
+            ],
 
       color: "from-red-800 to-amber-600",
     },
