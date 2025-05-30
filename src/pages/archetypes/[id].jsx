@@ -150,14 +150,14 @@ export default function ArchetypeDetail() {
             image: "/images/famous-people/bran-stark.png",
           },
           {
-            name: "River Tam",
-            role: "Firefly",
-            image: "/images/famous-people/river-tam.png",
-          },
-          {
             name: "Obi-Wan Kenobi",
             role: "Star Wars",
             image: "/images/famous-people/obi-wan-kenobi.png",
+          },
+          {
+            name: "Gandalf",
+            role: "The Lord of the Rings",
+            image: "/images/famous-people/gandalf.png",
           }
         ],
      
