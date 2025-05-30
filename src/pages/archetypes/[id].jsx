@@ -51,10 +51,10 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
 
       color: "from-blue-600 to-green-500",
@@ -100,11 +100,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-green-600 to-blue-400",
     },
     elprg: {
@@ -148,11 +149,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-indigo-700 to-purple-500",
     },
     elprn: {
@@ -183,7 +185,7 @@ export default function ArchetypeDetail() {
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
       famousPeople: [
-      {
+        {
           name: "Ted Lasso",
           role: "Ted Lasso",
           image: "/images/famous-people/ted-lasso.png",
@@ -196,11 +198,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-red-600 to-orange-500",
     },
     elcsg: {
@@ -225,7 +228,7 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
       famousPeople: [
-{
+        {
           name: "Ted Lasso",
           role: "Ted Lasso",
           image: "/images/famous-people/ted-lasso.png",
@@ -238,11 +241,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-gray-600 to-blue-400",
     },
     elcsn: {
@@ -273,7 +277,7 @@ export default function ArchetypeDetail() {
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
       famousPeople: [
-{
+        {
           name: "Ted Lasso",
           role: "Ted Lasso",
           image: "/images/famous-people/ted-lasso.png",
@@ -286,11 +290,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-yellow-700 to-orange-400",
     },
     elcrg: {
@@ -321,7 +326,7 @@ export default function ArchetypeDetail() {
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
       famousPeople: [
-{
+        {
           name: "Ted Lasso",
           role: "Ted Lasso",
           image: "/images/famous-people/ted-lasso.png",
@@ -334,11 +339,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-teal-600 to-green-400",
     },
     elcrn: {
@@ -369,7 +375,7 @@ export default function ArchetypeDetail() {
         "Nationalist-minded individuals may foster exclusionary attitudes, resisting beneficial global cooperation and viewing external influences as inherently threatening rather than potentially enriching.",
       ],
       famousPeople: [
-{
+        {
           name: "Ted Lasso",
           role: "Ted Lasso",
           image: "/images/famous-people/ted-lasso.png",
@@ -382,11 +388,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-amber-700 to-red-400",
     },
     eapsg: {
@@ -430,11 +437,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-sky-600 to-cyan-400",
     },
     eapsn: {
@@ -478,11 +486,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-slate-700 to-gray-400",
     },
     eaprg: {
@@ -512,6 +521,7 @@ export default function ArchetypeDetail() {
         "Religious-minded individuals may impose rigid moral frameworks on diverse populations, sometimes limiting pluralism and suppressing differing viewpoints in the pursuit of religious orthodoxy.",
         "Globalist-minded individuals may underestimate the significance of national identity, local governance, and the unique challenges faced by distinct communities, risking overreach in pursuit of universal ideals.",
       ],
+      famousPeople: [
         {
           name: "Ted Lasso",
           role: "Ted Lasso",
@@ -525,10 +535,10 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
 
       color: "from-purple-700 to-pink-500",
@@ -574,10 +584,10 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
 
       color: "from-rose-700 to-red-500",
@@ -623,10 +633,10 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
 
       color: "from-blue-800 to-gray-600",
@@ -672,10 +682,10 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
 
       color: "from-amber-700 to-lime-500",
@@ -721,10 +731,10 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
 
       color: "from-green-700 to-teal-400",
@@ -770,11 +780,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-purple-700 to-red-600",
     },
     flpsg: {
@@ -818,11 +829,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-cyan-500 to-blue-400",
     },
     flpsn: {
@@ -866,11 +878,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-orange-600 to-yellow-400",
     },
     flprg: {
@@ -914,11 +927,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-teal-600 to-blue-400",
     },
     flprn: {
@@ -962,11 +976,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-red-600 to-rose-400",
     },
     flcsg: {
@@ -1010,11 +1025,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-blue-500 to-green-400",
     },
     flcsn: {
@@ -1058,11 +1074,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-red-700 to-blue-600",
     },
     flcrg: {
@@ -1106,11 +1123,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-yellow-600 to-gray-400",
     },
     flcrn: {
@@ -1154,11 +1172,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-amber-700 to-emerald-500",
     },
     fapsg: {
@@ -1202,11 +1221,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-black to-gray-700",
     },
     fapsn: {
@@ -1250,11 +1270,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-gray-700 to-blue-400",
     },
     faprg: {
@@ -1298,11 +1319,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-purple-800 to-rose-600",
     },
     faprn: {
@@ -1346,11 +1368,12 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
+      
       color: "from-amber-700 to-yellow-400",
     },
     facsg: {
@@ -1394,10 +1417,10 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
 
       color: "from-gray-800 to-blue-500",
@@ -1443,10 +1466,10 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
 
       color: "from-slate-800 to-red-600",
@@ -1492,10 +1515,10 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
 
       color: "from-indigo-800 to-emerald-500",
@@ -1541,10 +1564,10 @@ export default function ArchetypeDetail() {
          role: "Harry Potter", 
          image: "/images/famous-people/hermione-granger.png",
         },
-        { name: "Galadrieln", 
+        { name: "Galadriel", 
          role: "The Rings of Power", 
          image: "/images/famous-people/galadriel.png",        
-        },
+        }
       ],
 
       color: "from-red-800 to-amber-600",
