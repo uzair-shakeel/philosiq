@@ -103,9 +103,9 @@ export default function ArchetypeDetail() {
               image: "/images/famous-people/peggy-olson.png",
             },
             {
-              name: "T'Challa",
-              role: "Black Panther",
-              image: "/images/famous-people/tchalla.png",
+              name: "Carrie Mathison",
+              role: "Homeland",
+              image: "/images/famous-people/carrie-mathison.png",
             }
           ],
       
