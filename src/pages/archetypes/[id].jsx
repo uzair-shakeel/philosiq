@@ -1805,7 +1805,7 @@ export default function ArchetypeDetail() {
             <div className="w-full lg:w-1/4">
               <div className="bg-white rounded-lg shadow-lg p-8 h-full">
                 <h2 className="text-2xl font-bold mb-6 text-secondary-darkBlue flex items-center">
-                  <FaUsers className="mr-3 text-primary-maroon" /> Famous People
+                  <FaUsers className="mr-3 text-primary-maroon" /> Fictional Characters
                 </h2>
                 <div className="space-y-8">
                   {currentArchetype?.famousPeople?.map((person, index) => (
