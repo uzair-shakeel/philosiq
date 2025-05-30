@@ -1641,9 +1641,9 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Buffy Summers",
-                role: "Buffy the Vampire Slayer",
-                image: "/images/famous-people/buffy-summers.png",
+                name: "Franklin Saint",
+                role: "Snowfall",
+                image: "/images/famous-people/franklin-saint.png",
               },
               {
                 name: "Arya Stark",
