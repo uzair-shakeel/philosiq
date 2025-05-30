@@ -39,15 +39,22 @@ export default function ArchetypeDetail() {
       ],
       famousPeople: [
         {
-          name: "Jean-Luc Picard",
-          role: "Star Trek: TNG",
+          name: "Ted Lasso",
+          role: "Ted Lasso",
+          image: "/images/famous-people/ted-lasso.png",
         },
         { name: "Aang", 
           role: "Avatar: The Last Airbender",
-          image: "/images/famous-people/aang.png"
+          image: "/images/famous-people/aang.png",
         },
-        { name: "Hermione Granger", role: "Harry Potter" },
-        { name: "Lisa Simpson", role: "The Simpsons" },
+        { name: "Hermione Granger", 
+         role: "Harry Potter" 
+         image: "/images/famous-people/hermione-granger.png",
+        },
+        { name: "Galadrieln", 
+         role: "The Rings of Power" 
+         image: "/images/famous-people/galadriel.png",        
+        },
       ],
 
       color: "from-blue-600 to-green-500",
