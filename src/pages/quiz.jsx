@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
+import AuthModal from "../components/AuthModal";
 import {
   FaArrowRight,
   FaArrowLeft,
   FaClipboardList,
   FaClipboardCheck,
   FaInfoCircle,
+  FaUser,
 } from "react-icons/fa";
 import axios from "axios";
 import { track } from "@vercel/analytics";
+import { useRouter } from "next/router";
+import { calculateResults } from "../utils/resultsCalculator";
 
 export default function QuizPage() {
   const [quizStarted, setQuizStarted] = useState(false);
@@ -20,6 +24,21 @@ export default function QuizPage() {
   const [showingAxes, setShowingAxes] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authToken, setAuthToken] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState(null);
+  const router = useRouter();
+
+  // Check authentication status on mount
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setIsAuthenticated(true);
+      setAuthToken(token);
+    }
+  }, []);
 
   // Fallback questions in case the API fails
   const FALLBACK_QUESTIONS = [
@@ -161,6 +180,11 @@ export default function QuizPage() {
 
   // Function to start the quiz
   const startQuiz = async (type) => {
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
+
     // Track quiz start event
     track("quiz_started", { type });
 
@@ -184,10 +208,10 @@ export default function QuizPage() {
         const questionsByAxis = {};
         allQuestions.forEach((question) => {
           // All questions should already be marked for short quiz from the API
-          if (!questionsByAxis[question.axis]) {
-            questionsByAxis[question.axis] = [];
-          }
-          questionsByAxis[question.axis].push(question);
+            if (!questionsByAxis[question.axis]) {
+              questionsByAxis[question.axis] = [];
+            }
+            questionsByAxis[question.axis].push(question);
         });
 
         // Get axes available
@@ -348,117 +372,91 @@ export default function QuizPage() {
     }
   };
 
-  const handleSubmit = () => {
-    // Prepare results data with axis calculations
-    const axisScores = calculateResults();
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    setSubmissionError(null);
 
-    // Make sure each question has the necessary weight fields
-    const processedQuestions = questions.map((question) => {
-      return {
-        ...question,
-        // Ensure weight_agree and weight_disagree exist, falling back to weight or default value of 1
-        weight_agree: question.weight_agree || question.weight || 1,
-        weight_disagree: question.weight_disagree || question.weight || 1,
+    try {
+      // Get the auth token
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Please log in to save your results");
+      }
+
+      // Calculate final results using the proper utility
+      const finalResults = calculateResults(questions, answers);
+      console.log("Final Results:", finalResults); // Debug log
+
+      // Get stored results data which includes secondary archetypes
+      const storedResults = sessionStorage.getItem("quizResults");
+      const parsedStoredResults = storedResults
+        ? JSON.parse(storedResults)
+        : {};
+
+      // Save results to session storage
+      const resultsData = {
+        questions,
+        answers,
+        // Save detailed axis information
+        axisResults: finalResults.axisResults,
+        // Save primary archetype
+        archetype: finalResults.archetype,
+        // Include secondary archetypes if available
+        secondaryArchetypes: parsedStoredResults.secondaryArchetypes || [],
+        timestamp: new Date().toISOString(),
+        quizType: quizType === "short" ? "short" : "full",
       };
-    });
 
-    // Prepare the results data
-    const quizResultsData = JSON.stringify({
-      answers,
-      questions: processedQuestions,
-      axisScores,
-      totalQuestions: questions.length,
-      timestamp: new Date().toISOString(),
-      quizType,
-    });
+      console.log("Saving Results Data:", resultsData); // Debug log
 
-    // Store results in sessionStorage for the current session
-    sessionStorage.setItem("quizResults", quizResultsData);
+      sessionStorage.setItem("quizResults", JSON.stringify(resultsData));
+      localStorage.setItem("quizResults", JSON.stringify(resultsData));
 
-    // Also store in localStorage for persistence across browser sessions
-    localStorage.setItem("quizResults", quizResultsData);
+      // If user is authenticated, save to database
+      try {
+        const response = await fetch("/api/quiz/save-results", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(resultsData),
+        });
 
-    // Track quiz completion
-    track("quiz_completed", {
-      type: quizType,
-      questionsAnswered: Object.keys(answers).length,
-      totalQuestions: questions.length,
-    });
+        const data = await response.json();
 
-    // Redirect to results page
-    window.location.href = "/results";
-  };
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to save results");
+        }
 
-  // Calculate quiz results based on answers
-  const calculateResults = () => {
-    // Initialize axis scores
-    const axisScores = {
-      "Equity vs. Free Market": 50,
-      "Libertarian vs. Authoritarian": 50,
-      "Progressive vs. Conservative": 50,
-      "Secular vs. Religious": 50,
-      "Globalism vs. Nationalism": 50,
-    };
-
-    // Count how many questions were answered for each axis
-    const axisCounts = {
-      "Equity vs. Free Market": 0,
-      "Libertarian vs. Authoritarian": 0,
-      "Progressive vs. Conservative": 0,
-      "Secular vs. Religious": 0,
-      "Globalism vs. Nationalism": 0,
-    };
-
-    // Calculate the scores
-    questions.forEach((question) => {
-      const answer = answers[question._id];
-
-      // Skip if question wasn't answered
-      if (answer === undefined) return;
-
-      const axis = question.axis;
-      const direction = question.direction;
-      const weight = question.weight;
-
-      // Convert answer to a score modifier
-      // -2 (strongly disagree) to +2 (strongly agree)
-      const modifier = answer;
-
-      // Update the score based on direction
-      // Left positions decrease for "Right" answers and increase for "Left" answers
-      if (direction === "Left") {
-        axisScores[axis] += modifier * weight;
-      } else {
-        axisScores[axis] -= modifier * weight;
+        // Track successful quiz completion
+        track("quiz_completed", {
+          quizType: quizType === "short" ? "short" : "full",
+          archetype: finalResults.archetype?.name || "Unknown",
+        });
+      } catch (error) {
+        console.error("Error saving results:", error);
+        // Don't block navigation if saving fails
+        track("quiz_save_error", {
+          error: error.message,
+          quizType: quizType === "short" ? "short" : "full",
+        });
       }
 
-      // Increment the question count for this axis
-      axisCounts[axis] += 1;
-    });
+      // Navigate to results page
+      router.push("/results");
+    } catch (error) {
+      console.error("Submission error:", error);
+      setSubmissionError(error.message);
 
-    // Normalize scores to be between 0 and 100
-    // Where 50 is the starting point
-    Object.keys(axisScores).forEach((axis) => {
-      if (axisCounts[axis] > 0) {
-        // Calculate maximum possible points for this axis
-        const maxPoints = axisCounts[axis] * 5; // 5 = max weight (1-5) * max answer value (2)
+      // Track submission error
+      track("quiz_submission_error", {
+        error: error.message,
+        quizType: quizType === "short" ? "short" : "full",
+      });
 
-        // Convert to 0-100 scale
-        // First, get the raw offset from the middle (50)
-        const rawOffset = axisScores[axis] - 50;
-
-        // Scale this offset based on the maximum possible points
-        const scaledOffset = (rawOffset / maxPoints) * 50;
-
-        // Apply the scaled offset to the middle value (50)
-        axisScores[axis] = Math.round(50 + scaledOffset);
-
-        // Ensure the score is between 0 and 100
-        axisScores[axis] = Math.max(0, Math.min(100, axisScores[axis]));
-      }
-    });
-
-    return axisScores;
+      setIsSubmitting(false);
+    }
   };
 
   const toggleAxesDisplay = () => {
@@ -506,19 +504,32 @@ export default function QuizPage() {
   }
 
   return (
-    <Layout title="Political Survey Quiz - PhilosiQ">
+    <Layout title="Political Quiz - PhilosiQ">
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
+
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
           {!quizStarted ? (
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
                 <h1 className="text-4xl font-bold mb-4">
-                  Political Survey Quiz
+                  Discover Your Political Archetype
                 </h1>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                  Discover your political identity by answering questions about
-                  your views on various political issues.
+                  Take our quiz to understand where you stand on the political
+                  spectrum
                 </p>
+                {!isAuthenticated && (
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg inline-block">
+                    <p className="text-blue-700 flex items-center">
+                      <FaUser className="mr-2" />
+                      Please sign in to take the quiz and save your results
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

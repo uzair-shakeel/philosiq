@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FaBars, FaTimes, FaUser } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaUser,
+  FaSignInAlt,
+  FaUserCircle,
+  FaHistory,
+} from "react-icons/fa";
 
 const Navbar = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showBanner, setShowBanner] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    // Check authentication status
+    const token = localStorage.getItem("authToken");
+    setIsAuthenticated(!!token);
+
     const handleScroll = () => {
       if (window.scrollY > 20) {
         setScrolled(true);
@@ -21,6 +33,12 @@ const Navbar = ({ user }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    setIsAuthenticated(false);
+    router.push("/");
+  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -34,8 +52,11 @@ const Navbar = ({ user }) => {
     { name: "Contact Us", path: "/contact-us" },
   ];
 
-  if (user) {
-    navLinks.push({ name: "Questions", path: "/questions" });
+  if (isAuthenticated) {
+    navLinks.push(
+      { name: "Profile", path: "/profile" },
+      { name: "Quiz History", path: "/history", icon: FaHistory }
+    );
   }
 
   const isHomePage = router.pathname === "/";
@@ -90,6 +111,33 @@ const Navbar = ({ user }) => {
                 {link.name}
               </Link>
             ))}
+
+            {/* Authentication Buttons */}
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-4">
+                <Link
+                  href="/profile"
+                  className="flex items-center text-neutral-dark hover:text-primary-maroon"
+                >
+                  <FaUserCircle className="mr-2" />
+                  Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => router.push("/login")}
+                className="flex items-center bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors"
+              >
+                <FaSignInAlt className="mr-2" />
+                Login
+              </button>
+            )}
           </div>
 
           <button
@@ -100,6 +148,7 @@ const Navbar = ({ user }) => {
           </button>
         </div>
 
+        {/* Mobile Menu */}
         {isOpen && (
           <div className="md:hidden bg-white shadow-lg absolute top-full left-0 right-0 py-4 px-6 flex flex-col space-y-4">
             {navLinks.map((link) => (
@@ -123,6 +172,40 @@ const Navbar = ({ user }) => {
                 {link.name}
               </Link>
             ))}
+
+            {/* Mobile Authentication Buttons */}
+            {isAuthenticated ? (
+              <>
+                <Link
+                  href="/profile"
+                  className="flex items-center text-neutral-dark hover:text-primary-maroon py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <FaUserCircle className="mr-2" />
+                  Profile
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  className="w-full bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  router.push("/login");
+                  setIsOpen(false);
+                }}
+                className="w-full bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors flex items-center justify-center"
+              >
+                <FaSignInAlt className="mr-2" />
+                Login
+              </button>
+            )}
           </div>
         )}
       </nav>
