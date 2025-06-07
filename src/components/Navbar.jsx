@@ -52,9 +52,9 @@ const Navbar = ({ user }) => {
     { name: "Contact Us", path: "/contact-us" },
   ];
 
-  if (isAuthenticated) {
-    navLinks.push({ name: "Quiz History", path: "/history", icon: FaHistory });
-  }
+  // if (isAuthenticated) {
+  //   navLinks.push({ name: "Quiz History", path: "/history", icon: FaHistory });
+  // }
 
   const isHomePage = router.pathname === "/";
 
@@ -112,13 +112,6 @@ const Navbar = ({ user }) => {
             {/* Authentication Buttons */}
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <Link
-                  href="/profile"
-                  className="flex items-center text-neutral-dark hover:text-primary-maroon"
-                >
-                  <FaUserCircle className="mr-2" />
-                  Profile
-                </Link>
                 <button
                   onClick={handleLogout}
                   className="bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors"

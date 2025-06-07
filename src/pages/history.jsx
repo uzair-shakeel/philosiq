@@ -27,6 +27,27 @@ export default function QuizHistory() {
         return;
       }
 
+      // First, validate the token with a lightweight request to check user status
+      const validationResponse = await fetch("/api/auth/validate", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!validationResponse.ok) {
+        const validationErrorText = await validationResponse.text();
+        console.error(
+          "Token validation failed:",
+          validationResponse.status,
+          validationErrorText
+        );
+        localStorage.removeItem("authToken");
+        setError("Your session is invalid or expired. Please log in again.");
+        setTimeout(() => router.push("/login"), 3000);
+        return;
+      }
+
+      // If token is valid, proceed with fetching quiz results
       const response = await fetch("/api/quiz/results", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -35,6 +56,12 @@ export default function QuizHistory() {
 
       if (!response.ok) {
         const errorText = await response.text();
+        if (response.status === 401) {
+          localStorage.removeItem("authToken");
+          setError("Your session has expired. Please log in again.");
+          setTimeout(() => router.push("/login"), 2000);
+          return;
+        }
         throw new Error(
           `Failed to fetch quiz history: ${response.status} ${response.statusText} - ${errorText}`
         );
@@ -45,6 +72,22 @@ export default function QuizHistory() {
     } catch (err) {
       console.error("Error fetching quiz history:", err);
       setError(err.message || "Failed to load quiz history");
+      // Fallback to localStorage results if API call fails
+      const localResults = localStorage.getItem("quizResults");
+      if (localResults) {
+        try {
+          const parsedResults = JSON.parse(localResults);
+          setQuizResults(
+            Array.isArray(parsedResults) ? parsedResults : [parsedResults]
+          );
+          setError(
+            "Failed to load history from server, showing local results instead."
+          );
+        } catch (e) {
+          console.error("Error parsing local results:", e);
+          setError("Failed to load history from server or local storage.");
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -87,6 +130,15 @@ export default function QuizHistory() {
                     Error Loading History
                   </h3>
                   <p className="text-red-700">{error}</p>
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem("authToken");
+                      router.push("/login");
+                    }}
+                    className="mt-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+                  >
+                    Log In Again
+                  </button>
                 </div>
               </div>
             </div>
