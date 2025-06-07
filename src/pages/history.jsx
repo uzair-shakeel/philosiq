@@ -34,7 +34,10 @@ export default function QuizHistory() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch quiz history");
+        const errorText = await response.text();
+        throw new Error(
+          `Failed to fetch quiz history: ${response.status} ${response.statusText} - ${errorText}`
+        );
       }
 
       const data = await response.json();

@@ -53,10 +53,7 @@ const Navbar = ({ user }) => {
   ];
 
   if (isAuthenticated) {
-    navLinks.push(
-      { name: "Profile", path: "/profile" },
-      { name: "Quiz History", path: "/history", icon: FaHistory }
-    );
+    navLinks.push({ name: "Quiz History", path: "/history", icon: FaHistory });
   }
 
   const isHomePage = router.pathname === "/";

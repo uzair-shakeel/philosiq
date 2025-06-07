@@ -94,8 +94,8 @@ export default function LoginPage() {
                 disabled={isLoading}
                 className={`w-full py-2 px-4 text-white rounded ${
                   isLoading
-                    ? "bg-primary/70 cursor-not-allowed"
-                    : "bg-primary hover:bg-primary-dark"
+                    ? "bg-primary-maroon/70 cursor-not-allowed"
+                    : "bg-primary-maroon hover:bg-primary-darkMaroon"
                 } transition-colors`}
               >
                 {isLoading ? "Logging in..." : "Login"}
