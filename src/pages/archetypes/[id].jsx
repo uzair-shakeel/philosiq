@@ -146,7 +146,7 @@ export default function ArchetypeDetail() {
           },
           {
             name: "Bran Stark",
-            role: "Game of Thrones",
+            role: "A Song of Ice and Fire",
             image: "/images/famous-people/bran-stark.png",
           },
           {
@@ -249,7 +249,7 @@ export default function ArchetypeDetail() {
             },
             {
               name: "Jorah Mormont",
-              role: "Game of Thrones",
+              role: "A Song of Ice and Fire",
               image: "/images/famous-people/jorah-mormont.png",
             },
             {
@@ -348,7 +348,7 @@ export default function ArchetypeDetail() {
               },
               {
                 name: "Jon Snow",
-                role: "Game of Thrones",
+                role: "A Song of Ice and Fire",
                 image: "/images/famous-people/jon-snow.png",
               },
               {
@@ -395,7 +395,7 @@ export default function ArchetypeDetail() {
             famousPeople: [
               {
                 name: "Brienne of Tarth",
-                role: "Game of Thrones",
+                role: "A Song of Ice and Fire",
                 image: "/images/famous-people/brienne-of-tarth.png",
               },
               {
@@ -602,7 +602,7 @@ export default function ArchetypeDetail() {
             famousPeople: [
               {
                 name: "Margaery Tyrell",
-                role: "Game of Thrones",
+                role: "A Song of Ice and Fire",
                 image: "/images/famous-people/margaery-tyrell.png",
               },
               {
@@ -773,7 +773,7 @@ export default function ArchetypeDetail() {
               },
               {
                 name: "Maester Lewin",
-                role: "Game of Thrones",
+                role: "A Song of Ice and Fire",
                 image: "/images/famous-people/maester-lewin.png",
               }
             ],
@@ -1070,7 +1070,7 @@ export default function ArchetypeDetail() {
             famousPeople: [
               {
                 name: "Daenerys Targaryen",
-                role: "Game of Thrones",
+                role: "A Song of Ice and Fire",
                 image: "/images/famous-people/daenerys-targaryen.png",
               },
               {
@@ -1330,7 +1330,7 @@ export default function ArchetypeDetail() {
             famousPeople: [
               {
                 name: "Tywin Lannister",
-                role: "Game of Thrones",
+                role: "A Song of Ice and Fire",
                 image: "/images/famous-people/tywin-lannister.png",
               },
               {
@@ -1595,7 +1595,7 @@ export default function ArchetypeDetail() {
               },
               {
                 name: "Eddard Stark",
-                role: "Game of Thrones",
+                role: "A Song of Ice and Fire",
                 image: "/images/famous-people/ned-stark.png",
               },
               {
@@ -1647,7 +1647,7 @@ export default function ArchetypeDetail() {
               },
               {
                 name: "Arya Stark",
-                role: "Game of Thrones",
+                role: "A Song of Ice and Fire",
                 image: "/images/famous-people/arya-stark.png",
               },
               {
