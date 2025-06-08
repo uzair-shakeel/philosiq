@@ -248,14 +248,14 @@ export default function ArchetypeDetail() {
               image: "/images/famous-people/lisa-simpson.png",
             },
             {
-              name: "Chidi Anagonye",
-              role: "The Good Place",
-              image: "/images/famous-people/chidi-anagonye.png",
+              name: "Jorah Mormont",
+              role: "Game of Thrones",
+              image: "/images/famous-people/jorah-mormont.png",
             },
             {
-              name: "Simone",
-              role: "The Good Place",
-              image: "/images/famous-people/simone.png",
+              name: "Mark Scout",
+              role: "Severance",
+              image: "/images/famous-people/mark-scout.png",
             }
           ],
 
@@ -300,14 +300,14 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/john-dutton.png",
               },
               {
+                name: "Rocky Balboa",
+                role: "Rocky",
+                image: "/images/famous-people/rocky.png",
+              },
+              {
                 name: "Hank Hill",
                 role: "King of the Hill",
                 image: "/images/famous-people/hank-hill.png",
-              },
-              {
-                name: "Andy Taylor",
-                role: "The Andy Griffith Show",
-                image: "/images/famous-people/andy-taylor.png",
               }
             ],
 
@@ -404,14 +404,14 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/hopper.png",
               },
               {
-                name: "Uncle Iroh",
-                role: "Avatar: The Last Airbender",
-                image: "/images/famous-people/uncle-iroh.png",
+                name: "Joel Miller",
+                role: "The Last of Us",
+                image: "/images/famous-people/joel-miller.png",
               },
               {
-                name: "Teal'c",
-                role: "Stargate SG-1",
-                image: "/images/famous-people/tealc.png",
+                name: "Boyd Stevens",
+                role: "From",
+                image: "/images/famous-people/sheriff-boyd.png",
               }
             ],
 
@@ -446,24 +446,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Spock",
-                role: "Star Trek",
-                image: "/images/famous-people/spock.png",
+                name: "Nathan Fielder",
+                role: "Nathan for You",
+                image: "/images/famous-people/nathan-fielder.png",
               },
               {
-                name: "Harold Finch",
-                role: "Person of Interest",
-                image: "/images/famous-people/harold-finch.png",
+                name: "Saito",
+                role: "Inception",
+                image: "/images/famous-people/saito.png",
               },
               {
-                name: "J.A.R.V.I.S.",
+                name: "Director Orson Krennic",
                 role: "Iron Man",
-                image: "/images/famous-people/jarvis.png",
+                image: "/images/famous-people/director-orson-krennic.png",
               },
               {
-                name: "Chloe O’Brian",
-                role: "24",
-                image: "/images/famous-people/chloe-obrian.png",
+                name: "Peter Brand",
+                role: "Moneyball",
+                image: "/images/famous-people/peter-brand.png",
               }
             ],
 
@@ -498,24 +498,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Jack Bauer",
-                role: "24",
-                image: "/images/famous-people/jack-bauer.png",
+                name: "Tony Soprano",
+                role: "The Sopranos",
+                image: "/images/famous-people/tony-soprano.png",
               },
               {
-                name: "Vic Mackey",
-                role: "The Shield",
-                image: "/images/famous-people/vic-mackey.png",
+                name: "Trevor Phillops",
+                role: "Grand Theft Auto V",
+                image: "/images/famous-people/trevor-phillips.png",
               },
               {
-                name: "Frank Castle",
-                role: "The Punisher",
-                image: "/images/famous-people/frank-castle.png",
+                name: "Admiral Cain",
+                role: "Battlestar Galactica",
+                image: "/images/famous-people/admiral-cain.png",
               },
               {
-                name: "Elliot Stabler",
-                role: "Law & Order: SVU",
-                image: "/images/famous-people/elliot-stabler.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX.png",
               }
             ],
 
@@ -550,24 +550,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "John Locke",
-                role: "Lost",
-                image: "/images/famous-people/john-locke.png",
+                name: "Aslan",
+                role: "The Chronicles of Narnia",
+                image: "/images/famous-people/aslan.png",
               },
               {
-                name: "Eli Sunday",
-                role: "There Will Be Blood",
+                name: "V",
+                role: "V for vendetta",
                 image: "/images/famous-people/eli-sunday.png",
               },
               {
-                name: "Lysa Arryn",
-                role: "Game of Thrones",
-                image: "/images/famous-people/lysa-arryn.png",
+                name: "Angela Abar",
+                role: "Watchmen",
+                image: "/images/famous-people/angela-abar.png",
               },
               {
-                name: "Serena Joy Waterford",
-                role: "The Handmaid’s Tale",
-                image: "/images/famous-people/serena-joy-waterford.png",
+                name: "Marian Anderson",
+                role: "Marian Anderson",
+                image: "/images/famous-people/marian-anderson.png",
               }
             ],
       color: "from-purple-700 to-pink-500",
@@ -601,14 +601,14 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Dolores Umbridge",
-                role: "Harry Potter",
-                image: "/images/famous-people/dolores-umbridge.png",
-              },
-              {
                 name: "Margaery Tyrell",
                 role: "Game of Thrones",
                 image: "/images/famous-people/margaery-tyrell.png",
+              },
+              {
+                name: "Lady Jessica",
+                role: "Dune",
+                image: "/images/famous-people/lady-jessica.png",
               },
               {
                 name: "Ned Flanders",
@@ -616,9 +616,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/ned-flanders.png",
               },
               {
-                name: "Sybil Crawley",
-                role: "Downton Abbey",
-                image: "/images/famous-people/sybil-crawley.png",
+                name: "Eli Sunday",
+                role: "There Will Be Blood",
+                image: "/images/famous-people/eli-sunday.png",
               }
             ],
 
@@ -653,24 +653,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Amanda Waller",
-                role: "Peacemaker",
-                image: "/images/famous-people/amanda-waller.png",
+                name: "Raymond Holt",
+                role: "Brooklyn Nine-Nine",
+                image: "/images/famous-people/captian-raymond-holt.png",
               },
               {
                 name: "General Leia",
                 role: "Star Wars",
-                image: "/images/famous-people/general-leia.png",
+                image: "/images/famous-people/general-leia-organa.png",
               },
               {
-                name: "Commander Shepard",
-                role: "Mass Effect",
-                image: "/images/famous-people/commander-shepard.png",
-              },
-              {
-                name: "William Adama",
+                name: "Laura Roslin",
                 role: "Battlestar Galactica",
-                image: "/images/famous-people/william-adama.png",
+                image: "/images/famous-people/president-laura-roslin.png",
+              },
+              {
+                name: "Miranda Bailey",
+                role: "Grey's Anatomy",
+                image: "/images/famous-people/miranda-bailey.png",
               }
             ],
 
@@ -705,14 +705,14 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Samwise Gamgee",
-                role: "LOTR",
-                image: "/images/famous-people/samwise-gamgee.png",
+                name: "Dolores Abernathy",
+                role: "Westworld",
+                image: "/images/famous-people/dolores-abernathy.png",
               },
               {
-                name: "Jim Halpert",
-                role: "The Office",
-                image: "/images/famous-people/jim-halpert.png",
+                name: "Charles Widmore",
+                role: "Lost",
+                image: "/images/famous-people/charles-widmore.png",
               },
               {
                 name: "Ben Wyatt",
@@ -720,9 +720,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/ben-wyatt.png",
               },
               {
-                name: "Carson",
-                role: "Downton Abbey",
-                image: "/images/famous-people/carson.png",
+                name: "Jim Halpert",
+                role: "The Office",
+                image: "/images/famous-people/jim-halpert.png",
               }
             ],
 
@@ -757,24 +757,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Father Brown",
-                role: "Father Brown",
-                image: "/images/famous-people/father-brown.png",
+                name: "Mario",
+                role: "Mario",
+                image: "/images/famous-people/mario.png",
               },
               {
-                name: "Reverend TimTom",
-                role: "The Middle",
-                image: "/images/famous-people/reverend-timtom.png",
+                name: "Mufasa",
+                role: "The Lion King",
+                image: "/images/famous-people/mufasa.png",
               },
               {
-                name: "Claire Fraser",
-                role: "Outlander",
-                image: "/images/famous-people/claire-fraser.png",
+                name: "The Giver",
+                role: "The Giver",
+                image: "/images/famous-people/the-giver.png",
               },
               {
-                name: "John Book",
-                role: "Witness",
-                image: "/images/famous-people/john-book.png",
+                name: "Maester Lewin",
+                role: "Game of Thrones",
+                image: "/images/famous-people/maester-lewin.png",
               }
             ],
 
@@ -819,14 +819,14 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/bernard-holland.png",
               },
               {
-                name: "Mother Abbess",
+                name: "Gaius Helen Mohiam",
                 role: "The Sound of Music",
-                image: "/images/famous-people/mother-abbess.png",
+                image: "/images/famous-people/the-reverend-mother-gaius-helen-mohiam.png",
               },
               {
-                name: "Sister Aloysius",
-                role: "Doubt",
-                image: "/images/famous-people/sister-aloysius.png",
+                name: "Mace Windu",
+                role: "Star Wars",
+                image: "/images/famous-people/mace-windu.png",
               }
             ],
 
@@ -861,24 +861,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Dolores Abernathy",
-                role: "Westworld",
-                image: "/images/famous-people/dolores-abernathy.png",
+                name: "Rick Sanchez",
+                role: "Rick and Morty",
+                image: "/images/famous-people/rick-sanchez.png",
               },
               {
-                name: "Michael Burnham",
-                role: "Star Trek: Discovery",
-                image: "/images/famous-people/michael-burnham.png",
+                name: "Lewis Robinson",
+                role: "Meet the Robinsons",
+                image: "/images/famous-people/lewis.png",
               },
               {
-                name: "Nathan Bateman",
-                role: "Ex Machina",
-                image: "/images/famous-people/nathan-bateman.png",
+                name: "Larry David",
+                role: "Curb Your Enthusiasm",
+                image: "/images/famous-people/larry-david.png",
               },
               {
-                name: "Angela Abar",
-                role: "Watchmen",
-                image: "/images/famous-people/angela-abar.png",
+                name: "Dr. Gregory House.png",
+                role: "House",
+                image: "/images/famous-people/dr.-gregory-house.png",
               }
             ],
 
@@ -913,24 +913,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Malcolm Reynolds",
-                role: "Firefly",
-                image: "/images/famous-people/malcolm-reynolds.png",
+                name: "Bojack Horseman",
+                role: "Bojack Horseman",
+                image: "/images/famous-people/bojack-horseman.png",
               },
               {
-                name: "Tony Stark",
-                role: "Iron Man",
-                image: "/images/famous-people/tony-stark.png",
+                name: "Han Solo",
+                role: "Star Wars",
+                image: "/images/famous-people/han-solo.png",
               },
               {
-                name: "Jessica Jones",
-                role: "Jessica Jones",
-                image: "/images/famous-people/jessica-jones.png",
+                name: "Sly Cooper",
+                role: "Sly Cooper",
+                image: "/images/famous-people/sly-cooper.png",
               },
               {
-                name: "Geralt of Rivia",
-                role: "The Witcher",
-                image: "/images/famous-people/geralt-of-rivia.png",
+                name: "Jimmy McNulty",
+                role: "The Wire",
+                image: "/images/famous-people/jimmy-mcnulty.png",
               }
             ],
 
@@ -975,14 +975,14 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/saul-goodman.png",
               },
               {
-                name: "Harriet Tubman",
-                role: "Underground",
-                image: "/images/famous-people/harriet-tubman.png",
+                name: "Belle",
+                role: "Beauty and the Beast",
+                image: "/images/famous-people/belle.png",
               },
               {
-                name: "Kunta Kinte",
-                role: "Roots",
-                image: "/images/famous-people/kunta-kinte.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1017,24 +1017,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Lisbeth Salander",
-                role: "The Girl with the Dragon Tattoo",
-                image: "/images/famous-people/lisbeth-salander.png",
+                name: "Daryl Dixon",
+                role: "The Walking Dead",
+                image: "/images/famous-people/daryl-dixon.png",
               },
               {
-                name: "Clarisse McClellan",
-                role: "Fahrenheit 451",
-                image: "/images/famous-people/clarisse-mcclellan.png",
+                name: "Dennis Reynolds",
+                role: "It's Always Sunny in Philadelphia",
+                image: "/images/famous-people/dennis-reynolds.png",
               },
               {
-                name: "Howard Beale",
-                role: "Network",
-                image: "/images/famous-people/howard-beale.png",
+                name: "Omar Little",
+                role: "The Wire",
+                image: "/images/famous-people/omar-little.png",
               },
               {
-                name: "Elliot Alderson",
-                role: "Mr. Robot",
-                image: "/images/famous-people/elliot-alderson.png",
+                name: "Jack Shephard",
+                role: "Lost",
+                image: "/images/famous-people/jack-shephard.png",
               }
             ],
 
@@ -1069,24 +1069,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "President Jed Bartlet",
-                role: "The West Wing",
-                image: "/images/famous-people/president-jed-bartlet.png",
-              },
-              {
-                name: "Jean-Michel Basquiat",
-                role: "Basquiat",
-                image: "/images/famous-people/jean-michel-basquiat.png",
-              },
-              {
-                name: "Maeve Millay",
-                role: "Westworld",
-                image: "/images/famous-people/maeve-millay.png",
+                name: "Daenerys Targaryen",
+                role: "Game of Thrones",
+                image: "/images/famous-people/daenerys-targaryen.png",
               },
               {
                 name: "Lara Croft",
                 role: "Tomb Raider",
                 image: "/images/famous-people/lara-croft.png",
+              },
+              {
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
+              },
+              {
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1126,19 +1126,19 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/jack-ryan.png",
               },
               {
-                name: "Steve Rogers",
-                role: "Captain America",
-                image: "/images/famous-people/steve-rogers.png",
+                name: "Mr. Incredible",
+                role: "The Incredibles",
+                image: "/images/famous-people/mr.-incredible.png",
               },
               {
-                name: "Francis Underwood",
-                role: "House of Cards",
-                image: "/images/famous-people/francis-underwood.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               },
               {
-                name: "George Washington",
-                role: "Turn: Washington’s Spies",
-                image: "/images/famous-people/george-washington.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1173,24 +1173,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Tony Stark Sr.",
-                role: "Marvel Universe",
-                image: "/images/famous-people/tony-stark-sr.png",
+                name: "King Triton",
+                role: "The Little Mermaid",
+                image: "/images/famous-people/king-triton.png",
               },
               {
-                name: "Hank Rearden",
-                role: "Atlas Shrugged",
-                image: "/images/famous-people/hank-rearden.png",
+                name: "Raymond Reddington",
+                role: "The Blacklist",
+                image: "/images/famous-people/raymond-reddington.png",
               },
               {
-                name: "Lucious Lyon",
-                role: "Empire",
-                image: "/images/famous-people/lucious-lyon.png",
+                name: "Thomas Shelby",
+                role: "Peaky Blinders",
+                image: "/images/famous-people/tommy-shelby.png",
               },
               {
-                name: "Logan Roy",
-                role: "Succession",
-                image: "/images/famous-people/logan-roy.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1225,24 +1225,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Cora Crawley",
-                role: "Downton Abbey",
-                image: "/images/famous-people/cora-crawley.png",
+                name: "Logan Roy",
+                role: "Succession",
+                image: "/images/famous-people/logan-roy.png",
               },
               {
-                name: "Robert Crawley",
-                role: "Downton Abbey",
-                image: "/images/famous-people/robert-crawley.png",
+                name: "Christopher Moltisanti",
+                role: "The Sopranos",
+                image: "/images/famous-people/christopher-moltisanti.png",
               },
               {
-                name: "Marilla Cuthbert",
-                role: "Anne with an E",
-                image: "/images/famous-people/marilla-cuthbert.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               },
               {
-                name: "Red Forman",
-                role: "That '70s Show",
-                image: "/images/famous-people/red-forman.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1277,24 +1277,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Tywin Lannister",
-                role: "Game of Thrones",
-                image: "/images/famous-people/tywin-lannister.png",
+                name: "Mark Watney",
+                role: "The Martian",
+                image: "/images/famous-people/mark-watney.png",
               },
               {
-                name: "Miranda Priestly",
-                role: "The Devil Wears Prada",
-                image: "/images/famous-people/miranda-priestly.png",
+                name: "Sheldon Cooper",
+                role: "The Big Bang Theory",
+                image: "/images/famous-people/sheldon-cooper.png",
               },
               {
-                name: "Lord Vetinari",
-                role: "Discworld",
-                image: "/images/famous-people/lord-vetinari.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               },
               {
-                name: "Frank Underwood Sr.",
-                role: "Fan theory/extension",
-                image: "/images/famous-people/frank-underwood-sr.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1329,24 +1329,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Raymond Reddington",
-                role: "The Blacklist",
-                image: "/images/famous-people/raymond-reddington.png",
+                name: "Tywin Lannister",
+                role: "Game of Thrones",
+                image: "/images/famous-people/tywin-lannister.png",
               },
               {
-                name: "Daniel Plainview",
-                role: "There Will Be Blood",
-                image: "/images/famous-people/daniel-plainview.png",
+                name: "Frank Underwood",
+                role: "House of Cards",
+                image: "/images/famous-people/frank-underwood.png",
               },
               {
-                name: "Christina Yang",
-                role: "Grey's Anatomy",
-                image: "/images/famous-people/christina-yang.png",
+                name: "Nucky Thompson",
+                role: "Boardwalk Empire",
+                image: "/images/famous-people/enoch- thompson.png",
               },
               {
-                name: "Arthur Jensen",
-                role: "Network",
-                image: "/images/famous-people/arthur-jensen.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1381,24 +1381,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Sheldon Cooper",
-                role: "The Big Bang Theory",
-                image: "/images/famous-people/sheldon-cooper.png",
+                name: "Alma Coin",
+                role: "The Hunger Games",
+                image: "/images/famous-people/alma-coin.png",
               },
               {
-                name: "Judge Claude Frollo",
-                role: "Hunchback of Notre Dame",
-                image: "/images/famous-people/judge-claude-frollo.png",
+                name: "Dolores Umbridge",
+                role: "Harry Potter",
+                image: "/images/famous-people/dolores-umbridge.png",
               },
               {
-                name: "Skyler White",
-                role: "Breaking Bad",
-                image: "/images/famous-people/skyler-white.png",
+                name: "Maeve Millay",
+                role: "Westworld",
+                image: "/images/famous-people/maeve-millay.png",
               },
               {
-                name: "Monk",
-                role: "Monk",
-                image: "/images/famous-people/monk.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1433,9 +1433,9 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Bob the Builder",
-                role: "Bob the Builder",
-                image: "/images/famous-people/bob-the-builder.png",
+                name: "James St. Patrick",
+                role: "Power",
+                image: "/images/famous-people/james-st.-patrick.png",
               },
               {
                 name: "Fix-It Felix",
@@ -1443,14 +1443,14 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/fix-it-felix.png",
               },
               {
-                name: "Frank",
-                role: "Hearts Beat Loud",
-                image: "/images/famous-people/frank-hearts-beat-loud.png",
+                name: "Elizabeth Jennings",
+                role: "The Americans",
+                image: "/images/famous-people/elizabeth-jennings.png",
               },
               {
-                name: "Mike Baxter",
-                role: "Last Man Standing",
-                image: "/images/famous-people/mike-baxter.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1485,24 +1485,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Olivia Pope",
-                role: "Scandal",
-                image: "/images/famous-people/olivia-pope.png",
+                name: "Marty Byrde",
+                role: "Ozark",
+                image: "/images/famous-people/marty-byrd.png",
               },
               {
-                name: "Logan Roy Jr.",
+                name: "Shiv Roy",
                 role: "Succession",
-                image: "/images/famous-people/logan-roy-jr.png",
+                image: "/images/famous-people/shiv-roy.png",
               },
               {
-                name: "Harvey Specter",
-                role: "Suits",
-                image: "/images/famous-people/harvey-specter.png",
+                name: "Michael De Santa",
+                role: "Grand Theft Auto V",
+                image: "/images/famous-people/michael-de-santa.png",
               },
               {
-                name: "Joan Holloway",
-                role: "Mad Men",
-                image: "/images/famous-people/joan-holloway.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1542,19 +1542,19 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/gustavo-fring.png",
               },
               {
-                name: "Amanda Waller",
-                role: "Suicide Squad (alt version)",
-                image: "/images/famous-people/amanda-waller-alt.png",
+                name: "Dwight Schrute",
+                role: "The Office",
+                image: "/images/famous-people/dwight-schrute.png",
               },
               {
-                name: "Judge Dredd",
-                role: "Dredd",
-                image: "/images/famous-people/judge-dredd.png",
+                name: "Dexter",
+                role: "Dexter",
+                image: "/images/famous-people/dexter.png",
               },
               {
-                name: "Tywin Lannister",
-                role: "Game of Thrones (alt interpretation)",
-                image: "/images/famous-people/tywin-lannister-alt.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1589,24 +1589,24 @@ export default function ArchetypeDetail() {
       ],
             famousPeople: [
               {
-                name: "Queen Elizabeth II",
-                role: "The Crown",
-                image: "/images/famous-people/queen-elizabeth-ii.png",
+                name: "Harmony Cobel",
+                role: "Severance",
+                image: "/images/famous-people/harmony-cobel.png",
               },
               {
-                name: "King T’Chaka",
-                role: "Black Panther",
-                image: "/images/famous-people/king-tchaka.png",
+                name: "Eddard Stark",
+                role: "Game of Thrones",
+                image: "/images/famous-people/ned-stark.png",
               },
               {
-                name: "Prince Zuko",
-                role: "Avatar: The Last Airbender",
-                image: "/images/famous-people/prince-zuko.png",
+                name: "The Sultan",
+                role: "Aladdin",
+                image: "/images/famous-people/the-sutan.png",
               },
               {
-                name: "Viserys",
-                role: "House of the Dragon",
-                image: "/images/famous-people/viserys.png",
+                name: "XX",
+                role: "XX",
+                image: "/images/famous-people/XX",
               }
             ],
 
@@ -1651,14 +1651,14 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/arya-stark.png",
               },
               {
-                name: "Maximus",
-                role: "Gladiator",
-                image: "/images/famous-people/maximus.png",
+                name: "Walter White",
+                role: "Breaking Bad",
+                image: "/images/famous-people/walter-white.png",
               },
               {
-                name: "Kara Danvers / Supergirl",
-                role: "Supergirl",
-                image: "/images/famous-people/kara-danvers-supergirl.png",
+                name: "Murphy Cooper",
+                role: "Interstellar",
+                image: "/images/famous-people/murphy-cooper.png",
               }
             ],
 
