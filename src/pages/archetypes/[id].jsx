@@ -1448,9 +1448,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/elizabeth-jennings.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Maximus Decimus Meridius",
+                role: "Gladiator",
+                image: "/images/famous-people/maximus-decimus-meridius.png",
               }
             ],
 
