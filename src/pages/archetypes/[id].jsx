@@ -513,9 +513,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/admiral-cain.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX.png",
+                name: "Ernesto de la Cruz",
+                role: "Coco",
+                image: "/images/famous-people/ernesto-de-la-ruz.png",
               }
             ],
 
@@ -980,9 +980,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/belle.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Remy",
+                role: "Ratatouille",
+                image: "/images/famous-people/remy",
               }
             ],
 
@@ -1079,14 +1079,14 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/lara-croft.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Padme Amidala",
+                role: "Star Wars",
+                image: "/images/famous-people/padme-amidala",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Varys",
+                role: "A Song of Ice and Fire",
+                image: "/images/famous-people/varys",
               }
             ],
 
@@ -1131,14 +1131,14 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/mr.-incredible.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "John Dutton",
+                role: "Yellowstone",
+                image: "/images/famous-people/john-dutton",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Jack Bauer",
+                role: "24",
+                image: "/images/famous-people/jack-bauer",
               }
             ],
 
@@ -1188,9 +1188,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/tommy-shelby.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Willy Wanka",
+                role: "Charlie and the Chocolate Factory",
+                image: "/images/famous-people/willy-wanka",
               }
             ],
 
@@ -1235,14 +1235,14 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/christopher-moltisanti.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Eowyn",
+                role: "The Lord of the Rings",
+                image: "/images/famous-people/eowyn",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Clair Fraser",
+                role: "Outlander",
+                image: "/images/famous-people/clair-fraser",
               }
             ],
 
