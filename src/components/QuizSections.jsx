@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image"; // ✅ ADD THIS
 import { FaArrowRight, FaClipboardCheck, FaUserCheck, FaBalanceScale } from "react-icons/fa";
 import Link from "next/link";
 
@@ -7,19 +6,12 @@ export default function QuizSections() {
   const sections = [
     {
       title: "Our Quiz",
-      description: "...",
-      icon: (
-        <div className="relative w-24 h-24">
-          <Image
-            src="/red_sky_y.png" // ✅ FIXED
-            alt="Archetypes Visual"
-            fill
-            className="object-cover rounded-full"
-          />
-          <FaUserCheck className="absolute inset-0 text-white text-4xl flex items-center justify-center" />
-        </div>
-      ),
-      bgColor: "from-primary-maroon to-primary-darkMaroon", // ✅ RECOMMENDED
+      description:
+        "Our quiz uses thought-provoking questions carefully designed to delve into your perspectives on key issues, encouraging reflection and clarity in your responses. By exploring a range of scenarios and values, it captures the nuances of your views with remarkable accuracy. This approach ensures that the results provide a comprehensive understanding of your stance, going beyond surface-level opinions.",
+      icon: <FaClipboardCheck className="text-white text-5xl" />,
+      reverse: false,
+      buttonLink: "/quiz",
+      bgColor: "from-primary-maroon to-primary-darkMaroon",
     },
     {
       title: "Archetypes",
