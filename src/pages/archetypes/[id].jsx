@@ -1500,9 +1500,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/michael-de-santa.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Philip Jennings",
+                role: "The Americans",
+                image: "/images/famous-people/philip-jennings.png",
               }
             ],
 
@@ -1552,9 +1552,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/dexter.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Stannis Baratheon",
+                role: "A Song of Ice and Fire",
+                image: "/images/famous-people/stannis-baratheon.png",
               }
             ],
 
@@ -1604,9 +1604,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/the-sutan.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Queen Elinor",
+                role: "Brave",
+                image: "/images/famous-people/queen-elinor.png",
               }
             ],
 
