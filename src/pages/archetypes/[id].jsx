@@ -1396,9 +1396,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/maeve-millay.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Ezekiel",
+                role: "The Walking Dead",
+                image: "/images/famous-people/ezekiel",
               }
             ],
 
