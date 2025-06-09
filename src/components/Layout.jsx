@@ -16,8 +16,7 @@ const Layout = ({ children, title = "PhilosiQ - Political Survey" }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* Background image applied here */}
-      <div className="flex flex-col min-h-screen bg-[url('/red_sky_y.png')] bg-cover bg-center">
+      <div className="flex flex-col min-h-screen bg-[url('/red_sky_y.png')] bg-no-repeat bg-top bg-center bg-cover">
         <Navbar />
         <main className="flex-grow">{children}</main>
         <Footer />
