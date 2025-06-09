@@ -982,7 +982,7 @@ export default function ArchetypeDetail() {
               {
                 name: "Remy",
                 role: "Ratatouille",
-                image: "/images/famous-people/remy",
+                image: "/images/famous-people/remy.png",
               }
             ],
 
@@ -1081,12 +1081,12 @@ export default function ArchetypeDetail() {
               {
                 name: "Padme Amidala",
                 role: "Star Wars",
-                image: "/images/famous-people/padme-amidala",
+                image: "/images/famous-people/padme-amidala.png",
               },
               {
                 name: "Varys",
                 role: "A Song of Ice and Fire",
-                image: "/images/famous-people/varys",
+                image: "/images/famous-people/varys.png",
               }
             ],
 
@@ -1133,12 +1133,12 @@ export default function ArchetypeDetail() {
               {
                 name: "John Dutton",
                 role: "Yellowstone",
-                image: "/images/famous-people/john-dutton",
+                image: "/images/famous-people/john-dutton.png",
               },
               {
                 name: "Jack Bauer",
                 role: "24",
-                image: "/images/famous-people/jack-bauer",
+                image: "/images/famous-people/jack-bauer.png",
               }
             ],
 
@@ -1190,7 +1190,7 @@ export default function ArchetypeDetail() {
               {
                 name: "Willy Wanka",
                 role: "Charlie and the Chocolate Factory",
-                image: "/images/famous-people/willy-wanka",
+                image: "/images/famous-people/willy-wanka.png",
               }
             ],
 
@@ -1237,12 +1237,12 @@ export default function ArchetypeDetail() {
               {
                 name: "Eowyn",
                 role: "The Lord of the Rings",
-                image: "/images/famous-people/eowyn",
+                image: "/images/famous-people/eowyn.png",
               },
               {
                 name: "Clair Fraser",
                 role: "Outlander",
-                image: "/images/famous-people/clair-fraser",
+                image: "/images/famous-people/clair-fraser.png",
               }
             ],
 
@@ -1289,12 +1289,12 @@ export default function ArchetypeDetail() {
               {
                 name: "Robert Ford",
                 role: "Westworld",
-                image: "/images/famous-people/robert-ford",
+                image: "/images/famous-people/robert-ford.png",
               },
               {
                 name: "Nathan Bateman",
                 role: "Ex Machina",
-                image: "/images/famous-people/nathan-bateman",
+                image: "/images/famous-people/nathan-bateman.png",
               }
             ],
 
@@ -1346,7 +1346,7 @@ export default function ArchetypeDetail() {
               {
                 name: "Jessica Atreides",
                 role: "Dune",
-                image: "/images/famous-people/jessica-atreides",
+                image: "/images/famous-people/jessica-atreides.png",
               }
             ],
 
@@ -1398,7 +1398,7 @@ export default function ArchetypeDetail() {
               {
                 name: "Ezekiel",
                 role: "The Walking Dead",
-                image: "/images/famous-people/ezekiel",
+                image: "/images/famous-people/ezekiel.png",
               }
             ],
 
