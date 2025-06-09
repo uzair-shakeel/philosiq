@@ -1287,14 +1287,14 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/sheldon-cooper.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Robert Ford",
+                role: "Westworld",
+                image: "/images/famous-people/robert-ford",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Nathan Bateman",
+                role: "Ex Machina",
+                image: "/images/famous-people/nathan-bateman",
               }
             ],
 
@@ -1344,9 +1344,9 @@ export default function ArchetypeDetail() {
                 image: "/images/famous-people/enoch- thompson.png",
               },
               {
-                name: "XX",
-                role: "XX",
-                image: "/images/famous-people/XX",
+                name: "Jessica Atreides",
+                role: "Dune",
+                image: "/images/famous-people/jessica-atreides",
               }
             ],
 
