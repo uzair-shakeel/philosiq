@@ -85,6 +85,9 @@ function ResultsContent({ results }) {
   const [showMindMapModal, setShowMindMapModal] = useState(false);
   const [isPdfGenerating, setIsPdfGenerating] = useState(false);
 
+  // Add state to store axis breakdown data
+  const [axisBreakdownData, setAxisBreakdownData] = useState({});
+
   // Get the raw data from session storage for debugging
   const [rawData, setRawData] = useState(null);
 
@@ -154,6 +157,21 @@ function ResultsContent({ results }) {
     setAxisLetters((prev) => {
       if (prev[axisName] === letter) return prev;
       return { ...prev, [axisName]: letter };
+    });
+  };
+
+  // Function to handle axis breakdown data updates
+  const handleAxisDataUpdate = (axisName, axisData) => {
+    setAxisBreakdownData((prev) => {
+      // Only update if the data has changed to prevent unnecessary re-renders
+      if (
+        prev[axisName] &&
+        prev[axisName].score === axisData.score &&
+        prev[axisName].positionStrength === axisData.positionStrength
+      ) {
+        return prev;
+      }
+      return { ...prev, [axisName]: axisData };
     });
   };
 
@@ -746,13 +764,29 @@ function ResultsContent({ results }) {
         flippedAxis: archetype.flippedAxis,
       }));
 
-      // Simplified data object with only archetype name and traits
+      // Prepare axis breakdown data
+      const axisBreakdownArray = Object.values(axisBreakdownData).map(
+        (axis) => ({
+          name: axis.name,
+          score: axis.score,
+          rawScore: axis.rawScore,
+          leftLabel: axis.leftLabel,
+          rightLabel: axis.rightLabel,
+          userPosition: axis.userPosition,
+          positionStrength: axis.positionStrength,
+          leftPercent: axis.leftPercent,
+          rightPercent: axis.rightPercent,
+        })
+      );
+
+      // Simplified data object with archetype, secondary archetypes, and axis breakdown
       const resultsData = {
         archetype: {
           name: results.archetype.name,
           traits: traits.length > 0 ? traits : results.archetype.traits || [],
         },
         secondaryArchetypes: secondaryArchetypesData,
+        axisBreakdown: axisBreakdownArray,
       };
 
       console.log("Saving to database:", resultsData);
@@ -774,11 +808,11 @@ function ResultsContent({ results }) {
       }
 
       console.log(
-        "Archetype and secondary archetypes saved to database successfully."
+        "Archetype, secondary archetypes, and axis breakdown saved to database successfully."
       );
       return true;
     } catch (error) {
-      console.error("Error saving archetype to database:", error);
+      console.error("Error saving data to database:", error);
       throw error;
     }
   };
@@ -1123,6 +1157,7 @@ function ResultsContent({ results }) {
                   userPosition={axis.userPosition}
                   positionStrength={axis.positionStrength}
                   onLetterDetermined={handleLetterDetermined}
+                  onAxisDataUpdate={handleAxisDataUpdate}
                   className={
                     index < results.axisResults.length - 1
                       ? "border-b border-gray-200 pb-6"

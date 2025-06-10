@@ -50,13 +50,14 @@ export default async function handler(req, res) {
     }
     console.log("User found:", user._id.toString());
 
-    // Get archetype data from request body
-    const { archetype, secondaryArchetypes } = req.body;
+    // Get data from request body
+    const { archetype, secondaryArchetypes, axisBreakdown } = req.body;
     console.log("Received archetype data:", JSON.stringify(archetype));
     console.log(
       "Received secondary archetypes:",
       JSON.stringify(secondaryArchetypes)
     );
+    console.log("Received axis breakdown:", JSON.stringify(axisBreakdown));
 
     // Validate required data
     if (!archetype || !archetype.name || !archetype.traits) {
@@ -67,7 +68,7 @@ export default async function handler(req, res) {
       });
     }
 
-    console.log("Saving new archetype result for user:", user._id.toString());
+    console.log("Saving new result for user:", user._id.toString());
 
     // Always create a new document for each quiz result
     const result = await db.collection("quiz_results").insertOne({
@@ -79,6 +80,7 @@ export default async function handler(req, res) {
       secondaryArchetypes: Array.isArray(secondaryArchetypes)
         ? secondaryArchetypes
         : [],
+      axisBreakdown: Array.isArray(axisBreakdown) ? axisBreakdown : [],
       createdAt: new Date(),
     });
 
@@ -91,13 +93,13 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
-      message: "Archetype and secondary archetypes saved successfully",
+      message: "Results saved successfully",
       resultId: result.insertedId.toString(),
     });
   } catch (error) {
-    console.error("Error saving archetype:", error);
+    console.error("Error saving results:", error);
     return res
       .status(500)
-      .json({ success: false, message: "Failed to save archetype" });
+      .json({ success: false, message: "Failed to save results" });
   }
 }

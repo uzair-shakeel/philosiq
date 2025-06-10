@@ -18,6 +18,7 @@ export default function AxisGraph({
   userPosition,
   className = "",
   onLetterDetermined, // New callback for returning the axis letter
+  onAxisDataUpdate, // New callback for returning axis breakdown data
 }) {
   // Return early if there's no data
   if (!questions || !answers || questions.length === 0) {
@@ -307,6 +308,25 @@ export default function AxisGraph({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canonicalName, getDominantAxisLetter]);
+
+  // Send the axis breakdown data to the parent component if callback provided
+  useEffect(() => {
+    if (onAxisDataUpdate) {
+      const axisData = {
+        name: canonicalName,
+        score: parseFloat(leftPercent),
+        rawScore: validRawScore,
+        leftLabel: safeLeftLabel,
+        rightLabel: safeRightLabel,
+        userPosition: isDominantLeft ? safeLeftLabel : safeRightLabel,
+        positionStrength: strengthLabel,
+        leftPercent: parseFloat(leftPercent),
+        rightPercent: parseFloat(rightPercent),
+      };
+      onAxisDataUpdate(canonicalName, axisData);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canonicalName, leftPercent, rightPercent, strengthLabel]);
 
   // Use the supplied position parameter for the current axis
   // Instead of using displayNormalizedScores, use the actual score directly
