@@ -51,13 +51,15 @@ export default async function handler(req, res) {
     console.log("User found:", user._id.toString());
 
     // Get data from request body
-    const { archetype, secondaryArchetypes, axisBreakdown } = req.body;
+    const { archetype, secondaryArchetypes, axisBreakdown, quizType } =
+      req.body;
     console.log("Received archetype data:", JSON.stringify(archetype));
     console.log(
       "Received secondary archetypes:",
       JSON.stringify(secondaryArchetypes)
     );
     console.log("Received axis breakdown:", JSON.stringify(axisBreakdown));
+    console.log("Received quiz type:", quizType || "not specified");
 
     // Validate required data
     if (!archetype || !archetype.name || !archetype.traits) {
@@ -70,6 +72,21 @@ export default async function handler(req, res) {
 
     console.log("Saving new result for user:", user._id.toString());
 
+    // Log the complete data structure being saved
+    console.log("Complete data structure being saved:", {
+      userId,
+      archetype: {
+        name: archetype.name,
+        traits: archetype.traits,
+      },
+      secondaryArchetypes: Array.isArray(secondaryArchetypes)
+        ? secondaryArchetypes
+        : [],
+      axisBreakdown: Array.isArray(axisBreakdown) ? axisBreakdown : [],
+      createdAt: new Date(),
+      quizType: req.body.quizType || "full", // Add quizType if provided
+    });
+
     // Always create a new document for each quiz result
     const result = await db.collection("quiz_results").insertOne({
       userId,
@@ -81,6 +98,7 @@ export default async function handler(req, res) {
         ? secondaryArchetypes
         : [],
       axisBreakdown: Array.isArray(axisBreakdown) ? axisBreakdown : [],
+      quizType: quizType || "full", // Add the quiz type
       createdAt: new Date(),
     });
 

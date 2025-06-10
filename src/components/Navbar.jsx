@@ -52,9 +52,9 @@ const Navbar = ({ user }) => {
     { name: "Contact Us", path: "/contact-us" },
   ];
 
-  // if (isAuthenticated) {
-  //   navLinks.push({ name: "Quiz History", path: "/history", icon: FaHistory });
-  // }
+  if (isAuthenticated) {
+    navLinks.push({ name: "Quiz History", path: "/history", icon: FaHistory });
+  }
 
   const isHomePage = router.pathname === "/";
 

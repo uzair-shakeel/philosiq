@@ -1,242 +1,232 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import Layout from "../components/Layout";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import {
-  FaSpinner,
-  FaChevronRight,
   FaCalendarAlt,
-  FaClipboardList,
-  FaExclamationCircle,
+  FaArrowRight,
+  FaSpinner,
+  FaHistory,
 } from "react-icons/fa";
 
-export default function QuizHistory() {
-  const [quizResults, setQuizResults] = useState([]);
+export default function HistoryPage() {
+  const [quizHistory, setQuizHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
-    fetchQuizHistory();
-  }, []);
+    // Check if user is authenticated
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      router.push("/login?redirect=history");
+      return;
+    }
 
-  const fetchQuizHistory = async () => {
+    // Fetch quiz history
+    fetchQuizHistory(token);
+  }, [router]);
+
+  const fetchQuizHistory = async (token) => {
     try {
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        router.push("/login");
-        return;
-      }
-
-      // First, validate the token with a lightweight request to check user status
-      const validationResponse = await fetch("/api/auth/validate", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!validationResponse.ok) {
-        const validationErrorText = await validationResponse.text();
-        console.error(
-          "Token validation failed:",
-          validationResponse.status,
-          validationErrorText
-        );
-        localStorage.removeItem("authToken");
-        setError("Your session is invalid or expired. Please log in again.");
-        setTimeout(() => router.push("/login"), 3000);
-        return;
-      }
-
-      // If token is valid, proceed with fetching quiz results
-      const response = await fetch("/api/quiz/results", {
+      setLoading(true);
+      const response = await fetch("/api/quiz/history", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        if (response.status === 401) {
-          localStorage.removeItem("authToken");
-          setError("Your session has expired. Please log in again.");
-          setTimeout(() => router.push("/login"), 2000);
-          return;
-        }
-        throw new Error(
-          `Failed to fetch quiz history: ${response.status} ${response.statusText} - ${errorText}`
-        );
+        throw new Error(`Failed to fetch history: ${response.status}`);
       }
 
       const data = await response.json();
-      setQuizResults(data.results);
-    } catch (err) {
-      console.error("Error fetching quiz history:", err);
-      setError(err.message || "Failed to load quiz history");
-      // Fallback to localStorage results if API call fails
-      const localResults = localStorage.getItem("quizResults");
-      if (localResults) {
-        try {
-          const parsedResults = JSON.parse(localResults);
-          setQuizResults(
-            Array.isArray(parsedResults) ? parsedResults : [parsedResults]
-          );
-          setError(
-            "Failed to load history from server, showing local results instead."
-          );
-        } catch (e) {
-          console.error("Error parsing local results:", e);
-          setError("Failed to load history from server or local storage.");
-        }
+
+      if (data.success && Array.isArray(data.results)) {
+        // Sort results by date (newest first)
+        const sortedResults = data.results.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setQuizHistory(sortedResults);
+      } else {
+        setQuizHistory([]);
       }
+    } catch (error) {
+      console.error("Error fetching quiz history:", error);
+      setError("Failed to load your quiz history. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
 
+  // Format date for display
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
       year: "numeric",
-      month: "long",
+      month: "short",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
     });
   };
 
-  if (loading) {
-    return (
-      <Layout title="Quiz History - PhilosiQ">
-        <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
-          <div className="container-custom">
-            <div className="flex items-center justify-center min-h-[400px]">
-              <FaSpinner className="animate-spin text-4xl text-primary-maroon" />
-            </div>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
+  // Get background color based on archetype name
+  const getArchetypeColor = (archetypeName) => {
+    // Extract first word of archetype name for color assignment
+    const firstWord =
+      archetypeName.split(" ")[1]?.toLowerCase() || archetypeName.toLowerCase();
 
-  if (error) {
-    return (
-      <Layout title="Quiz History - PhilosiQ">
-        <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
-          <div className="container-custom">
-            <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
-              <div className="flex">
-                <FaExclamationCircle className="text-red-400 text-xl mr-3" />
-                <div>
-                  <h3 className="text-red-800 font-medium">
-                    Error Loading History
-                  </h3>
-                  <p className="text-red-700">{error}</p>
-                  <button
-                    onClick={() => {
-                      localStorage.removeItem("authToken");
-                      router.push("/login");
-                    }}
-                    className="mt-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
-                  >
-                    Log In Again
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
+    const colorMap = {
+      utopian: "bg-blue-100 border-blue-300",
+      reformer: "bg-green-100 border-green-300",
+      prophet: "bg-purple-100 border-purple-300",
+      firebrand: "bg-red-100 border-red-300",
+      philosopher: "bg-indigo-100 border-indigo-300",
+      localist: "bg-yellow-100 border-yellow-300",
+      missionary: "bg-teal-100 border-teal-300",
+      guardian: "bg-orange-100 border-orange-300",
+      technocrat: "bg-blue-100 border-blue-300",
+      enforcer: "bg-gray-100 border-gray-300",
+      zealot: "bg-red-100 border-red-300",
+      purist: "bg-purple-100 border-purple-300",
+      commander: "bg-blue-100 border-blue-300",
+      steward: "bg-green-100 border-green-300",
+      shepherd: "bg-teal-100 border-teal-300",
+      priest: "bg-indigo-100 border-indigo-300",
+      futurist: "bg-cyan-100 border-cyan-300",
+      maverick: "bg-amber-100 border-amber-300",
+      evangelist: "bg-pink-100 border-pink-300",
+      dissenter: "bg-rose-100 border-rose-300",
+      globalist: "bg-sky-100 border-sky-300",
+      patriot: "bg-red-100 border-red-300",
+      industrialist: "bg-yellow-100 border-yellow-300",
+      traditionalist: "bg-blue-100 border-blue-300",
+      overlord: "bg-gray-100 border-gray-300",
+      corporatist: "bg-blue-100 border-blue-300",
+      moralizer: "bg-purple-100 border-purple-300",
+      builder: "bg-amber-100 border-amber-300",
+      executive: "bg-gray-100 border-gray-300",
+      ironhand: "bg-red-100 border-red-300",
+      regent: "bg-indigo-100 border-indigo-300",
+      crusader: "bg-red-100 border-red-300",
+    };
+
+    return colorMap[firstWord] || "bg-gray-100 border-gray-300";
+  };
 
   return (
-    <Layout title="Quiz History - PhilosiQ">
+    <Layout title="Your Quiz History - PhilosiQ">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
-          <h1 className="text-4xl font-bold mb-8 text-center">
-            Your Quiz History
-          </h1>
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold mb-2">Your Quiz History</h1>
+            <p className="text-lg text-gray-600">
+              Review your previous political archetype quiz results
+            </p>
+          </div>
 
-          {quizResults.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-md p-8 text-center">
-              <FaClipboardList className="text-4xl text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold mb-2">
-                No Quiz Results Yet
-              </h2>
-              <p className="text-gray-600 mb-6">
-                Take a quiz to start building your history!
-              </p>
+          {/* Loading State */}
+          {loading && (
+            <div className="flex flex-col items-center justify-center py-12">
+              <FaSpinner className="animate-spin text-4xl text-primary-maroon mb-4" />
+              <p className="text-lg">Loading your quiz history...</p>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && !loading && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+              <p>{error}</p>
               <button
-                onClick={() => router.push("/quiz")}
-                className="bg-primary-maroon text-white px-6 py-3 rounded-full hover:bg-primary-darkMaroon transition-colors"
+                onClick={() =>
+                  fetchQuizHistory(localStorage.getItem("authToken"))
+                }
+                className="mt-2 text-red-700 underline"
               >
-                Take Quiz Now
+                Try Again
               </button>
             </div>
-          ) : (
-            <div className="grid gap-6">
-              {quizResults.map((result, index) => (
+          )}
+
+          {/* Empty State */}
+          {!loading && !error && quizHistory.length === 0 && (
+            <div className="text-center py-12 bg-white rounded-lg shadow-md">
+              <FaHistory className="mx-auto text-5xl text-gray-400 mb-4" />
+              <h2 className="text-2xl font-bold mb-2">No Quiz Results Yet</h2>
+              <p className="text-gray-600 mb-6">
+                You haven't saved any quiz results yet. Take a quiz to get
+                started!
+              </p>
+              <Link
+                href="/quiz"
+                className="bg-primary-maroon text-white px-6 py-3 rounded-full inline-flex items-center"
+              >
+                Take Quiz Now <FaArrowRight className="ml-2" />
+              </Link>
+            </div>
+          )}
+
+          {/* Quiz History List */}
+          {!loading && !error && quizHistory.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {quizHistory.map((result, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                  className={`rounded-lg shadow-md border overflow-hidden transition-transform hover:shadow-lg hover:-translate-y-1 ${getArchetypeColor(
+                    result.archetype.name
+                  )}`}
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h2 className="text-xl font-semibold mb-2">
-                        {result.archetype?.name || "Quiz Result"}
-                      </h2>
-                      {result.secondaryArchetypes &&
-                        result.secondaryArchetypes.length > 0 && (
-                          <p className="text-sm text-gray-600 mb-2">
-                            Secondary:{" "}
-                            {result.secondaryArchetypes
-                              .map((a) => a.name || a)
-                              .join(", ")}
-                          </p>
-                        )}
-                      <div className="flex items-center text-gray-600">
-                        <FaCalendarAlt className="mr-2" />
-                        {formatDate(result.timestamp)}
-                      </div>
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <h3 className="text-xl font-bold">
+                        {result.archetype.name}
+                      </h3>
+                      <span className="bg-white px-3 py-1 rounded-full text-xs font-medium border border-gray-200 shadow-sm">
+                        {result.quizType === "full"
+                          ? "Full Quiz"
+                          : "Short Quiz"}
+                      </span>
                     </div>
-                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                      {result.quizType === "short" ? "Short Quiz" : "Full Quiz"}
-                    </span>
-                  </div>
 
-                  <div className="space-y-3">
-                    {Object.entries(result.axisScores || {}).map(
-                      ([axis, score]) => (
-                        <div key={axis}>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span className="text-gray-600">{axis}</span>
-                            <span className="font-medium">{score}%</span>
-                          </div>
-                          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-primary-maroon rounded-full"
-                              style={{ width: `${score}%` }}
-                            />
-                          </div>
-                        </div>
-                      )
-                    )}
-                  </div>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {result.archetype.traits.map((trait, i) => (
+                        <span
+                          key={i}
+                          className="bg-white px-2 py-1 rounded-full text-xs font-medium shadow-sm"
+                        >
+                          {trait}
+                        </span>
+                      ))}
+                    </div>
 
-                  <button
-                    onClick={() => {
-                      // Store this result in session storage
-                      sessionStorage.setItem(
-                        "quizResults",
-                        JSON.stringify(result)
-                      );
-                      router.push("/results");
-                    }}
-                    className="mt-4 w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-200 transition-colors flex items-center justify-center"
-                  >
-                    View Full Results <FaChevronRight className="ml-2" />
-                  </button>
+                    <div className="flex items-center text-sm text-gray-600 mb-4">
+                      <FaCalendarAlt className="mr-2" />
+                      {formatDate(result.createdAt)}
+                    </div>
+
+                    <Link
+                      href={`/history/${result._id}`}
+                      className="bg-white text-primary-maroon border border-primary-maroon px-4 py-2 rounded-full inline-flex items-center text-sm font-medium hover:bg-primary-maroon hover:text-white transition-colors"
+                    >
+                      View Full Results <FaArrowRight className="ml-2" />
+                    </Link>
+                  </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* Take New Quiz Button */}
+          {!loading && quizHistory.length > 0 && (
+            <div className="text-center mt-12">
+              <Link
+                href="/quiz"
+                className="bg-primary-maroon text-white px-6 py-3 rounded-full inline-flex items-center"
+              >
+                Take Another Quiz <FaArrowRight className="ml-2" />
+              </Link>
             </div>
           )}
         </div>

@@ -787,6 +787,7 @@ function ResultsContent({ results }) {
         },
         secondaryArchetypes: secondaryArchetypesData,
         axisBreakdown: axisBreakdownArray,
+        quizType: isFullQuiz ? "full" : "short",
       };
 
       console.log("Saving to database:", resultsData);
@@ -827,17 +828,7 @@ function ResultsContent({ results }) {
 
   return (
     <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
-      {/* 🚨 Screenshot warning banner */}
-      <div className="bg-yellow-200 text-yellow-900 text-center py-3 px-4 font-medium shadow-md">
-        📸 Please screenshot your results — they will not be saved. We're
-        working on a fix for this!
-      </div>
       <div className="container-custom">
-        {/* Logo for PDF sharing */}
-        <div className="absolute top-28 right-8 opacity-70">
-          <img src="/whitelogo.png" alt="PhilosiQ" className="h-10 w-auto" />
-        </div>
-
         {/* Main Results Header */}
         <div className="text-center mb-6">
           <h1 className="text-4xl font-bold mb-2">Your Quiz Results</h1>
