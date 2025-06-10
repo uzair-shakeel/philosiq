@@ -180,11 +180,6 @@ export default function QuizPage() {
 
   // Function to start the quiz
   const startQuiz = async (type) => {
-    if (!isAuthenticated) {
-      setShowAuthModal(true);
-      return;
-    }
-
     // Track quiz start event
     track("quiz_started", { type });
 
@@ -377,12 +372,6 @@ export default function QuizPage() {
     setSubmissionError(null);
 
     try {
-      // Get the auth token
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        throw new Error("Please log in to save your results");
-      }
-
       // Calculate final results using the proper utility
       const finalResults = calculateResults(questions, answers);
       console.log("Final Results:", finalResults); // Debug log
@@ -408,33 +397,45 @@ export default function QuizPage() {
       localStorage.setItem("quizResults", JSON.stringify(resultsData));
 
       // If user is authenticated, save to database
-      try {
-        const response = await fetch("/api/quiz/save-results", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(resultsData),
-        });
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        try {
+          const response = await fetch("/api/quiz/save-results", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(resultsData),
+          });
 
-        const data = await response.json();
+          const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(data.message || "Failed to save results");
+          if (!response.ok) {
+            console.error("Failed to save results:", data.message);
+            // Don't block navigation if saving fails
+          }
+
+          // Track successful quiz completion with save
+          track("quiz_completed", {
+            quizType: quizType === "short" ? "short" : "full",
+            archetype: finalResults.archetype?.name || "Unknown",
+            saved: true,
+          });
+        } catch (error) {
+          console.error("Error saving results:", error);
+          // Don't block navigation if saving fails
+          track("quiz_save_error", {
+            error: error.message,
+            quizType: quizType === "short" ? "short" : "full",
+          });
         }
-
-        // Track successful quiz completion
+      } else {
+        // Track quiz completion without save
         track("quiz_completed", {
           quizType: quizType === "short" ? "short" : "full",
           archetype: finalResults.archetype?.name || "Unknown",
-        });
-      } catch (error) {
-        console.error("Error saving results:", error);
-        // Don't block navigation if saving fails
-        track("quiz_save_error", {
-          error: error.message,
-          quizType: quizType === "short" ? "short" : "full",
+          saved: false,
         });
       }
 
@@ -520,8 +521,8 @@ export default function QuizPage() {
                 {!isAuthenticated && (
                   <div className="mt-4 p-4 bg-blue-50 rounded-lg inline-block">
                     <p className="text-blue-700 flex items-center">
-                      <FaUser className="mr-2" />
-                      Please sign in to take the quiz and save your results
+                      <FaInfoCircle className="mr-2" />
+                      You can take the quiz without signing in, but you'll need to log in to save your results
                     </p>
                   </div>
                 )}

@@ -5,6 +5,7 @@ import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { redirect } = router.query;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,8 +32,16 @@ export default function RegisterPage() {
       }
 
       const data = await response.json();
+
+      // Store the auth token but don't clear other localStorage items
       localStorage.setItem("authToken", data.token);
-      router.push("/");
+
+      // Redirect to the specified page or home page
+      if (redirect) {
+        router.push(`/${redirect}`);
+      } else {
+        router.push("/");
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -48,6 +57,13 @@ export default function RegisterPage() {
             <h1 className="text-2xl font-bold mb-6 text-center">
               Create Account
             </h1>
+
+            {redirect === "results" && (
+              <div className="bg-blue-50 text-blue-700 p-4 rounded-lg mb-6">
+                Create an account to save your quiz results and track your
+                political journey over time.
+              </div>
+            )}
 
             {error && (
               <div className="bg-red-50 text-red-700 p-4 rounded-lg mb-6">
@@ -128,7 +144,7 @@ export default function RegisterPage() {
               <p>
                 Already have an account?{" "}
                 <a
-                  href="/login"
+                  href={redirect ? `/login?redirect=${redirect}` : "/login"}
                   className="text-primary hover:text-primary-dark"
                 >
                   Login

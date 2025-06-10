@@ -84,6 +84,7 @@ function ResultsContent({ results }) {
   const [allPercents, setAllPercents] = useState([]);
   const [showMindMapModal, setShowMindMapModal] = useState(false);
   const [isPdfGenerating, setIsPdfGenerating] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Add state to store axis breakdown data
   const [axisBreakdownData, setAxisBreakdownData] = useState({});
@@ -121,6 +122,44 @@ function ResultsContent({ results }) {
       console.error("Error determining quiz type:", err);
     }
   }, []);
+
+  // Check if user is logged in and if they just logged in
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      // Check if auth token exists
+      const token = localStorage.getItem("authToken");
+      const wasLoggedIn = isLoggedIn;
+      setIsLoggedIn(!!token); // Convert to boolean
+
+      // If user just logged in and has results, automatically save them
+      if (
+        token &&
+        !wasLoggedIn &&
+        results &&
+        results.archetype &&
+        !resultsSaved &&
+        !isSaving
+      ) {
+        saveFinalResultsToDatabase(results, secondaryArchetypes)
+          .then(() => {
+            setResultsSaved(true);
+            console.log("Auto-saved results after login");
+          })
+          .catch((err) => {
+            console.error("Failed to auto-save results after login:", err);
+          });
+      }
+    };
+
+    // Check immediately when component mounts or dependencies change
+    checkLoginStatus();
+
+    // Also set up an interval to check periodically (in case user logs in in another tab)
+    const intervalId = setInterval(checkLoginStatus, 2000);
+
+    // Clean up interval on unmount
+    return () => clearInterval(intervalId);
+  }, [results, secondaryArchetypes, resultsSaved, isSaving]);
 
   // Track when results are viewed
   useEffect(() => {
@@ -710,6 +749,13 @@ function ResultsContent({ results }) {
   const handleSaveResults = async () => {
     if (resultsSaved || isSaving) return;
 
+    // Check if user is logged in
+    if (!isLoggedIn) {
+      // Redirect to login page
+      router.push("/login?redirect=results");
+      return;
+    }
+
     setIsSaving(true);
     try {
       await saveFinalResultsToDatabase(results, secondaryArchetypes);
@@ -729,6 +775,8 @@ function ResultsContent({ results }) {
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.log("No auth token found, skipping database save.");
+        // Redirect to login page
+        router.push("/login?redirect=results");
         return;
       }
 
@@ -837,24 +885,35 @@ function ResultsContent({ results }) {
             that fits you best
           </p>
 
-          {/* Save Results Button - Prominent Position */}
-          <button
-            onClick={handleSaveResults}
-            disabled={resultsSaved || isSaving}
-            className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
-              resultsSaved
-                ? "bg-green-500 text-white"
+          {/* Save Results Button - Only show when logged in */}
+          {isLoggedIn ? (
+            <button
+              onClick={handleSaveResults}
+              disabled={resultsSaved || isSaving}
+              className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
+                resultsSaved
+                  ? "bg-green-500 text-white"
+                  : isSaving
+                  ? "bg-gray-300 text-gray-600"
+                  : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+              }`}
+            >
+              {resultsSaved
+                ? "✓ Results Saved Successfully"
                 : isSaving
-                ? "bg-gray-300 text-gray-600"
-                : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-            }`}
-          >
-            {resultsSaved
-              ? "✓ Results Saved Successfully"
-              : isSaving
-              ? "Saving Your Results..."
-              : "Save Your Results to Account"}
-          </button>
+                ? "Saving Your Results..."
+                : "Save Your Results to Account"}
+            </button>
+          ) : (
+            <div className="mb-4">
+              <Link
+                href="/login?redirect=results"
+                className="px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+              >
+                Log in to Save Your Results
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Primary Archetype Card */}
