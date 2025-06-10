@@ -20,16 +20,26 @@ export default function Home() {
       <Layout title="PhilosiQ - Discover Your Political Identity">
         {/* Hero Section */}
         <section className="relative h-screen flex items-center">
-          <div className="absolute inset-0 bg-gradient-to-r from-secondary-darkBlue to-primary-darkMaroon opacity-90 z-0"></div>
-          <div className="absolute inset-0 bg-[url('/images/capitol-bg.jpg')] bg-cover bg-center mix-blend-overlay z-[-1]"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-secondary-darkBlue to-primary-darkMaroon opacity-80 z-10"></div>
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/red_sky_y.png"
+              alt="Political landscape background"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
 
-          <div className="container-custom relative z-10 text-white">
+          <div className="container-custom relative z-20 text-white">
             <div className="max-w-3xl">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 Discover Your Political Identity
               </h1>
               <p className="text-xl md:text-2xl mb-8 text-gray-200">
-                  Reveal the ideology behind your instincts. Our quiz maps your political DNA and introduces you to the archetype that fits you best.
+                Reveal the ideology behind your instincts. Our quiz maps your
+                political DNA and introduces you to the archetype that fits you
+                best.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
@@ -66,7 +76,7 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(() => {
+              {(() => {
                 const axes = [
                   "Equity Vs. Free Market",
                   "Libertarian Vs. Authoritarian",
@@ -74,7 +84,7 @@ export default function Home() {
                   "Secular Vs. Religious",
                   "Globalist Vs. Nationalist",
                 ];
-              
+
                 return (
                   <>
                     {/* Render boxes 1–3 normally */}
@@ -96,7 +106,7 @@ export default function Home() {
                         </p>
                       </div>
                     ))}
-              
+
                     {/* Wrap boxes 4 & 5 in a centered flex container that spans all columns */}
                     <div className="col-span-full flex justify-center gap-6 lg:col-span-3">
                       {axes.slice(3).map((axis, index) => (
@@ -136,7 +146,8 @@ export default function Home() {
                 How It Works
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                  Discover where you truly stand—Importiq makes understanding your political views quick, accurate, and surprisingly revealing.
+                Discover where you truly stand—Importiq makes understanding your
+                political views quick, accurate, and surprisingly revealing.
               </p>
             </div>
 
