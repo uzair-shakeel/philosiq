@@ -737,12 +737,22 @@ function ResultsContent({ results }) {
         }
       });
 
+      // Prepare secondary archetypes data
+      const secondaryArchetypesData = secondaryArchetypes.map((archetype) => ({
+        name: archetype.name,
+        code: archetype.code,
+        match: archetype.match,
+        traits: archetype.traits,
+        flippedAxis: archetype.flippedAxis,
+      }));
+
       // Simplified data object with only archetype name and traits
       const resultsData = {
         archetype: {
           name: results.archetype.name,
           traits: traits.length > 0 ? traits : results.archetype.traits || [],
         },
+        secondaryArchetypes: secondaryArchetypesData,
       };
 
       console.log("Saving to database:", resultsData);
@@ -763,7 +773,9 @@ function ResultsContent({ results }) {
         );
       }
 
-      console.log("Archetype saved to database successfully.");
+      console.log(
+        "Archetype and secondary archetypes saved to database successfully."
+      );
       return true;
     } catch (error) {
       console.error("Error saving archetype to database:", error);
@@ -792,34 +804,32 @@ function ResultsContent({ results }) {
           <img src="/whitelogo.png" alt="PhilosiQ" className="h-10 w-auto" />
         </div>
 
-        {/* Save Results Button */}
-        <div className="text-center mb-4">
-          <button
-            onClick={handleSaveResults}
-            disabled={resultsSaved || isSaving}
-            className={`px-6 py-2 rounded-full font-medium ${
-              resultsSaved
-                ? "bg-green-100 text-green-800"
-                : isSaving
-                ? "bg-gray-200 text-gray-600"
-                : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
-          >
-            {resultsSaved
-              ? "✓ Results Saved"
-              : isSaving
-              ? "Saving..."
-              : "Save Your Results"}
-          </button>
-        </div>
-
         {/* Main Results Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-6">
           <h1 className="text-4xl font-bold mb-2">Your Quiz Results</h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 mb-4">
             Importiq has crunched the numbers—here's the political archetype
             that fits you best
           </p>
+
+          {/* Save Results Button - Prominent Position */}
+          <button
+            onClick={handleSaveResults}
+            disabled={resultsSaved || isSaving}
+            className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
+              resultsSaved
+                ? "bg-green-500 text-white"
+                : isSaving
+                ? "bg-gray-300 text-gray-600"
+                : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+            }`}
+          >
+            {resultsSaved
+              ? "✓ Results Saved Successfully"
+              : isSaving
+              ? "Saving Your Results..."
+              : "Save Your Results to Account"}
+          </button>
         </div>
 
         {/* Primary Archetype Card */}

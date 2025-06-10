@@ -51,8 +51,12 @@ export default async function handler(req, res) {
     console.log("User found:", user._id.toString());
 
     // Get archetype data from request body
-    const { archetype } = req.body;
+    const { archetype, secondaryArchetypes } = req.body;
     console.log("Received archetype data:", JSON.stringify(archetype));
+    console.log(
+      "Received secondary archetypes:",
+      JSON.stringify(secondaryArchetypes)
+    );
 
     // Validate required data
     if (!archetype || !archetype.name || !archetype.traits) {
@@ -72,6 +76,9 @@ export default async function handler(req, res) {
         name: archetype.name,
         traits: archetype.traits,
       },
+      secondaryArchetypes: Array.isArray(secondaryArchetypes)
+        ? secondaryArchetypes
+        : [],
       createdAt: new Date(),
     });
 
@@ -84,7 +91,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
-      message: "Archetype saved successfully",
+      message: "Archetype and secondary archetypes saved successfully",
       resultId: result.insertedId.toString(),
     });
   } catch (error) {
