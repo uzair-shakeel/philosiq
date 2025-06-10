@@ -18,7 +18,7 @@ export default function AuthModal({ isOpen, onClose }) {
         <div className="flex justify-center space-x-4">
           <button
             onClick={() => router.push("/login")}
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition-colors"
+            className="px-4 py-2 bg-primary-maroon text-white rounded hover:bg-primary-darkMaroon transition-colors"
           >
             Login
           </button>

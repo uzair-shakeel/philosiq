@@ -91,6 +91,13 @@ function ResultsContent({ results }) {
   // Check if the quiz was a full quiz or short quiz
   const [isFullQuiz, setIsFullQuiz] = useState(false);
 
+  // Add state to track if results have been saved
+  const [resultsSaved, setResultsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Add a useRef to track if secondaryArchetypes have been calculated
+  const secondaryArchetypesCalculated = useRef(false);
+
   // Add useEffect to check quiz type when component mounts
   useEffect(() => {
     try {
@@ -122,14 +129,13 @@ function ResultsContent({ results }) {
     }
   }, [results, isFullQuiz]);
 
-  const handleUpdate = (name, data) => {
+  // Memoize the handleUpdate function to prevent unnecessary re-renders
+  const handleUpdate = React.useCallback((name, data) => {
     setAllPercents((prev) => ({
       ...prev,
       [name]: data,
     }));
-  };
-
-  console.log("this function is being called", allPercents);
+  }, []);
 
   useEffect(() => {
     try {
@@ -144,50 +150,65 @@ function ResultsContent({ results }) {
 
   // Function to handle the letter determined by each axis
   const handleLetterDetermined = (axisName, letter) => {
-    setAxisLetters((prev) => ({
-      ...prev,
-      [axisName]: letter,
-    }));
+    // Only update if the letter is different to prevent unnecessary re-renders
+    setAxisLetters((prev) => {
+      if (prev[axisName] === letter) return prev;
+      return { ...prev, [axisName]: letter };
+    });
   };
 
   // Log the axis letters when they change and calculate secondary archetypes
   useEffect(() => {
-    if (Object.keys(axisLetters).length > 0) {
-      // If we have all 5 axis letters, form the code and calculate secondary archetypes
-      if (Object.keys(axisLetters).length >= 5) {
-        const axisOrder = [
-          "Equity vs. Free Market",
-          "Libertarian vs. Authoritarian",
-          "Progressive vs. Conservative",
-          "Secular vs. Religious",
-          "Globalism vs. Nationalism",
-        ];
+    // Only run this effect if we have all 5 axis letters and haven't calculated secondaries yet
+    if (
+      Object.keys(axisLetters).length === 5 &&
+      !secondaryArchetypesCalculated.current
+    ) {
+      console.log(
+        "Calculating archetypes with complete axis letters:",
+        axisLetters
+      );
 
-        const archetypeCode = axisOrder
-          .map((axis) => axisLetters[axis] || "?")
-          .join("");
+      const axisOrder = [
+        "Equity vs. Free Market",
+        "Libertarian vs. Authoritarian",
+        "Progressive vs. Conservative",
+        "Secular vs. Religious",
+        "Globalism vs. Nationalism",
+      ];
 
-        // Set the primary archetype based on the code
-        const primaryArchetype = ARCHETYPE_MAP.find(
-          (entry) => entry.code === archetypeCode
-        );
-        if (primaryArchetype) {
-          // Update the results archetype if present
-          if (results && results.archetype) {
-            results.archetype.name = primaryArchetype.label;
-            results.archetype.code = archetypeCode;
-          }
+      const archetypeCode = axisOrder
+        .map((axis) => axisLetters[axis] || "?")
+        .join("");
+
+      // Set the primary archetype based on the code
+      const primaryArchetype = ARCHETYPE_MAP.find(
+        (entry) => entry.code === archetypeCode
+      );
+      if (primaryArchetype) {
+        // Update the results archetype if present
+        if (results && results.archetype) {
+          results.archetype.name = primaryArchetype.label;
+          results.archetype.code = archetypeCode;
         }
-
-        // Calculate secondary archetypes
-        calculateSecondaryArchetypes(axisLetters, axisOrder);
       }
+
+      // Calculate secondary archetypes
+      calculateSecondaryArchetypes(axisLetters, axisOrder);
+
+      // Mark that we've calculated secondary archetypes
+      secondaryArchetypesCalculated.current = true;
     }
   }, [axisLetters, results]);
 
   // Calculate secondary archetypes based on primary archetype letters
   const calculateSecondaryArchetypes = (letters, axisOrder) => {
-    if (!letters || Object.keys(letters).length < 5) return;
+    if (!letters || Object.keys(letters).length < 5) {
+      console.log("Not enough letters to calculate secondary archetypes");
+      return;
+    }
+
+    console.log("Calculating secondary archetypes with letters:", letters);
 
     // Define opposite letters for each axis
     const oppositeLetters = {
@@ -208,7 +229,12 @@ function ResultsContent({ results }) {
     const axesAt50 = []; // Axes exactly at 50%
     const axesOther = []; // All other axes
 
-    results?.axisResults.forEach((axis) => {
+    if (!results || !results.axisResults) {
+      console.log("No results or axisResults available");
+      return;
+    }
+
+    results.axisResults.forEach((axis) => {
       const canonicalName =
         axis.name === "Equality vs. Markets"
           ? "Equity vs. Free Market"
@@ -355,7 +381,21 @@ function ResultsContent({ results }) {
       });
     });
 
-    setSecondaryArchetypes(secondaries);
+    console.log("Generated secondary archetypes:", secondaries);
+
+    // Only update state if the secondaries are different
+    setSecondaryArchetypes((prev) => {
+      // Simple check if arrays are different by comparing length and first item
+      if (
+        prev.length !== secondaries.length ||
+        (prev.length > 0 &&
+          secondaries.length > 0 &&
+          prev[0].code !== secondaries[0].code)
+      ) {
+        return secondaries;
+      }
+      return prev;
+    });
   };
 
   // Get the user's archetype information from results
@@ -648,8 +688,96 @@ function ResultsContent({ results }) {
     }
   };
 
+  // Function to handle saving results manually
+  const handleSaveResults = async () => {
+    if (resultsSaved || isSaving) return;
+
+    setIsSaving(true);
+    try {
+      await saveFinalResultsToDatabase(results, secondaryArchetypes);
+      setResultsSaved(true);
+    } catch (error) {
+      console.error("Error saving results:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Save results to database
+  const saveFinalResultsToDatabase = async (results, secondaryArchetypes) => {
+    try {
+      console.log("Saving results to database");
+
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.log("No auth token found, skipping database save.");
+        return;
+      }
+
+      if (!results || !results.archetype || !results.archetype.name) {
+        console.error("Invalid results data, missing archetype name");
+        return;
+      }
+
+      // Get traits from axisLetters
+      const traits = Object.entries(axisLetters).map(([axis, letter]) => {
+        switch (axis) {
+          case "Equity vs. Free Market":
+            return letter === "E" ? "Equity" : "Free Market";
+          case "Libertarian vs. Authoritarian":
+            return letter === "L" ? "Libertarian" : "Authoritarian";
+          case "Progressive vs. Conservative":
+            return letter === "P" ? "Progressive" : "Conservative";
+          case "Secular vs. Religious":
+            return letter === "S" ? "Secular" : "Religious";
+          case "Globalism vs. Nationalism":
+            return letter === "G" ? "Globalism" : "Nationalism";
+          default:
+            return letter;
+        }
+      });
+
+      // Simplified data object with only archetype name and traits
+      const resultsData = {
+        archetype: {
+          name: results.archetype.name,
+          traits: traits.length > 0 ? traits : results.archetype.traits || [],
+        },
+      };
+
+      console.log("Saving to database:", resultsData);
+
+      const response = await fetch("/api/quiz/save-results", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(resultsData),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(
+          `Failed to save results: ${response.status} ${response.statusText} - ${errorText}`
+        );
+      }
+
+      console.log("Archetype saved to database successfully.");
+      return true;
+    } catch (error) {
+      console.error("Error saving archetype to database:", error);
+      throw error;
+    }
+  };
+
   // If no results are passed, the ResultsProcessor component will handle it
   if (!results) return null;
+
+  console.log(
+    "Results page rendered with secondaryArchetypes:",
+    secondaryArchetypes.length
+  );
 
   return (
     <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
@@ -662,6 +790,27 @@ function ResultsContent({ results }) {
         {/* Logo for PDF sharing */}
         <div className="absolute top-28 right-8 opacity-70">
           <img src="/whitelogo.png" alt="PhilosiQ" className="h-10 w-auto" />
+        </div>
+
+        {/* Save Results Button */}
+        <div className="text-center mb-4">
+          <button
+            onClick={handleSaveResults}
+            disabled={resultsSaved || isSaving}
+            className={`px-6 py-2 rounded-full font-medium ${
+              resultsSaved
+                ? "bg-green-100 text-green-800"
+                : isSaving
+                ? "bg-gray-200 text-gray-600"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
+          >
+            {resultsSaved
+              ? "✓ Results Saved"
+              : isSaving
+              ? "Saving..."
+              : "Save Your Results"}
+          </button>
         </div>
 
         {/* Main Results Header */}

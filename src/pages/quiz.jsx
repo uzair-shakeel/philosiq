@@ -208,10 +208,10 @@ export default function QuizPage() {
         const questionsByAxis = {};
         allQuestions.forEach((question) => {
           // All questions should already be marked for short quiz from the API
-            if (!questionsByAxis[question.axis]) {
-              questionsByAxis[question.axis] = [];
-            }
-            questionsByAxis[question.axis].push(question);
+          if (!questionsByAxis[question.axis]) {
+            questionsByAxis[question.axis] = [];
+          }
+          questionsByAxis[question.axis].push(question);
         });
 
         // Get axes available
@@ -387,22 +387,17 @@ export default function QuizPage() {
       const finalResults = calculateResults(questions, answers);
       console.log("Final Results:", finalResults); // Debug log
 
-      // Get stored results data which includes secondary archetypes
-      const storedResults = sessionStorage.getItem("quizResults");
-      const parsedStoredResults = storedResults
-        ? JSON.parse(storedResults)
-        : {};
-
       // Save results to session storage
       const resultsData = {
         questions,
         answers,
         // Save detailed axis information
         axisResults: finalResults.axisResults,
+        axisScores: finalResults.axisScores,
         // Save primary archetype
         archetype: finalResults.archetype,
         // Include secondary archetypes if available
-        secondaryArchetypes: parsedStoredResults.secondaryArchetypes || [],
+        secondaryArchetypes: finalResults.secondaryArchetypes || [],
         timestamp: new Date().toISOString(),
         quizType: quizType === "short" ? "short" : "full",
       };

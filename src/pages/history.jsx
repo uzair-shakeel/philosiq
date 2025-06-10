@@ -184,6 +184,15 @@ export default function QuizHistory() {
                       <h2 className="text-xl font-semibold mb-2">
                         {result.archetype?.name || "Quiz Result"}
                       </h2>
+                      {result.secondaryArchetypes &&
+                        result.secondaryArchetypes.length > 0 && (
+                          <p className="text-sm text-gray-600 mb-2">
+                            Secondary:{" "}
+                            {result.secondaryArchetypes
+                              .map((a) => a.name || a)
+                              .join(", ")}
+                          </p>
+                        )}
                       <div className="flex items-center text-gray-600">
                         <FaCalendarAlt className="mr-2" />
                         {formatDate(result.timestamp)}
