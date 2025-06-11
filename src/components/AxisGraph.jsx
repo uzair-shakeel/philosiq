@@ -246,20 +246,20 @@ export default function AxisGraph({
       rightSideColor = "bg-green-600"; // Green for right (Free Market)
       break;
     case "Libertarian vs. Authoritarian":
-      leftSideColor = "bg-blue-500"; // Blue for left (Libertarian)
+      leftSideColor = "bg-teal-500"; // Teal for left (Libertarian)
       rightSideColor = "bg-orange-500"; // Orange for right (Authoritarian)
       break;
     case "Progressive vs. Conservative":
-      leftSideColor = "bg-green-500"; // Green for left (Progressive)
-      rightSideColor = "bg-blue-400"; // Blue for right (Conservative)
+      leftSideColor = "bg-sky-500"; // Sky for left (Progressive)
+      rightSideColor = "bg-red-400"; // Red for right (Conservative)
       break;
     case "Secular vs. Religious":
       leftSideColor = "bg-yellow-400"; // Yellow for left (Secular)
       rightSideColor = "bg-purple-500"; // Purple for right (Religious)
       break;
     case "Globalism vs. Nationalism":
-      leftSideColor = "bg-teal-500"; // Teal for left (Globalism)
-      rightSideColor = "bg-green-500"; // Green for right (Nationalism)
+      leftSideColor = "bg-lime-500"; // Lime for left (Globalism)
+      rightSideColor = "bg-rose-500"; // Rose for right (Nationalism)
       break;
     default:
       // Default colors

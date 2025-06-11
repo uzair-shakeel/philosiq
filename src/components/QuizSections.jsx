@@ -9,11 +9,11 @@ export default function QuizSections() {
       title: "Our Quiz",
       description:
         "Our quiz uses thought-provoking questions carefully designed to delve into your perspectives on key issues, encouraging reflection and clarity in your responses. By exploring a range of scenarios and values, it captures the nuances of your views with remarkable accuracy. This approach ensures that the results provide a comprehensive understanding of your stance, going beyond surface-level opinions.",
-      image: "/images/red_sky_y.png",
+      image: "/images/squares.png",
       alt: "Person taking a political quiz on a tablet",
       reverse: false,
       buttonLink: "/quiz",
-      bgColor: "from-primary-maroon to-primary-darkMaroon",
+      bgColor: "from-primary-lightMaroon to-primary-maroon",
     },
     {
       title: "Archetypes",

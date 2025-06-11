@@ -949,7 +949,7 @@ function ResultsContent({ results }) {
                             letter === "L" ? "Libertarian" : "Authoritarian";
                           bgColor =
                             letter === "L"
-                              ? "bg-indigo-100 text-indigo-800"
+                              ? "bg-teal-100 text-teal-800"
                               : "bg-orange-100 text-orange-800";
                           break;
                         case "Progressive vs. Conservative":
@@ -957,8 +957,8 @@ function ResultsContent({ results }) {
                             letter === "P" ? "Progressive" : "Conservative";
                           bgColor =
                             letter === "P"
-                              ? "bg-purple-100 text-purple-800"
-                              : "bg-blue-100 text-blue-800";
+                              ? "bg-sky-100 text-sky-800"
+                              : "bg-red-100 text-red-800";
                           break;
                         case "Secular vs. Religious":
                           label = letter === "S" ? "Secular" : "Religious";
@@ -971,8 +971,8 @@ function ResultsContent({ results }) {
                           label = letter === "G" ? "Globalism" : "Nationalism";
                           bgColor =
                             letter === "G"
-                              ? "bg-teal-100 text-teal-800"
-                              : "bg-red-100 text-red-800";
+                              ? "bg-lime-100 text-lime-800"
+                              : "bg-rose-100 text-rose-800";
                           break;
                         default:
                           label = letter;
@@ -997,21 +997,21 @@ function ResultsContent({ results }) {
                       else if (trait === "Free Market")
                         bgColor = "bg-green-100 text-green-800";
                       else if (trait === "Libertarian")
-                        bgColor = "bg-indigo-100 text-indigo-800";
+                        bgColor = "bg-teal-100 text-teal-800";
                       else if (trait === "Authoritarian")
                         bgColor = "bg-orange-100 text-orange-800";
                       else if (trait === "Progressive")
-                        bgColor = "bg-purple-100 text-purple-800";
+                        bgColor = "bg-sky-100 text-sky-800";
                       else if (trait === "Conservative")
-                        bgColor = "bg-blue-100 text-blue-800";
+                        bgColor = "bg-red-100 text-red-800";
                       else if (trait === "Secular")
                         bgColor = "bg-yellow-100 text-yellow-800";
                       else if (trait === "Religious")
                         bgColor = "bg-purple-100 text-purple-800";
                       else if (trait === "Globalism")
-                        bgColor = "bg-teal-100 text-teal-800";
+                        bgColor = "bg-lime-100 text-lime-800";
                       else if (trait === "Nationalism")
-                        bgColor = "bg-red-100 text-red-800";
+                        bgColor = "bg-rose-100 text-rose-800";
 
                       return (
                         <span
@@ -1093,21 +1093,21 @@ function ResultsContent({ results }) {
                         else if (trait === "Free Market")
                           bgColor = "bg-green-100 text-green-800";
                         else if (trait === "Libertarian")
-                          bgColor = "bg-indigo-100 text-indigo-800";
+                          bgColor = "bg-teal-100 text-teal-800";
                         else if (trait === "Authoritarian")
                           bgColor = "bg-orange-100 text-orange-800";
                         else if (trait === "Progressive")
-                          bgColor = "bg-purple-100 text-purple-800";
+                          bgColor = "bg-sky-100 text-sky-800";
                         else if (trait === "Conservative")
-                          bgColor = "bg-blue-100 text-blue-800";
+                          bgColor = "bg-red-100 text-red-800";
                         else if (trait === "Secular")
                           bgColor = "bg-yellow-100 text-yellow-800";
                         else if (trait === "Religious")
                           bgColor = "bg-purple-100 text-purple-800";
                         else if (trait === "Globalism")
-                          bgColor = "bg-teal-100 text-teal-800";
+                          bgColor = "bg-lime-100 text-lime-800";
                         else if (trait === "Nationalism")
-                          bgColor = "bg-red-100 text-red-800";
+                          bgColor = "bg-rose-100 text-rose-800";
 
                         return (
                           <span
