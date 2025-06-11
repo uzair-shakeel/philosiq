@@ -1,12 +1,11 @@
 // This middleware runs on edge runtime
 import { NextResponse } from "next/server";
 
-// Helper method to handle CORS preflight requests
+// Simple CORS headers for the API
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  "Access-Control-Max-Age": "86400",
 };
 
 export function middleware(request) {
@@ -15,12 +14,12 @@ export function middleware(request) {
     `[Middleware] ${request.method} request to ${request.nextUrl.pathname}`
   );
 
-  // Only apply to /api routes
-  if (!request.nextUrl.pathname.startsWith("/api")) {
+  // Only apply to the login API
+  if (request.nextUrl.pathname !== "/api/auth/login") {
     return NextResponse.next();
   }
 
-  // Handle OPTIONS request
+  // Handle OPTIONS request for login
   if (request.method === "OPTIONS") {
     console.log("[Middleware] Handling OPTIONS request");
     return new NextResponse(null, {
@@ -29,10 +28,10 @@ export function middleware(request) {
     });
   }
 
-  // For non-OPTIONS requests, add CORS headers to the response
+  // For POST requests, add CORS headers
   const response = NextResponse.next();
-
-  // Add the CORS headers to the response
+  
+  // Add the CORS headers
   Object.entries(corsHeaders).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
@@ -41,5 +40,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: "/api/:path*",
+  matcher: "/api/auth/login",
 };

@@ -10,57 +10,35 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [debugInfo, setDebugInfo] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-    setDebugInfo(null);
 
     try {
-      console.log("Attempting login with:", { email, hasPassword: !!password });
+      // Use absolute URL to avoid path issues in production
+      const loginUrl = `${window.location.origin}/api/auth/login`;
 
-      // Use the direct endpoint that should be properly routed now
-      const requestData = { email, password };
-      const apiUrl = new URL("/api/auth/login", window.location.origin).href;
-
-      console.log("Sending login request to:", apiUrl);
-
-      const response = await fetch(apiUrl, {
+      const response = await fetch(loginUrl, {
         method: "POST",
-        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
-        body: JSON.stringify(requestData),
+        body: JSON.stringify({ email, password }),
       });
 
-      console.log("Login response status:", response.status);
-
-      // Get the response text
-      const responseText = await response.text();
-
-      // Try to parse the response as JSON
       let data;
       try {
-        data = responseText ? JSON.parse(responseText) : {};
-      } catch (jsonError) {
-        console.error("JSON parse error:", jsonError);
-        setDebugInfo({
-          status: response.status,
-          headers: Object.fromEntries([...response.headers.entries()]),
-          text: responseText,
-        });
-        throw new Error(`Non-JSON response: ${responseText.substring(0, 100)}`);
+        // Parse response as JSON
+        data = await response.json();
+      } catch (err) {
+        throw new Error("Server returned an invalid response");
       }
 
       if (!response.ok) {
-        throw new Error(data.error || data.message || "Login failed");
+        throw new Error(data.message || "Login failed");
       }
-
-      console.log("Login successful");
 
       // Store the auth token
       localStorage.setItem("authToken", data.token);
@@ -72,8 +50,7 @@ export default function LoginPage() {
         router.push("/");
       }
     } catch (err) {
-      console.error("Login error:", err);
-      setError(err.message || "An unexpected error occurred");
+      setError(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -96,21 +73,6 @@ export default function LoginPage() {
             {error && (
               <div className="bg-red-50 text-red-700 p-4 rounded-lg mb-6">
                 {error}
-              </div>
-            )}
-
-            {debugInfo && (
-              <div className="bg-yellow-50 text-yellow-800 p-4 rounded-lg mb-6 text-xs overflow-auto max-h-40">
-                <p>
-                  <strong>Status:</strong> {debugInfo.status}
-                </p>
-                <p>
-                  <strong>Headers:</strong>{" "}
-                  {JSON.stringify(debugInfo.headers, null, 2)}
-                </p>
-                <p>
-                  <strong>Response:</strong> {debugInfo.text}
-                </p>
               </div>
             )}
 
