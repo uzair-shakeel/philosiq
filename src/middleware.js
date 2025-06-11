@@ -10,6 +10,11 @@ const corsHeaders = {
 };
 
 export function middleware(request) {
+  // Log request details
+  console.log(
+    `[Middleware] ${request.method} request to ${request.nextUrl.pathname}`
+  );
+
   // Only apply to /api routes
   if (!request.nextUrl.pathname.startsWith("/api")) {
     return NextResponse.next();
@@ -17,6 +22,7 @@ export function middleware(request) {
 
   // Handle OPTIONS request
   if (request.method === "OPTIONS") {
+    console.log("[Middleware] Handling OPTIONS request");
     return new NextResponse(null, {
       status: 200,
       headers: corsHeaders,

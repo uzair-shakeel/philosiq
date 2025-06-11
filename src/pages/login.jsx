@@ -10,33 +10,62 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [debugInfo, setDebugInfo] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+    setDebugInfo(null);
 
     try {
       console.log("Attempting login with:", { email, hasPassword: !!password });
 
-      const response = await fetch("/api/auth/login", {
+      // Create the full URL to avoid any relative path issues
+      const apiUrl = new URL("/api/auth/login", window.location.origin).href;
+      console.log("Login API URL:", apiUrl);
+
+      const requestData = {
+        email,
+        password,
+      };
+
+      console.log("Sending request to:", apiUrl);
+
+      const response = await fetch(apiUrl, {
         method: "POST",
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(requestData),
       });
 
-      // Log response status for debugging
+      // Log response details for debugging
       console.log("Login response status:", response.status);
+      console.log(
+        "Login response headers:",
+        Object.fromEntries([...response.headers.entries()])
+      );
 
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error(`Non-JSON response: ${await response.text()}`);
+      // Get the response text first so we can log it if JSON parsing fails
+      const responseText = await response.text();
+      console.log("Response text:", responseText);
+
+      let data;
+      try {
+        // Now parse the text as JSON
+        data = responseText ? JSON.parse(responseText) : {};
+      } catch (jsonError) {
+        console.error("JSON parse error:", jsonError);
+        setDebugInfo({
+          status: response.status,
+          headers: Object.fromEntries([...response.headers.entries()]),
+          text: responseText,
+        });
+        throw new Error(`Non-JSON response: ${responseText.substring(0, 100)}`);
       }
-
-      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || data.message || "Login failed");
@@ -78,6 +107,21 @@ export default function LoginPage() {
             {error && (
               <div className="bg-red-50 text-red-700 p-4 rounded-lg mb-6">
                 {error}
+              </div>
+            )}
+
+            {debugInfo && (
+              <div className="bg-yellow-50 text-yellow-800 p-4 rounded-lg mb-6 text-xs overflow-auto max-h-40">
+                <p>
+                  <strong>Status:</strong> {debugInfo.status}
+                </p>
+                <p>
+                  <strong>Headers:</strong>{" "}
+                  {JSON.stringify(debugInfo.headers, null, 2)}
+                </p>
+                <p>
+                  <strong>Response:</strong> {debugInfo.text}
+                </p>
               </div>
             )}
 
