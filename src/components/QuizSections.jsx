@@ -13,6 +13,7 @@ export default function QuizSections() {
       alt: "Person taking a political quiz on a tablet",
       reverse: false,
       buttonLink: "/quiz",
+      bgColor: "from-primary-lightMaroon to-primary-maroon",
     },
     {
       title: "Archetypes",
