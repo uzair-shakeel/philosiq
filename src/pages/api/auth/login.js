@@ -6,13 +6,32 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"; // Replace with a real secret in production
 
 export default async function handler(req, res) {
+  // Handle preflight OPTIONS request for CORS
+  if (req.method === "OPTIONS") {
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+    return res.status(200).end();
+  }
+
   if (req.method !== "POST") {
     return res
       .status(405)
-      .json({ success: false, message: "Method not allowed" });
+      .json({ success: false, message: `Method ${req.method} not allowed` });
   }
 
   try {
+    console.log(
+      "Login request received:",
+      JSON.stringify({
+        method: req.method,
+        headers: req.headers,
+        bodyLength: req.body ? Object.keys(req.body).length : 0,
+      })
+    );
+
     const { email, password } = req.body;
 
     // Validate input
@@ -47,7 +66,7 @@ export default async function handler(req, res) {
         userId: user._id.toString(),
         email: user.email,
       },
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       { expiresIn: "7d" }
     );
 
@@ -63,6 +82,12 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error("Login error:", error);
-    return res.status(500).json({ success: false, message: "Failed to login" });
+    return res
+      .status(500)
+      .json({
+        success: false,
+        message: "Failed to login",
+        error: error.message,
+      });
   }
 }

@@ -17,20 +17,32 @@ export default function LoginPage() {
     setError("");
 
     try {
+      console.log("Attempting login with:", { email, hasPassword: !!password });
+
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Login failed");
+      // Log response status for debugging
+      console.log("Login response status:", response.status);
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error(`Non-JSON response: ${await response.text()}`);
       }
 
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || data.message || "Login failed");
+      }
+
+      console.log("Login successful");
 
       // Store the auth token but don't clear other localStorage items
       localStorage.setItem("authToken", data.token);
@@ -42,7 +54,8 @@ export default function LoginPage() {
         router.push("/");
       }
     } catch (err) {
-      setError(err.message);
+      console.error("Login error:", err);
+      setError(err.message || "An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }
