@@ -21,50 +21,82 @@ export default function LoginPage() {
     try {
       console.log("Attempting login with:", { email, hasPassword: !!password });
 
-      // Create the full URL to avoid any relative path issues
-      const apiUrl = new URL("/api/auth/login", window.location.origin).href;
-      console.log("Login API URL:", apiUrl);
+      // Try both API endpoints - the direct one and the catch-all
+      const requestData = { email, password };
 
-      const requestData = {
-        email,
-        password,
-      };
+      // First try the catch-all route which is more likely to work in production
+      let response;
+      let responseText;
+      let success = false;
 
-      console.log("Sending request to:", apiUrl);
+      // List of endpoints to try in order
+      const endpoints = [
+        "/api/auth/login", // Try direct endpoint first
+        "/api/auth/login/", // Some servers need trailing slash
+        "/api/auth/login", // The catch-all route
+      ];
 
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
+      let lastError = null;
 
-      // Log response details for debugging
-      console.log("Login response status:", response.status);
-      console.log(
-        "Login response headers:",
-        Object.fromEntries([...response.headers.entries()])
-      );
+      // Try each endpoint until one works
+      for (const endpoint of endpoints) {
+        if (success) break;
 
-      // Get the response text first so we can log it if JSON parsing fails
-      const responseText = await response.text();
-      console.log("Response text:", responseText);
+        try {
+          const apiUrl = new URL(endpoint, window.location.origin).href;
+          console.log(`Trying endpoint: ${apiUrl}`);
 
+          response = await fetch(apiUrl, {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(requestData),
+          });
+
+          console.log(`Response from ${endpoint}:`, response.status);
+
+          // Get the response text
+          responseText = await response.text();
+          console.log(
+            `Response text from ${endpoint}:`,
+            responseText.substring(0, 100)
+          );
+
+          // If response is ok and contains data, consider it successful
+          if (response.ok && responseText) {
+            success = true;
+            break;
+          }
+        } catch (err) {
+          console.error(`Error with endpoint ${endpoint}:`, err);
+          lastError = err;
+        }
+      }
+
+      // If all endpoints failed, throw the last error
+      if (!success && lastError) {
+        throw lastError;
+      }
+
+      // Parse the response text
       let data;
       try {
-        // Now parse the text as JSON
         data = responseText ? JSON.parse(responseText) : {};
       } catch (jsonError) {
         console.error("JSON parse error:", jsonError);
         setDebugInfo({
-          status: response.status,
-          headers: Object.fromEntries([...response.headers.entries()]),
+          status: response?.status,
+          headers: response
+            ? Object.fromEntries([...response.headers.entries()])
+            : {},
           text: responseText,
         });
-        throw new Error(`Non-JSON response: ${responseText.substring(0, 100)}`);
+        throw new Error(
+          `Non-JSON response: ${responseText?.substring(0, 100)}`
+        );
       }
 
       if (!response.ok) {

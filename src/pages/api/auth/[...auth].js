@@ -14,12 +14,12 @@ const logRequest = (req, stage, details = {}) => {
       method: req.method,
       url: req.url,
       headers: req.headers,
+      path: req.query.auth,
       ...details,
     })
   );
 };
 
-// This extra export helps some hosting platforms recognize the allowed methods
 export const config = {
   api: {
     bodyParser: true,
@@ -28,7 +28,7 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-  logRequest(req, "start");
+  logRequest(req, "start_catchall", { query: req.query });
 
   // Set CORS headers for all requests
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -38,15 +38,33 @@ export default async function handler(req, res) {
 
   // Handle preflight OPTIONS request
   if (req.method === "OPTIONS") {
-    logRequest(req, "options_response");
+    logRequest(req, "options_response_catchall");
     return res.status(200).end();
   }
 
+  // Get the route from the URL
+  const authPath = req.query.auth || [];
+  const route = authPath[0];
+
+  // Route to appropriate handler
+  if (route === "login") {
+    return handleLogin(req, res);
+  }
+
+  // If no matching route, return 404
+  return res.status(404).json({
+    success: false,
+    message: `Route not found: /api/auth/${authPath.join("/")}`,
+  });
+}
+
+// Login handler function
+async function handleLogin(req, res) {
   // Force method to uppercase for consistency
   const method = req.method.toUpperCase();
 
   if (method !== "POST") {
-    logRequest(req, "method_not_allowed", { received: method });
+    logRequest(req, "method_not_allowed_catchall", { received: method });
     return res
       .status(405)
       .json({
@@ -56,16 +74,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    logRequest(req, "processing_request", {
-      bodyKeys: req.body ? Object.keys(req.body) : [],
-      bodyLength: req.body ? JSON.stringify(req.body).length : 0,
-    });
+    logRequest(req, "processing_login_catchall");
 
     const { email, password } = req.body;
 
     // Validate input
     if (!email || !password) {
-      logRequest(req, "validation_failed", {
+      logRequest(req, "validation_failed_catchall", {
         hasEmail: !!email,
         hasPassword: !!password,
       });
@@ -76,33 +91,33 @@ export default async function handler(req, res) {
     }
 
     // Connect to database
-    logRequest(req, "connecting_to_db");
+    logRequest(req, "connecting_to_db_catchall");
     const { db } = await connectToDatabase();
 
     // Find user
-    logRequest(req, "finding_user", { email });
+    logRequest(req, "finding_user_catchall", { email });
     const user = await db.collection("users").findOne({ email });
 
     if (!user) {
-      logRequest(req, "user_not_found", { email });
+      logRequest(req, "user_not_found_catchall", { email });
       return res
         .status(401)
         .json({ success: false, message: "Invalid email or password" });
     }
 
     // Verify password
-    logRequest(req, "verifying_password");
+    logRequest(req, "verifying_password_catchall");
     const isValid = await bcrypt.compare(password, user.password);
 
     if (!isValid) {
-      logRequest(req, "invalid_password", { email });
+      logRequest(req, "invalid_password_catchall", { email });
       return res
         .status(401)
         .json({ success: false, message: "Invalid email or password" });
     }
 
     // Create token with user ID as string
-    logRequest(req, "creating_token", { userId: user._id.toString() });
+    logRequest(req, "creating_token_catchall", { userId: user._id.toString() });
     const token = jwt.sign(
       {
         userId: user._id.toString(),
@@ -113,7 +128,7 @@ export default async function handler(req, res) {
     );
 
     // Return success with token and user info
-    logRequest(req, "login_success", { userId: user._id.toString() });
+    logRequest(req, "login_success_catchall", { userId: user._id.toString() });
     return res.status(200).json({
       success: true,
       token,
@@ -124,7 +139,7 @@ export default async function handler(req, res) {
       },
     });
   } catch (error) {
-    logRequest(req, "error", {
+    logRequest(req, "error_catchall", {
       message: error.message,
       stack: error.stack,
     });
