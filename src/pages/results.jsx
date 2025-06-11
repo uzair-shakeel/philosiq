@@ -957,7 +957,7 @@ function ResultsContent({ results }) {
                             letter === "P" ? "Progressive" : "Conservative";
                           bgColor =
                             letter === "P"
-                              ? "bg-purple-100 text-purple-800"
+                              ? "bg-red-100 text-red-800"
                               : "bg-blue-100 text-blue-800";
                           break;
                         case "Secular vs. Religious":
