@@ -4,7 +4,11 @@
     {
       "src": "/api/auth/login",
       "methods": ["POST", "OPTIONS"],
-      "dest": "/api/auth/[...auth].js"
+      "dest": "/api/auth/login"
+    },
+    {
+      "src": "/api/auth/.*",
+      "dest": "/api/auth/[...nextauth]"
     },
     {
       "src": "/api/(.*)",

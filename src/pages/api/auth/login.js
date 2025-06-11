@@ -3,7 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 // You would need to set up a secure JWT_SECRET in your environment variables
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"; // Replace with a real secret in production
+const JWT_SECRET =
+  process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || "your-secret-key"; // Use NextAuth secret if available
 
 // Helper for structured logging
 const logRequest = (req, stage, details = {}) => {
@@ -47,12 +48,10 @@ export default async function handler(req, res) {
 
   if (method !== "POST") {
     logRequest(req, "method_not_allowed", { received: method });
-    return res
-      .status(405)
-      .json({
-        success: false,
-        message: `Method ${method} not allowed, only POST is supported`,
-      });
+    return res.status(405).json({
+      success: false,
+      message: `Method ${method} not allowed, only POST is supported`,
+    });
   }
 
   try {
@@ -107,6 +106,8 @@ export default async function handler(req, res) {
       {
         userId: user._id.toString(),
         email: user.email,
+        name: user.name,
+        role: user.role || "user",
       },
       JWT_SECRET,
       { expiresIn: "7d" }
@@ -121,6 +122,7 @@ export default async function handler(req, res) {
         id: user._id.toString(),
         name: user.name,
         email: user.email,
+        role: user.role || "user",
       },
     });
   } catch (error) {

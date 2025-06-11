@@ -21,82 +21,39 @@ export default function LoginPage() {
     try {
       console.log("Attempting login with:", { email, hasPassword: !!password });
 
-      // Try both API endpoints - the direct one and the catch-all
+      // Use the direct endpoint that should be properly routed now
       const requestData = { email, password };
+      const apiUrl = new URL("/api/auth/login", window.location.origin).href;
 
-      // First try the catch-all route which is more likely to work in production
-      let response;
-      let responseText;
-      let success = false;
+      console.log("Sending login request to:", apiUrl);
 
-      // List of endpoints to try in order
-      const endpoints = [
-        "/api/auth/login", // Try direct endpoint first
-        "/api/auth/login/", // Some servers need trailing slash
-        "/api/auth/login", // The catch-all route
-      ];
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
 
-      let lastError = null;
+      console.log("Login response status:", response.status);
 
-      // Try each endpoint until one works
-      for (const endpoint of endpoints) {
-        if (success) break;
+      // Get the response text
+      const responseText = await response.text();
 
-        try {
-          const apiUrl = new URL(endpoint, window.location.origin).href;
-          console.log(`Trying endpoint: ${apiUrl}`);
-
-          response = await fetch(apiUrl, {
-            method: "POST",
-            credentials: "same-origin",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify(requestData),
-          });
-
-          console.log(`Response from ${endpoint}:`, response.status);
-
-          // Get the response text
-          responseText = await response.text();
-          console.log(
-            `Response text from ${endpoint}:`,
-            responseText.substring(0, 100)
-          );
-
-          // If response is ok and contains data, consider it successful
-          if (response.ok && responseText) {
-            success = true;
-            break;
-          }
-        } catch (err) {
-          console.error(`Error with endpoint ${endpoint}:`, err);
-          lastError = err;
-        }
-      }
-
-      // If all endpoints failed, throw the last error
-      if (!success && lastError) {
-        throw lastError;
-      }
-
-      // Parse the response text
+      // Try to parse the response as JSON
       let data;
       try {
         data = responseText ? JSON.parse(responseText) : {};
       } catch (jsonError) {
         console.error("JSON parse error:", jsonError);
         setDebugInfo({
-          status: response?.status,
-          headers: response
-            ? Object.fromEntries([...response.headers.entries()])
-            : {},
+          status: response.status,
+          headers: Object.fromEntries([...response.headers.entries()]),
           text: responseText,
         });
-        throw new Error(
-          `Non-JSON response: ${responseText?.substring(0, 100)}`
-        );
+        throw new Error(`Non-JSON response: ${responseText.substring(0, 100)}`);
       }
 
       if (!response.ok) {
@@ -105,7 +62,7 @@ export default function LoginPage() {
 
       console.log("Login successful");
 
-      // Store the auth token but don't clear other localStorage items
+      // Store the auth token
       localStorage.setItem("authToken", data.token);
 
       // Redirect to the specified page or home page

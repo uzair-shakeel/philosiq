@@ -403,36 +403,36 @@ export default function QuizPage() {
       // If user is authenticated, save to database
       const token = localStorage.getItem("authToken");
       if (token) {
-        try {
-          const response = await fetch("/api/quiz/save-results", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(resultsData),
-          });
+      try {
+        const response = await fetch("/api/quiz/save-results", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(resultsData),
+        });
 
-          const data = await response.json();
+        const data = await response.json();
 
-          if (!response.ok) {
+        if (!response.ok) {
             console.error("Failed to save results:", data.message);
             // Don't block navigation if saving fails
-          }
+        }
 
           // Track successful quiz completion with save
-          track("quiz_completed", {
-            quizType: quizType === "short" ? "short" : "full",
-            archetype: finalResults.archetype?.name || "Unknown",
+        track("quiz_completed", {
+          quizType: quizType === "short" ? "short" : "full",
+          archetype: finalResults.archetype?.name || "Unknown",
             saved: true,
-          });
-        } catch (error) {
-          console.error("Error saving results:", error);
-          // Don't block navigation if saving fails
-          track("quiz_save_error", {
-            error: error.message,
-            quizType: quizType === "short" ? "short" : "full",
-          });
+        });
+      } catch (error) {
+        console.error("Error saving results:", error);
+        // Don't block navigation if saving fails
+        track("quiz_save_error", {
+          error: error.message,
+          quizType: quizType === "short" ? "short" : "full",
+        });
         }
       } else {
         // Track quiz completion without save
