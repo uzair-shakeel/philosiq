@@ -539,20 +539,20 @@ export default function MindMap() {
                           rightSideColor = "bg-green-600"; // Green for Free Market
                           break;
                         case "Authority":
-                          leftSideColor = "bg-blue-500"; // Blue for Libertarian
+                          leftSideColor = "bg-teal-500"; // Teal for Libertarian
                           rightSideColor = "bg-orange-500"; // Orange for Authoritarian
                           break;
                         case "Social":
-                          leftSideColor = "bg-green-500"; // Green for Progressive
-                          rightSideColor = "bg-blue-400"; // Blue for Conservative
+                          leftSideColor = "bg-sky-500"; // Green for Progressive
+                          rightSideColor = "bg-red-400"; // Blue for Conservative
                           break;
                         case "Religious":
                           leftSideColor = "bg-yellow-400"; // Yellow for Secular
                           rightSideColor = "bg-purple-500"; // Purple for Religious
                           break;
                         case "National":
-                          leftSideColor = "bg-teal-500"; // Teal for Globalism
-                          rightSideColor = "bg-green-500"; // Green for Nationalism
+                          leftSideColor = "bg-lime-500"; // Teal for Globalism
+                          rightSideColor = "bg-rose-500"; // Green for Nationalism
                           break;
                       }
 
