@@ -560,8 +560,8 @@ function ResultsContent({ results }) {
     y = addWrappedText(description, margin, y, contentWidth, 15);
     y = addSeparator(y);
 
-    // Axis Breakdown
-   y += 10;
+// Add axis breakdown section
+y += 10;
 pdf.setFontSize(14);
 pdf.setFont("helvetica", "bold");
 pdf.text("Your Political Axis Breakdown", margin, y);
@@ -572,7 +572,7 @@ pdf.setFontSize(11);
 pdf.setFont("helvetica", "normal");
 
 results.axisResults.forEach((axis, index) => {
-  // Check if we need to add a new page
+  // New page if needed
   if (y > pdf.internal.pageSize.getHeight() - 80) {
     pdf.addPage();
     y = 40;
@@ -584,16 +584,17 @@ results.axisResults.forEach((axis, index) => {
 
   pdf.setFont("helvetica", "normal");
 
-  // ✅ Correct percent values based on actual scores
-  const leftPercent = Math.round(100 - axis.score);
-  const rightPercent = Math.round(axis.score);
+  // ✅ Pull exact left/right percentages from allPercents
+  const axisPercent = allPercents[axis.name] || {};
+  const leftValue = axisPercent.leftPercent || "N/A";
+  const rightValue = axisPercent.rightPercent || "N/A";
 
-  pdf.text(`${axis.leftLabel}: ${leftPercent}%`, margin, y);
+  pdf.text(`${axis.leftLabel}: ${leftValue}%`, margin, y);
   y += 15;
-  pdf.text(`${axis.rightLabel}: ${rightPercent}%`, margin, y);
+  pdf.text(`${axis.rightLabel}: ${rightValue}%`, margin, y);
   y += 15;
 
-  // Position summary
+  // Use original axis.score to describe position
   let positionText = "";
   if (axis.score < 40) {
     positionText = `Extreme ${axis.leftLabel} leaning`;
@@ -615,10 +616,10 @@ results.axisResults.forEach((axis, index) => {
   y += 20;
 
   if (index < results.axisResults.length - 1) {
-    y += 10; // space between sections
+    y += 10;
   }
 });
-
+    
     // Secondary Archetypes
     if (secondaryArchetypes?.length > 0) {
       if (y > pdf.internal.pageSize.getHeight() - 120) {
