@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import Layout from "../components/Layout";
 import Link from "next/link";
 
 export default function ArchetypePage() {
+  // Define trait pairs (opposites)
+  const traitPairs = [
+    ["Equity", "Free Market"],
+    ["Libertarian", "Authoritarian", "Authority"],
+    ["Progressive", "Conservative"],
+    ["Secular", "Religious"],
+    ["Globalist", "Nationalist"],
+  ];
+
+  // State for selected filters
+  const [selectedFilters, setSelectedFilters] = useState([]);
+
   // Comprehensive list of all 32 unique archetypes
   const allArchetypes = [
     {
@@ -379,6 +391,79 @@ export default function ArchetypePage() {
     },
   ];
 
+  // Extract all unique traits for filter options
+  const allTraits = useMemo(() => {
+    const traits = new Set();
+    allArchetypes.forEach((archetype) => {
+      archetype.traits.forEach((trait) => {
+        traits.add(trait);
+      });
+    });
+    return Array.from(traits).sort();
+  }, [allArchetypes]);
+
+  // Filter archetypes based on selected filters
+  const filteredArchetypes = useMemo(() => {
+    if (selectedFilters.length === 0) {
+      return allArchetypes;
+    }
+
+    return allArchetypes.filter((archetype) => {
+      return selectedFilters.every((filter) =>
+        archetype.traits.includes(filter)
+      );
+    });
+  }, [allArchetypes, selectedFilters]);
+
+  // Handle filter selection
+  const handleFilterClick = (trait) => {
+    setSelectedFilters((prev) => {
+      if (prev.includes(trait)) {
+        return prev.filter((f) => f !== trait);
+      } else {
+        // Find if there's an opposite trait already selected
+        const oppositeSelected = traitPairs.find((pair) => {
+          return (
+            pair.includes(trait) &&
+            pair.some((p) => prev.includes(p) && p !== trait)
+          );
+        });
+
+        // If an opposite is selected, replace it
+        if (oppositeSelected) {
+          const oppositeTraits = oppositeSelected.filter((p) => p !== trait);
+          const oppositeInSelection = oppositeTraits.find((p) =>
+            prev.includes(p)
+          );
+
+          if (oppositeInSelection) {
+            return [...prev.filter((f) => f !== oppositeInSelection), trait];
+          }
+        }
+
+        return [...prev, trait];
+      }
+    });
+  };
+
+  // Check if a trait is disabled (opposite of a selected trait)
+  const isTraitDisabled = (trait) => {
+    if (selectedFilters.includes(trait)) return false;
+
+    // Check if any of its opposites are selected
+    return traitPairs.some((pair) => {
+      return (
+        pair.includes(trait) &&
+        pair.some((p) => selectedFilters.includes(p) && p !== trait)
+      );
+    });
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSelectedFilters([]);
+  };
+
   return (
     <Layout title="Political Archetypes - PhilosiQ">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
@@ -391,101 +476,107 @@ export default function ArchetypePage() {
             </p>
           </div>
 
-          {/* All Archetypes Grid */}
-          <div className="mb-20">
-            <h2 className="text-3xl font-bold text-center text-secondary-darkBlue mb-8">
-              All Political Archetypes
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {allArchetypes.map((archetype) => (
-                <Link
-                  href={`/archetypes/${archetype.slug}`}
-                  key={archetype.id}
-                  className="flex p-8 flex-col h-full bg-white rounded-lg shadow-md overflow-hidden transform transition-all hover:scale-102 hover:shadow-lg"
-                  shallow={false}
+          {/* Filter Section */}
+          <div className="mb-10 bg-white rounded-lg shadow-md p-6">
+            <div className="flex flex-wrap items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-secondary-darkBlue">
+                Filter Archetypes
+              </h3>
+              {selectedFilters.length > 0 && (
+                <button
+                  onClick={clearFilters}
+                  className="text-sm text-primary-maroon hover:underline"
                 >
-                  <h3 className="text-xl font-bold mb-4 text-primary-maroon">
-                    {archetype.name}
-                  </h3>
-                  <div className="space-y-2">
-                    <p className="text-sm text-gray-500 mb-3">Key traits:</p>
-                    <ul className="space-y-2">
-                      {archetype.traits.map((trait, index) => (
-                        <li key={index} className="flex items-center">
-                          <span className="w-2 h-2 bg-primary-maroon rounded-full mr-2"></span>
-                          <span>{trait}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="mt-4 text-sm text-primary-maroon font-medium">
-                    View details →
-                  </div>
-                </Link>
+                  Clear all filters
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {allTraits.map((trait) => (
+                <button
+                  key={trait}
+                  onClick={() => handleFilterClick(trait)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    selectedFilters.includes(trait)
+                      ? "bg-primary-maroon text-white"
+                      : isTraitDisabled(trait)
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                  disabled={isTraitDisabled(trait)}
+                >
+                  {trait}
+                </button>
               ))}
             </div>
           </div>
 
-          {/* Axis Categories Section */}
-          {/* <div className="space-y-16">
+          {/* All Archetypes Grid */}
+          <div className="mb-20">
             <h2 className="text-3xl font-bold text-center text-secondary-darkBlue mb-8">
-              Political Axes
+              {selectedFilters.length > 0
+                ? `Filtered Archetypes (${filteredArchetypes.length})`
+                : "All Political Archetypes"}
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-xl font-bold mb-3 text-green-600">
-                  Equality vs. Markets
-                </h3>
-                <p className="text-gray-600">
-                  This axis measures your economic views, from support for
-                  equality-based policies to preference for free market
-                  solutions.
+            {filteredArchetypes.length === 0 ? (
+              <div className="text-center py-10">
+                <p className="text-lg text-gray-600">
+                  No archetypes match your selected filters.
                 </p>
+                <button
+                  onClick={clearFilters}
+                  className="mt-4 px-6 py-2 bg-primary-maroon text-white rounded-md hover:bg-primary-maroon/90"
+                >
+                  Clear filters
+                </button>
               </div>
-
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-xl font-bold mb-3 text-blue-600">
-                  Democracy vs. Authority
-                </h3>
-                <p className="text-gray-600">
-                  This axis measures your governance preferences, from
-                  democratic processes to centralized authority.
-                </p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {filteredArchetypes.map((archetype) => (
+                  <Link
+                    href={`/archetypes/${archetype.slug}`}
+                    key={archetype.id}
+                    className="flex p-8 flex-col h-full bg-white rounded-lg shadow-md overflow-hidden transform transition-all hover:scale-102 hover:shadow-lg"
+                    shallow={false}
+                  >
+                    <h3 className="text-xl font-bold mb-4 text-primary-maroon">
+                      {archetype.name}
+                    </h3>
+                    <div className="space-y-2">
+                      <p className="text-sm text-gray-500 mb-3">Key traits:</p>
+                      <ul className="space-y-2">
+                        {archetype.traits.map((trait, index) => (
+                          <li key={index} className="flex items-center">
+                            <span
+                              className={`w-2 h-2 rounded-full mr-2 ${
+                                selectedFilters.includes(trait)
+                                  ? "bg-primary-maroon"
+                                  : "bg-gray-400"
+                              }`}
+                            ></span>
+                            <span
+                              className={
+                                selectedFilters.includes(trait)
+                                  ? "font-medium"
+                                  : ""
+                              }
+                            >
+                              {trait}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="mt-4 text-sm text-primary-maroon font-medium">
+                      View details →
+                    </div>
+                  </Link>
+                ))}
               </div>
-
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-xl font-bold mb-3 text-purple-600">
-                  Progress vs. Tradition
-                </h3>
-                <p className="text-gray-600">
-                  This axis measures your cultural outlook, from embracing
-                  change and innovation to valuing tradition and stability.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-xl font-bold mb-3 text-yellow-600">
-                  Secular vs. Religious
-                </h3>
-                <p className="text-gray-600">
-                  This axis measures your view on the role of religion in
-                  society and governance.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-xl font-bold mb-3 text-red-600">
-                  Globalism vs. Nationalism
-                </h3>
-                <p className="text-gray-600">
-                  This axis measures your perspective on international
-                  cooperation versus national sovereignty.
-                </p>
-              </div>
-            </div>
-          </div> */}
+            )}
+          </div>
         </div>
       </div>
     </Layout>

@@ -87,9 +87,6 @@ export default function QuizSections() {
                     fill
                     className="object-cover mix-blend-overlay"
                   />
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-r ${section.bgColor} opacity-10`}
-                  ></div>
                 </div>
               </div>
             </div>
