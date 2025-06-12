@@ -477,7 +477,7 @@ function ResultsContent({ results }) {
     }, 1000);
   };
 
-  const handleDownloadPDF = async () => {
+const handleDownloadPDF = async () => {
   setIsPdfGenerating(true);
 
   try {
@@ -488,6 +488,7 @@ function ResultsContent({ results }) {
     const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
     let y = 40;
     const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
     const margin = 40;
     const contentWidth = pageWidth - margin * 2;
 
@@ -497,7 +498,38 @@ function ResultsContent({ results }) {
       return y + lines.length * lineHeight;
     };
 
-    const addSeparator = (y) => y + 20;
+    const addSectionHeader = (title, y) => {
+      pdf.setFontSize(14).setFont("helvetica", "bold");
+      pdf.text(title, margin, y);
+      y += 6;
+      pdf.setDrawColor(180);
+      pdf.setLineWidth(0.5);
+      pdf.line(margin, y, pageWidth - margin, y);
+      return y + 14;
+    };
+
+    const drawAxisBox = (axisName, leftText, rightText, positionText, y) => {
+      const boxHeight = 65;
+      if (y + boxHeight + 40 > pageHeight) {
+        pdf.addPage();
+        y = 40;
+      }
+      pdf.setFillColor(245, 245, 245);
+      pdf.rect(margin, y, contentWidth, boxHeight, 'F');
+      pdf.setFont("helvetica", "bold").text(axisName, margin + 10, y + 20);
+      pdf.setFont("helvetica", "normal").text(leftText, margin + 10, y + 35);
+      pdf.text(rightText, margin + 10, y + 50);
+      pdf.text(positionText, pageWidth - margin - 150, y + 35);
+      return y + boxHeight + 10;
+    };
+
+    const getPositionStrength = (score) => {
+      if (score > 80) return "Extreme";
+      if (score >= 70) return "Committed";
+      if (score >= 60) return "Inclined";
+      if (score >= 50) return "Leaning";
+      return "Centrist";
+    };
 
     // Title
     pdf.setFontSize(16).setFont("helvetica", "bold");
@@ -506,178 +538,114 @@ function ResultsContent({ results }) {
 
     pdf.setFontSize(11).setFont("helvetica", "normal");
     pdf.text(`Generated on ${new Date().toLocaleDateString()}`, margin, y);
-    y = addSeparator(y + 10);
+    y += 30;
 
-    // Archetype Name
-    pdf.setFontSize(14).setFont("helvetica", "bold");
-    y += 10;
-    pdf.text(`Your Archetype: ${results.archetype?.name || "Unknown"}`, margin, y);
-    y += 20;
+    y = addSectionHeader("Your Archetype", y);
+    pdf.setFontSize(13).setFont("helvetica", "bold");
+    pdf.text(results.archetype?.name || "Unknown", margin, y);
+    y += 18;
 
-    // Traits with percentages
-    pdf.setFontSize(11).setFont("helvetica", "normal");
+    // Traits
     const traitLines = [];
-
     if (Object.keys(axisLetters).length > 0 && results.axisResults) {
       Object.entries(axisLetters).forEach(([axis, letter]) => {
-        let traitLabel = "";
-        let traitScore = null;
         const axisResult = results.axisResults.find((r) => r.name === axis);
-
+        let traitLabel = "";
         switch (axis) {
-          case "Equity vs. Free Market":
-            traitLabel = letter === "E" ? "Equity" : "Free Market";
-            break;
-          case "Libertarian vs. Authoritarian":
-            traitLabel = letter === "L" ? "Libertarian" : "Authoritarian";
-            break;
-          case "Progressive vs. Conservative":
-            traitLabel = letter === "P" ? "Progressive" : "Conservative";
-            break;
-          case "Secular vs. Religious":
-            traitLabel = letter === "S" ? "Secular" : "Religious";
-            break;
-          case "Globalism vs. Nationalism":
-            traitLabel = letter === "G" ? "Globalism" : "Nationalism";
-            break;
+          case "Equity vs. Free Market": traitLabel = letter === "E" ? "Equity" : "Free Market"; break;
+          case "Libertarian vs. Authoritarian": traitLabel = letter === "L" ? "Libertarian" : "Authoritarian"; break;
+          case "Progressive vs. Conservative": traitLabel = letter === "P" ? "Progressive" : "Conservative"; break;
+          case "Secular vs. Religious": traitLabel = letter === "S" ? "Secular" : "Religious"; break;
+          case "Globalism vs. Nationalism": traitLabel = letter === "G" ? "Globalism" : "Nationalism"; break;
         }
-
-        if (axisResult) {
-          const isLeft = axisResult.leftLabel === traitLabel;
-          traitScore = isLeft ? axisResult.score : 100 - axisResult.score;
-          traitLines.push(`${traitLabel}: ${Math.round(traitScore)}%`);
-        } else {
-          traitLines.push(traitLabel);
-        }
+        const traitScore = axisResult
+          ? Math.round(letter === axisResult.leftLabel ? axisResult.score : 100 - axisResult.score)
+          : null;
+        traitLines.push(`${traitLabel}${traitScore !== null ? `: ${traitScore}%` : ""}`);
       });
     }
-
+    pdf.setFontSize(11);
     pdf.text(`Traits: ${traitLines.join(", ")}`, margin, y);
-    y += 15;
+    y += 20;
 
-    // Archetype description
+    // Description
     const description = getArchetypeDescription(results.archetype?.name);
     y = addWrappedText(description, margin, y, contentWidth, 15);
-    y = addSeparator(y);
 
-// Add axis breakdown section
-y += 10;
-pdf.setFontSize(14);
-pdf.setFont("helvetica", "bold");
-pdf.text("Your Political Axis Breakdown", margin, y);
-y += 20;
+    y += 20;
+    y = addSectionHeader("Your Political Axis Breakdown", y);
 
-pdf.setFontSize(11);
-pdf.setFont("helvetica", "normal");
+    results.axisResults.forEach((axis) => {
+      const axisPercent = allPercents[axis.name] || {};
+      const leftValue = parseFloat(axisPercent.leftPercent) || 0;
+      const rightValue = parseFloat(axisPercent.rightPercent) || 0;
 
-// Helper to calculate strength label
-function getPositionStrength(score) {
-  if (score > 80) return "Extreme";
-  if (score >= 70) return "Committed";
-  if (score >= 60) return "Inclined";
-  if (score >= 50) return "Leaning";
-  return "";
-}
-
-results.axisResults.forEach((axis, index) => {
-  if (y > pdf.internal.pageSize.getHeight() - 80) {
-    pdf.addPage();
-    y = 40;
-  }
-
-  pdf.setFont("helvetica", "bold");
-  pdf.text(axis.name, margin, y);
-  y += 15;
-
-  pdf.setFont("helvetica", "normal");
-
-  const axisPercent = allPercents[axis.name] || {};
-  const leftValue = parseFloat(axisPercent.leftPercent) || 0;
-  const rightValue = parseFloat(axisPercent.rightPercent) || 0;
-
-  pdf.text(`${axis.leftLabel}: ${leftValue.toFixed(2)}%`, margin, y);
-  y += 15;
-  pdf.text(`${axis.rightLabel}: ${rightValue.toFixed(2)}%`, margin, y);
-  y += 15;
-
-  let positionText = "Position: ";
-  if (Math.abs(leftValue - rightValue) < 0.01) {
-    positionText += "Centrist";
-  } else if (leftValue > rightValue) {
-    const strength = getPositionStrength(leftValue);
-    positionText += `${axis.leftLabel}${strength ? ` (${strength})` : ""}`;
-  } else {
-    const strength = getPositionStrength(rightValue);
-    positionText += `${axis.rightLabel}${strength ? ` (${strength})` : ""}`;
-  }
-
-  pdf.text(positionText, margin, y);
-  y += 15;
-
-  if (index < results.axisResults.length - 1) {
-    y += 10;
-  }
-});
-    
-    // Secondary Archetypes
-    if (secondaryArchetypes?.length > 0) {
-      if (y > pdf.internal.pageSize.getHeight() - 120) {
-        pdf.addPage();
-        y = 40;
+      let positionText = "Position: ";
+      if (Math.abs(leftValue - rightValue) < 0.01) {
+        positionText += "Centrist";
+      } else if (leftValue > rightValue) {
+        positionText += `${axis.leftLabel} (${getPositionStrength(leftValue)})`;
+      } else {
+        positionText += `${axis.rightLabel} (${getPositionStrength(rightValue)})`;
       }
 
-      y = addSeparator(y);
+      y = drawAxisBox(
+        axis.name,
+        `${axis.leftLabel}: ${leftValue.toFixed(2)}%`,
+        `${axis.rightLabel}: ${rightValue.toFixed(2)}%`,
+        positionText,
+        y
+      );
+    });
+
+    // Secondary Archetypes
+    if (secondaryArchetypes.length > 0) {
       y += 10;
-
-      pdf.setFontSize(14).setFont("helvetica", "bold");
-      pdf.text("Your Secondary Archetypes", margin, y);
+      y = addSectionHeader("Your Secondary Archetypes", y);
+      pdf.setFontSize(11).text(
+        "You also show strong alignment with these political archetypes:",
+        margin,
+        y
+      );
       y += 20;
 
-      pdf.setFontSize(11).setFont("helvetica", "normal");
-      pdf.text("You also show strong alignment with these political archetypes:", margin, y);
-      y += 20;
-
-      secondaryArchetypes.forEach((archetype, index) => {
-        if (y > pdf.internal.pageSize.getHeight() - 150) {
+      secondaryArchetypes.forEach((archetype) => {
+        if (y + 100 > pageHeight) {
           pdf.addPage();
           y = 40;
         }
 
-        pdf.setFont("helvetica", "bold");
-        pdf.text(`${archetype.name} (${archetype.match})`, margin, y);
+        pdf.setFont("helvetica", "bold").text(`${archetype.name} (${archetype.match})`, margin, y);
         y += 15;
 
-        pdf.setFont("helvetica", "normal");
-        pdf.text(`Traits: ${(archetype.traits || []).join(", ")}`, margin, y);
-        y += 15;
-
-        pdf.text(
-          `Difference from primary: Flipped position on ${
-            archetype.flippedAxis?.replace(" vs. ", "/") || ""
-          }`,
+        pdf.setFont("helvetica", "normal").text(
+          `Traits: ${archetype.traits.join(", ")}`,
           margin,
           y
         );
         y += 15;
 
-        const secondaryDescription = getArchetypeDescription(archetype.name);
-        y = addWrappedText(secondaryDescription, margin, y, contentWidth, 15);
+        pdf.text(
+          `Difference from primary: Flipped position on ${archetype.flippedAxis.replace(" vs. ", "/")}`,
+          margin,
+          y
+        );
+        y += 15;
 
-        if (index < secondaryArchetypes.length - 1) {
-          y = addSeparator(y);
-        }
+        const desc = getArchetypeDescription(archetype.name);
+        y = addWrappedText(desc, margin, y, contentWidth, 15);
+        y += 10;
       });
     }
 
-    // Page numbers
+    // Page Numbers
     const totalPages = pdf.internal.getNumberOfPages();
     for (let i = 1; i <= totalPages; i++) {
       pdf.setPage(i);
-      pdf.setFontSize(10);
-      pdf.text(
+      pdf.setFontSize(10).text(
         `Page ${i} of ${totalPages}`,
         pageWidth / 2,
-        pdf.internal.pageSize.getHeight() - 20,
+        pageHeight - 20,
         { align: "center" }
       );
     }
@@ -685,29 +653,26 @@ results.axisResults.forEach((axis, index) => {
     // Footer
     pdf.setPage(totalPages);
     pdf.setFontSize(10).setFont("helvetica", "italic");
-    const footerText = "Visit philosiq.com to learn more about your political archetype";
     pdf.text(
-      footerText,
+      "Visit philosiq.com to learn more about your political archetype",
       pageWidth / 2,
-      pdf.internal.pageSize.getHeight() - 40,
+      pageHeight - 40,
       { align: "center" }
     );
 
     const archetypeName = results.archetype?.name || "Results";
     const date = new Date().toISOString().split("T")[0];
     const filename = `PhilosiQ-${archetypeName.replace(/\s+/g, "-")}-${date}.pdf`;
-
     pdf.save(filename);
 
     track("pdf_download_completed", {
-      archetype: results.archetype?.name || "Unknown",
+      archetype: archetypeName,
     });
   } catch (error) {
     console.error("Error generating PDF:", error);
     alert("Failed to generate PDF. Please try again.");
     track("pdf_download_error", {
       error: error.message || "Unknown error",
-      archetype: results.archetype?.name || "Unknown",
     });
   } finally {
     setIsPdfGenerating(false);
