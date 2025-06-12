@@ -595,25 +595,12 @@ results.axisResults.forEach((axis, index) => {
   y += 15;
 
   // Use original axis.score to describe position
-  let positionText = "";
-  if (axis.score < 40) {
-    positionText = `Extreme ${axis.leftLabel} leaning`;
-  } else if (axis.score < 45) {
-    positionText = `Committed ${axis.leftLabel} leaning`;
-  } else if (axis.score < 50) {
-    positionText = `Inclined ${axis.leftLabel} leaning`;
-  } else if (axis.score > 60) {
-    positionText = `Extreme ${axis.rightLabel} leaning`;
-  } else if (axis.score > 55) {
-    positionText = `Committed ${axis.rightLabel} leaning`;
-  } else if (axis.score > 50) {
-    positionText = `Inclined ${axis.rightLabel} leaning`;
-  } else {
-    positionText = "Centrist position";
-  }
+const displayPosition =
+  axis.userPosition === "Centered"
+    ? "Centrist"
+    : `${axis.userPosition} (${axis.positionStrength})`;
 
-  pdf.text(`Position: ${positionText}`, margin, y);
-  y += 20;
+pdf.text(`Position: ${displayPosition}`, margin, y);
 
   if (index < results.axisResults.length - 1) {
     y += 10;
