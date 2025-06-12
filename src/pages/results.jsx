@@ -561,57 +561,63 @@ function ResultsContent({ results }) {
     y = addSeparator(y);
 
     // Axis Breakdown
-    y += 10;
-    pdf.setFontSize(14).setFont("helvetica", "bold");
-    pdf.text("Your Political Axis Breakdown", margin, y);
-    y += 20;
+   y += 10;
+pdf.setFontSize(14);
+pdf.setFont("helvetica", "bold");
+pdf.text("Your Political Axis Breakdown", margin, y);
+y += 20;
 
-    pdf.setFontSize(11).setFont("helvetica", "normal");
+// Add each axis
+pdf.setFontSize(11);
+pdf.setFont("helvetica", "normal");
 
-    results.axisResults.forEach((axis, index) => {
-      if (y > pdf.internal.pageSize.getHeight() - 80) {
-        pdf.addPage();
-        y = 40;
-      }
+results.axisResults.forEach((axis, index) => {
+  // Check if we need to add a new page
+  if (y > pdf.internal.pageSize.getHeight() - 80) {
+    pdf.addPage();
+    y = 40;
+  }
 
-      pdf.setFont("helvetica", "bold");
-      pdf.text(axis.name, margin, y);
-      y += 15;
+  pdf.setFont("helvetica", "bold");
+  pdf.text(axis.name, margin, y);
+  y += 15;
 
-      pdf.setFont("helvetica", "normal");
+  pdf.setFont("helvetica", "normal");
 
-      const leftPercent = axis.score <= 50 ? axis.score : 100 - axis.score;
-      const rightPercent = axis.score >= 50 ? axis.score : 100 - axis.score;
+  // ✅ Correct percent values based on actual scores
+  const leftPercent = Math.round(100 - axis.score);
+  const rightPercent = Math.round(axis.score);
 
-      pdf.text(`${axis.leftLabel}: ${Math.round(leftPercent)}%`, margin, y);
-      y += 15;
-      pdf.text(`${axis.rightLabel}: ${Math.round(rightPercent)}%`, margin, y);
-      y += 15;
+  pdf.text(`${axis.leftLabel}: ${leftPercent}%`, margin, y);
+  y += 15;
+  pdf.text(`${axis.rightLabel}: ${rightPercent}%`, margin, y);
+  y += 15;
 
-      let positionText = "";
-      if (axis.score < 40) {
-        positionText = `Extreme ${axis.leftLabel} leaning`;
-      } else if (axis.score < 45) {
-        positionText = `Committed ${axis.leftLabel} leaning`;
-      } else if (axis.score < 50) {
-        positionText = `Inclined ${axis.leftLabel} leaning`;
-      } else if (axis.score > 60) {
-        positionText = `Extreme ${axis.rightLabel} leaning`;
-      } else if (axis.score > 55) {
-        positionText = `Committed ${axis.rightLabel} leaning`;
-      } else if (axis.score > 50) {
-        positionText = `Inclined ${axis.rightLabel} leaning`;
-      } else {
-        positionText = "Centrist position";
-      }
+  // Position summary
+  let positionText = "";
+  if (axis.score < 40) {
+    positionText = `Extreme ${axis.leftLabel} leaning`;
+  } else if (axis.score < 45) {
+    positionText = `Committed ${axis.leftLabel} leaning`;
+  } else if (axis.score < 50) {
+    positionText = `Inclined ${axis.leftLabel} leaning`;
+  } else if (axis.score > 60) {
+    positionText = `Extreme ${axis.rightLabel} leaning`;
+  } else if (axis.score > 55) {
+    positionText = `Committed ${axis.rightLabel} leaning`;
+  } else if (axis.score > 50) {
+    positionText = `Inclined ${axis.rightLabel} leaning`;
+  } else {
+    positionText = "Centrist position";
+  }
 
-      pdf.text(`Position: ${positionText}`, margin, y);
-      y += 20;
+  pdf.text(`Position: ${positionText}`, margin, y);
+  y += 20;
 
-      if (index < results.axisResults.length - 1) {
-        y = addSeparator(y);
-      }
-    });
+  if (index < results.axisResults.length - 1) {
+    y += 10; // space between sections
+  }
+});
 
     // Secondary Archetypes
     if (secondaryArchetypes?.length > 0) {
