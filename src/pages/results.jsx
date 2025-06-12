@@ -567,12 +567,19 @@ pdf.setFont("helvetica", "bold");
 pdf.text("Your Political Axis Breakdown", margin, y);
 y += 20;
 
-// Add each axis
 pdf.setFontSize(11);
 pdf.setFont("helvetica", "normal");
 
+// Helper to calculate strength label
+function getPositionStrength(score) {
+  if (score > 80) return "Extreme";
+  if (score >= 70) return "Committed";
+  if (score >= 60) return "Inclined";
+  if (score >= 50) return "Leaning";
+  return "";
+}
+
 results.axisResults.forEach((axis, index) => {
-  // New page if needed
   if (y > pdf.internal.pageSize.getHeight() - 80) {
     pdf.addPage();
     y = 40;
@@ -584,7 +591,6 @@ results.axisResults.forEach((axis, index) => {
 
   pdf.setFont("helvetica", "normal");
 
-  // ✅ Pull and parse left/right percentages from allPercents
   const axisPercent = allPercents[axis.name] || {};
   const leftValue = parseFloat(axisPercent.leftPercent) || 0;
   const rightValue = parseFloat(axisPercent.rightPercent) || 0;
@@ -594,20 +600,20 @@ results.axisResults.forEach((axis, index) => {
   pdf.text(`${axis.rightLabel}: ${rightValue.toFixed(2)}%`, margin, y);
   y += 15;
 
-  // ✅ Determine position dynamically from percentages
   let positionText = "Position: ";
   if (Math.abs(leftValue - rightValue) < 0.01) {
     positionText += "Centrist";
   } else if (leftValue > rightValue) {
-    positionText += `${axis.leftLabel} (${axis.positionStrength})`;
+    const strength = getPositionStrength(leftValue);
+    positionText += `${axis.leftLabel}${strength ? ` (${strength})` : ""}`;
   } else {
-    positionText += `${axis.rightLabel} (${axis.positionStrength})`;
+    const strength = getPositionStrength(rightValue);
+    positionText += `${axis.rightLabel}${strength ? ` (${strength})` : ""}`;
   }
 
   pdf.text(positionText, margin, y);
   y += 15;
 
-  // Add spacing between axis blocks
   if (index < results.axisResults.length - 1) {
     y += 10;
   }
