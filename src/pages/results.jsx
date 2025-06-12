@@ -595,12 +595,14 @@ results.axisResults.forEach((axis, index) => {
   y += 15;
 
   // Use original axis.score to describe position
-const displayPosition =
-  axis.userPosition === "Centered"
-    ? "Centrist"
-    : `${axis.userPosition} (${axis.positionStrength})`;
-
-pdf.text(`Position: ${displayPosition}`, margin, y);
+let traitLabel = axis.userPosition;
+if (traitLabel === "Centered") {
+  pdf.text(`Position: Centrist`, margin, y);
+} else {
+  const isLeft = traitLabel === axis.leftLabel;
+  const label = isLeft ? axis.leftLabel : axis.rightLabel;
+  pdf.text(`Position: ${label} (${axis.positionStrength})`, margin, y);
+}
 
   if (index < results.axisResults.length - 1) {
     y += 10;
