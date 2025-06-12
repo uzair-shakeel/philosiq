@@ -584,26 +584,30 @@ results.axisResults.forEach((axis, index) => {
 
   pdf.setFont("helvetica", "normal");
 
-  // ✅ Pull exact left/right percentages from allPercents
+  // ✅ Pull and parse left/right percentages from allPercents
   const axisPercent = allPercents[axis.name] || {};
-  const leftValue = axisPercent.leftPercent || "N/A";
-  const rightValue = axisPercent.rightPercent || "N/A";
+  const leftValue = parseFloat(axisPercent.leftPercent) || 0;
+  const rightValue = parseFloat(axisPercent.rightPercent) || 0;
 
-  pdf.text(`${axis.leftLabel}: ${leftValue}%`, margin, y);
+  pdf.text(`${axis.leftLabel}: ${leftValue.toFixed(2)}%`, margin, y);
   y += 15;
-  pdf.text(`${axis.rightLabel}: ${rightValue}%`, margin, y);
+  pdf.text(`${axis.rightLabel}: ${rightValue.toFixed(2)}%`, margin, y);
   y += 15;
 
-  // Use original axis.score to describe position
-let traitLabel = axis.userPosition;
-if (traitLabel === "Centered") {
-  pdf.text(`Position: Centrist`, margin, y);
-} else {
-  const isLeft = traitLabel === axis.leftLabel;
-  const label = isLeft ? axis.leftLabel : axis.rightLabel;
-  pdf.text(`Position: ${label} (${axis.positionStrength})`, margin, y);
-}
+  // ✅ Determine position dynamically from percentages
+  let positionText = "Position: ";
+  if (Math.abs(leftValue - rightValue) < 0.01) {
+    positionText += "Centrist";
+  } else if (leftValue > rightValue) {
+    positionText += `${axis.leftLabel} (${axis.positionStrength})`;
+  } else {
+    positionText += `${axis.rightLabel} (${axis.positionStrength})`;
+  }
 
+  pdf.text(positionText, margin, y);
+  y += 15;
+
+  // Add spacing between axis blocks
   if (index < results.axisResults.length - 1) {
     y += 10;
   }
