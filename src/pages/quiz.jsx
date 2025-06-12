@@ -121,13 +121,16 @@ export default function QuizPage() {
   ];
 
   // Function to fetch questions from the API
-  const fetchQuestions = async (limit, includeInShortQuiz = false) => {
+  const fetchQuestions = async (limit, includeInShortQuiz = null) => {
     setIsLoading(true);
     setError(null);
 
     try {
       // Use the public endpoint instead of the authenticated one
-      const url = `/api/questions/public?limit=${limit}&includeInShortQuiz=${includeInShortQuiz}`;
+      const url =
+        includeInShortQuiz !== null
+          ? `/api/questions/public?limit=${limit}&includeInShortQuiz=${includeInShortQuiz}`
+          : `/api/questions/public?limit=${limit}`;
       console.log(`Fetching questions from: ${url}`);
 
       const response = await axios.get(url);
@@ -273,8 +276,8 @@ export default function QuizPage() {
         // Final shuffle to mix questions from different axes
         fetchedQuestions = shuffleArray(selectedQuestions);
       } else {
-        // For full quiz, fetch questions and ensure no duplicates
-        const allQuestions = await fetchQuestions(200, false);
+        // For full quiz, fetch all questions without filtering by includeInShortQuiz
+        const allQuestions = await fetchQuestions(200, null);
 
         if (allQuestions.length === 0) {
           setError("Not enough questions available. Please try again later.");
@@ -403,36 +406,36 @@ export default function QuizPage() {
       // If user is authenticated, save to database
       const token = localStorage.getItem("authToken");
       if (token) {
-      try {
-        const response = await fetch("/api/quiz/save-results", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(resultsData),
-        });
+        try {
+          const response = await fetch("/api/quiz/save-results", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(resultsData),
+          });
 
-        const data = await response.json();
+          const data = await response.json();
 
-        if (!response.ok) {
+          if (!response.ok) {
             console.error("Failed to save results:", data.message);
             // Don't block navigation if saving fails
-        }
+          }
 
           // Track successful quiz completion with save
-        track("quiz_completed", {
-          quizType: quizType === "short" ? "short" : "full",
-          archetype: finalResults.archetype?.name || "Unknown",
+          track("quiz_completed", {
+            quizType: quizType === "short" ? "short" : "full",
+            archetype: finalResults.archetype?.name || "Unknown",
             saved: true,
-        });
-      } catch (error) {
-        console.error("Error saving results:", error);
-        // Don't block navigation if saving fails
-        track("quiz_save_error", {
-          error: error.message,
-          quizType: quizType === "short" ? "short" : "full",
-        });
+          });
+        } catch (error) {
+          console.error("Error saving results:", error);
+          // Don't block navigation if saving fails
+          track("quiz_save_error", {
+            error: error.message,
+            quizType: quizType === "short" ? "short" : "full",
+          });
         }
       } else {
         // Track quiz completion without save
@@ -446,7 +449,9 @@ export default function QuizPage() {
       // Ensure minimum loading time before navigation
       const elapsedTime = Date.now() - startTime;
       if (elapsedTime < MIN_LOADING_TIME) {
-        await new Promise(resolve => setTimeout(resolve, MIN_LOADING_TIME - elapsedTime));
+        await new Promise((resolve) =>
+          setTimeout(resolve, MIN_LOADING_TIME - elapsedTime)
+        );
       }
 
       // Navigate to results page

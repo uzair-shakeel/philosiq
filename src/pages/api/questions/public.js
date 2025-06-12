@@ -22,11 +22,14 @@ export default async function handler(req, res) {
 
     // Apply additional filters if provided
     if (req.query.axis) query.axis = req.query.axis;
+
+    // Only filter by includeInShortQuiz if explicitly provided
     if (req.query.includeInShortQuiz === "true") {
       query.includeInShortQuiz = true;
     } else if (req.query.includeInShortQuiz === "false") {
       query.includeInShortQuiz = { $ne: true };
     }
+    // If includeInShortQuiz is not provided, return all questions regardless of that field
 
     // Get questions with optional limit
     let questions;
