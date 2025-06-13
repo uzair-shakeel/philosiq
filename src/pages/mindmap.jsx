@@ -474,10 +474,20 @@ export default function MindMap() {
           ) : (
             <>
               {/* Archetype Distribution */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-xl font-bold mb-6">
-                  Archetype Distribution
-                </h2>
+                  <div className="flex items-center mb-6">
+                    <h2 className="text-xl font-bold mr-2">Archetype Distribution</h2>
+                    <div className="relative group">
+                      <button
+                        className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-xs font-bold focus:outline-none"
+                        title="What is this?"
+                      >
+                        ?
+                      </button>
+                      <div className="absolute top-6 left-0 w-64 p-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                        This section shows the percentage of quiz takers who fall into each political archetype based on their quiz answers.
+                      </div>
+                    </div>
+                  </div>
 
                 {sortedArchetypes.length === 0 ? (
                   <p className="text-gray-500 text-center py-4">
