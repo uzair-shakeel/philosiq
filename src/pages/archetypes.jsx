@@ -484,13 +484,13 @@ export default function ArchetypePage() {
         <button
           key={trait}
           onClick={() => handleFilterClick(trait)}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-all w-full text-center ${
-            selectedFilters.includes(trait)
-              ? "bg-primary-maroon text-white"
-              : isTraitDisabled(trait)
-              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-          }`}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all w-full text-center ${
+              selectedFilters.includes(trait)
+                ? "bg-primary-maroon text-white"
+                : isTraitDisabled(trait)
+                ? "bg-gray-300 text-gray-400 cursor-not-allowed"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
           disabled={isTraitDisabled(trait)}
         >
           {trait}
