@@ -424,16 +424,16 @@ function getPositionDescription(axis, score, strength) {
 
   // Get the appropriate side label based on the score
   let sideLabel;
-  if (canonicalAxis === "Equity vs. Free Market") {
-    sideLabel = score < 50 ? "Free Market" : "Equity";
-  } else if (canonicalAxis === "Libertarian vs. Authoritarian") {
-    sideLabel = score < 50 ? "Authoritarian" : "Libertarian";
-  } else if (canonicalAxis === "Progressive vs. Conservative") {
-    sideLabel = score < 50 ? "Conservative" : "Progressive";
-  } else if (canonicalAxis === "Secular vs. Religious") {
-    sideLabel = score < 50 ? "Religious" : "Secular";
-  } else if (canonicalAxis === "Globalism vs. Nationalism") {
-    sideLabel = score < 50 ? "Nationalist" : "Globalist";
+    if (canonicalAxis === "Equity vs. Free Market") {
+      sideLabel = score < 50 ? "Equity" : "Free Market";
+    } else if (canonicalAxis === "Libertarian vs. Authoritarian") {
+      sideLabel = score < 50 ? "Libertarian" : "Authoritarian";
+    } else if (canonicalAxis === "Progressive vs. Conservative") {
+      sideLabel = score < 50 ? "Progressive" : "Conservative";
+    } else if (canonicalAxis === "Secular vs. Religious") {
+      sideLabel = score < 50 ? "Secular" : "Religious";
+    } else if (canonicalAxis === "Globalism vs. Nationalism") {
+      sideLabel = score < 50 ? "Globalist" : "Nationalist";
   } else {
     return "Your position on this axis reflects a balance between the opposing viewpoints.";
   }
@@ -476,7 +476,7 @@ function getPositionDescription(axis, score, strength) {
         "You envision a fundamentally transformed society where economic systems are rebuilt around principles of collective ownership, universal dignity, and justice. You may advocate for the abolition or radical restructuring of traditional market systems, believing that capitalism inherently breeds inequality. You seek a world where resources and wealth are equitably shared, and where human needs take precedence over profit or competition.",
     },
 
-    "Free Market": {
+    Free Market: {
       Leaning:
         "You generally favor market-based solutions to social and economic challenges, viewing private enterprise as a key engine of innovation and individual empowerment. While you acknowledge the need for some regulation to ensure fair play, you believe that competition and consumer choice usually lead to better outcomes than centralized planning.",
       Inclined:
