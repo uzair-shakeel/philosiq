@@ -488,9 +488,12 @@ export default function MindMap() {
                     {sortedArchetypes.map(([archetype, percentage]) => (
                       <div key={archetype} className="mb-2">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm font-medium">
-                            {archetype}
-                          </span>
+                            <Link
+                              href={`/archetypes/${getArchetypeCode(archetype)}`}
+                              className="text-sm font-medium text-primary-maroon hover:underline"
+                            >
+                              {archetype}
+                            </Link>
                           <span className="text-sm text-gray-600">
                             {percentage.toFixed(1)}%
                           </span>
