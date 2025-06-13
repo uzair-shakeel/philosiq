@@ -530,7 +530,6 @@ export default function MindMap() {
                     ))}
                   </div>
                 )}
-              </div>
 
               {/* Axis Letter Distribution */}
               <div className="bg-white rounded-lg shadow-lg p-6 mt-8">
