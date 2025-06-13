@@ -533,7 +533,20 @@ export default function MindMap() {
 
               {/* Axis Letter Distribution */}
               <div className="bg-white rounded-lg shadow-lg p-6 mt-8">
-                <h2 className="text-xl font-bold mb-6">Axis Distribution</h2>
+                  <div className="flex items-center mb-6">
+                    <h2 className="text-xl font-bold mr-2">Axis Distribution</h2>
+                    <div className="relative group">
+                      <button
+                        className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-xs font-bold focus:outline-none"
+                        title="What is this?"
+                      >
+                        ?
+                      </button>
+                      <div className="absolute top-6 left-0 w-64 p-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                        This section displays how quiz takers are distributed across each ideological axis (e.g., Equity vs. Free Market). It helps visualize the range of perspectives within your audience.
+                      </div>
+                    </div>
+                  </div>
                 {axisData && Object.keys(axisData).length > 0 ? (
                   <div className="space-y-6">
                     {Object.entries(axisData).map(([axis, distribution]) => {
