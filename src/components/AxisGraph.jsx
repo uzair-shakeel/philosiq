@@ -485,8 +485,8 @@ function getPositionDescription(axis, score, strength) {
         "You firmly believe in the power of laissez-faire capitalism, advocating for low taxes, minimal government oversight, and robust protection of private property. You view regulation and redistribution not just as inefficient, but as infringements on individual liberty and barriers to prosperity. Markets, you argue, are self-correcting and should be trusted to guide society forward.",
       Extreme:
         "You envision a society built almost entirely around voluntary exchange, where markets—not governments—solve nearly all problems, from healthcare to education. You may support privatizing public services, abolishing welfare programs, and reducing the state’s role to little more than defending property rights. Any form of economic coercion by the state is seen as a threat to freedom and a slippery slope toward authoritarianism.",
-
     },
+    
     Libertarian: {
       Leaning:
         "You lean toward individual freedom and civil liberties, but accept some level of government oversight when necessary.",
