@@ -596,79 +596,33 @@ export default function QuizPage() {
                   </div>
                 </div>
 
-                    {/* MindMap Contribute Section - Shown above Full Quiz */}
-                    <div className="mb-6 bg-white rounded-lg shadow-lg overflow-hidden no-print">
-                      <div className="bg-gradient-to-r from-primary-maroon to-secondary-darkBlue p-6 text-white">
-                        <h2 className="text-2xl font-bold mb-2">Contribute to MindMap</h2>
-                        <p>
-                          Help us understand how demographics correlate with political
-                          beliefs by anonymously contributing your data.
-                        </p>
-                        <p className="text-sm text-blue-200 mt-2">
-                          <FaInfoCircle className="inline-block mr-1" />
-                          This feature is exclusively available for full quiz results.
-                        </p>
-                      </div>
-                      <div className="p-6">
-                        <div className="flex flex-col md:flex-row items-center justify-between">
-                          <div className="mb-4 md:mb-0 md:mr-6">
-                            <h3 className="text-lg font-semibold mb-2">What is MindMap?</h3>
-                            <p className="text-gray-600">
-                              MindMap visualizes how demographic factors like age,
-                              education, and location correlate with political archetypes.
-                              Your anonymous contribution helps build a more comprehensive
-                              picture.
-                            </p>
-                            <button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                window.location.href = "/mindmap";
-                              }}
-                              className="mt-3 text-primary-maroon hover:text-primary-darkMaroon flex items-center"
-                            >
-                              <span>View MindMap</span>
-                              <FaArrowRight className="ml-1" />
-                            </button>
-                          </div>
-                          <button
-                            onClick={() => {
-                              setShowMindMapModal(true);
-                            }}
-                            className="bg-primary-maroon text-white px-6 py-3 rounded-full flex items-center text-start font-medium hover:shadow-lg transition-all"
-                          >
-                            <FaChartPie size={27} className="mr-2 min-w-10" />
-                            Contribute Anonymously
-                          </button>
-                        </div>
-                      </div>
+                {/* Full Quiz Option */}
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                  <div className="bg-primary-maroon text-white p-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-2xl font-bold">Full Quiz</h2>
+                      <FaClipboardCheck className="text-3xl" />
                     </div>
-                    
-                    {/* Full Quiz Option */}
-                    <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                      <div className="bg-primary-maroon text-white p-6">
-                        <div className="flex justify-between items-center mb-4">
-                          <h2 className="text-2xl font-bold">Full Quiz</h2>
-                          <FaClipboardCheck className="text-3xl" />
-                        </div>
-                        <p className="text-sm opacity-90">
-                          88 questions • ~25 minutes
-                        </p>
-                      </div>
-                      <div className="p-6">
-                        <p className="text-gray-600 mb-6">
-                          Explore the full spectrum of your political beliefs with
-                          our comprehensive, in-depth test. This full quiz provides
-                          the most accurate results by covering a broad range of key
-                          topics across the ideological spectrum.
-                        </p>
-                        <button
-                          onClick={() => startQuiz("full")}
-                          className="w-full bg-primary-maroon hover:bg-primary-darkMaroon text-white font-bold py-3 px-4 rounded transition-colors duration-300"
-                        >
-                          Start Full Quiz
-                        </button>
-                      </div>
-                    </div>
+                    <p className="text-sm opacity-90">
+                      88 questions • ~25 minutes
+                    </p>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-gray-600 mb-6">
+                      Explore the full spectrum of your political beliefs with
+                      our comprehensive, in-depth test. This full quiz provides
+                      the most accurate results by covering a broad range of key
+                      topics across the ideological spectrum.
+                    </p>
+                    <button
+                      onClick={() => startQuiz("full")}
+                      className="w-full bg-primary-maroon hover:bg-primary-darkMaroon text-white font-bold py-3 px-4 rounded transition-colors duration-300"
+                    >
+                      Start Full Quiz
+                    </button>
+                  </div>
+                </div>
+              </div>
 
               {/* Political Axes Information Section */}
               <div className="mt-12 bg-white rounded-lg shadow-lg p-6">
