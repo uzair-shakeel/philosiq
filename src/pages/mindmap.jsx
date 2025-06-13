@@ -346,7 +346,7 @@ export default function MindMap() {
             <h1 className="text-4xl font-bold mb-2">MindMap</h1>
             <p className="text-lg text-gray-600">
               Discover how different demographics align with political
-              archetypes
+              archetypes.
             </p>
             {totalContributions > 0 && (
               <div className="mt-4 p-2 bg-blue-50 text-blue-700 rounded-full inline-block px-4">
@@ -673,7 +673,7 @@ export default function MindMap() {
               Contribute to Our MindMap
             </h2>
             <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Help us build a more comprehensive view of how demographics and
+              Take the <strong>full quiz</strong> and help us build a more comprehensive view of how demographics and
               political beliefs intersect by anonymously contributing your data.
             </p>
             <Link
