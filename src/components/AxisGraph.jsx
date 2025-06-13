@@ -474,7 +474,7 @@ function getPositionDescription(axis, score, strength) {
         "You firmly believe that economic fairness is foundational to a just society. You view wealth redistribution, universal healthcare, affordable housing, and strong labor protections not as optional ideals, but as essential rights. For you, markets should exist only when they serve the public good, and unchecked capitalism is seen as a source of societal harm that needs to be curtailed by democratic institutions.",
       Extreme:
         "You envision a fundamentally transformed society where economic systems are rebuilt around principles of collective ownership, universal dignity, and justice. You may advocate for the abolition or radical restructuring of traditional market systems, believing that capitalism inherently breeds inequality. You seek a world where resources and wealth are equitably shared, and where human needs take precedence over profit or competition.",
-    }
+    },
 
     "Free Market": {
       Leaning:
@@ -485,7 +485,6 @@ function getPositionDescription(axis, score, strength) {
         "You firmly believe in the power of laissez-faire capitalism, advocating for low taxes, minimal government oversight, and robust protection of private property. You view regulation and redistribution not just as inefficient, but as infringements on individual liberty and barriers to prosperity. Markets, you argue, are self-correcting and should be trusted to guide society forward.",
       Extreme:
         "You envision a society built almost entirely around voluntary exchange, where markets—not governments—solve nearly all problems, from healthcare to education. You may support privatizing public services, abolishing welfare programs, and reducing the state’s role to little more than defending property rights. Any form of economic coercion by the state is seen as a threat to freedom and a slippery slope toward authoritarianism.",
-    }
 
     },
     Libertarian: {
