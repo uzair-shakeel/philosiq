@@ -384,10 +384,10 @@ export default function AxisGraph({
           </span>
         </div>
 
+        {/* Marker for user's position */}
         <div
-          className="absolute top-1/2 w-[10px] h-[10px] bg-white border-[2px] border-black rounded-full z-30 transform -translate-x-1/2 -translate-y-1/2 shadow-md"
+          className="absolute top-0 bottom-0 w-1 h-full bg-white border border-black z-30 transform -translate-x-1/2"
           style={{ left: `${markerVisiblePosition}%` }}
-          title={`Your position: ${safeUserPosition} (${strengthLabel})`}
         ></div>
       </div>
 
