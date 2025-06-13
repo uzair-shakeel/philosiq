@@ -424,8 +424,8 @@ function getPositionDescription(axis, score, strength) {
 
   // Get the appropriate side label based on the score
   let sideLabel;
-  if (canonicalAxis === "Equity vs. Free Market") {
-    sideLabel = score < 50 ? "Free Market" : "Equity";
+    if (canonicalAxis === "Equity vs. Free Market") {
+      sideLabel = score < 50 ? "Equity" : "Free Market";
   } else if (canonicalAxis === "Libertarian vs. Authoritarian") {
     sideLabel = score < 50 ? "Authoritarian" : "Libertarian";
   } else if (canonicalAxis === "Progressive vs. Conservative") {
