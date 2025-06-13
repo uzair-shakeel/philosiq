@@ -464,117 +464,117 @@ function getPositionDescription(axis, score, strength) {
   }
 
   // Comprehensive descriptions for each position and strength level
-  const descriptions = {
-    Equity: {
-      Leaning:
-        "You show a moderate preference for equity-based solutions, believing that everyone should have a fair shot at success, even if starting from different circumstances. While you recognize the importance of markets in driving innovation and growth, you believe government should step in to correct for structural disadvantages and provide a baseline of opportunity for all citizens.",
-      Inclined:
-        "You tend to support policies that actively reduce inequality through taxation, social programs, and accessible public services. You see economic disparity not just as a byproduct of the market, but as a social and moral issue. While you're not entirely against free markets, you believe they must operate under strict rules to prevent exploitation and to protect the most vulnerable in society.",
-      Committed:
-        "You firmly believe that economic fairness is foundational to a just society. You view wealth redistribution, universal healthcare, affordable housing, and strong labor protections not as optional ideals, but as essential rights. For you, markets should exist only when they serve the public good, and unchecked capitalism is seen as a source of societal harm that needs to be curtailed by democratic institutions.",
-      Extreme:
-        "You envision a fundamentally transformed society where economic systems are rebuilt around principles of collective ownership, universal dignity, and justice. You may advocate for the abolition or radical restructuring of traditional market systems, believing that capitalism inherently breeds inequality. You seek a world where resources and wealth are equitably shared, and where human needs take precedence over profit or competition.",
-    },
+const descriptions = {
+  "Equity": {
+    Leaning:
+      "You believe fairness means supporting those who face structural disadvantages. You value equal access to opportunity, even if it requires government help.",
+    Inclined:
+      "You support programs that reduce inequality, like healthcare and education access. You think the market alone can't guarantee a fair outcome.",
+    Committed:
+      "You see economic justice as essential and favor policies like wealth redistribution and strong labor protections to level the playing field.",
+    Extreme:
+      "You believe the system needs fundamental change to ensure shared wealth and dignity. Markets should serve society, not dominate it.",
+  },
 
-    "Free Market": {
-      Leaning:
-        "You generally favor market-based solutions to social and economic challenges, viewing private enterprise as a key engine of innovation and individual empowerment. While you acknowledge the need for some regulation to ensure fair play, you believe that competition and consumer choice usually lead to better outcomes than centralized planning.",
-      Inclined:
-        "You prefer a system where the government plays a minimal role in economic affairs. You trust that free markets, when left largely to their own devices, will allocate resources efficiently and reward hard work. Taxes, subsidies, and excessive regulation are seen as distortions that often do more harm than good.",
-      Committed:
-        "You firmly believe in the power of laissez-faire capitalism, advocating for low taxes, minimal government oversight, and robust protection of private property. You view regulation and redistribution not just as inefficient, but as infringements on individual liberty and barriers to prosperity. Markets, you argue, are self-correcting and should be trusted to guide society forward.",
-      Extreme:
-        "You envision a society built almost entirely around voluntary exchange, where markets—not governments—solve nearly all problems, from healthcare to education. You may support privatizing public services, abolishing welfare programs, and reducing the state’s role to little more than defending property rights. Any form of economic coercion by the state is seen as a threat to freedom and a slippery slope toward authoritarianism.",
-    },
-    
-      "Libertarian": {
-        Leaning:
-          "You lean toward individual freedom and personal autonomy, believing that people should generally be trusted to make their own choices. While you accept a role for government in limited matters like public safety, you prefer solutions that reduce coercion and maximize liberty.",
-        Inclined:
-          "You prefer a political system where government interference is minimized and civil liberties are strongly protected. You believe that voluntary association and free expression are the cornerstones of a healthy society, and that too much regulation stifles personal and economic freedom.",
-        Committed:
-          "You strongly believe that freedom from state intrusion is essential to human flourishing. You advocate for minimal government, low taxation, and a robust defense of personal rights. In your view, individual liberty should be the default, and state power must be rigorously constrained.",
-        Extreme:
-          "You advocate for a radically free society where nearly all aspects of life are governed by voluntary interaction rather than government force. You may support abolishing entire government functions, including taxes, police, and welfare programs, favoring a decentralized or even stateless model rooted in personal sovereignty.",
-      },
-      
-      "Authoritarian": {
-        Leaning:
-          "You think society benefits from a little more structure and discipline. While you value personal freedoms, you also believe government should play a firmer role in upholding public order and ensuring stability.",
-        Inclined:
-          "You prefer a strong government that maintains law, tradition, and national cohesion. You see centralized authority as necessary to counter social fragmentation and to enforce values that bind society together.",
-        Committed:
-          "You believe that an orderly, functioning society depends on decisive leadership and institutional strength. You support top-down governance, loyalty to the state, and the use of authority to maintain unity and suppress harmful dissent.",
-        Extreme:
-          "You favor a powerful, centralized state that controls many aspects of life in order to preserve national identity, morality, and order. You may support censorship, surveillance, and heavy regulation as tools to eliminate chaos and enforce discipline across society.",
-      },
-      
-      "Progressive": {
-        Leaning:
-          "You support moderate reforms aimed at improving society, especially in areas like civil rights, education, and economic justice. You’re open to new ideas and social experimentation that challenge outdated norms.",
-        Inclined:
-          "You favor a future-focused society, open to innovation and inclusive of marginalized voices. You believe change is necessary for moral and social progress, even if it means confronting tradition and entrenched interests.",
-        Committed:
-          "You strongly advocate for comprehensive societal reform to advance equality, sustainability, and justice. You view progress as both a moral and practical imperative, and believe government and institutions must evolve with changing times.",
-        Extreme:
-          "You envision a complete transformation of society—politically, culturally, and economically. You may seek to dismantle systemic power structures and replace them with radically inclusive and equitable alternatives. In your view, clinging to old norms only hinders human progress.",
-      },
-      
-      "Conservative": {
-        Leaning:
-          "You respect tradition and established systems, believing that they provide valuable stability and wisdom. While you accept some change is inevitable, it should be cautious and well considered.",
-        Inclined:
-          "You believe time-tested values, cultural heritage, and institutions form the backbone of a stable society. You support reforms only when they uphold order, responsibility, and respect for tradition.",
-        Committed:
-          "You strongly uphold traditional norms, religious principles, and a moral social fabric. You see progressive change as often misguided or dangerous, and advocate for preserving the cultural and institutional status quo.",
-        Extreme:
-          "You advocate for a society firmly rooted in tradition, hierarchy, and cultural continuity. You may resist modern values entirely, seeking to reverse social changes you view as corrosive and restore older ways of life as the foundation of national strength.",
-      },
-      
-      "Secular": {
-        Leaning:
-          "You prefer a clear boundary between religious belief and public decision-making. While you respect faith on a personal level, you believe government and policy should remain neutral and rational.",
-        Inclined:
-          "You believe that religion should remain private, and that secular ethics grounded in reason and universal values are the best foundation for law and governance. You are cautious about religious influence in politics or education.",
-        Committed:
-          "You strongly support a secular society where rational inquiry and pluralism take precedence. You view religious institutions as having no place in crafting public policy, and favor strict separation between church and state.",
-        Extreme:
-          "You advocate for a fully secular public sphere, free from religious influence or symbolism. You may view organized religion as inherently regressive or oppressive, and believe society should be grounded entirely in science, logic, and humanist principles.",
-      },
-      
-      "Religious": {
-        Leaning:
-          "You see religious values as offering useful moral guidance for individuals and society. While not necessarily central to governance, you believe faith has an important role to play in public life.",
-        Inclined:
-          "You believe that religious beliefs and traditions provide meaning, cohesion, and moral structure to society. You support policies and cultural norms that reflect those values in the public sphere.",
-        Committed:
-          "You believe religion is a vital foundation for law, ethics, and community. You support a society where religious teachings inform governance, public policy, and social expectations.",
-        Extreme:
-          "You advocate for a theologically grounded society in which religious authority shapes law and morality. You may support formal integration of religious doctrine into state functions, seeing faith as inseparable from public life and national identity.",
-      },
-      
-      "Globalist": {
-        Leaning:
-          "You lean toward international cooperation and shared responsibility. While you recognize national interests, you believe that many challenges—like climate change and human rights—require global solutions.",
-        Inclined:
-          "You support interconnected economies, cross-border partnerships, and global institutions. You see cultural exchange and multilateralism as positive forces for peace, prosperity, and understanding.",
-        Committed:
-          "You believe humanity is stronger when nations work together. You support global frameworks that prioritize shared values over national rivalry, and may view yourself as a citizen of the world as much as of any one country.",
-        Extreme:
-          "You advocate for a post-national world in which global governance, human solidarity, and universal values transcend borders. You may support ceding national sovereignty to international bodies in the name of unity, justice, and planetary stewardship.",
-      },
-      
-      "Nationalist": {
-        Leaning:
-          "You lean toward prioritizing your country’s interests, culture, and identity—while still valuing peaceful global relations. You believe national pride is healthy and cohesion is worth preserving.",
-        Inclined:
-          "You believe that nations should put their own people first. You favor strong borders, self-determination, and cultural preservation over international commitments that might dilute sovereignty.",
-        Committed:
-          "You strongly prioritize national independence, tradition, and unity. You are skeptical of global institutions and advocate for policies that maintain a distinct national identity and economic self-sufficiency.",
-        Extreme:
-          "You advocate for a fully self-reliant nation, culturally and economically. You may oppose immigration, foreign influence, or multilateralism, and support policies aimed at restoring national greatness and defending against global homogenization.",
-      },
-  };
+  "Free Market": {
+    Leaning:
+      "You generally favor market-based solutions to social and economic challenges, viewing private enterprise as a key engine of innovation and individual empowerment. While you acknowledge the need for some regulation to ensure fair play, you believe that competition and consumer choice usually lead to better outcomes than centralized planning.",
+    Inclined:
+      "You support minimal government interference in the economy and trust the market to reward effort and efficiency more than regulation does.",
+    Committed:
+      "You believe free markets work best with limited taxes and regulation. Government should stay out of business unless absolutely necessary.",
+    Extreme:
+      "You see voluntary exchange as the ideal system and believe the state should play a minimal role in the economy, if any at all.",
+  },
+
+  "Libertarian": {
+    Leaning:
+      "You believe people should generally be free to make their own choices without government interference, except for basic safety or rights.",
+    Inclined:
+      "You support strong personal freedoms and minimal state involvement in private matters, favoring individual responsibility over control.",
+    Committed:
+      "You think government should only handle essential functions like defense and leave most decisions to individuals and communities.",
+    Extreme:
+      "You favor a society with almost no government power, trusting voluntary cooperation and personal freedom to guide social order.",
+  },
+
+  "Authoritarian": {
+    Leaning:
+      "You think a bit more order and control helps society function better, even if it limits some freedoms.",
+    Inclined:
+      "You support strong leadership and rules to maintain order, tradition, and national unity in a changing world.",
+    Committed:
+      "You believe centralized authority is necessary to enforce values and protect the nation from instability or division.",
+    Extreme:
+      "You favor a powerful state that prioritizes unity, discipline, and moral order, even if it reduces individual rights.",
+  },
+
+  "Progressive": {
+    Leaning:
+      "You lean toward change and reform, believing society should evolve to address inequality and outdated systems.",
+    Inclined:
+      "You support inclusive policies and new ideas that promote fairness and adapt to modern challenges.",
+    Committed:
+      "You believe progress is vital and that institutions must be reformed to reflect values like justice and sustainability.",
+    Extreme:
+      "You seek major transformation to replace unjust systems with new, equitable structures that better serve everyone.",
+  },
+
+  "Conservative": {
+    Leaning:
+      "You prefer gradual change and believe tradition offers valuable guidance in keeping society stable and functional.",
+    Inclined:
+      "You support preserving cultural values and established systems, trusting that slow change is better than sudden shifts.",
+    Committed:
+      "You believe in upholding tradition, order, and long-standing institutions to protect society from decline or chaos.",
+    Extreme:
+      "You favor returning to traditional norms and social structures, rejecting modern trends that undermine cultural stability.",
+  },
+
+  "Secular": {
+    Leaning:
+      "You value keeping religion separate from public life, believing policy should be based on reason and shared values.",
+    Inclined:
+      "You believe laws should reflect universal principles, not religious doctrine, and that government should stay neutral.",
+    Committed:
+      "You see secularism as key to fairness, and think religion should not influence law, education, or public policy.",
+    Extreme:
+      "You support removing religious influence from all public institutions, favoring a society grounded in reason and science.",
+  },
+
+  "Religious": {
+    Leaning:
+      "You see religious values as a helpful moral guide and believe they can positively shape public life and ethics.",
+    Inclined:
+      "You support the presence of religious influence in society and policy, believing faith helps build moral order.",
+    Committed:
+      "You believe faith should inform public decisions and culture, offering structure and values for the common good.",
+    Extreme:
+      "You support a society where religion plays a central role in law and governance, guiding both public and private life.",
+  },
+
+  "Globalist": {
+    Leaning:
+      "You support global cooperation to solve shared problems and see international partnerships as generally positive.",
+    Inclined:
+      "You value cross-border collaboration and believe global institutions help promote peace, trade, and shared progress.",
+    Committed:
+      "You support global governance and cooperation over national competition, seeing yourself as part of a wider world.",
+    Extreme:
+      "You believe national borders should matter less and support building a unified global society with shared values.",
+  },
+
+  "Nationalist": {
+    Leaning:
+      "You believe your country’s interests should come first, but still see value in respectful global cooperation.",
+    Inclined:
+      "You support protecting your nation’s culture, economy, and sovereignty, even if that limits global involvement.",
+    Committed:
+      "You prioritize national identity and self-rule, favoring policies that reduce foreign influence and preserve traditions.",
+    Extreme:
+      "You favor a nation that is fully self-reliant, culturally strong, and free from global entanglements or outside control.",
+  },
+};
 
   // Return the appropriate description or a default message if not found
   return (
