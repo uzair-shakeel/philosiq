@@ -6,7 +6,7 @@ export default function ArchetypePage() {
   // Define trait pairs (opposites)
   const traitPairs = [
     ["Equity", "Free Market"],
-    ["Libertarian", "Authoritarian", "Authority"],
+    ["Libertarian", "Authoritarian"],
     ["Progressive", "Conservative"],
     ["Secular", "Religious"],
     ["Globalist", "Nationalist"],
@@ -298,7 +298,7 @@ export default function ArchetypePage() {
       name: "The Overlord",
       traits: [
         "Free Market",
-        "Authority",
+        "Authoritarian",
         "Progressive",
         "Secular",
         "Globalist",
@@ -310,7 +310,7 @@ export default function ArchetypePage() {
       name: "The Corporatist",
       traits: [
         "Free Market",
-        "Authority",
+        "Authoritarian",
         "Progressive",
         "Secular",
         "Nationalist",
@@ -322,7 +322,7 @@ export default function ArchetypePage() {
       name: "The Moralizer",
       traits: [
         "Free Market",
-        "Authority",
+        "Authoritarian",
         "Progressive",
         "Religious",
         "Globalist",
@@ -334,7 +334,7 @@ export default function ArchetypePage() {
       name: "The Builder",
       traits: [
         "Free Market",
-        "Authority",
+        "Authoritarian",
         "Progressive",
         "Religious",
         "Nationalist",
@@ -346,7 +346,7 @@ export default function ArchetypePage() {
       name: "The Executive",
       traits: [
         "Free Market",
-        "Authority",
+        "Authoritarian",
         "Conservative",
         "Secular",
         "Globalist",
@@ -358,7 +358,7 @@ export default function ArchetypePage() {
       name: "The Ironhand",
       traits: [
         "Free Market",
-        "Authority",
+        "Authoritarian",
         "Conservative",
         "Secular",
         "Nationalist",
@@ -370,7 +370,7 @@ export default function ArchetypePage() {
       name: "The Regent",
       traits: [
         "Free Market",
-        "Authority",
+        "Authoritarian",
         "Conservative",
         "Religious",
         "Globalist",
@@ -382,7 +382,7 @@ export default function ArchetypePage() {
       name: "The Crusader",
       traits: [
         "Free Market",
-        "Authority",
+        "Authoritarian",
         "Conservative",
         "Religious",
         "Nationalist",
