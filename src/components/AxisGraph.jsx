@@ -424,19 +424,19 @@ function getPositionDescription(axis, score, strength) {
 
   // Get the appropriate side label based on the score
   let sideLabel;
-if (canonicalAxis === "Equity vs. Free Market") {
-  sideLabel = score >= 50 ? "Equity" : "Free Market";
-} else if (canonicalAxis === "Libertarian vs. Authoritarian") {
-  sideLabel = score >= 50 ? "Libertarian" : "Authoritarian";
-} else if (canonicalAxis === "Progressive vs. Conservative") {
-  sideLabel = score >= 50 ? "Progressive" : "Conservative";
-} else if (canonicalAxis === "Secular vs. Religious") {
-  sideLabel = score >= 50 ? "Secular" : "Religious";
-} else if (canonicalAxis === "Globalism vs. Nationalism") {
-  sideLabel = score >= 50 ? "Globalist" : "Nationalist";
-  } else {
-    return "Your position on this axis reflects a balance between the opposing viewpoints.";
-  }
+    if (canonicalAxis === "Equity vs. Free Market") {
+      sideLabel = score < 50 ? "Free Market" : "Equity";
+    } else if (canonicalAxis === "Libertarian vs. Authoritarian") {
+      sideLabel = score < 50 ? "Authoritarian" : "Libertarian";
+    } else if (canonicalAxis === "Progressive vs. Conservative") {
+      sideLabel = score < 50 ? "Conservative" : "Progressive";
+    } else if (canonicalAxis === "Secular vs. Religious") {
+      sideLabel = score < 50 ? "Religious" : "Secular";
+    } else if (canonicalAxis === "Globalism vs. Nationalism") {
+      sideLabel = score < 50 ? "Nationalist" : "Globalist";
+    } else {
+      return "Your position on this axis reflects a balance between the opposing viewpoints.";
+    }
 
   // Map the strength to the new categories
   let strengthCategory;
