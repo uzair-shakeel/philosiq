@@ -498,6 +498,17 @@ export default function ArchetypePage() {
       ))}
     </div>
   ))}
+  {/* Clear Button */}
+  {selectedFilters.length > 0 && (
+    <div className="mt-4 col-span-5 text-center">
+      <button
+        onClick={clearFilters}
+        className="px-6 py-2 bg-primary-maroon text-white rounded-md hover:bg-primary-maroon/90 transition-all"
+      >
+        Clear All Filters
+      </button>
+    </div>
+  )}
 </div>
 
           {/* All Archetypes Grid */}
