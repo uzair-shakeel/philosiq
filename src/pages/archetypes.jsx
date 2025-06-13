@@ -500,26 +500,6 @@ export default function ArchetypePage() {
   ))}
 </div>
 
-            <div className="flex flex-wrap gap-2">
-              {allTraits.map((trait) => (
-                <button
-                  key={trait}
-                  onClick={() => handleFilterClick(trait)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedFilters.includes(trait)
-                      ? "bg-primary-maroon text-white"
-                      : isTraitDisabled(trait)
-                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                  disabled={isTraitDisabled(trait)}
-                >
-                  {trait}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* All Archetypes Grid */}
           <div className="mb-20">
             <h2 className="text-3xl font-bold text-center text-secondary-darkBlue mb-8">
