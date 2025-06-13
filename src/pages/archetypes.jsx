@@ -477,20 +477,28 @@ export default function ArchetypePage() {
           </div>
 
           {/* Filter Section */}
-          <div className="mb-10 bg-white rounded-lg shadow-md p-6">
-            <div className="flex flex-wrap items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-secondary-darkBlue">
-                Filter Archetypes
-              </h3>
-              {selectedFilters.length > 0 && (
-                <button
-                  onClick={clearFilters}
-                  className="text-sm text-primary-maroon hover:underline"
-                >
-                  Clear all filters
-                </button>
-              )}
-            </div>
+         <div className="grid grid-cols-5 gap-4">
+  {traitPairs.map(([first, second], index) => (
+    <div key={index} className="flex flex-col gap-2 items-center">
+      {[first, second].map((trait) => (
+        <button
+          key={trait}
+          onClick={() => handleFilterClick(trait)}
+          className={`px-4 py-2 rounded-full text-sm font-medium transition-all w-full text-center ${
+            selectedFilters.includes(trait)
+              ? "bg-primary-maroon text-white"
+              : isTraitDisabled(trait)
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          }`}
+          disabled={isTraitDisabled(trait)}
+        >
+          {trait}
+        </button>
+      ))}
+    </div>
+  ))}
+</div>
 
             <div className="flex flex-wrap gap-2">
               {allTraits.map((trait) => (
