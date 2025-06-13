@@ -475,7 +475,6 @@ function getPositionDescription(axis, score, strength) {
       Extreme:
         "You envision a fundamentally transformed society where economic systems are rebuilt around principles of collective ownership, universal dignity, and justice. You may advocate for the abolition or radical restructuring of traditional market systems, believing that capitalism inherently breeds inequality. You seek a world where resources and wealth are equitably shared, and where human needs take precedence over profit or competition.",
     },
-
     Free Market: {
       Leaning:
         "You generally favor market-based solutions to social and economic challenges, viewing private enterprise as a key engine of innovation and individual empowerment. While you acknowledge the need for some regulation to ensure fair play, you believe that competition and consumer choice usually lead to better outcomes than centralized planning.",
@@ -486,7 +485,6 @@ function getPositionDescription(axis, score, strength) {
       Extreme:
         "You envision a society built almost entirely around voluntary exchange, where markets—not governments—solve nearly all problems, from healthcare to education. You may support privatizing public services, abolishing welfare programs, and reducing the state’s role to little more than defending property rights. Any form of economic coercion by the state is seen as a threat to freedom and a slippery slope toward authoritarianism.",
     },
-    
     Libertarian: {
       Leaning:
         "You lean toward individual freedom and civil liberties, but accept some level of government oversight when necessary.",
