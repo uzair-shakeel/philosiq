@@ -513,11 +513,12 @@ export default function ArchetypePage() {
 
           {/* All Archetypes Grid */}
           <div className="mb-20">
-            <h2 className="text-3xl font-bold text-center text-secondary-darkBlue mb-8">
+            <h2 className="mt-12 text-3xl font-bold text-center text-secondary-darkBlue mb-8">
               {selectedFilters.length > 0
                 ? `Filtered Archetypes (${filteredArchetypes.length})`
                 : "All Political Archetypes"}
             </h2>
+
 
             {filteredArchetypes.length === 0 ? (
               <div className="text-center py-10">
