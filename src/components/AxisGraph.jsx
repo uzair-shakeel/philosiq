@@ -467,23 +467,26 @@ function getPositionDescription(axis, score, strength) {
   const descriptions = {
     Equity: {
       Leaning:
-        "You lean toward equity-based solutions, valuing social safety nets while recognizing a role for market mechanisms.",
+        "You show a moderate preference for equity-based solutions, believing that everyone should have a fair shot at success, even if starting from different circumstances. While you recognize the importance of markets in driving innovation and growth, you believe government should step in to correct for structural disadvantages and provide a baseline of opportunity for all citizens.",
       Inclined:
-        "You prefer policies that reduce inequality and emphasize redistribution, though you may still support some free market elements.",
+        "You tend to support policies that actively reduce inequality through taxation, social programs, and accessible public services. You see economic disparity not just as a byproduct of the market, but as a social and moral issue. While you're not entirely against free markets, you believe they must operate under strict rules to prevent exploitation and to protect the most vulnerable in society.",
       Committed:
-        "You strongly support economic systems that prioritize fairness, wealth redistribution, and robust social programs.",
+        "You firmly believe that economic fairness is foundational to a just society. You view wealth redistribution, universal healthcare, affordable housing, and strong labor protections not as optional ideals, but as essential rights. For you, markets should exist only when they serve the public good, and unchecked capitalism is seen as a source of societal harm that needs to be curtailed by democratic institutions.",
       Extreme:
-        "You advocate for a radically equitable society, with markets heavily regulated or replaced to ensure complete economic justice.",
-    },
+        "You envision a fundamentally transformed society where economic systems are rebuilt around principles of collective ownership, universal dignity, and justice. You may advocate for the abolition or radical restructuring of traditional market systems, believing that capitalism inherently breeds inequality. You seek a world where resources and wealth are equitably shared, and where human needs take precedence over profit or competition.",
+    }
+
     "Free Market": {
       Leaning:
-        "You lean toward market-based solutions, believing economic freedom drives progress but should be balanced with fairness.",
+        "You generally favor market-based solutions to social and economic challenges, viewing private enterprise as a key engine of innovation and individual empowerment. While you acknowledge the need for some regulation to ensure fair play, you believe that competition and consumer choice usually lead to better outcomes than centralized planning.",
       Inclined:
-        "You prefer limited government involvement in the economy, trusting markets to create innovation and prosperity.",
+        "You prefer a system where the government plays a minimal role in economic affairs. You trust that free markets, when left largely to their own devices, will allocate resources efficiently and reward hard work. Taxes, subsidies, and excessive regulation are seen as distortions that often do more harm than good.",
       Committed:
-        "You strongly support laissez-faire principles, seeing regulation and redistribution as threats to economic freedom.",
+        "You firmly believe in the power of laissez-faire capitalism, advocating for low taxes, minimal government oversight, and robust protection of private property. You view regulation and redistribution not just as inefficient, but as infringements on individual liberty and barriers to prosperity. Markets, you argue, are self-correcting and should be trusted to guide society forward.",
       Extreme:
-        "You believe the free market should be the sole driver of economic life, with minimal or no state intervention.",
+        "You envision a society built almost entirely around voluntary exchange, where markets—not governments—solve nearly all problems, from healthcare to education. You may support privatizing public services, abolishing welfare programs, and reducing the state’s role to little more than defending property rights. Any form of economic coercion by the state is seen as a threat to freedom and a slippery slope toward authoritarianism.",
+    }
+
     },
     Libertarian: {
       Leaning:
