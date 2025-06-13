@@ -384,11 +384,12 @@ export default function AxisGraph({
           </span>
         </div>
 
-      {/* Marker for user's position */}
-      <div
-        className="absolute top-0 bottom-0 w-1 h-full bg-white border border-black z-30 transform -translate-x-1/2"
-        style={{ left: `${markerVisiblePosition}%` }}
-      ></div>
+        {/* Marker for user's position */}
+        <div
+          className="absolute top-0 bottom-0 w-1 h-full bg-white border border-black z-30 transform -translate-x-1/2"
+          style={{ left: `${markerVisiblePosition}%` }}
+        ></div>
+      </div>
 
       {/* Axis scale indicators */}
       {/* <div className="flex justify-between mt-1 text-xs text-gray-700">
