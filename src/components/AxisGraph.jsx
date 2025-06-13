@@ -427,7 +427,7 @@ function getPositionDescription(axis, score, strength) {
     if (canonicalAxis === "Equity vs. Free Market") {
       sideLabel = score < 50 ? "Equity" : "Free Market";
   } else if (canonicalAxis === "Libertarian vs. Authoritarian") {
-    sideLabel = score < 50 ? "Authoritarian" : "Libertarian";
+    sideLabel = score < 50 ? "Libertarian" : "Authoritarian";
   } else if (canonicalAxis === "Progressive vs. Conservative") {
     sideLabel = score < 50 ? "Conservative" : "Progressive";
   } else if (canonicalAxis === "Secular vs. Religious") {
