@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 
 if (
-  !process.env.MONGODB_URI ||
+  process.env.MONGODB_URI ||
   "mongodb://uzair:uzair123@ac-gxnmdjp-shard-00-00.cpammnv.mongodb.net:27017,ac-gxnmdjp-shard-00-01.cpammnv.mongodb.net:27017,ac-gxnmdjp-shard-00-02.cpammnv.mongodb.net:27017/Philosiq?ssl=true&replicaSet=atlas-bfokwp-shard-0&authSource=admin&retryWrites=true&w=majority&appName=API"
 ) {
   throw new Error(
@@ -9,7 +9,10 @@ if (
   );
 }
 
-if (!process.env.MONGODB_DB) {
+if (
+  process.env.MONGODB_DB ||
+  "Philosiq"
+) {
   throw new Error(
     "Please define the MONGODB_DB environment variable inside .env.local"
   );
