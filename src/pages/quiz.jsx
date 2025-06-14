@@ -121,16 +121,13 @@ export default function QuizPage() {
   ];
 
   // Function to fetch questions from the API
-  const fetchQuestions = async (limit, includeInShortQuiz = null) => {
+  const fetchQuestions = async (limit, includeInShortQuiz = false) => {
     setIsLoading(true);
     setError(null);
 
     try {
       // Use the public endpoint instead of the authenticated one
-      const url =
-        includeInShortQuiz !== null
-          ? `/api/questions/public?limit=${limit}&includeInShortQuiz=${includeInShortQuiz}`
-          : `/api/questions/public?limit=${limit}`;
+      const url = `/api/questions/public?limit=${limit}&includeInShortQuiz=${includeInShortQuiz}`;
       console.log(`Fetching questions from: ${url}`);
 
       const response = await axios.get(url);
@@ -183,6 +180,11 @@ export default function QuizPage() {
 
   // Function to start the quiz
   const startQuiz = async (type) => {
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
+
     // Track quiz start event
     track("quiz_started", { type });
 
@@ -276,8 +278,8 @@ export default function QuizPage() {
         // Final shuffle to mix questions from different axes
         fetchedQuestions = shuffleArray(selectedQuestions);
       } else {
-        // For full quiz, fetch all questions without filtering by includeInShortQuiz
-        const allQuestions = await fetchQuestions(200, null);
+        // For full quiz, fetch questions and ensure no duplicates
+        const allQuestions = await fetchQuestions(200, false);
 
         if (allQuestions.length === 0) {
           setError("Not enough questions available. Please try again later.");
@@ -374,11 +376,13 @@ export default function QuizPage() {
     setIsSubmitting(true);
     setSubmissionError(null);
 
-    // Record the start time to ensure minimum loading time
-    const startTime = Date.now();
-    const MIN_LOADING_TIME = 1000; // 1 second minimum loading time
-
     try {
+      // Get the auth token
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Please log in to save your results");
+      }
+
       // Calculate final results using the proper utility
       const finalResults = calculateResults(questions, answers);
       console.log("Final Results:", finalResults); // Debug log
@@ -404,71 +408,41 @@ export default function QuizPage() {
       localStorage.setItem("quizResults", JSON.stringify(resultsData));
 
       // If user is authenticated, save to database
-      const token = localStorage.getItem("authToken");
-      if (token) {
-        try {
-          const response = await fetch("/api/quiz/save-results", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(resultsData),
-          });
+      try {
+        const response = await fetch("/api/quiz/save-results", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(resultsData),
+        });
 
-          const data = await response.json();
+        const data = await response.json();
 
-          if (!response.ok) {
-            console.error("Failed to save results:", data.message);
-            // Don't block navigation if saving fails
-          }
-
-          // Track successful quiz completion with save
-          track("quiz_completed", {
-            quizType: quizType === "short" ? "short" : "full",
-            archetype: finalResults.archetype?.name || "Unknown",
-            saved: true,
-          });
-        } catch (error) {
-          console.error("Error saving results:", error);
-          // Don't block navigation if saving fails
-          track("quiz_save_error", {
-            error: error.message,
-            quizType: quizType === "short" ? "short" : "full",
-          });
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to save results");
         }
-      } else {
-        // Track quiz completion without save
+
+        // Track successful quiz completion
         track("quiz_completed", {
           quizType: quizType === "short" ? "short" : "full",
           archetype: finalResults.archetype?.name || "Unknown",
-          saved: false,
+        });
+      } catch (error) {
+        console.error("Error saving results:", error);
+        // Don't block navigation if saving fails
+        track("quiz_save_error", {
+          error: error.message,
+          quizType: quizType === "short" ? "short" : "full",
         });
       }
 
-      // Ensure minimum loading time before navigation
-      const elapsedTime = Date.now() - startTime;
-      if (elapsedTime < MIN_LOADING_TIME) {
-        await new Promise((resolve) =>
-          setTimeout(resolve, MIN_LOADING_TIME - elapsedTime)
-        );
-      }
-
       // Navigate to results page
-      try {
-        await router.push("/results");
-      } catch (navError) {
-        console.error("Navigation error:", navError);
-        setSubmissionError(
-          "Error navigating to results page. Please try again."
-        );
-        setIsSubmitting(false);
-      }
+      router.push("/results");
     } catch (error) {
       console.error("Submission error:", error);
-      setSubmissionError(
-        error.message || "An unexpected error occurred. Please try again."
-      );
+      setSubmissionError(error.message);
 
       // Track submission error
       track("quiz_submission_error", {
@@ -531,19 +505,6 @@ export default function QuizPage() {
         onClose={() => setShowAuthModal(false)}
       />
 
-      {/* Loading overlay for quiz submission */}
-      {isSubmitting && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 shadow-lg max-w-md w-full mx-4 text-center">
-            <div className="w-16 h-16 border-4 border-primary-maroon border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <h2 className="text-2xl font-bold mb-2">Processing Your Results</h2>
-            <p className="text-gray-600">
-              Please wait while we analyze your answers...
-            </p>
-          </div>
-        </div>
-      )}
-
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
           {!quizStarted ? (
@@ -559,9 +520,8 @@ export default function QuizPage() {
                 {!isAuthenticated && (
                   <div className="mt-4 p-4 bg-blue-50 rounded-lg inline-block">
                     <p className="text-blue-700 flex items-center">
-                      <FaInfoCircle className="mr-2" />
-                      You can take the quiz without signing in, but you'll need
-                      to log in to save your results
+                      <FaUser className="mr-2" />
+                      Please sign in to take the quiz and save your results
                     </p>
                   </div>
                 )}
@@ -906,17 +866,6 @@ export default function QuizPage() {
                   </div>
                 </div>
 
-                {/* Submission error message */}
-                {submissionError && (
-                  <div className="mt-4 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg">
-                    <p className="font-medium">Error submitting quiz</p>
-                    <p className="text-sm">{submissionError}</p>
-                    <p className="text-sm mt-2">
-                      Please try again or refresh the page.
-                    </p>
-                  </div>
-                )}
-
                 {/* Navigation buttons */}
                 <div className="flex justify-between mt-8">
                   <button
@@ -937,27 +886,17 @@ export default function QuizPage() {
                     <button
                       onClick={handleSubmit}
                       disabled={
-                        answers[questions[currentQuestion]?._id] ===
-                          undefined || isSubmitting
+                        answers[questions[currentQuestion]?._id] === undefined
                       }
                       className={`px-6 py-2 rounded flex items-center gap-2 ${
                         answers[questions[currentQuestion]?._id] === undefined
                           ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                          : isSubmitting
-                          ? "bg-gray-400 text-white cursor-not-allowed"
                           : quizType === "short"
                           ? "bg-secondary-darkBlue text-white hover:bg-secondary-blue"
                           : "bg-primary-maroon text-white hover:bg-primary-darkMaroon"
                       }`}
                     >
-                      {isSubmitting ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                          Processing...
-                        </>
-                      ) : (
-                        "Submit"
-                      )}
+                      Submit
                     </button>
                   ) : (
                     <button
