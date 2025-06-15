@@ -12,21 +12,21 @@ export default async function handler(req, res) {
   try {
     // Get token from header
     const authHeader = req.headers.authorization;
-    // if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    //   return res
-    //     .status(401)
-    //     .json({ success: false, message: "No token provided" });
-    // }
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res
+        .status(401)
+        .json({ success: false, message: "No token provided" });
+    }
 
     const token = authHeader.split(" ")[1];
 
     // Verify token
     let decoded;
-    // try {
-    //   decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // } catch (error) {
-    //   return res.status(401).json({ success: false, message: "Invalid token" });
-    // }
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      return res.status(401).json({ success: false, message: "Invalid token" });
+    }
 
     // Connect to database
     const { db } = await connectToDatabase();

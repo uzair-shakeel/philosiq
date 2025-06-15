@@ -25,17 +25,17 @@ export default async function handler(req, res) {
 
     // Verify token
     let decoded;
-    // try {
-    //   decoded = jwt.verify(token, process.env.JWT_SECRET);
-    //   console.log("Token verified for user:", decoded.userId);
-    // } catch (error) {
-    //   console.error("Token verification failed:", error.message);
-    //   return res.status(401).json({
-    //     success: false,
-    //     message: "Invalid token",
-    //     error: error.message,
-    //   });
-    // }
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("Token verified for user:", decoded.userId);
+    } catch (error) {
+      console.error("Token verification failed:", error.message);
+      return res.status(401).json({
+        success: false,
+        message: "Invalid token",
+        error: error.message,
+      });
+    }
 
     // Connect to database
     const { db } = await connectToDatabase();
