@@ -30,7 +30,11 @@ export default async function handler(req, res) {
       console.log("Token verified for user:", decoded.userId);
     } catch (error) {
       console.error("Token verification failed:", error.message);
-      return res.status(401).json({ success: false, message: "Invalid token" });
+      return res.status(401).json({
+        success: false,
+        message: "Invalid token",
+        error: error.message,
+      });
     }
 
     // Connect to database
