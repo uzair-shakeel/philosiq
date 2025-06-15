@@ -12,21 +12,21 @@ export default async function handler(req, res) {
   try {
     // Get token from header
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res
-        .status(401)
-        .json({ success: false, message: "No token provided" });
-    }
+    // if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    //   return res
+    //     .status(401)
+    //     .json({ success: false, message: "No token provided" });
+    // }
 
     const token = authHeader.split(" ")[1];
 
     // Verify token
     let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
-    } catch (error) {
-      return res.status(401).json({ success: false, message: "Invalid token" });
-    }
+    // try {
+    //   decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // } catch (error) {
+    //   return res.status(401).json({ success: false, message: "Invalid token" });
+    // }
 
     // Connect to database
     const { db } = await connectToDatabase();
@@ -50,16 +50,16 @@ export default async function handler(req, res) {
       .toArray();
 
     // Transform the results to include string _id for easier frontend handling
-    const transformedResults = results.map(result => ({
+    const transformedResults = results.map((result) => ({
       ...result,
       _id: result._id.toString(),
-      userId: result.userId.toString()
+      userId: result.userId.toString(),
     }));
 
     return res.status(200).json({
       success: true,
       message: "Quiz history retrieved successfully",
-      results: transformedResults
+      results: transformedResults,
     });
   } catch (error) {
     console.error("Error fetching quiz history:", error);
@@ -67,4 +67,4 @@ export default async function handler(req, res) {
       .status(500)
       .json({ success: false, message: "Failed to fetch quiz history" });
   }
-} 
+}
