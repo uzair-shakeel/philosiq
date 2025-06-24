@@ -409,35 +409,7 @@ export default function QuizPage() {
       localStorage.setItem("quizResults", JSON.stringify(resultsData));
 
       // If user is authenticated, save to database
-      try {
-        const response = await fetch("/api/quiz/save-results", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(resultsData),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || "Failed to save results");
-        }
-
-        // Track successful quiz completion
-        track("quiz_completed", {
-          quizType: quizType === "short" ? "short" : "full",
-          archetype: finalResults.archetype?.name || "Unknown",
-        });
-      } catch (error) {
-        console.error("Error saving results:", error);
-        // Don't block navigation if saving fails
-        track("quiz_save_error", {
-          error: error.message,
-          quizType: quizType === "short" ? "short" : "full",
-        });
-      }
+ 
 
       // Navigate to results page
       router.push("/results");
