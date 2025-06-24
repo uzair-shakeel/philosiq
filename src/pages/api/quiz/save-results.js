@@ -66,13 +66,27 @@ export default async function handler(req, res) {
     console.log("Received quiz type:", quizType || "not specified");
 
     // Validate required data
-    if (!archetype || !archetype.name || !archetype.traits) {
-      console.error("Missing archetype data:", JSON.stringify(req.body));
-      return res.status(400).json({
-        success: false,
-        message: "Missing archetype name or traits",
-      });
-    }
+if (!req.body.archetype) {
+  console.error("Missing archetype object:", JSON.stringify(req.body));
+  return res.status(400).json({
+    success: false,
+    message: "Missing archetype object",
+  });
+}
+if (!req.body.archetype.name) {
+  console.error("Missing archetype name:", JSON.stringify(req.body));
+  return res.status(400).json({
+    success: false,
+    message: "Missing archetype name",
+  });
+}
+if (!req.body.archetype.traits) {
+  console.error("Missing archetype traits:", JSON.stringify(req.body));
+  return res.status(400).json({
+    success: false,
+    message: "Missing archetype traits",
+  });
+}
 
     console.log("Saving new result for user:", user._id.toString());
 
