@@ -520,73 +520,105 @@ export default function QuizResultDetail() {
 
             <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
               {result.axisBreakdown && result.axisBreakdown.length > 0 ? (
-                result.axisBreakdown.map((axis, index) => (
-                  <div
-                    key={index}
-                    className={
-                      index < result.axisBreakdown.length - 1
-                        ? "mb-8 pb-8 border-b border-gray-200"
-                        : ""
-                    }
-                  >
-                    <h3 className="text-lg font-semibold mb-1">{axis.name}</h3>
+                result.axisBreakdown.map((axis, index) => {
+                  // Determine colors based on axis name
+                  let leftSideColor = "bg-blue-600";
+                  let rightSideColor = "bg-green-600";
+                  switch (axis.name) {
+                    case "Equity vs. Free Market":
+                      leftSideColor = "bg-blue-600"; // Blue for Equity
+                      rightSideColor = "bg-green-600"; // Green for Free Market
+                      break;
+                    case "Libertarian vs. Authoritarian":
+                      leftSideColor = "bg-blue-500"; // Blue for Libertarian
+                      rightSideColor = "bg-orange-500"; // Orange for Authoritarian
+                      break;
+                    case "Progressive vs. Conservative":
+                      leftSideColor = "bg-green-500"; // Green for Progressive
+                      rightSideColor = "bg-blue-400"; // Blue for Conservative
+                      break;
+                    case "Secular vs. Religious":
+                      leftSideColor = "bg-yellow-400"; // Yellow for Secular
+                      rightSideColor = "bg-purple-500"; // Purple for Religious
+                      break;
+                    case "Globalism vs. Nationalism":
+                      leftSideColor = "bg-teal-500"; // Teal for Globalism
+                      rightSideColor = "bg-green-500"; // Green for Nationalism
+                      break;
+                  }
 
-                    {/* Axis Labels */}
-                    <div className="flex justify-between items-center">
-                      <div className="text-xs font-medium">
-                        <span className="px-2 py-0.5 rounded-full text-white bg-blue-600">
-                          {axis.leftLabel}{" "}
-                          {axis.userPosition === axis.leftLabel &&
-                            `(${axis.positionStrength})`}
-                        </span>
+                  return (
+                    <div
+                      key={index}
+                      className={
+                        index < result.axisBreakdown.length - 1
+                          ? "mb-8 pb-8 border-b border-gray-200"
+                          : ""
+                      }
+                    >
+                      <h3 className="text-lg font-semibold mb-1">
+                        {axis.name}
+                      </h3>
+
+                      {/* Axis Labels */}
+                      <div className="flex justify-between items-center">
+                        <div className="text-xs font-medium">
+                          <span className="px-2 py-0.5 rounded-full text-white bg-blue-600">
+                            {axis.leftLabel}{" "}
+                            {axis.userPosition === axis.leftLabel &&
+                              `(${axis.positionStrength})`}
+                          </span>
+                        </div>
+                        <div className="text-xs font-medium">
+                          <span className="px-2 py-0.5 rounded-full text-white bg-green-600">
+                            {axis.rightLabel}{" "}
+                            {axis.userPosition === axis.rightLabel &&
+                              `(${axis.positionStrength})`}
+                          </span>
+                        </div>
                       </div>
-                      <div className="text-xs font-medium">
-                        <span className="px-2 py-0.5 rounded-full text-white bg-green-600">
-                          {axis.rightLabel}{" "}
-                          {axis.userPosition === axis.rightLabel &&
-                            `(${axis.positionStrength})`}
-                        </span>
+
+                      {/* Axis bar */}
+                      <div className="relative h-10 rounded-full overflow-hidden mt-1 border border-gray-200">
+                        {/* Left side bar with percentage */}
+                        <div
+                          className={`h-full absolute left-0 z-10 flex items-center justify-center ${leftSideColor}`}
+                          style={{
+                            width: `${axis.leftPercent || axis.score}%`,
+                          }}
+                        >
+                          <span className="text-white font-bold text-center px-2 z-20">
+                            {axis.leftPercent || axis.score}%
+                          </span>
+                        </div>
+
+                        {/* Right side bar with percentage */}
+                        <div
+                          className={`h-full absolute right-0 z-10 flex items-center justify-center ${rightSideColor}`}
+                          style={{
+                            width: `${axis.rightPercent || 100 - axis.score}%`,
+                          }}
+                        >
+                          <span className="text-white font-bold text-center px-2 z-20">
+                            {axis.rightPercent || 100 - axis.score}%
+                          </span>
+                        </div>
+
+                        {/* Marker for user's position */}
+                        <div
+                          className="absolute top-0 bottom-0 w-1 h-full bg-white border border-black z-30 transform -translate-x-1/2"
+                          style={{ left: `${axis.score}%` }}
+                        ></div>
+                      </div>
+
+                      {/* Position description */}
+                      <div className="mt-2 text-sm text-gray-700">
+                        Your position: {axis.userPosition} (
+                        {axis.positionStrength})
                       </div>
                     </div>
-
-                    {/* Axis bar */}
-                    <div className="relative h-10 rounded-full overflow-hidden mt-1 border border-gray-200">
-                      {/* Left side bar with percentage */}
-                      <div
-                        className="h-full bg-blue-600 absolute left-0 z-10 flex items-center justify-center"
-                        style={{ width: `${axis.leftPercent || axis.score}%` }}
-                      >
-                        <span className="text-white font-bold text-center px-2 z-20">
-                          {axis.leftPercent || axis.score}%
-                        </span>
-                      </div>
-
-                      {/* Right side bar with percentage */}
-                      <div
-                        className="h-full bg-green-600 absolute right-0 z-10 flex items-center justify-center"
-                        style={{
-                          width: `${axis.rightPercent || 100 - axis.score}%`,
-                        }}
-                      >
-                        <span className="text-white font-bold text-center px-2 z-20">
-                          {axis.rightPercent || 100 - axis.score}%
-                        </span>
-                      </div>
-
-                      {/* Marker for user's position */}
-                      <div
-                        className="absolute top-0 bottom-0 w-1 h-full bg-white border border-black z-30 transform -translate-x-1/2"
-                        style={{ left: `${axis.score}%` }}
-                      ></div>
-                    </div>
-
-                    {/* Position description */}
-                    <div className="mt-2 text-sm text-gray-700">
-                      Your position: {axis.userPosition} (
-                      {axis.positionStrength})
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               ) : (
                 <div className="text-center py-8 text-gray-500">
                   <FaChartPie className="mx-auto text-4xl mb-3 opacity-30" />
