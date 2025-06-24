@@ -84,7 +84,6 @@ function ResultsContent({ results }) {
   const [allPercents, setAllPercents] = useState([]);
   const [showMindMapModal, setShowMindMapModal] = useState(false);
   const [isPdfGenerating, setIsPdfGenerating] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Add state to store axis breakdown data
   const [axisBreakdownData, setAxisBreakdownData] = useState({});
@@ -103,63 +102,22 @@ function ResultsContent({ results }) {
   const secondaryArchetypesCalculated = useRef(false);
 
   // Add useEffect to check quiz type when component mounts
+  // Starting at line 108
   useEffect(() => {
     try {
-      // Try to get stored quiz data from session storage first (for current session)
       let storedData = sessionStorage.getItem("quizResults");
-
-      // If not found in sessionStorage, try localStorage
       if (!storedData) {
         storedData = localStorage.getItem("quizResults");
       }
-
       if (storedData) {
         const parsedData = JSON.parse(storedData);
-        // Check if this was a full quiz (not a short quiz)
         setIsFullQuiz(parsedData.quizType === "full");
+        setResultsSaved(parsedData.isSaved || false); // Initialize resultsSaved
       }
     } catch (err) {
       console.error("Error determining quiz type:", err);
     }
   }, []);
-
-  // Check if user is logged in and if they just logged in
-  useEffect(() => {
-    const checkLoginStatus = () => {
-      // Check if auth token exists
-      const token = localStorage.getItem("authToken");
-      const wasLoggedIn = isLoggedIn;
-      setIsLoggedIn(!!token); // Convert to boolean
-
-      // If user just logged in and has results, automatically save them
-      if (
-        token &&
-        !wasLoggedIn &&
-        results &&
-        results.archetype &&
-        !resultsSaved &&
-        !isSaving
-      ) {
-        saveFinalResultsToDatabase(results, secondaryArchetypes)
-          .then(() => {
-            setResultsSaved(true);
-            console.log("Auto-saved results after login");
-          })
-          .catch((err) => {
-            console.error("Failed to auto-save results after login:", err);
-          });
-      }
-    };
-
-    // Check immediately when component mounts or dependencies change
-    checkLoginStatus();
-
-    // Also set up an interval to check periodically (in case user logs in in another tab)
-    const intervalId = setInterval(checkLoginStatus, 2000);
-
-    // Clean up interval on unmount
-    return () => clearInterval(intervalId);
-  }, [results, secondaryArchetypes, resultsSaved, isSaving]);
 
   // Track when results are viewed
   useEffect(() => {
@@ -481,39 +439,50 @@ function ResultsContent({ results }) {
     setIsPdfGenerating(true);
 
     try {
+      // Track PDF download start
       track("pdf_download_started", {
         archetype: results.archetype?.name || "Unknown",
       });
 
+      // Create a new PDF document with minimal styling
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "pt",
         format: "a4",
       });
-      let y = 40;
+
+      // Set initial position
+      let y = 40; // Starting y position
       const pageWidth = pdf.internal.pageSize.getWidth();
       const margin = 40;
       const contentWidth = pageWidth - margin * 2;
 
+      // Helper function to add text with word wrap
       const addWrappedText = (text, x, y, maxWidth, lineHeight) => {
         const lines = pdf.splitTextToSize(text, maxWidth);
         pdf.text(lines, x, y);
         return y + lines.length * lineHeight;
       };
 
-      const addSeparator = (y) => y + 20;
+      // Helper function to add a separator
+      const addSeparator = (y) => {
+        return y + 20; // Just add space instead of drawing a line
+      };
 
-      // Title
-      pdf.setFontSize(16).setFont("helvetica", "bold");
+      // Add title
+      pdf.setFontSize(16);
+      pdf.setFont("helvetica", "bold");
       pdf.text("PhilosiQ Political Archetype Results", margin, y);
       y += 20;
 
-      pdf.setFontSize(11).setFont("helvetica", "normal");
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
       pdf.text(`Generated on ${new Date().toLocaleDateString()}`, margin, y);
       y = addSeparator(y + 10);
 
-      // Archetype Name
-      pdf.setFontSize(14).setFont("helvetica", "bold");
+      // Add primary archetype
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
       y += 10;
       pdf.text(
         `Your Archetype: ${results.archetype?.name || "Unknown"}`,
@@ -522,49 +491,41 @@ function ResultsContent({ results }) {
       );
       y += 20;
 
-      // Traits with percentages
-      pdf.setFontSize(11).setFont("helvetica", "normal");
-      const traitLines = [];
+      // Add traits
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
 
-      if (Object.keys(axisLetters).length > 0 && results.axisResults) {
+      const traits = [];
+      if (Object.keys(axisLetters).length > 0) {
         Object.entries(axisLetters).forEach(([axis, letter]) => {
-          let traitLabel = "";
-          let traitScore = null;
-          const axisResult = results.axisResults.find((r) => r.name === axis);
-
+          let trait = "";
           switch (axis) {
             case "Equity vs. Free Market":
-              traitLabel = letter === "E" ? "Equity" : "Free Market";
+              trait = letter === "E" ? "Equity" : "Free Market";
               break;
             case "Libertarian vs. Authoritarian":
-              traitLabel = letter === "L" ? "Libertarian" : "Authoritarian";
+              trait = letter === "L" ? "Libertarian" : "Authoritarian";
               break;
             case "Progressive vs. Conservative":
-              traitLabel = letter === "P" ? "Progressive" : "Conservative";
+              trait = letter === "P" ? "Progressive" : "Conservative";
               break;
             case "Secular vs. Religious":
-              traitLabel = letter === "S" ? "Secular" : "Religious";
+              trait = letter === "S" ? "Secular" : "Religious";
               break;
             case "Globalism vs. Nationalism":
-              traitLabel = letter === "G" ? "Globalism" : "Nationalism";
+              trait = letter === "G" ? "Globalism" : "Nationalism";
               break;
           }
-
-          if (axisResult) {
-            const isLeft = axisResult.leftLabel === traitLabel;
-            traitScore = isLeft ? axisResult.score : 100 - axisResult.score;
-            traitLines.push(`${traitLabel}: ${Math.round(traitScore)}%`);
-          } else {
-            traitLines.push(traitLabel);
-          }
+          traits.push(trait);
         });
       }
 
-      pdf.text(`Traits: ${traitLines.join(", ")}`, margin, y);
+      pdf.text(`Traits: ${traits.join(", ")}`, margin, y);
       y += 15;
 
-      // Archetype description
+      // Add description
       const description = getArchetypeDescription(results.archetype?.name);
+      pdf.setFontSize(11);
       y = addWrappedText(description, margin, y, contentWidth, 15);
       y = addSeparator(y);
 
@@ -575,19 +536,12 @@ function ResultsContent({ results }) {
       pdf.text("Your Political Axis Breakdown", margin, y);
       y += 20;
 
+      // Add each axis
       pdf.setFontSize(11);
       pdf.setFont("helvetica", "normal");
 
-      // Helper to calculate strength label
-      function getPositionStrength(score) {
-        if (score > 80) return "Extreme";
-        if (score >= 70) return "Committed";
-        if (score >= 60) return "Inclined";
-        if (score >= 50) return "Leaning";
-        return "";
-      }
-
       results.axisResults.forEach((axis, index) => {
+        // Check if we need to add a new page
         if (y > pdf.internal.pageSize.getHeight() - 80) {
           pdf.addPage();
           y = 40;
@@ -599,40 +553,44 @@ function ResultsContent({ results }) {
 
         pdf.setFont("helvetica", "normal");
 
-        const axisPercent = allPercents[axis.name] || {};
-        const leftValue = parseFloat(axisPercent.leftPercent) || 0;
-        const rightValue = parseFloat(axisPercent.rightPercent) || 0;
+        // Simple text representation of the axis position
+        const leftPercent = axis.score <= 50 ? axis.score : 100 - axis.score;
+        const rightPercent = axis.score >= 50 ? axis.score : 100 - axis.score;
 
-        pdf.text(`${axis.leftLabel}: ${leftValue.toFixed(2)}%`, margin, y);
+        pdf.text(`${axis.leftLabel}: ${leftPercent}%`, margin, y);
         y += 15;
-        pdf.text(`${axis.rightLabel}: ${rightValue.toFixed(2)}%`, margin, y);
+        pdf.text(`${axis.rightLabel}: ${rightPercent}%`, margin, y);
         y += 15;
 
-        let positionText = "Position: ";
-        if (Math.abs(leftValue - rightValue) < 0.01) {
-          positionText += "Centrist";
-        } else if (leftValue > rightValue) {
-          const strength = getPositionStrength(leftValue);
-          positionText += `${axis.leftLabel}${
-            strength ? ` (${strength})` : ""
-          }`;
+        // Add a simple text indicator of position
+        let positionText = "";
+        if (axis.score < 40) {
+          positionText = `Extreme ${axis.leftLabel} leaning`;
+        } else if (axis.score < 45) {
+          positionText = `Committed ${axis.leftLabel} leaning`;
+        } else if (axis.score < 50) {
+          positionText = `Inclined ${axis.leftLabel} leaning`;
+        } else if (axis.score > 60) {
+          positionText = `Extreme ${axis.rightLabel} leaning`;
+        } else if (axis.score > 55) {
+          positionText = `Committed ${axis.rightLabel} leaning`;
+        } else if (axis.score > 50) {
+          positionText = `Inclined ${axis.rightLabel} leaning`;
         } else {
-          const strength = getPositionStrength(rightValue);
-          positionText += `${axis.rightLabel}${
-            strength ? ` (${strength})` : ""
-          }`;
+          positionText = "Centrist position";
         }
 
-        pdf.text(positionText, margin, y);
-        y += 15;
+        pdf.text(`Position: ${positionText}`, margin, y);
+        y += 20;
 
         if (index < results.axisResults.length - 1) {
-          y += 10;
+          y = addSeparator(y);
         }
       });
 
-      // Secondary Archetypes
-      if (secondaryArchetypes?.length > 0) {
+      // Add secondary archetypes if they exist
+      if (secondaryArchetypes && secondaryArchetypes.length > 0) {
+        // Check if we need to add a new page
         if (y > pdf.internal.pageSize.getHeight() - 120) {
           pdf.addPage();
           y = 40;
@@ -641,11 +599,13 @@ function ResultsContent({ results }) {
         y = addSeparator(y);
         y += 10;
 
-        pdf.setFontSize(14).setFont("helvetica", "bold");
+        pdf.setFontSize(14);
+        pdf.setFont("helvetica", "bold");
         pdf.text("Your Secondary Archetypes", margin, y);
         y += 20;
 
-        pdf.setFontSize(11).setFont("helvetica", "normal");
+        pdf.setFontSize(11);
+        pdf.setFont("helvetica", "normal");
         pdf.text(
           "You also show strong alignment with these political archetypes:",
           margin,
@@ -654,6 +614,7 @@ function ResultsContent({ results }) {
         y += 20;
 
         secondaryArchetypes.forEach((archetype, index) => {
+          // Check if we need to add a new page
           if (y > pdf.internal.pageSize.getHeight() - 150) {
             pdf.addPage();
             y = 40;
@@ -669,7 +630,9 @@ function ResultsContent({ results }) {
 
           pdf.text(
             `Difference from primary: Flipped position on ${
-              archetype.flippedAxis?.replace(" vs. ", "/") || ""
+              archetype.flippedAxis
+                ? archetype.flippedAxis.replace(" vs. ", "/")
+                : ""
             }`,
             margin,
             y
@@ -685,7 +648,7 @@ function ResultsContent({ results }) {
         });
       }
 
-      // Page numbers
+      // Add page numbers
       const totalPages = pdf.internal.getNumberOfPages();
       for (let i = 1; i <= totalPages; i++) {
         pdf.setPage(i);
@@ -698,9 +661,10 @@ function ResultsContent({ results }) {
         );
       }
 
-      // Footer
+      // Add footer on last page
       pdf.setPage(totalPages);
-      pdf.setFontSize(10).setFont("helvetica", "italic");
+      pdf.setFontSize(10);
+      pdf.setFont("helvetica", "italic");
       const footerText =
         "Visit philosiq.com to learn more about your political archetype";
       pdf.text(
@@ -710,6 +674,7 @@ function ResultsContent({ results }) {
         { align: "center" }
       );
 
+      // Generate a filename with the archetype name and date
       const archetypeName = results.archetype?.name || "Results";
       const date = new Date().toISOString().split("T")[0];
       const filename = `PhilosiQ-${archetypeName.replace(
@@ -717,14 +682,18 @@ function ResultsContent({ results }) {
         "-"
       )}-${date}.pdf`;
 
+      // Save the PDF
       pdf.save(filename);
 
+      // Track successful PDF download
       track("pdf_download_completed", {
         archetype: results.archetype?.name || "Unknown",
       });
     } catch (error) {
       console.error("Error generating PDF:", error);
       alert("Failed to generate PDF. Please try again.");
+
+      // Track PDF generation error
       track("pdf_download_error", {
         error: error.message || "Unknown error",
         archetype: results.archetype?.name || "Unknown",
@@ -734,33 +703,36 @@ function ResultsContent({ results }) {
     }
   };
 
-  // Function to handle saving results manually
+  // Starting at line 615
   const handleSaveResults = async () => {
     if (resultsSaved || isSaving) return;
-
-    // Check if user is logged in
-    if (!isLoggedIn) {
-      // Redirect to login page
-      router.push("/login?redirect=results");
-      return;
-    }
 
     setIsSaving(true);
     try {
       await saveFinalResultsToDatabase(results, secondaryArchetypes);
       setResultsSaved(true);
+      track("results_saved", {
+        archetype: results.archetype?.name || "Unknown",
+        quizType: isFullQuiz ? "full" : "short",
+      });
     } catch (error) {
       console.error("Error saving results:", error);
+      alert("Failed to save results. Please try again.");
     } finally {
       setIsSaving(false);
     }
   };
 
-  // Save results to database
+  // Starting at line 629
   const saveFinalResultsToDatabase = async (results, secondaryArchetypes) => {
     try {
-      console.log("Saving results to database");
+      const storedData = JSON.parse(sessionStorage.getItem("quizResults"));
+      if (storedData?.isSaved) {
+        console.log("Results already saved, skipping database save.");
+        return;
+      }
 
+      console.log("Saving results to database");
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.log("No auth token found, skipping database save.");
@@ -772,7 +744,6 @@ function ResultsContent({ results }) {
         return;
       }
 
-      // Get traits from axisLetters
       const traits = Object.entries(axisLetters).map(([axis, letter]) => {
         switch (axis) {
           case "Equity vs. Free Market":
@@ -790,7 +761,6 @@ function ResultsContent({ results }) {
         }
       });
 
-      // Prepare secondary archetypes data
       const secondaryArchetypesData = secondaryArchetypes.map((archetype) => ({
         name: archetype.name,
         code: archetype.code,
@@ -799,7 +769,6 @@ function ResultsContent({ results }) {
         flippedAxis: archetype.flippedAxis,
       }));
 
-      // Prepare axis breakdown data
       const axisBreakdownArray = Object.values(axisBreakdownData).map(
         (axis) => ({
           name: axis.name,
@@ -814,7 +783,6 @@ function ResultsContent({ results }) {
         })
       );
 
-      // Simplified data object with archetype, secondary archetypes, and axis breakdown
       const resultsData = {
         archetype: {
           name: results.archetype.name,
@@ -823,6 +791,7 @@ function ResultsContent({ results }) {
         secondaryArchetypes: secondaryArchetypesData,
         axisBreakdown: axisBreakdownArray,
         quizType: isFullQuiz ? "full" : "short",
+        requestId: Math.random().toString(36).substring(2), // Add for debugging
       };
 
       console.log("Saving to database:", resultsData);
@@ -838,14 +807,15 @@ function ResultsContent({ results }) {
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(
-          `Failed to save results: ${response.status} ${response.statusText} - ${errorText}`
-        );
+        throw new Error(`Failed to save results: ${errorText}`);
       }
 
-      console.log(
-        "Archetype, secondary archetypes, and axis breakdown saved to database successfully."
+      // Update sessionStorage to mark results as saved
+      sessionStorage.setItem(
+        "quizResults",
+        JSON.stringify({ ...storedData, isSaved: true })
       );
+      console.log("Results saved successfully.");
       return true;
     } catch (error) {
       console.error("Error saving data to database:", error);
@@ -872,35 +842,24 @@ function ResultsContent({ results }) {
             that fits you best
           </p>
 
-          {/* Save Results Button - Only show when logged in */}
-          {isLoggedIn ? (
-            <button
-              onClick={handleSaveResults}
-              disabled={resultsSaved || isSaving}
-              className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
-                resultsSaved
-                  ? "bg-green-500 text-white"
-                  : isSaving
-                  ? "bg-gray-300 text-gray-600"
-                  : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-              }`}
-            >
-              {resultsSaved
-                ? "✓ Results Saved Successfully"
+          {/* Save Results Button - Prominent Position */}
+          <button
+            onClick={handleSaveResults}
+            disabled={resultsSaved || isSaving}
+            className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
+              resultsSaved
+                ? "bg-green-500 text-white"
                 : isSaving
-                ? "Saving Your Results..."
-                : "Save Your Results to Account"}
-            </button>
-          ) : (
-            <div className="mb-4">
-              <Link
-                href="/login?redirect=results"
-                className="px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-              >
-                Log in to Save Your Results
-              </Link>
-            </div>
-          )}
+                ? "bg-gray-300 text-gray-600"
+                : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+            }`}
+          >
+            {resultsSaved
+              ? "✓ Results Saved Successfully"
+              : isSaving
+              ? "Saving Your Results..."
+              : "Save Your Results to Account"}
+          </button>
         </div>
 
         {/* Primary Archetype Card */}
@@ -936,7 +895,7 @@ function ResultsContent({ results }) {
                             letter === "L" ? "Libertarian" : "Authoritarian";
                           bgColor =
                             letter === "L"
-                              ? "bg-teal-100 text-teal-800"
+                              ? "bg-indigo-100 text-indigo-800"
                               : "bg-orange-100 text-orange-800";
                           break;
                         case "Progressive vs. Conservative":
@@ -944,8 +903,8 @@ function ResultsContent({ results }) {
                             letter === "P" ? "Progressive" : "Conservative";
                           bgColor =
                             letter === "P"
-                              ? "bg-sky-100 text-sky-800"
-                              : "bg-red-100 text-red-800";
+                              ? "bg-purple-100 text-purple-800"
+                              : "bg-blue-100 text-blue-800";
                           break;
                         case "Secular vs. Religious":
                           label = letter === "S" ? "Secular" : "Religious";
@@ -958,8 +917,8 @@ function ResultsContent({ results }) {
                           label = letter === "G" ? "Globalism" : "Nationalism";
                           bgColor =
                             letter === "G"
-                              ? "bg-lime-100 text-lime-800"
-                              : "bg-rose-100 text-rose-800";
+                              ? "bg-teal-100 text-teal-800"
+                              : "bg-red-100 text-red-800";
                           break;
                         default:
                           label = letter;
@@ -984,21 +943,21 @@ function ResultsContent({ results }) {
                       else if (trait === "Free Market")
                         bgColor = "bg-green-100 text-green-800";
                       else if (trait === "Libertarian")
-                        bgColor = "bg-teal-100 text-teal-800";
+                        bgColor = "bg-indigo-100 text-indigo-800";
                       else if (trait === "Authoritarian")
                         bgColor = "bg-orange-100 text-orange-800";
                       else if (trait === "Progressive")
-                        bgColor = "bg-sky-100 text-sky-800";
+                        bgColor = "bg-purple-100 text-purple-800";
                       else if (trait === "Conservative")
-                        bgColor = "bg-red-100 text-red-800";
+                        bgColor = "bg-blue-100 text-blue-800";
                       else if (trait === "Secular")
                         bgColor = "bg-yellow-100 text-yellow-800";
                       else if (trait === "Religious")
                         bgColor = "bg-purple-100 text-purple-800";
                       else if (trait === "Globalism")
-                        bgColor = "bg-lime-100 text-lime-800";
+                        bgColor = "bg-teal-100 text-teal-800";
                       else if (trait === "Nationalism")
-                        bgColor = "bg-rose-100 text-rose-800";
+                        bgColor = "bg-red-100 text-red-800";
 
                       return (
                         <span
@@ -1080,21 +1039,21 @@ function ResultsContent({ results }) {
                         else if (trait === "Free Market")
                           bgColor = "bg-green-100 text-green-800";
                         else if (trait === "Libertarian")
-                          bgColor = "bg-teal-100 text-teal-800";
+                          bgColor = "bg-indigo-100 text-indigo-800";
                         else if (trait === "Authoritarian")
                           bgColor = "bg-orange-100 text-orange-800";
                         else if (trait === "Progressive")
-                          bgColor = "bg-sky-100 text-sky-800";
+                          bgColor = "bg-purple-100 text-purple-800";
                         else if (trait === "Conservative")
-                          bgColor = "bg-red-100 text-red-800";
+                          bgColor = "bg-blue-100 text-blue-800";
                         else if (trait === "Secular")
                           bgColor = "bg-yellow-100 text-yellow-800";
                         else if (trait === "Religious")
                           bgColor = "bg-purple-100 text-purple-800";
                         else if (trait === "Globalism")
-                          bgColor = "bg-lime-100 text-lime-800";
+                          bgColor = "bg-teal-100 text-teal-800";
                         else if (trait === "Nationalism")
-                          bgColor = "bg-rose-100 text-rose-800";
+                          bgColor = "bg-red-100 text-red-800";
 
                         return (
                           <span
