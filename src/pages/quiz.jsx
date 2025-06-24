@@ -373,6 +373,7 @@ export default function QuizPage() {
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return; // Prevent double submission
     setIsSubmitting(true);
     setSubmissionError(null);
 
@@ -392,7 +393,7 @@ export default function QuizPage() {
         questions,
         answers,
         // Save detailed axis information
-        axisResults: finalResults.axisResults,
+        axisBreakdown: finalResults.axisResults,
         axisScores: finalResults.axisScores,
         // Save primary archetype
         archetype: finalResults.archetype,
@@ -886,9 +887,11 @@ export default function QuizPage() {
                     <button
                       onClick={handleSubmit}
                       disabled={
+                        isSubmitting ||
                         answers[questions[currentQuestion]?._id] === undefined
                       }
                       className={`px-6 py-2 rounded flex items-center gap-2 ${
+                        isSubmitting ||
                         answers[questions[currentQuestion]?._id] === undefined
                           ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                           : quizType === "short"
