@@ -22,6 +22,7 @@ export default function QuizResultDetail() {
   const [error, setError] = useState(null);
   const [isPdfGenerating, setIsPdfGenerating] = useState(false);
   const [showDebug, setShowDebug] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -280,6 +281,43 @@ export default function QuizResultDetail() {
     }
   };
 
+  const handleDeleteResult = async () => {
+    if (!result) return;
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this quiz result? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+    setIsDeleting(true);
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        alert("You must be logged in to delete a result.");
+        setIsDeleting(false);
+        return;
+      }
+      const response = await fetch(`/api/quiz/result/${result._id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (response.ok && data.success) {
+        alert("Quiz result deleted successfully.");
+        router.push("/history");
+      } else {
+        alert(data.message || "Failed to delete quiz result.");
+      }
+    } catch (error) {
+      alert("Failed to delete quiz result. Please try again later.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   if (loading) {
     return (
       <Layout title="Loading Quiz Result - PhilosiQ">
@@ -526,24 +564,24 @@ export default function QuizResultDetail() {
                   let rightSideColor = "bg-green-600";
                   switch (axis.name) {
                     case "Equity vs. Free Market":
-                      leftSideColor = "bg-blue-600"; // Blue for Equity
-                      rightSideColor = "bg-green-600"; // Green for Free Market
+                      leftSideColor = "bg-teal-600"; // Blue for Equity
+                      rightSideColor = "bg-orange-600"; // Green for Free Market
                       break;
                     case "Libertarian vs. Authoritarian":
                       leftSideColor = "bg-blue-500"; // Blue for Libertarian
                       rightSideColor = "bg-orange-500"; // Orange for Authoritarian
                       break;
                     case "Progressive vs. Conservative":
-                      leftSideColor = "bg-green-500"; // Green for Progressive
-                      rightSideColor = "bg-blue-400"; // Blue for Conservative
+                      leftSideColor = "bg-sky-500"; // Green for Progressive
+                      rightSideColor = "bg-red-400"; // Blue for Conservative
                       break;
                     case "Secular vs. Religious":
                       leftSideColor = "bg-yellow-400"; // Yellow for Secular
                       rightSideColor = "bg-purple-500"; // Purple for Religious
                       break;
                     case "Globalism vs. Nationalism":
-                      leftSideColor = "bg-teal-500"; // Teal for Globalism
-                      rightSideColor = "bg-green-500"; // Green for Nationalism
+                      leftSideColor = "bg-lime-500"; // Teal for Globalism
+                      rightSideColor = "bg-rose-500"; // Green for Nationalism
                       break;
                   }
 
@@ -588,7 +626,7 @@ export default function QuizResultDetail() {
                           }}
                         >
                           <span className="text-white font-bold text-center px-2 z-20">
-                            {axis.leftPercent || axis.score}%
+                            {(axis.leftPercent || axis.score).toFixed(2)}%
                           </span>
                         </div>
 
@@ -600,7 +638,8 @@ export default function QuizResultDetail() {
                           }}
                         >
                           <span className="text-white font-bold text-center px-2 z-20">
-                            {axis.rightPercent || 100 - axis.score}%
+                            {(axis.rightPercent || 100 - axis.score).toFixed(2)}
+                            %
                           </span>
                         </div>
 
@@ -629,10 +668,10 @@ export default function QuizResultDetail() {
           </div>
 
           {/* Download PDF Button */}
-          <div className="text-center mt-8">
+          <div className="text-center mt-8 flex flex-col items-center gap-4">
             <button
               onClick={handleDownloadPDF}
-              disabled={isPdfGenerating}
+              disabled={isPdfGenerating || isDeleting}
               className="bg-primary-maroon text-white px-6 py-3 rounded-full inline-flex items-center hover:bg-primary-darkMaroon transition-colors disabled:bg-gray-400"
             >
               {isPdfGenerating ? (
@@ -642,6 +681,21 @@ export default function QuizResultDetail() {
               ) : (
                 <>
                   <FaDownload className="mr-2" /> Download as PDF
+                </>
+              )}
+            </button>
+            <button
+              onClick={handleDeleteResult}
+              disabled={isDeleting || isPdfGenerating}
+              className="bg-red-600 text-white px-6 py-3 rounded-full inline-flex items-center hover:bg-red-800 transition-colors disabled:bg-gray-400"
+            >
+              {isDeleting ? (
+                <>
+                  <FaSpinner className="animate-spin mr-2" /> Deleting...
+                </>
+              ) : (
+                <>
+                  <FaExclamationCircle className="mr-2" /> Delete Result
                 </>
               )}
             </button>

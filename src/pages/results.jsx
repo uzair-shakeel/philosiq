@@ -1470,7 +1470,16 @@ function getArchetypeColor(archetypeName) {
     "The Patriot": "from-red-500 to-blue-400",
     "The Maverick": "from-blue-500 to-purple-400",
     "The Steward": "from-green-500 to-blue-400",
-    // Add more colors as needed
+    "The High Priest": "from-green-500 to-blue-400",
+    "The Technocrat": "from-green-500 to-blue-400",
+    "The Guardian": "from-green-500 to-blue-400",
+    "The Missionary": "from-green-500 to-blue-400",
+    "The Localist": "from-green-500 to-blue-400",
+    "The Philosopher": "from-green-500 to-blue-400",
+    "The Firebrand": "from-green-500 to-blue-400",
+    "The Prophet": "from-green-500 to-blue-400",
+    "The Reformer": "from-green-500 to-blue-400",
+    "The Utopian": "from-green-500 to-blue-400",
     "Unknown Archetype": "from-gray-500 to-gray-400",
   };
 

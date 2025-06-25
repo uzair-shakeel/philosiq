@@ -7,13 +7,63 @@ import {
   FaArrowRight,
   FaSpinner,
   FaHistory,
+  FaTrash,
 } from "react-icons/fa";
+
+// Custom Modal Component
+function CustomModal({
+  isOpen,
+  title,
+  message,
+  onConfirm,
+  onCancel,
+  confirmText = "OK",
+  cancelText = "Cancel",
+  isConfirm = false,
+}) {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+      <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+        <h2 className="text-xl font-bold mb-3">{title}</h2>
+        <p className="mb-6 text-gray-700">{message}</p>
+        <div className="flex justify-end gap-3">
+          {isConfirm && (
+            <button
+              onClick={onCancel}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+            >
+              {cancelText}
+            </button>
+          )}
+          <button
+            onClick={onConfirm}
+            className={`px-4 py-2 rounded text-white ${
+              isConfirm
+                ? "bg-red-600 hover:bg-red-800"
+                : "bg-primary-maroon hover:bg-primary-darkMaroon"
+            }`}
+          >
+            {confirmText}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function HistoryPage() {
   const [quizHistory, setQuizHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
+  const [deletingId, setDeletingId] = useState(null);
+  const [modal, setModal] = useState({
+    isOpen: false,
+    type: "",
+    message: "",
+    onConfirm: null,
+  });
 
   useEffect(() => {
     // Check if user is authenticated
@@ -56,6 +106,62 @@ export default function HistoryPage() {
       setError("Failed to load your quiz history. Please try again later.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteResult = (resultId) => {
+    setModal({
+      isOpen: true,
+      type: "confirm",
+      message:
+        "Are you sure you want to delete this quiz result? This action cannot be undone.",
+      onConfirm: () => confirmDelete(resultId),
+    });
+  };
+
+  const confirmDelete = async (resultId) => {
+    setModal({ isOpen: false });
+    setDeletingId(resultId);
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        setModal({
+          isOpen: true,
+          type: "error",
+          message: "You must be logged in to delete a result.",
+        });
+        setDeletingId(null);
+        return;
+      }
+      const response = await fetch(`/api/quiz/result/${resultId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setQuizHistory((prev) => prev.filter((r) => r._id !== resultId));
+        setModal({
+          isOpen: true,
+          type: "success",
+          message: "Quiz result deleted successfully.",
+        });
+      } else {
+        setModal({
+          isOpen: true,
+          type: "error",
+          message: data.message || "Failed to delete quiz result.",
+        });
+      }
+    } catch (error) {
+      setModal({
+        isOpen: true,
+        type: "error",
+        message: "Failed to delete quiz result. Please try again later.",
+      });
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -212,6 +318,22 @@ export default function HistoryPage() {
                     >
                       View Full Results <FaArrowRight className="ml-2" />
                     </Link>
+                    <button
+                      onClick={() => handleDeleteResult(result._id)}
+                      disabled={deletingId === result._id}
+                      className="ml-2 bg-red-600 text-white px-4 py-2 rounded-full inline-flex items-center text-sm font-medium hover:bg-red-800 transition-colors disabled:bg-gray-400"
+                    >
+                      {deletingId === result._id ? (
+                        <>
+                          <FaSpinner className="animate-spin mr-2" />{" "}
+                          Deleting...
+                        </>
+                      ) : (
+                        <>
+                          <FaTrash className="mr-2" /> Delete
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
               ))}
@@ -229,6 +351,30 @@ export default function HistoryPage() {
               </Link>
             </div>
           )}
+
+          {/* Custom Modal for confirmation, success, and error */}
+          <CustomModal
+            isOpen={modal.isOpen}
+            title={
+              modal.type === "confirm"
+                ? "Confirm Delete"
+                : modal.type === "success"
+                ? "Deleted"
+                : "Error"
+            }
+            message={modal.message}
+            onConfirm={() => {
+              if (modal.type === "confirm") {
+                modal.onConfirm && modal.onConfirm();
+              } else {
+                setModal({ isOpen: false });
+              }
+            }}
+            onCancel={() => setModal({ isOpen: false })}
+            confirmText={modal.type === "confirm" ? "Delete" : "OK"}
+            cancelText="Cancel"
+            isConfirm={modal.type === "confirm"}
+          />
         </div>
       </div>
     </Layout>
