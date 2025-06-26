@@ -601,14 +601,18 @@ export default function QuizResultDetail() {
                       {/* Axis Labels */}
                       <div className="flex justify-between items-center">
                         <div className="text-xs font-medium">
-                          <span className="px-2 py-0.5 rounded-full text-white bg-blue-600">
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-white ${leftSideColor}`}
+                          >
                             {axis.leftLabel}{" "}
                             {axis.userPosition === axis.leftLabel &&
                               `(${axis.positionStrength})`}
                           </span>
                         </div>
                         <div className="text-xs font-medium">
-                          <span className="px-2 py-0.5 rounded-full text-white bg-green-600">
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-white ${rightSideColor}`}
+                          >
                             {axis.rightLabel}{" "}
                             {axis.userPosition === axis.rightLabel &&
                               `(${axis.positionStrength})`}
