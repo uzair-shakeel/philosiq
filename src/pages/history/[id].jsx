@@ -564,11 +564,11 @@ export default function QuizResultDetail() {
                   let rightSideColor = "bg-green-600";
                   switch (axis.name) {
                     case "Equity vs. Free Market":
-                      leftSideColor = "bg-teal-600"; // Blue for Equity
-                      rightSideColor = "bg-orange-600"; // Green for Free Market
+                      leftSideColor = "bg-blue-600"; // Blue for Equity
+                      rightSideColor = "bg-green-600"; // Green for Free Market
                       break;
                     case "Libertarian vs. Authoritarian":
-                      leftSideColor = "bg-blue-500"; // Blue for Libertarian
+                      leftSideColor = "bg-teal-500"; // Blue for Libertarian
                       rightSideColor = "bg-orange-500"; // Orange for Authoritarian
                       break;
                     case "Progressive vs. Conservative":

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
  * Component to display a visual representation of a political axis
  * with the user's position marked
  */
-export default function AxisGraph({
+export default function seAxisGraph({
   name,
   score = 50,
   rawScore = 0, // This is the -100 to 100 score

@@ -180,10 +180,11 @@ export default function QuizPage() {
 
   // Function to start the quiz
   const startQuiz = async (type) => {
-    if (!isAuthenticated) {
-      setShowAuthModal(true);
-      return;
-    }
+    // Removed authentication check so users can start the quiz without logging in
+    // if (!isAuthenticated) {
+    //   setShowAuthModal(true);
+    //   return;
+    // }
 
     // Track quiz start event
     track("quiz_started", { type });
@@ -379,10 +380,10 @@ export default function QuizPage() {
 
     try {
       // Get the auth token
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        throw new Error("Please log in to save your results");
-      }
+      // const token = localStorage.getItem("authToken");
+      // if (!token) {
+      //   throw new Error("Please log in to save your results");
+      // }
 
       // Calculate final results using the proper utility
       const finalResults = calculateResults(questions, answers);
@@ -409,7 +410,6 @@ export default function QuizPage() {
       localStorage.setItem("quizResults", JSON.stringify(resultsData));
 
       // If user is authenticated, save to database
- 
 
       // Navigate to results page
       router.push("/results");
@@ -494,7 +494,7 @@ export default function QuizPage() {
                   <div className="mt-4 p-4 bg-blue-50 rounded-lg inline-block">
                     <p className="text-blue-700 flex items-center">
                       <FaUser className="mr-2" />
-                      Please sign in to take the quiz and save your results
+                      Please sign in to save your results
                     </p>
                   </div>
                 )}

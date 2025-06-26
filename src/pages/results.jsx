@@ -101,8 +101,11 @@ function ResultsContent({ results }) {
   // Add a useRef to track if secondaryArchetypes have been calculated
   const secondaryArchetypesCalculated = useRef(false);
 
-  // Add useEffect to check quiz type when component mounts
-  // Starting at line 108
+  // Add state to track authentication
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  // Add useEffect to check quiz type and authentication when component mounts
   useEffect(() => {
     try {
       let storedData = sessionStorage.getItem("quizResults");
@@ -114,8 +117,11 @@ function ResultsContent({ results }) {
         setIsFullQuiz(parsedData.quizType === "full");
         setResultsSaved(parsedData.isSaved || false); // Initialize resultsSaved
       }
+      // Check authentication
+      const token = localStorage.getItem("authToken");
+      setIsAuthenticated(!!token);
     } catch (err) {
-      console.error("Error determining quiz type:", err);
+      console.error("Error determining quiz type or auth status:", err);
     }
   }, []);
 
@@ -843,24 +849,64 @@ function ResultsContent({ results }) {
           </p>
 
           {/* Save Results Button - Prominent Position */}
-          <button
-            onClick={handleSaveResults}
-            disabled={resultsSaved || isSaving}
-            className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
-              resultsSaved
-                ? "bg-green-500 text-white"
+          {!resultsSaved && isAuthenticated && (
+            <button
+              onClick={handleSaveResults}
+              disabled={resultsSaved || isSaving}
+              className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
+                resultsSaved
+                  ? "bg-green-500 text-white"
+                  : isSaving
+                  ? "bg-gray-300 text-gray-600"
+                  : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+              }`}
+            >
+              {resultsSaved
+                ? "✓ Results Saved Successfully"
                 : isSaving
-                ? "bg-gray-300 text-gray-600"
-                : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-            }`}
-          >
-            {resultsSaved
-              ? "✓ Results Saved Successfully"
-              : isSaving
-              ? "Saving Your Results..."
-              : "Save Your Results to Account"}
-          </button>
+                ? "Saving Your Results..."
+                : "Save Your Results to Account"}
+            </button>
+          )}
+          {!resultsSaved && !isAuthenticated && (
+            <button
+              onClick={() => setShowLoginModal(true)}
+              className="px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+            >
+              Save Results (Login Required)
+            </button>
+          )}
         </div>
+
+        {/* Login Modal or Redirect */}
+        {showLoginModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+            <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+              <h2 className="text-xl font-bold mb-3">Login Required</h2>
+              <p className="mb-6 text-gray-700">
+                You need to log in or register to save your results to your
+                account.
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowLoginModal(false)}
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setShowLoginModal(false);
+                    router.push("/login?redirect=results");
+                  }}
+                  className="px-4 py-2 bg-primary-maroon text-white rounded hover:bg-primary-darkMaroon"
+                >
+                  Login / Register
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Primary Archetype Card */}
         <div className="mb-16">
