@@ -30,11 +30,7 @@ export default async function handler(req, res) {
       console.log("Token verified for user:", decoded.userId);
     } catch (error) {
       console.error("Token verification failed:", error.message);
-      return res.status(401).json({
-        success: false,
-        message: "Invalid token",
-        error: error.message,
-      });
+      return res.status(401).json({ success: false, message: "Invalid token" });
     }
 
     // Connect to database
@@ -57,20 +53,54 @@ export default async function handler(req, res) {
     // Get data from request body
     const { archetype, secondaryArchetypes, axisBreakdown, quizType } =
       req.body;
+
+    // Normalize secondaryArchetypes
+    let normalizedSecondaryArchetypes = [];
+    if (Array.isArray(secondaryArchetypes)) {
+      normalizedSecondaryArchetypes = secondaryArchetypes;
+    } else if (secondaryArchetypes && typeof secondaryArchetypes === "object") {
+      normalizedSecondaryArchetypes = Object.values(secondaryArchetypes);
+    }
+
+    // Normalize axisBreakdown
+    let normalizedAxisBreakdown = [];
+    if (Array.isArray(axisBreakdown)) {
+      normalizedAxisBreakdown = axisBreakdown;
+    } else if (axisBreakdown && typeof axisBreakdown === "object") {
+      normalizedAxisBreakdown = Object.values(axisBreakdown);
+    }
+
     console.log("Received archetype data:", JSON.stringify(archetype));
     console.log(
       "Received secondary archetypes:",
-      JSON.stringify(secondaryArchetypes)
+      JSON.stringify(normalizedSecondaryArchetypes)
     );
-    console.log("Received axis breakdown:", JSON.stringify(axisBreakdown));
+    console.log(
+      "Received axis breakdown:",
+      JSON.stringify(normalizedAxisBreakdown)
+    );
     console.log("Received quiz type:", quizType || "not specified");
 
     // Validate required data
-    if (!archetype || !archetype.name || !archetype.traits) {
-      console.error("Missing archetype data:", JSON.stringify(req.body));
+    if (!req.body.archetype) {
+      console.error("Missing archetype object:", JSON.stringify(req.body));
       return res.status(400).json({
         success: false,
-        message: "Missing archetype name or traits",
+        message: "Missing archetype object",
+      });
+    }
+    if (!req.body.archetype.name) {
+      console.error("Missing archetype name:", JSON.stringify(req.body));
+      return res.status(400).json({
+        success: false,
+        message: "Missing archetype name",
+      });
+    }
+    if (!req.body.archetype.traits) {
+      console.error("Missing archetype traits:", JSON.stringify(req.body));
+      return res.status(400).json({
+        success: false,
+        message: "Missing archetype traits",
       });
     }
 
@@ -83,10 +113,8 @@ export default async function handler(req, res) {
         name: archetype.name,
         traits: archetype.traits,
       },
-      secondaryArchetypes: Array.isArray(secondaryArchetypes)
-        ? secondaryArchetypes
-        : [],
-      axisBreakdown: Array.isArray(axisBreakdown) ? axisBreakdown : [],
+      secondaryArchetypes: normalizedSecondaryArchetypes,
+      axisBreakdown: normalizedAxisBreakdown,
       createdAt: new Date(),
       quizType: req.body.quizType || "full", // Add quizType if provided
     });
@@ -98,10 +126,8 @@ export default async function handler(req, res) {
         name: archetype.name,
         traits: archetype.traits,
       },
-      secondaryArchetypes: Array.isArray(secondaryArchetypes)
-        ? secondaryArchetypes
-        : [],
-      axisBreakdown: Array.isArray(axisBreakdown) ? axisBreakdown : [],
+      secondaryArchetypes: normalizedSecondaryArchetypes,
+      axisBreakdown: normalizedAxisBreakdown,
       quizType: quizType || "full", // Add the quiz type
       createdAt: new Date(),
     });

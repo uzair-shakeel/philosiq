@@ -180,10 +180,11 @@ export default function QuizPage() {
 
   // Function to start the quiz
   const startQuiz = async (type) => {
-    if (!isAuthenticated) {
-      setShowAuthModal(true);
-      return;
-    }
+    // Removed authentication check so users can start the quiz without logging in
+    // if (!isAuthenticated) {
+    //   setShowAuthModal(true);
+    //   return;
+    // }
 
     // Track quiz start event
     track("quiz_started", { type });
@@ -373,15 +374,16 @@ export default function QuizPage() {
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return; // Prevent double submission
     setIsSubmitting(true);
     setSubmissionError(null);
 
     try {
       // Get the auth token
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        throw new Error("Please log in to save your results");
-      }
+      // const token = localStorage.getItem("authToken");
+      // if (!token) {
+      //   throw new Error("Please log in to save your results");
+      // }
 
       // Calculate final results using the proper utility
       const finalResults = calculateResults(questions, answers);
@@ -392,7 +394,7 @@ export default function QuizPage() {
         questions,
         answers,
         // Save detailed axis information
-        axisResults: finalResults.axisResults,
+        axisBreakdown: finalResults.axisResults,
         axisScores: finalResults.axisScores,
         // Save primary archetype
         archetype: finalResults.archetype,
@@ -408,35 +410,6 @@ export default function QuizPage() {
       localStorage.setItem("quizResults", JSON.stringify(resultsData));
 
       // If user is authenticated, save to database
-      try {
-        const response = await fetch("/api/quiz/save-results", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(resultsData),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || "Failed to save results");
-        }
-
-        // Track successful quiz completion
-        track("quiz_completed", {
-          quizType: quizType === "short" ? "short" : "full",
-          archetype: finalResults.archetype?.name || "Unknown",
-        });
-      } catch (error) {
-        console.error("Error saving results:", error);
-        // Don't block navigation if saving fails
-        track("quiz_save_error", {
-          error: error.message,
-          quizType: quizType === "short" ? "short" : "full",
-        });
-      }
 
       // Navigate to results page
       router.push("/results");
@@ -521,7 +494,7 @@ export default function QuizPage() {
                   <div className="mt-4 p-4 bg-blue-50 rounded-lg inline-block">
                     <p className="text-blue-700 flex items-center">
                       <FaUser className="mr-2" />
-                      Please sign in to take the quiz and save your results
+                      Please sign in to save your results
                     </p>
                   </div>
                 )}
@@ -886,9 +859,11 @@ export default function QuizPage() {
                     <button
                       onClick={handleSubmit}
                       disabled={
+                        isSubmitting ||
                         answers[questions[currentQuestion]?._id] === undefined
                       }
                       className={`px-6 py-2 rounded flex items-center gap-2 ${
+                        isSubmitting ||
                         answers[questions[currentQuestion]?._id] === undefined
                           ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                           : quizType === "short"
