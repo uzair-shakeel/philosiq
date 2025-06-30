@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     const questionsCollection = mongoose.connection.db.collection("questions");
 
     // Parse query parameters
-    const limit = parseInt(req.query.limit) || 50;
+    const limit = parseInt(req.query.limit) || 200;
 
     // Build query filter - only active questions for public endpoint
     const query = { active: true };
