@@ -168,6 +168,47 @@ export default function QuizPage() {
     }
   };
 
+  // Function to fetch all questions without any filtering
+  const fetchAllQuestions = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const url = `/api/questions/all`;
+      console.log(`Fetching all questions from: ${url}`);
+
+      const response = await axios.get(url);
+
+      if (response.data.success) {
+        console.log(
+          `Successfully fetched ${response.data.questions.length} questions`
+        );
+        return response.data.questions || [];
+      } else {
+        console.error("API returned success: false", response.data);
+        throw new Error(response.data.message || "Failed to fetch questions");
+      }
+    } catch (error) {
+      console.error("Error fetching all questions:", error);
+      setError(
+        `Failed to load questions from API: ${
+          error.message || "Unknown error"
+        }. Using fallback questions.`
+      );
+
+      // Return fallback questions if API fails
+      const duplicatedQuestions = [];
+      for (let i = 0; i < 10; i++) {
+        duplicatedQuestions.push(
+          ...FALLBACK_QUESTIONS.map((q) => ({ ...q, _id: `${q._id}_${i}` }))
+        );
+      }
+      return duplicatedQuestions;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Function to shuffle array (Fisher-Yates algorithm)
   const shuffleArray = (array) => {
     const newArray = [...array];
@@ -279,8 +320,8 @@ export default function QuizPage() {
         // Final shuffle to mix questions from different axes
         fetchedQuestions = shuffleArray(selectedQuestions);
       } else {
-        // For full quiz, fetch questions and ensure no duplicates
-        const allQuestions = await fetchQuestions(200, false);
+        // For full quiz, fetch all questions without any filtering
+        const allQuestions = await fetchAllQuestions();
 
         if (allQuestions.length === 0) {
           setError("Not enough questions available. Please try again later.");
@@ -293,36 +334,8 @@ export default function QuizPage() {
           new Map(allQuestions.map((q) => [q.question, q])).values()
         );
 
-        // Group questions by axis to ensure balanced distribution
-        const questionsByAxis = {};
-        uniqueQuestions.forEach((question) => {
-          if (!questionsByAxis[question.axis]) {
-            questionsByAxis[question.axis] = [];
-          }
-          questionsByAxis[question.axis].push(question);
-        });
-
-        // Calculate how many questions to take from each axis
-        const axes = Object.keys(questionsByAxis);
-        const targetQuestionsPerAxis = Math.ceil(130 / axes.length);
-
-        // Select questions from each axis
-        let selectedQuestions = [];
-        axes.forEach((axis) => {
-          const axisQuestions = questionsByAxis[axis];
-          const shuffled = shuffleArray([...axisQuestions]);
-          selectedQuestions = [
-            ...selectedQuestions,
-            ...shuffled.slice(0, targetQuestionsPerAxis),
-          ];
-        });
-
-        // If we have more than 130 questions, trim the excess
-        if (selectedQuestions.length > 130) {
-          selectedQuestions = shuffleArray(selectedQuestions).slice(0, 130);
-        }
-
-        fetchedQuestions = shuffleArray(selectedQuestions);
+        // Use all unique questions without limiting them
+        fetchedQuestions = shuffleArray(uniqueQuestions);
       }
 
       if (fetchedQuestions.length === 0) {
