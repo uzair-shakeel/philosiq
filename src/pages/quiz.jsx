@@ -773,8 +773,7 @@ export default function QuizPage() {
 
               <div className="mt-12 text-center">
                 <p className="text-gray-500 text-sm">
-                  Your responses are anonymous and will be used to determine
-                  your political archetype.
+                  Your responses are anonymous and will be used to determine your political archetype. However, if you choose to log in and save your results, your scores and email may be stored to allow you to revisit and compare your outcomes. This information will be kept private and will not be used for any purpose outside of this site.
                 </p>
               </div>
             </div>
