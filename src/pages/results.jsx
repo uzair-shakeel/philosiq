@@ -430,15 +430,223 @@ function ResultsContent({ results }) {
       }
     : null;
 
-  const handleEmailSubmit = (e) => {
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, this would send an API request to email the results
-    console.log(`Sending results to ${userEmail}`);
 
-    // Simulate email sending
-    setTimeout(() => {
+    if (!userEmail) {
+      alert("Please enter your email address");
+      return;
+    }
+
+    try {
+      setIsPdfGenerating(true);
+
+      // Track email sending start
+      track("email_results_started", {
+        archetype: results.archetype?.name || "Unknown",
+      });
+
+      // Create a new PDF document with minimal styling
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4",
+      });
+
+      // Set initial position
+      let y = 40; // Starting y position
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const margin = 40;
+      const contentWidth = pageWidth - margin * 2;
+
+      // Helper function to add text with word wrap
+      const addWrappedText = (text, x, y, maxWidth, lineHeight) => {
+        const lines = pdf.splitTextToSize(text, maxWidth);
+        pdf.text(lines, x, y);
+        return y + lines.length * lineHeight;
+      };
+
+      // Helper function to add a separator
+      const addSeparator = (y) => {
+        return y + 20; // Just add space instead of drawing a line
+      };
+
+      // Add title
+      pdf.setFontSize(16);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("PhilosiQ Political Archetype Results", margin, y);
+      y += 20;
+
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
+      pdf.text(`Generated on ${new Date().toLocaleDateString()}`, margin, y);
+      y = addSeparator(y + 10);
+
+      // Add primary archetype
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
+      y += 10;
+      pdf.text(
+        `Your Archetype: ${results.archetype?.name || "Unknown"}`,
+        margin,
+        y
+      );
+      y += 20;
+
+      // Add traits
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
+
+      const traits = [];
+      if (Object.keys(axisLetters).length > 0) {
+        Object.entries(axisLetters).forEach(([axis, letter]) => {
+          let trait = "";
+          switch (axis) {
+            case "Equity vs. Free Market":
+              trait = letter === "E" ? "Equity" : "Free Market";
+              break;
+            case "Libertarian vs. Authoritarian":
+              trait = letter === "L" ? "Libertarian" : "Authoritarian";
+              break;
+            case "Progressive vs. Conservative":
+              trait = letter === "P" ? "Progressive" : "Conservative";
+              break;
+            case "Secular vs. Religious":
+              trait = letter === "S" ? "Secular" : "Religious";
+              break;
+            case "Globalism vs. Nationalism":
+              trait = letter === "G" ? "Globalism" : "Nationalism";
+              break;
+          }
+          traits.push(trait);
+        });
+      }
+
+      pdf.text(`Traits: ${traits.join(", ")}`, margin, y);
+      y += 15;
+
+      // Add description
+      const description = getArchetypeDescription(results.archetype?.name);
+      pdf.setFontSize(11);
+      y = addWrappedText(description, margin, y, contentWidth, 15);
+      y = addSeparator(y);
+
+      // Add axis breakdown section
+      y += 10;
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Your Political Axis Breakdown", margin, y);
+      y += 20;
+
+      // Add each axis
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
+
+      results.axisResults.forEach((axis, index) => {
+        // Check if we need to add a new page
+        if (y > pdf.internal.pageSize.getHeight() - 80) {
+          pdf.addPage();
+          y = 40;
+        }
+
+        pdf.setFont("helvetica", "bold");
+        pdf.text(axis.name, margin, y);
+        y += 15;
+
+        pdf.setFont("helvetica", "normal");
+
+        // Get the correct percentages from axisBreakdownData
+        const axisName = axis.name;
+        const axisData = axisBreakdownData[axisName];
+
+        // Use the percentages from the child component if available, otherwise fallback to calculation
+        const leftPercent = axisData ? axisData.leftPercent : axis.score;
+        const rightPercent = axisData
+          ? axisData.rightPercent
+          : 100 - axis.score;
+
+        pdf.text(`${axis.leftLabel}: ${leftPercent}%`, margin, y);
+        y += 15;
+        pdf.text(`${axis.rightLabel}: ${rightPercent}%`, margin, y);
+        y += 15;
+
+        // Add a simple text indicator of position
+        let positionText = "";
+        // Correct interpretation: scores > 50 correspond to left label, scores < 50 correspond to right label
+        if (axis.score > 50) {
+          // Left side positions
+          const strength =
+            axis.score >= 80
+              ? "Extreme"
+              : axis.score >= 70
+              ? "Committed"
+              : axis.score >= 60
+              ? "Inclined"
+              : "Leaning";
+          positionText = `${strength} ${axis.leftLabel}`;
+        } else if (axis.score < 50) {
+          // Right side positions
+          const strength =
+            axis.score <= 20
+              ? "Extreme"
+              : axis.score <= 30
+              ? "Committed"
+              : axis.score <= 40
+              ? "Inclined"
+              : "Leaning";
+          positionText = `${strength} ${axis.rightLabel}`;
+        } else {
+          positionText = "Centrist position";
+        }
+
+        pdf.text(`Position: ${positionText}`, margin, y);
+        y += 20;
+
+        if (index < results.axisResults.length - 1) {
+          y = addSeparator(y);
+        }
+      });
+
+      // Get the PDF as base64 data
+      const pdfData = pdf.output("datauristring").split(",")[1];
+
+      // Send the PDF via email
+      const response = await fetch("/api/quiz/email-results", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          pdfData: pdfData,
+          archetypeName: results.archetype?.name || "Unknown",
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to send email");
+      }
+
+      // Track successful email
+      track("email_results_completed", {
+        archetype: results.archetype?.name || "Unknown",
+      });
+
       setEmailSent(true);
-    }, 1000);
+    } catch (error) {
+      console.error("Error sending results email:", error);
+      alert("Failed to send email. Please try again.");
+
+      // Track email error
+      track("email_results_error", {
+        error: error.message || "Unknown error",
+        archetype: results.archetype?.name || "Unknown",
+      });
+    } finally {
+      setIsPdfGenerating(false);
+    }
   };
 
   const handleDownloadPDF = async () => {
@@ -611,113 +819,40 @@ function ResultsContent({ results }) {
         }
       });
 
-      // Add secondary archetypes if they exist
-      if (secondaryArchetypes && secondaryArchetypes.length > 0) {
-        // Check if we need to add a new page
-        if (y > pdf.internal.pageSize.getHeight() - 120) {
-          pdf.addPage();
-          y = 40;
-        }
+      // Get the PDF as base64 data
+      const pdfData = pdf.output("datauristring").split(",")[1];
 
-        y = addSeparator(y);
-        y += 10;
+      // Send the PDF via email
+      const response = await fetch("/api/quiz/email-results", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          pdfData: pdfData,
+          archetypeName: results.archetype?.name || "Unknown",
+        }),
+      });
 
-        pdf.setFontSize(14);
-        pdf.setFont("helvetica", "bold");
-        pdf.text("Your Secondary Archetypes", margin, y);
-        y += 20;
+      const result = await response.json();
 
-        pdf.setFontSize(11);
-        pdf.setFont("helvetica", "normal");
-        pdf.text(
-          "You also show strong alignment with these political archetypes:",
-          margin,
-          y
-        );
-        y += 20;
-
-        secondaryArchetypes.forEach((archetype, index) => {
-          // Check if we need to add a new page
-          if (y > pdf.internal.pageSize.getHeight() - 150) {
-            pdf.addPage();
-            y = 40;
-          }
-
-          pdf.setFont("helvetica", "bold");
-          pdf.text(`${archetype.name} (${archetype.match})`, margin, y);
-          y += 15;
-
-          pdf.setFont("helvetica", "normal");
-          pdf.text(`Traits: ${(archetype.traits || []).join(", ")}`, margin, y);
-          y += 15;
-
-          pdf.text(
-            `Difference from primary: Flipped position on ${
-              archetype.flippedAxis
-                ? archetype.flippedAxis.replace(" vs. ", "/")
-                : ""
-            }`,
-            margin,
-            y
-          );
-          y += 15;
-
-          const secondaryDescription = getArchetypeDescription(archetype.name);
-          y = addWrappedText(secondaryDescription, margin, y, contentWidth, 15);
-
-          if (index < secondaryArchetypes.length - 1) {
-            y = addSeparator(y);
-          }
-        });
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to send email");
       }
 
-      // Add page numbers
-      const totalPages = pdf.internal.getNumberOfPages();
-      for (let i = 1; i <= totalPages; i++) {
-        pdf.setPage(i);
-        pdf.setFontSize(10);
-        pdf.text(
-          `Page ${i} of ${totalPages}`,
-          pageWidth / 2,
-          pdf.internal.pageSize.getHeight() - 20,
-          { align: "center" }
-        );
-      }
-
-      // Add footer on last page
-      pdf.setPage(totalPages);
-      pdf.setFontSize(10);
-      pdf.setFont("helvetica", "italic");
-      const footerText =
-        "Visit philosiq.com to learn more about your political archetype";
-      pdf.text(
-        footerText,
-        pageWidth / 2,
-        pdf.internal.pageSize.getHeight() - 40,
-        { align: "center" }
-      );
-
-      // Generate a filename with the archetype name and date
-      const archetypeName = results.archetype?.name || "Results";
-      const date = new Date().toISOString().split("T")[0];
-      const filename = `PhilosiQ-${archetypeName.replace(
-        /\s+/g,
-        "-"
-      )}-${date}.pdf`;
-
-      // Save the PDF
-      pdf.save(filename);
-
-      // Track successful PDF download
-      track("pdf_download_completed", {
+      // Track successful email
+      track("email_results_completed", {
         archetype: results.archetype?.name || "Unknown",
       });
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      alert("Failed to generate PDF. Please try again.");
 
-      // Track PDF generation error
-      track("pdf_download_error", {
+      setEmailSent(true);
+    } catch (error) {
+      console.error("Error sending results email:", error);
+      alert("Failed to send email. Please try again.");
+
+      // Track email error
+      track("email_results_error", {
         error: error.message || "Unknown error",
         archetype: results.archetype?.name || "Unknown",
       });
@@ -1321,13 +1456,21 @@ function ResultsContent({ results }) {
                         value={userEmail}
                         onChange={(e) => setUserEmail(e.target.value)}
                         required
+                        disabled={isPdfGenerating}
                       />
                     </div>
                     <button
                       type="submit"
-                      className="w-full btn-primary-outline"
+                      className="w-full btn-primary-outline flex justify-center items-center"
+                      disabled={isPdfGenerating}
                     >
-                      Send Results
+                      {isPdfGenerating ? (
+                        <>
+                          <FaSpinner className="animate-spin mr-2" /> Sending...
+                        </>
+                      ) : (
+                        "Send Results"
+                      )}
                     </button>
                   </form>
                 )}
