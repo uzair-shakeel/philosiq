@@ -365,6 +365,7 @@ export default function MindMapContributeModal({
         },
         body: JSON.stringify({
           ...formData,
+          race: formData.ethnicity,
           archetype,
           axisScores,
         }),

@@ -559,9 +559,15 @@ function ResultsContent({ results }) {
 
         pdf.setFont("helvetica", "normal");
 
-        // Simple text representation of the axis position
-        const leftPercent = axis.score <= 50 ? axis.score : 100 - axis.score;
-        const rightPercent = axis.score >= 50 ? axis.score : 100 - axis.score;
+        // Get the correct percentages from axisBreakdownData
+        const axisName = axis.name;
+        const axisData = axisBreakdownData[axisName];
+
+        // Use the percentages from the child component if available, otherwise fallback to calculation
+        const leftPercent = axisData ? axisData.leftPercent : axis.score;
+        const rightPercent = axisData
+          ? axisData.rightPercent
+          : 100 - axis.score;
 
         pdf.text(`${axis.leftLabel}: ${leftPercent}%`, margin, y);
         y += 15;
@@ -570,18 +576,29 @@ function ResultsContent({ results }) {
 
         // Add a simple text indicator of position
         let positionText = "";
-        if (axis.score < 40) {
-          positionText = `Extreme ${axis.leftLabel} leaning`;
-        } else if (axis.score < 45) {
-          positionText = `Committed ${axis.leftLabel} leaning`;
+        // Correct interpretation: scores > 50 correspond to left label, scores < 50 correspond to right label
+        if (axis.score > 50) {
+          // Left side positions
+          const strength =
+            axis.score >= 80
+              ? "Extreme"
+              : axis.score >= 70
+              ? "Committed"
+              : axis.score >= 60
+              ? "Inclined"
+              : "Leaning";
+          positionText = `${strength} ${axis.leftLabel}`;
         } else if (axis.score < 50) {
-          positionText = `Inclined ${axis.leftLabel} leaning`;
-        } else if (axis.score > 60) {
-          positionText = `Extreme ${axis.rightLabel} leaning`;
-        } else if (axis.score > 55) {
-          positionText = `Committed ${axis.rightLabel} leaning`;
-        } else if (axis.score > 50) {
-          positionText = `Inclined ${axis.rightLabel} leaning`;
+          // Right side positions
+          const strength =
+            axis.score <= 20
+              ? "Extreme"
+              : axis.score <= 30
+              ? "Committed"
+              : axis.score <= 40
+              ? "Inclined"
+              : "Leaning";
+          positionText = `${strength} ${axis.rightLabel}`;
         } else {
           positionText = "Centrist position";
         }
@@ -708,6 +725,12 @@ function ResultsContent({ results }) {
       setIsPdfGenerating(false);
     }
   };
+
+  {
+    results.axisResults.map((axis, index) => {
+      console.log("from parent axis graph", axis);
+    });
+  }
 
   // Starting at line 615
   const handleSaveResults = async () => {
