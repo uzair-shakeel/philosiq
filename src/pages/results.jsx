@@ -572,31 +572,40 @@ function ResultsContent({ results }) {
 
         // Add a simple text indicator of position
         let positionText = "";
-        // Correct interpretation: scores > 50 correspond to left label, scores < 50 correspond to right label
-        if (axis.score > 50) {
-          // Left side positions
-          const strength =
-            axis.score >= 80
-              ? "Extreme"
-              : axis.score >= 70
-              ? "Committed"
-              : axis.score >= 60
-              ? "Inclined"
-              : "Leaning";
-          positionText = `${strength} ${axis.leftLabel}`;
-        } else if (axis.score < 50) {
-          // Right side positions
-          const strength =
-            axis.score <= 20
-              ? "Extreme"
-              : axis.score <= 30
-              ? "Committed"
-              : axis.score <= 40
-              ? "Inclined"
-              : "Leaning";
-          positionText = `${strength} ${axis.rightLabel}`;
+
+        // Use the position and strength from axisData if available
+        if (axisData && axisData.userPosition && axisData.positionStrength) {
+          positionText = `${axisData.positionStrength} ${axisData.userPosition}`;
+        } else if (axis.positionStrength && axis.userPosition) {
+          // Fallback to the axis data from results
+          positionText = `${axis.positionStrength} ${axis.userPosition}`;
         } else {
-          positionText = "Centrist position";
+          // Legacy fallback calculation if no position data is available
+          if (axis.score > 50) {
+            // Left side positions
+            const strength =
+              axis.score >= 80
+                ? "Extreme"
+                : axis.score >= 70
+                ? "Committed"
+                : axis.score >= 60
+                ? "Inclined"
+                : "Leaning";
+            positionText = `${strength} ${axis.leftLabel}`;
+          } else if (axis.score < 50) {
+            // Right side positions
+            const strength =
+              axis.score <= 20
+                ? "Extreme"
+                : axis.score <= 30
+                ? "Committed"
+                : axis.score <= 40
+                ? "Inclined"
+                : "Leaning";
+            positionText = `${strength} ${axis.rightLabel}`;
+          } else {
+            positionText = "Centrist position";
+          }
         }
 
         pdf.text(`Position: ${positionText}`, margin, y);
@@ -784,31 +793,40 @@ function ResultsContent({ results }) {
 
         // Add a simple text indicator of position
         let positionText = "";
-        // Correct interpretation: scores > 50 correspond to left label, scores < 50 correspond to right label
-        if (axis.score > 50) {
-          // Left side positions
-          const strength =
-            axis.score >= 80
-              ? "Extreme"
-              : axis.score >= 70
-              ? "Committed"
-              : axis.score >= 60
-              ? "Inclined"
-              : "Leaning";
-          positionText = `${strength} ${axis.leftLabel}`;
-        } else if (axis.score < 50) {
-          // Right side positions
-          const strength =
-            axis.score <= 20
-              ? "Extreme"
-              : axis.score <= 30
-              ? "Committed"
-              : axis.score <= 40
-              ? "Inclined"
-              : "Leaning";
-          positionText = `${strength} ${axis.rightLabel}`;
+
+        // Use the position and strength from axisData if available
+        if (axisData && axisData.userPosition && axisData.positionStrength) {
+          positionText = `${axisData.positionStrength} ${axisData.userPosition}`;
+        } else if (axis.positionStrength && axis.userPosition) {
+          // Fallback to the axis data from results
+          positionText = `${axis.positionStrength} ${axis.userPosition}`;
         } else {
-          positionText = "Centrist position";
+          // Legacy fallback calculation if no position data is available
+          if (axis.score > 50) {
+            // Left side positions
+            const strength =
+              axis.score >= 80
+                ? "Extreme"
+                : axis.score >= 70
+                ? "Committed"
+                : axis.score >= 60
+                ? "Inclined"
+                : "Leaning";
+            positionText = `${strength} ${axis.leftLabel}`;
+          } else if (axis.score < 50) {
+            // Right side positions
+            const strength =
+              axis.score <= 20
+                ? "Extreme"
+                : axis.score <= 30
+                ? "Committed"
+                : axis.score <= 40
+                ? "Inclined"
+                : "Leaning";
+            positionText = `${strength} ${axis.rightLabel}`;
+          } else {
+            positionText = "Centrist position";
+          }
         }
 
         pdf.text(`Position: ${positionText}`, margin, y);
@@ -819,40 +837,39 @@ function ResultsContent({ results }) {
         }
       });
 
-      // Get the PDF as base64 data
-      const pdfData = pdf.output("datauristring").split(",")[1];
+      // Add footer
+      pdf.setFontSize(10);
+      pdf.setFont("helvetica", "italic");
+      const footerText =
+        "Visit philosiq.com to learn more about your political archetype";
+      pdf.text(
+        footerText,
+        pageWidth / 2,
+        pdf.internal.pageSize.getHeight() - 30,
+        { align: "center" }
+      );
 
-      // Send the PDF via email
-      const response = await fetch("/api/quiz/email-results", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: userEmail,
-          pdfData: pdfData,
-          archetypeName: results.archetype?.name || "Unknown",
-        }),
-      });
+      // Generate a filename with the archetype name and date
+      const archetypeName = results.archetype?.name || "Results";
+      const date = new Date().toISOString().split("T")[0];
+      const filename = `PhilosiQ-${archetypeName.replace(
+        /\s+/g,
+        "-"
+      )}-${date}.pdf`;
 
-      const result = await response.json();
+      // Save the PDF (this will trigger the download)
+      pdf.save(filename);
 
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to send email");
-      }
-
-      // Track successful email
-      track("email_results_completed", {
+      // Track successful download
+      track("pdf_download_completed", {
         archetype: results.archetype?.name || "Unknown",
       });
-
-      setEmailSent(true);
     } catch (error) {
-      console.error("Error sending results email:", error);
-      alert("Failed to send email. Please try again.");
+      console.error("Error generating PDF:", error);
+      alert("Failed to generate PDF. Please try again.");
 
-      // Track email error
-      track("email_results_error", {
+      // Track PDF error
+      track("pdf_download_error", {
         error: error.message || "Unknown error",
         archetype: results.archetype?.name || "Unknown",
       });
