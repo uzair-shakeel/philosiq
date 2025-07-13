@@ -860,7 +860,7 @@ function ResultsContent({ results }) {
       // Save the PDF (this will trigger the download)
       pdf.save(filename);
 
-      // Track successful download
+      // Track successful download from here
       track("pdf_download_completed", {
         archetype: results.archetype?.name || "Unknown",
       });
