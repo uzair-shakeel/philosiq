@@ -1024,6 +1024,37 @@ function ResultsContent({ results }) {
           </p>
 
  
+          <div className="flex justify-center">
+                 {/* Save Results Button - Prominent Position */}
+                 {!resultsSaved && isAuthenticated && (
+            <button
+              onClick={handleSaveResults}
+              disabled={resultsSaved || isSaving}
+              className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
+                resultsSaved
+                  ? "bg-green-500 text-white"
+                  : isSaving
+                  ? "bg-gray-300 text-gray-600"
+                  : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+              }`}
+            >
+              {resultsSaved
+                ? "✓ Results Saved Successfully"
+                : isSaving
+                ? "Saving Your Results..."
+                : "Save Your Results to Account"}
+            </button>
+          )}
+          {!resultsSaved && !isAuthenticated && (
+            <button
+              onClick={() => setShowLoginModal(true)}
+              className="px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+            >
+              Save Results (Login Required)
+            </button>
+          )}
+
+        </div>
         </div>
 
         {/* Login Modal or Redirect */}
@@ -1192,37 +1223,6 @@ function ResultsContent({ results }) {
           </div>
         </div>
 
-        <div className="flex justify-center mb-16">
-                 {/* Save Results Button - Prominent Position */}
-                 {!resultsSaved && isAuthenticated && (
-            <button
-              onClick={handleSaveResults}
-              disabled={resultsSaved || isSaving}
-              className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
-                resultsSaved
-                  ? "bg-green-500 text-white"
-                  : isSaving
-                  ? "bg-gray-300 text-gray-600"
-                  : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-              }`}
-            >
-              {resultsSaved
-                ? "✓ Results Saved Successfully"
-                : isSaving
-                ? "Saving Your Results..."
-                : "Save Your Results to Account"}
-            </button>
-          )}
-          {!resultsSaved && !isAuthenticated && (
-            <button
-              onClick={() => setShowLoginModal(true)}
-              className="px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-            >
-              Save Results (Login Required)
-            </button>
-          )}
-
-        </div>
 
 
     
