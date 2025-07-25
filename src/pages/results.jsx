@@ -1023,34 +1023,7 @@ function ResultsContent({ results }) {
             that fits you best
           </p>
 
-          {/* Save Results Button - Prominent Position */}
-          {!resultsSaved && isAuthenticated && (
-            <button
-              onClick={handleSaveResults}
-              disabled={resultsSaved || isSaving}
-              className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
-                resultsSaved
-                  ? "bg-green-500 text-white"
-                  : isSaving
-                  ? "bg-gray-300 text-gray-600"
-                  : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-              }`}
-            >
-              {resultsSaved
-                ? "✓ Results Saved Successfully"
-                : isSaving
-                ? "Saving Your Results..."
-                : "Save Your Results to Account"}
-            </button>
-          )}
-          {!resultsSaved && !isAuthenticated && (
-            <button
-              onClick={() => setShowLoginModal(true)}
-              className="px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-            >
-              Save Results (Login Required)
-            </button>
-          )}
+ 
         </div>
 
         {/* Login Modal or Redirect */}
@@ -1219,107 +1192,40 @@ function ResultsContent({ results }) {
           </div>
         </div>
 
-        {/* Secondary Archetypes - Improved Design */}
-        {secondaryArchetypes.length > 0 && (
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-6 text-center">
-              Your Secondary Archetypes
-            </h2>
-            <p className="text-center text-gray-600 mb-8">
-              You also show strong alignment with these political archetypes
-            </p>
+        <div className="flex justify-center mb-16">
+                 {/* Save Results Button - Prominent Position */}
+                 {!resultsSaved && isAuthenticated && (
+            <button
+              onClick={handleSaveResults}
+              disabled={resultsSaved || isSaving}
+              className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
+                resultsSaved
+                  ? "bg-green-500 text-white"
+                  : isSaving
+                  ? "bg-gray-300 text-gray-600"
+                  : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+              }`}
+            >
+              {resultsSaved
+                ? "✓ Results Saved Successfully"
+                : isSaving
+                ? "Saving Your Results..."
+                : "Save Your Results to Account"}
+            </button>
+          )}
+          {!resultsSaved && !isAuthenticated && (
+            <button
+              onClick={() => setShowLoginModal(true)}
+              className="px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+            >
+              Save Results (Login Required)
+            </button>
+          )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {secondaryArchetypes.map((archetype, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300"
-                >
-                  <div className="bg-gradient-to-r from-gray-100 to-gray-50 p-4 relative">
-                    {/* Decorative element */}
-                    <div className="absolute top-0 right-0 w-12 h-12 bg-blue-50 rounded-full opacity-30 translate-x-1/3 -translate-y-1/3"></div>
+        </div>
 
-                    <div className="flex justify-between items-center relative">
-                      <h3 className="text-2xl font-bold text-gray-800">
-                        {archetype.name}
-                      </h3>
-                      <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-sm">
-                        {archetype.match}
-                      </span>
-                    </div>
-                  </div>
 
-                  <div className="p-5">
-                    <div className="flex flex-wrap gap-2 mb-5">
-                      {archetype.traits.map((trait, i) => {
-                        // Define colors for different traits
-                        let bgColor = "bg-gray-200";
-
-                        if (trait === "Equity")
-                          bgColor = "bg-blue-100 text-blue-800";
-                        else if (trait === "Free Market")
-                          bgColor = "bg-green-100 text-green-800";
-                        else if (trait === "Libertarian")
-                          bgColor = "bg-indigo-100 text-indigo-800";
-                        else if (trait === "Authoritarian")
-                          bgColor = "bg-orange-100 text-orange-800";
-                        else if (trait === "Progressive")
-                          bgColor = "bg-purple-100 text-purple-800";
-                        else if (trait === "Conservative")
-                          bgColor = "bg-blue-100 text-blue-800";
-                        else if (trait === "Secular")
-                          bgColor = "bg-yellow-100 text-yellow-800";
-                        else if (trait === "Religious")
-                          bgColor = "bg-purple-100 text-purple-800";
-                        else if (trait === "Globalism")
-                          bgColor = "bg-teal-100 text-teal-800";
-                        else if (trait === "Nationalism")
-                          bgColor = "bg-red-100 text-red-800";
-
-                        return (
-                          <span
-                            key={i}
-                            className={`${bgColor} px-3 py-1 rounded-full text-sm font-medium shadow-sm`}
-                          >
-                            {trait}
-                          </span>
-                        );
-                      })}
-                    </div>
-
-                    <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-medium">
-                          Difference from primary:
-                        </span>{" "}
-                        Flipped position on{" "}
-                        <span className="font-semibold text-blue-700">
-                          {archetype.flippedAxis.replace(" vs. ", "/")}
-                        </span>
-                      </p>
-                    </div>
-
-                    <div className="text-sm text-gray-600 mb-4">
-                      {getArchetypeDescription(archetype.name)}
-                    </div>
-
-                    <Link
-                      href={`/archetypes/${archetype.slug}`}
-                      className="inline-flex items-center justify-center text-blue-600 hover:text-blue-800 hover:underline font-medium text-sm bg-blue-50 px-4 py-2 rounded-full hover:bg-blue-100 transition-all"
-                      shallow={false}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.location.href = `/archetypes/${archetype.slug}`;
-                      }}
-                    >
-                      View Details <FaArrowRight className="ml-1.5" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+    
 
         {/* Debug Section */}
         {/* {rawData && (
@@ -1436,6 +1342,108 @@ function ResultsContent({ results }) {
           </div>
         )}
 
+          {/* Secondary Archetypes - Improved Design */}
+          {secondaryArchetypes.length > 0 && (
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold mb-6 text-center">
+              Your Secondary Archetypes
+            </h2>
+            <p className="text-center text-gray-600 mb-8">
+              You also show strong alignment with these political archetypes
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {secondaryArchetypes.map((archetype, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="bg-gradient-to-r from-gray-100 to-gray-50 p-4 relative">
+                    {/* Decorative element */}
+                    <div className="absolute top-0 right-0 w-12 h-12 bg-blue-50 rounded-full opacity-30 translate-x-1/3 -translate-y-1/3"></div>
+
+                    <div className="flex justify-between items-center relative">
+                      <h3 className="text-2xl font-bold text-gray-800">
+                        {archetype.name}
+                      </h3>
+                      <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-sm">
+                        {archetype.match}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-5">
+                    <div className="flex flex-wrap gap-2 mb-5">
+                      {archetype.traits.map((trait, i) => {
+                        // Define colors for different traits
+                        let bgColor = "bg-gray-200";
+
+                        if (trait === "Equity")
+                          bgColor = "bg-blue-100 text-blue-800";
+                        else if (trait === "Free Market")
+                          bgColor = "bg-green-100 text-green-800";
+                        else if (trait === "Libertarian")
+                          bgColor = "bg-indigo-100 text-indigo-800";
+                        else if (trait === "Authoritarian")
+                          bgColor = "bg-orange-100 text-orange-800";
+                        else if (trait === "Progressive")
+                          bgColor = "bg-purple-100 text-purple-800";
+                        else if (trait === "Conservative")
+                          bgColor = "bg-blue-100 text-blue-800";
+                        else if (trait === "Secular")
+                          bgColor = "bg-yellow-100 text-yellow-800";
+                        else if (trait === "Religious")
+                          bgColor = "bg-purple-100 text-purple-800";
+                        else if (trait === "Globalism")
+                          bgColor = "bg-teal-100 text-teal-800";
+                        else if (trait === "Nationalism")
+                          bgColor = "bg-red-100 text-red-800";
+
+                        return (
+                          <span
+                            key={i}
+                            className={`${bgColor} px-3 py-1 rounded-full text-sm font-medium shadow-sm`}
+                          >
+                            {trait}
+                          </span>
+                        );
+                      })}
+                    </div>
+
+                    <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-medium">
+                          Difference from primary:
+                        </span>{" "}
+                        Flipped position on{" "}
+                        <span className="font-semibold text-blue-700">
+                          {archetype.flippedAxis.replace(" vs. ", "/")}
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="text-sm text-gray-600 mb-4">
+                      {getArchetypeDescription(archetype.name)}
+                    </div>
+
+                    <Link
+                      href={`/archetypes/${archetype.slug}`}
+                      className="inline-flex items-center justify-center text-blue-600 hover:text-blue-800 hover:underline font-medium text-sm bg-blue-50 px-4 py-2 rounded-full hover:bg-blue-100 transition-all"
+                      shallow={false}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href = `/archetypes/${archetype.slug}`;
+                      }}
+                    >
+                      View Details <FaArrowRight className="ml-1.5" />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Share Results */}
         <div className="mb-16 no-print">
           <h2 className="text-3xl font-bold mb-8 text-center">
@@ -1537,6 +1545,8 @@ function ResultsContent({ results }) {
             </div>
           </div>
         </div>
+
+          
 
         {/* Take Quiz Again Button */}
         <div className="text-center no-print">
