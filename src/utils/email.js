@@ -38,21 +38,21 @@ export async function sendContactNotification(contactData) {
   if (isResponse) {
     // Email response to user
     htmlContent = `
-      <h2>Response from PhilosiQ</h2>
+      <h2>Response from Philosiq</h2>
       <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
         ${message.replace(/\n/g, "<br>")}
       </div>
       <p style="color: #777; margin-top: 20px; font-size: 12px;">
-        This is a response to your inquiry submitted through the PhilosiQ contact form.
+        This is a response to your inquiry submitted through the Philosiq contact form.
       </p>
     `;
 
     textContent = `
-      Response from PhilosiQ
+      Response from Philosiq
       ---------------------------
       ${message}
       
-      This is a response to your inquiry submitted through the PhilosiQ contact form.
+      This is a response to your inquiry submitted through the Philosiq contact form.
     `;
   } else {
     // Notification to admin
@@ -65,7 +65,7 @@ export async function sendContactNotification(contactData) {
         ${message.replace(/\n/g, "<br>")}
       </div>
       <p style="color: #777; margin-top: 20px; font-size: 12px;">
-        This email was sent from the PhilosiQ contact form.
+        This email was sent from the Philosiq contact form.
       </p>
     `;
 
@@ -78,7 +78,7 @@ export async function sendContactNotification(contactData) {
       Message:
       ${message}
       
-      This email was sent from the PhilosiQ contact form.
+      This email was sent from the Philosiq contact form.
     `;
   }
 
