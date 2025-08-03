@@ -405,7 +405,8 @@ export default function seAxisGraph({
         {getPositionDescription(
           canonicalName,
           markerVisiblePosition,
-          strengthLabel
+          strengthLabel,
+          isDominantLeft
         )}
       </div>
     </div>
@@ -415,7 +416,7 @@ export default function seAxisGraph({
 /**
  * Helper function to generate a description of the user's position on the axis
  */
-function getPositionDescription(axis, score, strength) {
+function getPositionDescription(axis, score, strength, isDominantLeft) {
   // Define axis aliases
   const AXIS_ALIASES = {
     "Equality vs. Markets": "Equity vs. Free Market",
@@ -424,20 +425,38 @@ function getPositionDescription(axis, score, strength) {
   // Use canonical axis name if an alias exists
   const canonicalAxis = AXIS_ALIASES[axis] || axis;
 
-  // Get the appropriate side label based on the score
+  // Get the appropriate side label based on which side is visually dominant
   let sideLabel;
-  if (canonicalAxis === "Equity vs. Free Market") {
-    sideLabel = score < 50 ? "Free Market" : "Equity"; // ✅ FIXED
-  } else if (canonicalAxis === "Libertarian vs. Authoritarian") {
-    sideLabel = score < 50 ? "Authoritarian" : "Libertarian"; // ✅ FIXED
-  } else if (canonicalAxis === "Progressive vs. Conservative") {
-    sideLabel = score < 50 ? "Progressive" : "Conservative";
-  } else if (canonicalAxis === "Secular vs. Religious") {
-    sideLabel = score < 50 ? "Secular" : "Religious";
-  } else if (canonicalAxis === "Globalism vs. Nationalism") {
-    sideLabel = score < 50 ? "Globalist" : "Nationalist";
+  if (isDominantLeft) {
+    // Left side is dominant - use left side labels
+    if (canonicalAxis === "Equity vs. Free Market") {
+      sideLabel = "Equity";
+    } else if (canonicalAxis === "Libertarian vs. Authoritarian") {
+      sideLabel = "Libertarian";
+    } else if (canonicalAxis === "Progressive vs. Conservative") {
+      sideLabel = "Progressive";
+    } else if (canonicalAxis === "Secular vs. Religious") {
+      sideLabel = "Secular";
+    } else if (canonicalAxis === "Globalism vs. Nationalism") {
+      sideLabel = "Globalist";
+    } else {
+      return "Your position on this axis reflects a balance between the opposing viewpoints.";
+    }
   } else {
-    return "Your position on this axis reflects a balance between the opposing viewpoints.";
+    // Right side is dominant - use right side labels
+    if (canonicalAxis === "Equity vs. Free Market") {
+      sideLabel = "Free Market";
+    } else if (canonicalAxis === "Libertarian vs. Authoritarian") {
+      sideLabel = "Authoritarian";
+    } else if (canonicalAxis === "Progressive vs. Conservative") {
+      sideLabel = "Conservative";
+    } else if (canonicalAxis === "Secular vs. Religious") {
+      sideLabel = "Religious";
+    } else if (canonicalAxis === "Globalism vs. Nationalism") {
+      sideLabel = "Nationalist";
+    } else {
+      return "Your position on this axis reflects a balance between the opposing viewpoints.";
+    }
   }
 
   // Map the strength to the new categories
