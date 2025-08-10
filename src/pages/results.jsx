@@ -430,15 +430,232 @@ function ResultsContent({ results }) {
       }
     : null;
 
-  const handleEmailSubmit = (e) => {
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, this would send an API request to email the results
-    console.log(`Sending results to ${userEmail}`);
 
-    // Simulate email sending
-    setTimeout(() => {
+    if (!userEmail) {
+      alert("Please enter your email address");
+      return;
+    }
+
+    try {
+      setIsPdfGenerating(true);
+
+      // Track email sending start
+      track("email_results_started", {
+        archetype: results.archetype?.name || "Unknown",
+      });
+
+      // Create a new PDF document with minimal styling
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4",
+      });
+
+      // Set initial position
+      let y = 40; // Starting y position
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const margin = 40;
+      const contentWidth = pageWidth - margin * 2;
+
+      // Helper function to add text with word wrap
+      const addWrappedText = (text, x, y, maxWidth, lineHeight) => {
+        const lines = pdf.splitTextToSize(text, maxWidth);
+        pdf.text(lines, x, y);
+        return y + lines.length * lineHeight;
+      };
+
+      // Helper function to add a separator
+      const addSeparator = (y) => {
+        return y + 20; // Just add space instead of drawing a line
+      };
+
+      // Add title
+      pdf.setFontSize(16);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("PhilosiQ Political Archetype Results", margin, y);
+      y += 20;
+
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
+      pdf.text(`Generated on ${new Date().toLocaleDateString()}`, margin, y);
+      y = addSeparator(y + 10);
+
+      // Add primary archetype
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
+      y += 10;
+      pdf.text(
+        `Your Archetype: ${results.archetype?.name || "Unknown"}`,
+        margin,
+        y
+      );
+      y += 20;
+
+      // Add traits
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
+
+      const traits = [];
+      if (Object.keys(axisLetters).length > 0) {
+        Object.entries(axisLetters).forEach(([axis, letter]) => {
+          let trait = "";
+          switch (axis) {
+            case "Equity vs. Free Market":
+              trait = letter === "E" ? "Equity" : "Free Market";
+              break;
+            case "Libertarian vs. Authoritarian":
+              trait = letter === "L" ? "Libertarian" : "Authoritarian";
+              break;
+            case "Progressive vs. Conservative":
+              trait = letter === "P" ? "Progressive" : "Conservative";
+              break;
+            case "Secular vs. Religious":
+              trait = letter === "S" ? "Secular" : "Religious";
+              break;
+            case "Globalism vs. Nationalism":
+              trait = letter === "G" ? "Globalism" : "Nationalism";
+              break;
+          }
+          traits.push(trait);
+        });
+      }
+
+      pdf.text(`Traits: ${traits.join(", ")}`, margin, y);
+      y += 15;
+
+      // Add description
+      const description = getArchetypeDescription(results.archetype?.name);
+      pdf.setFontSize(11);
+      y = addWrappedText(description, margin, y, contentWidth, 15);
+      y = addSeparator(y);
+
+      // Add axis breakdown section
+      y += 10;
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Your Political Axis Breakdown", margin, y);
+      y += 20;
+
+      // Add each axis
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
+
+      results.axisResults.forEach((axis, index) => {
+        // Check if we need to add a new page
+        if (y > pdf.internal.pageSize.getHeight() - 80) {
+          pdf.addPage();
+          y = 40;
+        }
+
+        pdf.setFont("helvetica", "bold");
+        pdf.text(axis.name, margin, y);
+        y += 15;
+
+        pdf.setFont("helvetica", "normal");
+
+        // Get the correct percentages from axisBreakdownData
+        const axisName = axis.name;
+        const axisData = axisBreakdownData[axisName];
+
+        // Use the percentages from the child component if available, otherwise fallback to calculation
+        const leftPercent = axisData ? axisData.leftPercent : axis.score;
+        const rightPercent = axisData
+          ? axisData.rightPercent
+          : 100 - axis.score;
+
+        pdf.text(`${axis.leftLabel}: ${leftPercent}%`, margin, y);
+        y += 15;
+        pdf.text(`${axis.rightLabel}: ${rightPercent}%`, margin, y);
+        y += 15;
+
+        // Add a simple text indicator of position
+        let positionText = "";
+
+        // Use the position and strength from axisData if available
+        if (axisData && axisData.userPosition && axisData.positionStrength) {
+          positionText = `${axisData.positionStrength} ${axisData.userPosition}`;
+        } else if (axis.positionStrength && axis.userPosition) {
+          // Fallback to the axis data from results
+          positionText = `${axis.positionStrength} ${axis.userPosition}`;
+        } else {
+          // Legacy fallback calculation if no position data is available
+          if (axis.score > 50) {
+            // Left side positions
+            const strength =
+              axis.score >= 80
+                ? "Extreme"
+                : axis.score >= 70
+                ? "Committed"
+                : axis.score >= 60
+                ? "Inclined"
+                : "Leaning";
+            positionText = `${strength} ${axis.leftLabel}`;
+          } else if (axis.score < 50) {
+            // Right side positions
+            const strength =
+              axis.score <= 20
+                ? "Extreme"
+                : axis.score <= 30
+                ? "Committed"
+                : axis.score <= 40
+                ? "Inclined"
+                : "Leaning";
+            positionText = `${strength} ${axis.rightLabel}`;
+          } else {
+            positionText = "Centrist position";
+          }
+        }
+
+        pdf.text(`Position: ${positionText}`, margin, y);
+        y += 20;
+
+        if (index < results.axisResults.length - 1) {
+          y = addSeparator(y);
+        }
+      });
+
+      // Get the PDF as base64 data
+      const pdfData = pdf.output("datauristring").split(",")[1];
+
+      // Send the PDF via email
+      const response = await fetch("/api/quiz/email-results", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          pdfData: pdfData,
+          archetypeName: results.archetype?.name || "Unknown",
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to send email");
+      }
+
+      // Track successful email
+      track("email_results_completed", {
+        archetype: results.archetype?.name || "Unknown",
+      });
+
       setEmailSent(true);
-    }, 1000);
+    } catch (error) {
+      console.error("Error sending results email:", error);
+      alert("Failed to send email. Please try again.");
+
+      // Track email error
+      track("email_results_error", {
+        error: error.message || "Unknown error",
+        archetype: results.archetype?.name || "Unknown",
+      });
+    } finally {
+      setIsPdfGenerating(false);
+    }
   };
 
   const handleDownloadPDF = async () => {
@@ -559,9 +776,15 @@ function ResultsContent({ results }) {
 
         pdf.setFont("helvetica", "normal");
 
-        // Simple text representation of the axis position
-        const leftPercent = axis.score <= 50 ? axis.score : 100 - axis.score;
-        const rightPercent = axis.score >= 50 ? axis.score : 100 - axis.score;
+        // Get the correct percentages from axisBreakdownData
+        const axisName = axis.name;
+        const axisData = axisBreakdownData[axisName];
+
+        // Use the percentages from the child component if available, otherwise fallback to calculation
+        const leftPercent = axisData ? axisData.leftPercent : axis.score;
+        const rightPercent = axisData
+          ? axisData.rightPercent
+          : 100 - axis.score;
 
         pdf.text(`${axis.leftLabel}: ${leftPercent}%`, margin, y);
         y += 15;
@@ -570,20 +793,40 @@ function ResultsContent({ results }) {
 
         // Add a simple text indicator of position
         let positionText = "";
-        if (axis.score < 40) {
-          positionText = `Extreme ${axis.leftLabel} leaning`;
-        } else if (axis.score < 45) {
-          positionText = `Committed ${axis.leftLabel} leaning`;
-        } else if (axis.score < 50) {
-          positionText = `Inclined ${axis.leftLabel} leaning`;
-        } else if (axis.score > 60) {
-          positionText = `Extreme ${axis.rightLabel} leaning`;
-        } else if (axis.score > 55) {
-          positionText = `Committed ${axis.rightLabel} leaning`;
-        } else if (axis.score > 50) {
-          positionText = `Inclined ${axis.rightLabel} leaning`;
+
+        // Use the position and strength from axisData if available
+        if (axisData && axisData.userPosition && axisData.positionStrength) {
+          positionText = `${axisData.positionStrength} ${axisData.userPosition}`;
+        } else if (axis.positionStrength && axis.userPosition) {
+          // Fallback to the axis data from results
+          positionText = `${axis.positionStrength} ${axis.userPosition}`;
         } else {
-          positionText = "Centrist position";
+          // Legacy fallback calculation if no position data is available
+          if (axis.score > 50) {
+            // Left side positions
+            const strength =
+              axis.score >= 80
+                ? "Extreme"
+                : axis.score >= 70
+                ? "Committed"
+                : axis.score >= 60
+                ? "Inclined"
+                : "Leaning";
+            positionText = `${strength} ${axis.leftLabel}`;
+          } else if (axis.score < 50) {
+            // Right side positions
+            const strength =
+              axis.score <= 20
+                ? "Extreme"
+                : axis.score <= 30
+                ? "Committed"
+                : axis.score <= 40
+                ? "Inclined"
+                : "Leaning";
+            positionText = `${strength} ${axis.rightLabel}`;
+          } else {
+            positionText = "Centrist position";
+          }
         }
 
         pdf.text(`Position: ${positionText}`, margin, y);
@@ -594,81 +837,7 @@ function ResultsContent({ results }) {
         }
       });
 
-      // Add secondary archetypes if they exist
-      if (secondaryArchetypes && secondaryArchetypes.length > 0) {
-        // Check if we need to add a new page
-        if (y > pdf.internal.pageSize.getHeight() - 120) {
-          pdf.addPage();
-          y = 40;
-        }
-
-        y = addSeparator(y);
-        y += 10;
-
-        pdf.setFontSize(14);
-        pdf.setFont("helvetica", "bold");
-        pdf.text("Your Secondary Archetypes", margin, y);
-        y += 20;
-
-        pdf.setFontSize(11);
-        pdf.setFont("helvetica", "normal");
-        pdf.text(
-          "You also show strong alignment with these political archetypes:",
-          margin,
-          y
-        );
-        y += 20;
-
-        secondaryArchetypes.forEach((archetype, index) => {
-          // Check if we need to add a new page
-          if (y > pdf.internal.pageSize.getHeight() - 150) {
-            pdf.addPage();
-            y = 40;
-          }
-
-          pdf.setFont("helvetica", "bold");
-          pdf.text(`${archetype.name} (${archetype.match})`, margin, y);
-          y += 15;
-
-          pdf.setFont("helvetica", "normal");
-          pdf.text(`Traits: ${(archetype.traits || []).join(", ")}`, margin, y);
-          y += 15;
-
-          pdf.text(
-            `Difference from primary: Flipped position on ${
-              archetype.flippedAxis
-                ? archetype.flippedAxis.replace(" vs. ", "/")
-                : ""
-            }`,
-            margin,
-            y
-          );
-          y += 15;
-
-          const secondaryDescription = getArchetypeDescription(archetype.name);
-          y = addWrappedText(secondaryDescription, margin, y, contentWidth, 15);
-
-          if (index < secondaryArchetypes.length - 1) {
-            y = addSeparator(y);
-          }
-        });
-      }
-
-      // Add page numbers
-      const totalPages = pdf.internal.getNumberOfPages();
-      for (let i = 1; i <= totalPages; i++) {
-        pdf.setPage(i);
-        pdf.setFontSize(10);
-        pdf.text(
-          `Page ${i} of ${totalPages}`,
-          pageWidth / 2,
-          pdf.internal.pageSize.getHeight() - 20,
-          { align: "center" }
-        );
-      }
-
-      // Add footer on last page
-      pdf.setPage(totalPages);
+      // Add footer
       pdf.setFontSize(10);
       pdf.setFont("helvetica", "italic");
       const footerText =
@@ -676,7 +845,7 @@ function ResultsContent({ results }) {
       pdf.text(
         footerText,
         pageWidth / 2,
-        pdf.internal.pageSize.getHeight() - 40,
+        pdf.internal.pageSize.getHeight() - 30,
         { align: "center" }
       );
 
@@ -688,10 +857,10 @@ function ResultsContent({ results }) {
         "-"
       )}-${date}.pdf`;
 
-      // Save the PDF
+      // Save the PDF (this will trigger the download)
       pdf.save(filename);
 
-      // Track successful PDF download
+      // Track successful download from here
       track("pdf_download_completed", {
         archetype: results.archetype?.name || "Unknown",
       });
@@ -699,7 +868,7 @@ function ResultsContent({ results }) {
       console.error("Error generating PDF:", error);
       alert("Failed to generate PDF. Please try again.");
 
-      // Track PDF generation error
+      // Track PDF error
       track("pdf_download_error", {
         error: error.message || "Unknown error",
         archetype: results.archetype?.name || "Unknown",
@@ -708,6 +877,12 @@ function ResultsContent({ results }) {
       setIsPdfGenerating(false);
     }
   };
+
+  {
+    results.axisResults.map((axis, index) => {
+      console.log("from parent axis graph", axis);
+    });
+  }
 
   // Starting at line 615
   const handleSaveResults = async () => {
@@ -848,8 +1023,10 @@ function ResultsContent({ results }) {
             that fits you best
           </p>
 
-          {/* Save Results Button - Prominent Position */}
-          {!resultsSaved && isAuthenticated && (
+ 
+          <div className="flex justify-center">
+                 {/* Save Results Button - Prominent Position */}
+                 {!resultsSaved && isAuthenticated && (
             <button
               onClick={handleSaveResults}
               disabled={resultsSaved || isSaving}
@@ -876,6 +1053,8 @@ function ResultsContent({ results }) {
               Save Results (Login Required)
             </button>
           )}
+
+        </div>
         </div>
 
         {/* Login Modal or Redirect */}
@@ -1044,107 +1223,9 @@ function ResultsContent({ results }) {
           </div>
         </div>
 
-        {/* Secondary Archetypes - Improved Design */}
-        {secondaryArchetypes.length > 0 && (
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-6 text-center">
-              Your Secondary Archetypes
-            </h2>
-            <p className="text-center text-gray-600 mb-8">
-              You also show strong alignment with these political archetypes
-            </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {secondaryArchetypes.map((archetype, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300"
-                >
-                  <div className="bg-gradient-to-r from-gray-100 to-gray-50 p-4 relative">
-                    {/* Decorative element */}
-                    <div className="absolute top-0 right-0 w-12 h-12 bg-blue-50 rounded-full opacity-30 translate-x-1/3 -translate-y-1/3"></div>
 
-                    <div className="flex justify-between items-center relative">
-                      <h3 className="text-2xl font-bold text-gray-800">
-                        {archetype.name}
-                      </h3>
-                      <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-sm">
-                        {archetype.match}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-5">
-                    <div className="flex flex-wrap gap-2 mb-5">
-                      {archetype.traits.map((trait, i) => {
-                        // Define colors for different traits
-                        let bgColor = "bg-gray-200";
-
-                        if (trait === "Equity")
-                          bgColor = "bg-blue-100 text-blue-800";
-                        else if (trait === "Free Market")
-                          bgColor = "bg-green-100 text-green-800";
-                        else if (trait === "Libertarian")
-                          bgColor = "bg-indigo-100 text-indigo-800";
-                        else if (trait === "Authoritarian")
-                          bgColor = "bg-orange-100 text-orange-800";
-                        else if (trait === "Progressive")
-                          bgColor = "bg-purple-100 text-purple-800";
-                        else if (trait === "Conservative")
-                          bgColor = "bg-blue-100 text-blue-800";
-                        else if (trait === "Secular")
-                          bgColor = "bg-yellow-100 text-yellow-800";
-                        else if (trait === "Religious")
-                          bgColor = "bg-purple-100 text-purple-800";
-                        else if (trait === "Globalism")
-                          bgColor = "bg-teal-100 text-teal-800";
-                        else if (trait === "Nationalism")
-                          bgColor = "bg-red-100 text-red-800";
-
-                        return (
-                          <span
-                            key={i}
-                            className={`${bgColor} px-3 py-1 rounded-full text-sm font-medium shadow-sm`}
-                          >
-                            {trait}
-                          </span>
-                        );
-                      })}
-                    </div>
-
-                    <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-medium">
-                          Difference from primary:
-                        </span>{" "}
-                        Flipped position on{" "}
-                        <span className="font-semibold text-blue-700">
-                          {archetype.flippedAxis.replace(" vs. ", "/")}
-                        </span>
-                      </p>
-                    </div>
-
-                    <div className="text-sm text-gray-600 mb-4">
-                      {getArchetypeDescription(archetype.name)}
-                    </div>
-
-                    <Link
-                      href={`/archetypes/${archetype.slug}`}
-                      className="inline-flex items-center justify-center text-blue-600 hover:text-blue-800 hover:underline font-medium text-sm bg-blue-50 px-4 py-2 rounded-full hover:bg-blue-100 transition-all"
-                      shallow={false}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.location.href = `/archetypes/${archetype.slug}`;
-                      }}
-                    >
-                      View Details <FaArrowRight className="ml-1.5" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+    
 
         {/* Debug Section */}
         {/* {rawData && (
@@ -1261,6 +1342,108 @@ function ResultsContent({ results }) {
           </div>
         )}
 
+          {/* Secondary Archetypes - Improved Design */}
+          {secondaryArchetypes.length > 0 && (
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold mb-6 text-center">
+              Your Secondary Archetypes
+            </h2>
+            <p className="text-center text-gray-600 mb-8">
+              You also show strong alignment with these political archetypes
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {secondaryArchetypes.map((archetype, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="bg-gradient-to-r from-gray-100 to-gray-50 p-4 relative">
+                    {/* Decorative element */}
+                    <div className="absolute top-0 right-0 w-12 h-12 bg-blue-50 rounded-full opacity-30 translate-x-1/3 -translate-y-1/3"></div>
+
+                    <div className="flex justify-between items-center relative">
+                      <h3 className="text-2xl font-bold text-gray-800">
+                        {archetype.name}
+                      </h3>
+                      <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-sm">
+                        {archetype.match}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-5">
+                    <div className="flex flex-wrap gap-2 mb-5">
+                      {archetype.traits.map((trait, i) => {
+                        // Define colors for different traits
+                        let bgColor = "bg-gray-200";
+
+                        if (trait === "Equity")
+                          bgColor = "bg-blue-100 text-blue-800";
+                        else if (trait === "Free Market")
+                          bgColor = "bg-green-100 text-green-800";
+                        else if (trait === "Libertarian")
+                          bgColor = "bg-indigo-100 text-indigo-800";
+                        else if (trait === "Authoritarian")
+                          bgColor = "bg-orange-100 text-orange-800";
+                        else if (trait === "Progressive")
+                          bgColor = "bg-purple-100 text-purple-800";
+                        else if (trait === "Conservative")
+                          bgColor = "bg-blue-100 text-blue-800";
+                        else if (trait === "Secular")
+                          bgColor = "bg-yellow-100 text-yellow-800";
+                        else if (trait === "Religious")
+                          bgColor = "bg-purple-100 text-purple-800";
+                        else if (trait === "Globalism")
+                          bgColor = "bg-teal-100 text-teal-800";
+                        else if (trait === "Nationalism")
+                          bgColor = "bg-red-100 text-red-800";
+
+                        return (
+                          <span
+                            key={i}
+                            className={`${bgColor} px-3 py-1 rounded-full text-sm font-medium shadow-sm`}
+                          >
+                            {trait}
+                          </span>
+                        );
+                      })}
+                    </div>
+
+                    <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-medium">
+                          Difference from primary:
+                        </span>{" "}
+                        Flipped position on{" "}
+                        <span className="font-semibold text-blue-700">
+                          {archetype.flippedAxis.replace(" vs. ", "/")}
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="text-sm text-gray-600 mb-4">
+                      {getArchetypeDescription(archetype.name)}
+                    </div>
+
+                    <Link
+                      href={`/archetypes/${archetype.slug}`}
+                      className="inline-flex items-center justify-center text-blue-600 hover:text-blue-800 hover:underline font-medium text-sm bg-blue-50 px-4 py-2 rounded-full hover:bg-blue-100 transition-all"
+                      shallow={false}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href = `/archetypes/${archetype.slug}`;
+                      }}
+                    >
+                      View Details <FaArrowRight className="ml-1.5" />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Share Results */}
         <div className="mb-16 no-print">
           <h2 className="text-3xl font-bold mb-8 text-center">
@@ -1298,13 +1481,21 @@ function ResultsContent({ results }) {
                         value={userEmail}
                         onChange={(e) => setUserEmail(e.target.value)}
                         required
+                        disabled={isPdfGenerating}
                       />
                     </div>
                     <button
                       type="submit"
-                      className="w-full btn-primary-outline"
+                      className="w-full btn-primary-outline flex justify-center items-center"
+                      disabled={isPdfGenerating}
                     >
-                      Send Results
+                      {isPdfGenerating ? (
+                        <>
+                          <FaSpinner className="animate-spin mr-2" /> Sending...
+                        </>
+                      ) : (
+                        "Send Results"
+                      )}
                     </button>
                   </form>
                 )}
@@ -1354,6 +1545,8 @@ function ResultsContent({ results }) {
             </div>
           </div>
         </div>
+
+          
 
         {/* Take Quiz Again Button */}
         <div className="text-center no-print">

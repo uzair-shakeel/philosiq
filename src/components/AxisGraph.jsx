@@ -172,6 +172,8 @@ export default function seAxisGraph({
   const leftPercent = axisSpecificPercentages.left;
   const rightPercent = axisSpecificPercentages.right;
 
+  console.log("from child axis graph", leftPercent, rightPercent);
+
   // Function to determine axis letter based on percentages
   const getDominantAxisLetter = React.useMemo(() => {
     // Convert percentages to numbers for comparison
@@ -403,7 +405,8 @@ export default function seAxisGraph({
         {getPositionDescription(
           canonicalName,
           markerVisiblePosition,
-          strengthLabel
+          strengthLabel,
+          isDominantLeft
         )}
       </div>
     </div>
@@ -413,7 +416,7 @@ export default function seAxisGraph({
 /**
  * Helper function to generate a description of the user's position on the axis
  */
-function getPositionDescription(axis, score, strength) {
+function getPositionDescription(axis, score, strength, isDominantLeft) {
   // Define axis aliases
   const AXIS_ALIASES = {
     "Equality vs. Markets": "Equity vs. Free Market",
@@ -421,6 +424,7 @@ function getPositionDescription(axis, score, strength) {
 
   // Use canonical axis name if an alias exists
   const canonicalAxis = AXIS_ALIASES[axis] || axis;
+
 
 // Get the appropriate side label based on the score
 let sideLabel;
@@ -464,118 +468,117 @@ if (canonicalAxis === "Equity vs. Free Market") {
   }
 
   // Comprehensive descriptions for each position and strength level
-const descriptions = 
-{
-  "Equity": {
-    Leaning:
-      "You believe fairness requires awareness of social barriers. Some targeted support can help everyone start with a more equal chance.",
-    Inclined:
-      "You see equal opportunity as a shared responsibility. Structural disadvantages must be addressed to create real fairness.",
-    Committed:
-      "You believe justice means actively reducing inequality. Policies should rebalance outcomes, not just access.",
-    Extreme:
-      "You think the system must be restructured to ensure collective well-being and shared ownership of economic outcomes.",
-  },
+  const descriptions = {
+    Equity: {
+      Leaning:
+        "You believe fairness requires awareness of social barriers. Some targeted support can help everyone start with a more equal chance.",
+      Inclined:
+        "You see equal opportunity as a shared responsibility. Structural disadvantages must be addressed to create real fairness.",
+      Committed:
+        "You believe justice means actively reducing inequality. Policies should rebalance outcomes, not just access.",
+      Extreme:
+        "You think the system must be restructured to ensure collective well-being and shared ownership of economic outcomes.",
+    },
 
-  "Free Market": {
-    Leaning:
-      "You believe voluntary exchange and competition usually produce the best results. Light regulation can help, but markets should lead.",
-    Inclined:
-      "You think economic freedom drives innovation and growth. Government should interfere as little as possible.",
-    Committed:
-      "You believe low taxes and limited rules let people and businesses thrive. Personal responsibility should guide outcomes.",
-    Extreme:
-      "You believe markets are the most moral and efficient system. The role of government should be almost nonexistent.",
-  },
+    "Free Market": {
+      Leaning:
+        "You believe voluntary exchange and competition usually produce the best results. Light regulation can help, but markets should lead.",
+      Inclined:
+        "You think economic freedom drives innovation and growth. Government should interfere as little as possible.",
+      Committed:
+        "You believe low taxes and limited rules let people and businesses thrive. Personal responsibility should guide outcomes.",
+      Extreme:
+        "You believe markets are the most moral and efficient system. The role of government should be almost nonexistent.",
+    },
 
-  "Libertarian": {
-    Leaning:
-      "You prefer personal choice over government direction. People should be free unless their actions harm others.",
-    Inclined:
-      "You believe individual rights should outweigh most collective rules. Freedom is the default, not the exception.",
-    Committed:
-      "You think government should exist only to protect basic rights. People should shape their lives without interference.",
-    Extreme:
-      "You want a society where almost all authority is voluntary. Freedom and consent replace law and control.",
-  },
+    Libertarian: {
+      Leaning:
+        "You prefer personal choice over government direction. People should be free unless their actions harm others.",
+      Inclined:
+        "You believe individual rights should outweigh most collective rules. Freedom is the default, not the exception.",
+      Committed:
+        "You think government should exist only to protect basic rights. People should shape their lives without interference.",
+      Extreme:
+        "You want a society where almost all authority is voluntary. Freedom and consent replace law and control.",
+    },
 
-  "Authoritarian": {
-    Leaning:
-      "You think strong rules can help maintain order. Some freedoms may be limited to preserve social stability.",
-    Inclined:
-      "You believe unity and discipline are key to a strong society. Leadership should guide people more than public debate.",
-    Committed:
-      "You support concentrated power to protect values and enforce order. Stability outweighs personal autonomy.",
-    Extreme:
-      "You believe authority should shape all aspects of society. Obedience, tradition, and control create lasting strength.",
-  },
+    Authoritarian: {
+      Leaning:
+        "You think strong rules can help maintain order. Some freedoms may be limited to preserve social stability.",
+      Inclined:
+        "You believe unity and discipline are key to a strong society. Leadership should guide people more than public debate.",
+      Committed:
+        "You support concentrated power to protect values and enforce order. Stability outweighs personal autonomy.",
+      Extreme:
+        "You believe authority should shape all aspects of society. Obedience, tradition, and control create lasting strength.",
+    },
 
-  "Progressive": {
-    Leaning:
-      "You believe change is often needed to address unfair systems. Progress can come through thoughtful reform.",
-    Inclined:
-      "You support efforts to fix outdated norms. Innovation and inclusion are key to solving today’s challenges.",
-    Committed:
-      "You believe society must evolve quickly to reflect modern values. Deep reform is often necessary.",
-    Extreme:
-      "You think current systems are broken and must be replaced. Transformation is essential for real justice.",
-  },
+    Progressive: {
+      Leaning:
+        "You believe change is often needed to address unfair systems. Progress can come through thoughtful reform.",
+      Inclined:
+        "You support efforts to fix outdated norms. Innovation and inclusion are key to solving today’s challenges.",
+      Committed:
+        "You believe society must evolve quickly to reflect modern values. Deep reform is often necessary.",
+      Extreme:
+        "You think current systems are broken and must be replaced. Transformation is essential for real justice.",
+    },
 
-  "Conservative": {
-    Leaning:
-      "You think change should be careful and slow. Traditions often hold wisdom that keeps society grounded.",
-    Inclined:
-      "You value stability and heritage. Sudden shifts can cause more harm than good.",
-    Committed:
-      "You believe lasting institutions and moral order protect society. Cultural continuity matters more than novelty.",
-    Extreme:
-      "You think modern values have weakened society. A return to traditional roles and norms is needed.",
-  },
+    Conservative: {
+      Leaning:
+        "You think change should be careful and slow. Traditions often hold wisdom that keeps society grounded.",
+      Inclined:
+        "You value stability and heritage. Sudden shifts can cause more harm than good.",
+      Committed:
+        "You believe lasting institutions and moral order protect society. Cultural continuity matters more than novelty.",
+      Extreme:
+        "You think modern values have weakened society. A return to traditional roles and norms is needed.",
+    },
 
-  "Secular": {
-    Leaning:
-      "You think public decisions should rely on shared reason, not religious beliefs. Religion belongs in private life.",
-    Inclined:
-      "You believe society works best when policy is shaped by universal values rather than spiritual teachings.",
-    Committed:
-      "You see separating religion from law as essential to fairness. Institutions should be neutral and inclusive.",
-    Extreme:
-      "You believe public life should be entirely secular. Religion has no role in shaping rules or decisions.",
-  },
+    Secular: {
+      Leaning:
+        "You think public decisions should rely on shared reason, not religious beliefs. Religion belongs in private life.",
+      Inclined:
+        "You believe society works best when policy is shaped by universal values rather than spiritual teachings.",
+      Committed:
+        "You see separating religion from law as essential to fairness. Institutions should be neutral and inclusive.",
+      Extreme:
+        "You believe public life should be entirely secular. Religion has no role in shaping rules or decisions.",
+    },
 
-  "Religious": {
-    Leaning:
-      "You see faith as a moral compass. Religious values can offer helpful guidance to society.",
-    Inclined:
-      "You believe spiritual principles support ethical living. Public life benefits from faith-based values.",
-    Committed:
-      "You think faith should inform how people live, lead, and govern. It brings order and meaning.",
-    Extreme:
-      "You believe religion should guide law and culture. Society thrives when grounded in divine truth.",
-  },
+    Religious: {
+      Leaning:
+        "You see faith as a moral compass. Religious values can offer helpful guidance to society.",
+      Inclined:
+        "You believe spiritual principles support ethical living. Public life benefits from faith-based values.",
+      Committed:
+        "You think faith should inform how people live, lead, and govern. It brings order and meaning.",
+      Extreme:
+        "You believe religion should guide law and culture. Society thrives when grounded in divine truth.",
+    },
 
-  "Globalist": {
-    Leaning:
-      "You believe people everywhere share common challenges. Cooperation across borders can be helpful.",
-    Inclined:
-      "You support working with others to improve life beyond national boundaries. Shared progress is possible.",
-    Committed:
-      "You think global connection matters more than national competition. We are part of a larger world.",
-    Extreme:
-      "You believe humanity should unite across borders. National identity matters less than shared human values.",
-  },
+    Globalist: {
+      Leaning:
+        "You believe people everywhere share common challenges. Cooperation across borders can be helpful.",
+      Inclined:
+        "You support working with others to improve life beyond national boundaries. Shared progress is possible.",
+      Committed:
+        "You think global connection matters more than national competition. We are part of a larger world.",
+      Extreme:
+        "You believe humanity should unite across borders. National identity matters less than shared human values.",
+    },
 
-  "Nationalist": {
-    Leaning:
-      "You believe your country’s needs should come first, but recognize the value of some outside partnerships.",
-    Inclined:
-      "You think protecting national culture and sovereignty is key. Global ties should not weaken self-rule.",
-    Committed:
-      "You prioritize your country’s identity and traditions. Independence is more important than global approval.",
-    Extreme:
-      "You believe national strength and self-reliance should come before all else. Foreign influence should be resisted.",
-  }
-};
+    Nationalist: {
+      Leaning:
+        "You believe your country’s needs should come first, but recognize the value of some outside partnerships.",
+      Inclined:
+        "You think protecting national culture and sovereignty is key. Global ties should not weaken self-rule.",
+      Committed:
+        "You prioritize your country’s identity and traditions. Independence is more important than global approval.",
+      Extreme:
+        "You believe national strength and self-reliance should come before all else. Foreign influence should be resisted.",
+    },
+  };
 
   // Return the appropriate description or a default message if not found
   return (
