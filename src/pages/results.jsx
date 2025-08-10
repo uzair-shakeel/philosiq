@@ -63,7 +63,7 @@ const ARCHETYPE_MAP = [
 
 export default function ResultsPage() {
   return (
-    <Layout title="Your Results - PhilosiQ">
+    <Layout title="Your Results - Philosiq">
       <ResultsProcessor>
         <ResultsContent />
       </ResultsProcessor>
@@ -695,7 +695,7 @@ function ResultsContent({ results }) {
       // Add title
       pdf.setFontSize(16);
       pdf.setFont("helvetica", "bold");
-      pdf.text("PhilosiQ Political Archetype Results", margin, y);
+      pdf.text("Philosiq Political Archetype Results", margin, y);
       y += 20;
 
       pdf.setFontSize(11);
@@ -852,7 +852,7 @@ function ResultsContent({ results }) {
       // Generate a filename with the archetype name and date
       const archetypeName = results.archetype?.name || "Results";
       const date = new Date().toISOString().split("T")[0];
-      const filename = `PhilosiQ-${archetypeName.replace(
+      const filename = `Philosiq-${archetypeName.replace(
         /\s+/g,
         "-"
       )}-${date}.pdf`;
@@ -1462,7 +1462,7 @@ function ResultsContent({ results }) {
                   <div className="text-green-600">
                     <p className="mb-2">Results sent!</p>
                     <p className="text-sm">
-                      Check your inbox for your PhilosiQ results.
+                      Check your inbox for your quiz results from Philosiq.
                     </p>
                   </div>
                 ) : (
