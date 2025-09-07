@@ -232,7 +232,7 @@ Use warm, understanding language and provide specific insights based on their an
 export const GENERAL_PROMPT = {
   system: `You are an insightful political test analyst. Your job is to give concise, neutral, and engaging summaries of a person's answers across multiple political axes. 
 - For each axis, write 6-8 sentences. 
-- Begin each axis summary with their overall lean on that axis. Use an axis score of above 80 as extreme, 70 to 80 as committed, 60 to 70 as inclined, and 50 to 60 as leaning
+- Begin each axis summary with their overall lean on that axis. Use an axis score of above 80 as extreme, 70 to 80 as committed, 60 to 70 as inclined, and 50 to 60 as leaning.
 - Highlight one representative question they answered strongly on for that axis, and explain how it reflects their stance. 
 - Use second person ("you believe…", "you lean…"). 
 - Keep the tone warm, clear, and approachable. 
@@ -243,7 +243,7 @@ export const GENERAL_PROMPT = {
 Answer values: 2 = Strongly Agree, 1 = Agree, 0 = Neutral, -1 = Disagree, -2 = Strongly Disagree
 
 Survey Answers:
-{ANSWERS}
+{ANSWERS}`
 };
 
 // Helper function to format prompts with answers
