@@ -94,7 +94,7 @@ export default async function handler(req, res) {
     }
 
     // Set max tokens - increased for more comprehensive summaries
-    const maxTokens = 1500;
+    const maxTokens = 2500;
 
     console.log("Final prompt length:", formattedPrompt.length);
     console.log("Max tokens:", maxTokens);
