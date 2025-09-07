@@ -240,7 +240,7 @@ Follow these rules:
   * 70–80 = Committed 
   * 60–70 = Inclined 
   * 50–60 = Leaning
-- Highlight one representative question they answered strongly on, and explain how that answer reflects their stance. 
+- Highlight one representative question they answered strongly on, and explain how that answer reflects their stance. Write out the statement in quotes, dont say statement X.
 - Always write in second person ("you believe…", "you lean…"). 
 - After all axis sections, write a final **Overall Reflection** of 1-2 sentences highlighting their core values and what kind of political system or approach they would likely find most appealing. 
 Do not give a generic personality profile—your task is strictly political axis analysis.`,
