@@ -237,9 +237,9 @@ export const GENERAL_PROMPT = {
     - Always speak in second person ("you believe…", "you lean…"). 
     - Keep it short, clear, and approachable.`,
 
-  user: `using the answers to the questions, write a insightful summary for the user :
+  user: `Using the answers to the questions, write an insightful summary for the user:
 
-Answer values: 2=Strongly Agree, 1=Agree, 0=Neutral, -1=Disagree, -2=Strongly Disagree
+Answer values: 2 = Strongly Agree, 1 = Agree, 0 = Neutral, -1 = Disagree, -2 = Strongly Disagree
 
 Survey Answers:
 {ANSWERS}
@@ -247,7 +247,7 @@ Survey Answers:
 **Overall Political Personality**: Provide a short reflection on what their political positioning reveals about them. 
 - Highlight the core values and beliefs that shape their views. 
 - Describe what kind of political system or approach they would likely find most appealing. 
-- Keep the tone warm, personal, and easy to understand.,
+- Keep the tone warm, personal, and easy to understand.`
 };
 
 // Helper function to format prompts with answers
