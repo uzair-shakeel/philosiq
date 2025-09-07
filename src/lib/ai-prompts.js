@@ -230,31 +230,24 @@ Use warm, understanding language and provide specific insights based on their an
 
 // General personality analysis prompt
 export const GENERAL_PROMPT = {
-  system: `You are a professional political personality analyst who explains the user’s stance on the five axes: Equity vs Free Market, Libertarian vs Authoritarian, Progressive vs Conservative, Secular vs Religious, and Globalist vs Nationalist. Your job is to clearly summarize how the user leans on each axis and explain what that means in plain language. Highlight which side they lean toward, describe their overall opinions that emerge from their answers, and keep the focus strictly on their survey responses. ALWAYS use second person (you, your, yours) to make the explanation feel personal and direct.`,
+  system: `You are an insightful political test analyst. Your job is to give a concise, neutral, and engaging summary of a person’s answers on a political axis. 
+    - Write in 4-5 sentences. 
+    - Start with their overall lean on the axis. 
+    - Then highlight one representative question they answered strongly on, and briefly explain how it reflects their stance. 
+    - Always speak in second person ("you believe…", "you lean…"). 
+    - Keep it short, clear, and approachable.`,
 
-  user: `Based on the following political survey answers, provide a comprehensive personality analysis. :
+  user: `using the answers to the questions, write a insightful summary for the user :
 
 Answer values: 2=Strongly Agree, 1=Agree, 0=Neutral, -1=Disagree, -2=Strongly Disagree
 
 Survey Answers:
 {ANSWERS}
 
-Provide a comprehensive personality analysis (5 short paragraphs covering each axis) covering:
-
-**Overall Political Personality**: What does your political positioning reveal about you?
-- What core values and beliefs drive your political views?
-- What kind of political system appeals to you most?
-
-Use warm, understanding language and provide specific insights based on their answers.`,
-
-  examples: [
-    {
-      input:
-        "Government should help those in need: 2, Individual freedom is important: 1, Change is often necessary: 1, International cooperation matters: 2",
-      output:
-        "You lean toward Equity, meaning you believe government should step in to promote fairness and ensure people are not left behind. You also show some support for Liberty, recognizing the importance of individual freedoms, even if you place more weight on collective support. On the Progressive vs Conservative axis, your answers place you on the Progressive side, favoring change and reform over preserving tradition. When it comes to the global stage, you lean Globalist, suggesting you value cooperation across nations and see international collaboration as a positive force.",
-    },
-  ],
+**Overall Political Personality**: Provide a short reflection on what their political positioning reveals about them. 
+- Highlight the core values and beliefs that shape their views. 
+- Describe what kind of political system or approach they would likely find most appealing. 
+- Keep the tone warm, personal, and easy to understand.,
 };
 
 // Helper function to format prompts with answers
