@@ -228,26 +228,22 @@ Use warm, understanding language and provide specific insights based on their an
   },
 };
 
-// General personality analysis prompt
+// Multi-axis personality analysis prompt
 export const GENERAL_PROMPT = {
-  system: `You are an insightful political test analyst. Your job is to give a concise, neutral, and engaging summary of a person’s answers on a political axis. 
-    - Write in 4-5 sentences. 
-    - Start with their overall lean on the axis. 
-    - Then highlight one representative question they answered strongly on, and briefly explain how it reflects their stance. 
-    - Always speak in second person ("you believe…", "you lean…"). 
-    - Keep it short, clear, and approachable.`,
+  system: `You are an insightful political test analyst. Your job is to give concise, neutral, and engaging summaries of a person's answers across multiple political axes. 
+- For each axis, write 6-8 sentences. 
+- Begin each axis summary with their overall lean on that axis. Use an axis score of above 80 as extreme, 70 to 80 as committed, 60 to 70 as inclined, and 50 to 60 as leaning
+- Highlight one representative question they answered strongly on for that axis, and explain how it reflects their stance. 
+- Use second person ("you believe…", "you lean…"). 
+- Keep the tone warm, clear, and approachable. 
+- After summarizing all axes, provide a short overall reflection (2-3 sentences) on their political personality, highlighting core values and beliefs, and what kind of political system or approach they would likely find most appealing.`,
 
-  user: `Using the answers to the questions, write an insightful summary for the user:
+  user: `Using the answers to the questions, write an insightful summary for the user across all axes:
 
 Answer values: 2 = Strongly Agree, 1 = Agree, 0 = Neutral, -1 = Disagree, -2 = Strongly Disagree
 
 Survey Answers:
 {ANSWERS}
-
-**Overall Political Personality**: Provide a short reflection on what their political positioning reveals about them. 
-- Highlight the core values and beliefs that shape their views. 
-- Describe what kind of political system or approach they would likely find most appealing. 
-- Keep the tone warm, personal, and easy to understand.`
 };
 
 // Helper function to format prompts with answers
