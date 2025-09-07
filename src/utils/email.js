@@ -16,6 +16,25 @@ export function createTransporter() {
   });
 }
 
+export async function sendPasswordResetEmail(toEmail, resetUrl) {
+  const transporter = createTransporter();
+  const from = process.env.EMAIL_FROM;
+  const subject = "Reset your PhilosiQ password";
+  const html = `
+    <p>We received a request to reset your PhilosiQ password.</p>
+    <p>Click the link below to set a new password. This link will expire in 1 hour.</p>
+    <p><a href="${resetUrl}">Reset your password</a></p>
+    <p>If you didn't request this, you can ignore this email.</p>
+  `;
+  const text = `We received a request to reset your PhilosiQ password.
+
+Reset your password: ${resetUrl}
+
+This link will expire in 1 hour. If you didn't request this, you can ignore this email.`;
+
+  await transporter.sendMail({ from, to: toEmail, subject, html, text });
+}
+
 /**
  * Sends a contact form submission notification email
  * @param {object} contactData - The contact form data
@@ -38,21 +57,21 @@ export async function sendContactNotification(contactData) {
   if (isResponse) {
     // Email response to user
     htmlContent = `
-      <h2>Response from Philosiq</h2>
+      <h2>Response from PhilosiQ</h2>
       <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
         ${message.replace(/\n/g, "<br>")}
       </div>
       <p style="color: #777; margin-top: 20px; font-size: 12px;">
-        This is a response to your inquiry submitted through the Philosiq contact form.
+        This is a response to your inquiry submitted through the PhilosiQ contact form.
       </p>
     `;
 
     textContent = `
-      Response from Philosiq
+      Response from PhilosiQ
       ---------------------------
       ${message}
       
-      This is a response to your inquiry submitted through the Philosiq contact form.
+      This is a response to your inquiry submitted through the PhilosiQ contact form.
     `;
   } else {
     // Notification to admin
@@ -65,7 +84,7 @@ export async function sendContactNotification(contactData) {
         ${message.replace(/\n/g, "<br>")}
       </div>
       <p style="color: #777; margin-top: 20px; font-size: 12px;">
-        This email was sent from the Philosiq contact form.
+        This email was sent from the PhilosiQ contact form.
       </p>
     `;
 
@@ -78,7 +97,7 @@ export async function sendContactNotification(contactData) {
       Message:
       ${message}
       
-      This email was sent from the Philosiq contact form.
+      This email was sent from the PhilosiQ contact form.
     `;
   }
 

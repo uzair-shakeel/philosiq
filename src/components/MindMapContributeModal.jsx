@@ -11,6 +11,10 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 import { track } from "@vercel/analytics";
+import { getCountriesList } from "../utils/countries";
+
+// Comprehensive list of countries
+const COUNTRIES = getCountriesList();
 
 export default function MindMapContributeModal({
   isOpen,
@@ -26,6 +30,7 @@ export default function MindMapContributeModal({
     education: "",
     gender: "",
     ethnicity: "",
+    country: "",
     zipCode: "",
     age: "",
     votingTendency: "",
@@ -92,8 +97,15 @@ export default function MindMapContributeModal({
     setZipcodeError("");
 
     try {
-      // Use the enhanced zipcode-proxy API
-      const response = await fetch(`/api/zipcode-proxy?zipcode=${zipcode}`);
+      // Use the enhanced zipcode-proxy API with optional country to disambiguate
+      const countryParam = formData.country
+        ? `&country=${encodeURIComponent(formData.country)}`
+        : "";
+      const response = await fetch(
+        `/api/zipcode-proxy?zipcode=${encodeURIComponent(
+          zipcode
+        )}${countryParam}`
+      );
       const data = await response.json();
 
       if (!response.ok) {
@@ -169,13 +181,18 @@ export default function MindMapContributeModal({
 
     // Try to detect the country from the zipcode format
     const zipcode = formData.zipCode.trim();
-    let countryCode = "US";
-    let countryName = "United States";
+    // Prefer user-selected country if provided
+    let countryCode = formData.country || "US";
+    let countryName =
+      COUNTRIES.find((c) => c.code === countryCode)?.name || "United States";
     let cityName = "Manual City";
     let stateName = "Manual Region";
 
     // Simple detection based on format
-    if (/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(zipcode)) {
+    if (
+      !formData.country &&
+      /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(zipcode)
+    ) {
       // Canadian postal code
       countryCode = "CA";
       countryName = "Canada";
@@ -227,7 +244,10 @@ export default function MindMapContributeModal({
           break;
       }
       cityName = `${stateName} Region`;
-    } else if (/^[A-Za-z]{1,2}\d[A-Za-z\d]?[ ]?\d[A-Za-z]{2}$/.test(zipcode)) {
+    } else if (
+      !formData.country &&
+      /^[A-Za-z]{1,2}\d[A-Za-z\d]?[ ]?\d[A-Za-z]{2}$/.test(zipcode)
+    ) {
       // UK postal code
       countryCode = "GB";
       countryName = "United Kingdom";
@@ -235,58 +255,68 @@ export default function MindMapContributeModal({
       cityName = "UK Location";
     } else if (/^\d{5}$/.test(zipcode)) {
       // Could be US, Pakistan, or others - check first digit
+      if (formData.country === "PK") {
+        countryCode = "PK";
+        countryName = "Pakistan";
+        stateName = "Pakistan";
+        cityName = "Pakistan Region";
+      } else {
+        // Default to US logic
+        countryCode = "US";
+        countryName = "United States";
 
-      // For US, try to determine the region from the first 3 digits
-      countryCode = "US";
-      countryName = "United States";
+        const prefix = zipcode.substring(0, 3);
+        const prefixNum = parseInt(prefix, 10);
 
-      const prefix = zipcode.substring(0, 3);
-      const prefixNum = parseInt(prefix, 10);
-
-      // Map ZIP code prefixes to general regions
-      if (prefixNum >= 0 && prefixNum <= 99) {
-        stateName = "US Territories";
-        cityName = "US Territory";
-      } else if (prefixNum >= 100 && prefixNum <= 199) {
-        stateName = "Northeast US";
-        cityName = "Northeast Region";
-      } else if (prefixNum >= 200 && prefixNum <= 299) {
-        stateName = "Mid-Atlantic US";
-        cityName = "Mid-Atlantic Region";
-      } else if (prefixNum >= 300 && prefixNum <= 399) {
-        stateName = "Southeast US";
-        cityName = "Southeast Region";
-      } else if (prefixNum >= 400 && prefixNum <= 499) {
-        stateName = "Midwest US";
-        cityName = "Midwest Region";
-      } else if (prefixNum >= 500 && prefixNum <= 599) {
-        stateName = "Central US";
-        cityName = "Central Region";
-      } else if (prefixNum >= 600 && prefixNum <= 699) {
-        stateName = "Central US";
-        cityName = "Central Region";
-      } else if (prefixNum >= 700 && prefixNum <= 799) {
-        stateName = "South Central US";
-        cityName = "South Central Region";
-      } else if (prefixNum >= 800 && prefixNum <= 899) {
-        stateName = "Western US";
-        cityName = "Western Region";
-      } else if (prefixNum >= 900 && prefixNum <= 999) {
-        stateName = "West Coast US";
-        cityName = "West Coast Region";
+        // Map ZIP code prefixes to general regions
+        if (prefixNum >= 0 && prefixNum <= 99) {
+          stateName = "US Territories";
+          cityName = "US Territory";
+        } else if (prefixNum >= 100 && prefixNum <= 199) {
+          stateName = "Northeast US";
+          cityName = "Northeast Region";
+        } else if (prefixNum >= 200 && prefixNum <= 299) {
+          stateName = "Mid-Atlantic US";
+          cityName = "Mid-Atlantic Region";
+        } else if (prefixNum >= 300 && prefixNum <= 399) {
+          stateName = "Southeast US";
+          cityName = "Southeast Region";
+        } else if (prefixNum >= 400 && prefixNum <= 499) {
+          stateName = "Midwest US";
+          cityName = "Midwest Region";
+        } else if (prefixNum >= 500 && prefixNum <= 599) {
+          stateName = "Central US";
+          cityName = "Central Region";
+        } else if (prefixNum >= 600 && prefixNum <= 699) {
+          stateName = "Central US";
+          cityName = "Central Region";
+        } else if (prefixNum >= 700 && prefixNum <= 799) {
+          stateName = "South Central US";
+          cityName = "South Central Region";
+        } else if (prefixNum >= 800 && prefixNum <= 899) {
+          stateName = "Western US";
+          cityName = "Western Region";
+        } else if (prefixNum >= 900 && prefixNum <= 999) {
+          stateName = "West Coast US";
+          cityName = "West Coast Region";
+        }
       }
     } else if (/^\d{6}$/.test(zipcode)) {
       // Indian postal code
-      countryCode = "IN";
-      countryName = "India";
-      stateName = "India";
-      cityName = "India Location";
+      if (!formData.country || formData.country === "IN") {
+        countryCode = "IN";
+        countryName = "India";
+        stateName = "India";
+        cityName = "India Location";
+      }
     } else if (/^\d{4}$/.test(zipcode)) {
       // Australian postal code
-      countryCode = "AU";
-      countryName = "Australia";
-      stateName = "Australia";
-      cityName = "Australia Location";
+      if (!formData.country || formData.country === "AU") {
+        countryCode = "AU";
+        countryName = "Australia";
+        stateName = "Australia";
+        cityName = "Australia Location";
+      }
     }
 
     // Create a manual location object
@@ -329,6 +359,21 @@ export default function MindMapContributeModal({
           validateZipcode(value);
         }, 300);
       }
+    } else if (name === "country") {
+      setFormData((prev) => ({
+        ...prev,
+        country: value,
+      }));
+      // Clear current location when country changes
+      setLocationData(null);
+      setZipcodeError("");
+      // Re-validate if zipcode is present
+      const currentZip = formData.zipCode?.trim();
+      if (currentZip && currentZip.length >= 3) {
+        setTimeout(() => {
+          validateZipcode(currentZip);
+        }, 150);
+      }
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -347,7 +392,8 @@ export default function MindMapContributeModal({
 
   const canProceedToStep2 =
     formData.education && formData.gender && formData.ethnicity;
-  const canProceedToStep3 = formData.age && formData.location && !zipcodeError;
+  const canProceedToStep3 =
+    formData.age && formData.country && formData.location && !zipcodeError;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -603,6 +649,27 @@ export default function MindMapContributeModal({
               Location & Age
             </h3>
             <div className="space-y-5">
+              {/* Country */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Country
+                </label>
+                <select
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
+                  required
+                >
+                  <option value="">Select country</option>
+                  {COUNTRIES.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* Zip Code */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">

@@ -51,8 +51,15 @@ export default async function handler(req, res) {
     console.log("User found:", user._id.toString());
 
     // Get data from request body
-    const { archetype, secondaryArchetypes, axisBreakdown, quizType } =
-      req.body;
+    const {
+      archetype,
+      secondaryArchetypes,
+      axisBreakdown,
+      quizType,
+      answerBreakdown,
+      impactAnswers,
+      isPlusActive,
+    } = req.body;
 
     // Normalize secondaryArchetypes
     let normalizedSecondaryArchetypes = [];
@@ -70,6 +77,26 @@ export default async function handler(req, res) {
       normalizedAxisBreakdown = Object.values(axisBreakdown);
     }
 
+    // Normalize answerBreakdown (optional)
+    let normalizedAnswerBreakdown = [];
+    if (Array.isArray(answerBreakdown)) {
+      normalizedAnswerBreakdown = answerBreakdown;
+    } else if (answerBreakdown && typeof answerBreakdown === "object") {
+      normalizedAnswerBreakdown = Object.values(answerBreakdown);
+    }
+
+    // Normalize impactAnswers (optional)
+    let normalizedImpactAnswers = null;
+    if (impactAnswers && typeof impactAnswers === "object") {
+      normalizedImpactAnswers = impactAnswers;
+    }
+
+    // Normalize isPlusActive (optional)
+    let normalizedIsPlusActive = false;
+    if (typeof isPlusActive === "boolean") {
+      normalizedIsPlusActive = isPlusActive;
+    }
+
     console.log("Received archetype data:", JSON.stringify(archetype));
     console.log(
       "Received secondary archetypes:",
@@ -80,6 +107,20 @@ export default async function handler(req, res) {
       JSON.stringify(normalizedAxisBreakdown)
     );
     console.log("Received quiz type:", quizType || "not specified");
+    console.log(
+      "Received answer breakdown count:",
+      Array.isArray(normalizedAnswerBreakdown)
+        ? normalizedAnswerBreakdown.length
+        : 0
+    );
+    console.log(
+      "Received impact answers:",
+      normalizedImpactAnswers ? "Yes" : "No"
+    );
+    console.log(
+      "Received isPlusActive:",
+      normalizedIsPlusActive ? "Yes" : "No"
+    );
 
     // Validate required data
     if (!req.body.archetype) {
@@ -128,6 +169,9 @@ export default async function handler(req, res) {
       },
       secondaryArchetypes: normalizedSecondaryArchetypes,
       axisBreakdown: normalizedAxisBreakdown,
+      answerBreakdown: normalizedAnswerBreakdown,
+      impactAnswers: normalizedImpactAnswers, // Add impact answers
+      isPlusActive: normalizedIsPlusActive, // Add plus status
       quizType: quizType || "full", // Add the quiz type
       createdAt: new Date(),
     });

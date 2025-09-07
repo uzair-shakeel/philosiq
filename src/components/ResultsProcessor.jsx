@@ -38,7 +38,8 @@ export default function ResultsProcessor({ children }) {
 
       const { answers, questions, axisScores } = parsedData;
 
-      if (!questions || !answers) {
+      if (!questions || !answers || !Array.isArray(questions) || Object.keys(answers).length === 0) {
+        console.error("Invalid quiz results data structure:", { questions: !!questions, answers: !!answers, questionsArray: Array.isArray(questions), answersKeys: answers ? Object.keys(answers).length : 0 });
         setError("Invalid quiz results data. Please retake the quiz.");
         setLoading(false);
         return;
@@ -65,16 +66,25 @@ export default function ResultsProcessor({ children }) {
       const calculatedResults = calculateResults(questions, answers);
 
       // Save results to localStorage for persistence across browser sessions
-      localStorage.setItem(
-        "quizResults",
-        JSON.stringify({
-          answers,
-          questions,
-          axisScores,
-          timestamp: new Date().toISOString(),
-          archetype: calculatedResults.archetype,
-        })
-      );
+      const completeResultsData = {
+        answers,
+        questions,
+        axisScores,
+        timestamp: new Date().toISOString(),
+        archetype: calculatedResults.archetype,
+        axisResults: calculatedResults.axisResults,
+        quizType: parsedData.quizType || "full",
+        isSaved: true,
+        // Ensure we preserve any additional data from the original
+        ...parsedData,
+        // But override with our calculated results
+        calculatedResults,
+      };
+
+      localStorage.setItem("quizResults", JSON.stringify(completeResultsData));
+      
+      // Also update sessionStorage to keep them in sync
+      sessionStorage.setItem("quizResults", JSON.stringify(completeResultsData));
 
       // Check if we have equity results
       const hasEquityResults = calculatedResults.axisResults.some(
@@ -101,8 +111,15 @@ export default function ResultsProcessor({ children }) {
         }
       }
 
-      // Set the processed results
-      setResults(calculatedResults);
+      // Set the processed results along with original data
+      setResults({
+        ...calculatedResults,
+        originalAnswers: answers,
+        originalQuestions: questions,
+        // Ensure we always have the raw data available for components
+        questions: questions,
+        answers: answers,
+      });
     } catch (err) {
       console.error("Error processing results:", err);
       setError(`Failed to process quiz results: ${err.message}`);

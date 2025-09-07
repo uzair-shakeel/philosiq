@@ -55,4 +55,28 @@ h6 {
   .section-padding {
     @apply py-12 md:py-20;
   }
+
+  /* AdSense Styling */
+  .ad-container {
+    @apply rounded-lg overflow-hidden;
+  }
+
+  .ad-container ins {
+    @apply rounded-lg;
+  }
+
+  /* Responsive ad sizing */
+  @media (max-width: 768px) {
+    .ad-container {
+      @apply mx-4;
+    }
+  }
+
+  /* Line clamp utility for text truncation */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }

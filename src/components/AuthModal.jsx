@@ -1,10 +1,23 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-export default function AuthModal({ isOpen, onClose }) {
+export default function AuthModal({ isOpen, onClose, redirectUrl }) {
   const router = useRouter();
 
   if (!isOpen) return null;
+
+  const handleLogin = () => {
+    // Store the current full URL (including query parameters) so user can return after login
+    if (typeof window !== "undefined") {
+      const currentUrl = window.location.pathname + window.location.search;
+      localStorage.setItem("returnUrl", currentUrl);
+    }
+
+    const loginUrl = redirectUrl
+      ? `/login?redirect=${encodeURIComponent(redirectUrl)}`
+      : "/login";
+    router.push(loginUrl);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -17,7 +30,7 @@ export default function AuthModal({ isOpen, onClose }) {
         </p>
         <div className="flex justify-center space-x-4">
           <button
-            onClick={() => router.push("/login")}
+            onClick={handleLogin}
             className="px-4 py-2 bg-primary-maroon text-white rounded hover:bg-primary-darkMaroon transition-colors"
           >
             Login

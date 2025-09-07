@@ -9,9 +9,58 @@ import {
   FaExclamationCircle,
   FaCalendarAlt,
   FaChartPie,
+  FaBolt,
+  FaBalanceScale,
+  FaThumbsUp,
+  FaThumbsDown,
+  FaInfoCircle,
+  FaEnvelope,
+  FaCrown,
 } from "react-icons/fa";
 import AxisGraph from "../../components/AxisGraph";
 import { jsPDF } from "jspdf";
+import { FaKey } from "react-icons/fa";
+import AxisSpecificSummaries from "../../components/AxisSpecificSummaries";
+import PoliticalCompass from "../../components/PoliticalCompass";
+
+// Helper function to convert answer value to agreement text
+const getAgreementText = (answerValue) => {
+  if (answerValue === 2) return "Strongly Agree";
+  if (answerValue === 1) return "Agree";
+  if (answerValue === 0) return "Neutral";
+  if (answerValue === -1) return "Disagree";
+  if (answerValue === -2) return "Strongly Disagree";
+  return answerValue;
+};
+
+// Visual theme per axis for the Impact Answers section (matching results page)
+const AXIS_THEME = {
+  "Equity vs. Free Market": {
+    header: "from-blue-500 to-green-500",
+    aligned: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    against: "bg-rose-50 text-rose-700 border-rose-200",
+  },
+  "Libertarian vs. Authoritarian": {
+    header: "from-teal-500 to-orange-500",
+    aligned: "bg-teal-50 text-teal-700 border-teal-200",
+    against: "bg-orange-50 text-orange-700 border-orange-200",
+  },
+  "Progressive vs. Conservative": {
+    header: "from-sky-500 to-red-500",
+    aligned: "bg-sky-50 text-sky-700 border-sky-200",
+    against: "bg-red-50 text-red-700 border-red-200",
+  },
+  "Secular vs. Religious": {
+    header: "from-yellow-500 to-purple-500",
+    aligned: "bg-yellow-50 text-yellow-700 border-yellow-200",
+    against: "bg-purple-50 text-purple-700 border-purple-200",
+  },
+  "Globalism vs. Nationalism": {
+    header: "from-lime-500 to-rose-500",
+    aligned: "bg-lime-50 text-lime-700 border-lime-200",
+    against: "bg-rose-50 text-rose-700 border-rose-200",
+  },
+};
 
 export default function QuizResultDetail() {
   const router = useRouter();
@@ -21,8 +70,10 @@ export default function QuizResultDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPdfGenerating, setIsPdfGenerating] = useState(false);
-  const [showDebug, setShowDebug] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [genCodeLoading, setGenCodeLoading] = useState(false);
+  const [generatedCode, setGeneratedCode] = useState("");
+  const [isPlusActive, setIsPlusActive] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -33,6 +84,12 @@ export default function QuizResultDetail() {
         const token = localStorage.getItem("authToken");
 
         if (!token) {
+          // Store current URL for return after login
+          if (typeof window !== "undefined") {
+            const currentUrl =
+              window.location.pathname + window.location.search;
+            localStorage.setItem("returnUrl", currentUrl);
+          }
           router.push("/login?redirect=history");
           return;
         }
@@ -53,6 +110,8 @@ export default function QuizResultDetail() {
           console.log("Received result data:", data.result);
           console.log("Secondary archetypes:", data.result.secondaryArchetypes);
           console.log("Axis breakdown:", data.result.axisBreakdown);
+          console.log("Impact answers:", data.result.impactAnswers);
+          console.log("Has impact answers:", !!data.result.impactAnswers);
           setResult(data.result);
         } else {
           setError("Could not find this quiz result.");
@@ -65,7 +124,25 @@ export default function QuizResultDetail() {
       }
     };
 
+    const checkPlusStatus = async () => {
+      try {
+        const email = localStorage.getItem("userEmail");
+        if (email) {
+          const response = await fetch(
+            `/api/user/plus-status?email=${encodeURIComponent(email)}`
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setIsPlusActive(!!data?.active);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking plus status:", error);
+      }
+    };
+
     fetchQuizResult();
+    checkPlusStatus();
   }, [id, router]);
 
   // Format date for display
@@ -281,6 +358,30 @@ export default function QuizResultDetail() {
     }
   };
 
+  const handleGenerateIQrypt = async () => {
+    if (!result?._id || genCodeLoading) return;
+    try {
+      setGenCodeLoading(true);
+      const token = localStorage.getItem("authToken");
+      if (!token) return alert("Login required.");
+      const resp = await fetch("/api/compare/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ resultId: result._id }),
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.message || "Failed to generate code");
+      setGeneratedCode(data.code);
+    } catch (e) {
+      alert(e.message || "Unable to generate code.");
+    } finally {
+      setGenCodeLoading(false);
+    }
+  };
+
   const handleDeleteResult = async () => {
     if (!result) return;
     if (
@@ -393,7 +494,6 @@ export default function QuizResultDetail() {
               <FaArrowLeft className="mr-2" /> Back to History
             </Link>
           </div>
-
           {/* Result Date */}
           <div className="flex items-center text-gray-600 mb-6">
             <FaCalendarAlt className="mr-2" />
@@ -402,7 +502,6 @@ export default function QuizResultDetail() {
               {result.quizType === "full" ? "Full Quiz" : "Short Quiz"}
             </span>
           </div>
-
           {/* Primary Archetype Card */}
           <div className="mb-16">
             <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-lg overflow-hidden border border-gray-200">
@@ -458,7 +557,6 @@ export default function QuizResultDetail() {
               </div>
             </div>
           </div>
-
           {/* Secondary Archetypes - If Available */}
           {result.secondaryArchetypes &&
             result.secondaryArchetypes.length > 0 && (
@@ -546,7 +644,6 @@ export default function QuizResultDetail() {
                 </div>
               </div>
             )}
-
           {/* Axis Breakdown */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-6 text-center">
@@ -650,7 +747,9 @@ export default function QuizResultDetail() {
                         {/* Marker for user's position */}
                         <div
                           className="absolute top-0 bottom-0 w-1 h-full bg-white border border-black z-30 transform -translate-x-1/2"
-                          style={{ left: `${axis.score}%` }}
+                          style={{
+                            left: `${axis.score}%`,
+                          }}
                         ></div>
                       </div>
 
@@ -671,6 +770,294 @@ export default function QuizResultDetail() {
             </div>
           </div>
 
+          {/* Political Compass */}
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold mb-6 text-center">
+              Political Compass
+            </h2>
+            <div className="max-w-2xl mx-auto">
+              <PoliticalCompass
+                axisResults={result.axisBreakdown}
+                answers={result.answers}
+                questions={result.questions}
+              />
+            </div>
+          </div>
+
+          {/* Impact Answers - The Balance Board */}
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold mb-2 text-center flex items-center justify-center gap-2">
+              <FaBolt className="text-yellow-500" /> The Balance Board
+            </h2>
+            <p className="text-center text-gray-600 mb-8">
+              The Balance Board is where your score's story comes to life. On
+              one side are the answers that propelled you toward your result. On
+              the other are the ones that pulled you back from the edge.
+              Together, they show why you landed exactly where you did
+            </p>
+
+            {!result.impactAnswers ? (
+              <div className="text-center py-8 text-gray-500">
+                <span className="text-4xl mb-3 block">⚡</span>
+                <p>No impact answers data available for this result.</p>
+                <p className="text-sm mt-2">
+                  This quiz result was taken before the Balance Board feature
+                  was added.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-8">
+                {/* Show only first axis for free users, all axes for plus users */}
+                {result.axisBreakdown
+                  ?.filter((_, index) => isPlusActive || index === 0)
+                  ?.map((axis, index) => {
+                    const data = result.impactAnswers[axis.name] || {
+                      aligned: [],
+                      against: [],
+                    };
+                    const theme = AXIS_THEME[axis.name] || {
+                      header: "from-gray-200 to-gray-100",
+                      aligned: "bg-green-50 text-green-700 border-green-200",
+                      against: "bg-red-50 text-red-700 border-red-200",
+                    };
+                    const formatScore = (n) => {
+                      const rounded = Math.round(n * 10) / 10;
+                      return (rounded > 0 ? "+" : "") + rounded;
+                    };
+                    return (
+                      <div
+                        key={axis.name}
+                        className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200"
+                      >
+                        <div
+                          className={`px-6 py-4 bg-gradient-to-r ${theme.header} text-white flex items-center justify-between`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <FaBalanceScale className="opacity-90" />
+                            <h3 className="text-lg font-bold">{axis.name}</h3>
+                          </div>
+                        </div>
+                        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <div className="flex items-center gap-2 mb-3">
+                              <FaThumbsUp className="text-emerald-600" />
+                              <h4 className="font-semibold">
+                                Aligned with your view
+                              </h4>
+                            </div>
+                            {data.aligned.length === 0 ? (
+                              <p className="text-sm text-gray-500">
+                                No strong aligned answers.
+                              </p>
+                            ) : (
+                              <ul className="space-y-3">
+                                {data.aligned.map((item) => (
+                                  <li
+                                    key={item.id}
+                                    className={`p-3 rounded-lg border ${theme.aligned} flex items-start justify-between`}
+                                  >
+                                    <div>
+                                      <p className="text-sm font-medium text-gray-800">
+                                        {item.question}
+                                      </p>
+                                      {item.answerValue !== undefined && (
+                                        <p className="text-xs opacity-75 mt-1">
+                                          Your Answer:{" "}
+                                          {getAgreementText(item.answerValue)}
+                                        </p>
+                                      )}
+                                    </div>
+                                    <span className="ml-3 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-white/70 text-current border border-white">
+                                      {formatScore(item.contribution)}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 mb-3">
+                              <FaThumbsDown className="text-rose-600" />
+                              <h4 className="font-semibold">
+                                Counter to your view
+                              </h4>
+                            </div>
+                            {data.against.length === 0 ? (
+                              <p className="text-sm text-gray-500">
+                                No strong counter answers.
+                              </p>
+                            ) : (
+                              <ul className="space-y-3">
+                                {data.against.map((item) => (
+                                  <li
+                                    key={item.id}
+                                    className={`p-3 rounded-lg border ${theme.against} flex items-start justify-between`}
+                                  >
+                                    <div>
+                                      <p className="text-sm font-medium text-gray-800">
+                                        {item.question}
+                                      </p>
+                                      {item.answerValue !== undefined && (
+                                        <p className="text-xs opacity-75 mt-1">
+                                          Your Answer:{" "}
+                                          {getAgreementText(item.answerValue)}
+                                        </p>
+                                      )}
+                                    </div>
+                                    <span className="ml-3 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-white/70 text-current border border-white">
+                                      {formatScore(item.contribution)}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                {/* Show upgrade prompt for free users after first axis */}
+                {!isPlusActive &&
+                  result.axisBreakdown &&
+                  result.axisBreakdown.length > 1 && (
+                    <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6 text-center">
+                      <div className="flex items-center justify-center gap-3 mb-4">
+                        <div className="bg-purple-100 p-3 rounded-full">
+                          <FaCrown className="text-purple-600 text-xl" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-semibold text-gray-800">
+                            Unlock All Axes
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            Upgrade to Philosiq+ to see your complete Balance
+                            Board
+                          </p>
+                        </div>
+                      </div>
+
+                      <p className="text-gray-700 mb-4">
+                        You're currently seeing only the first axis. Upgrade to
+                        Philosiq+ to access all {result.axisBreakdown.length}{" "}
+                        axes and get the full picture of what influenced your
+                        political archetype.
+                      </p>
+
+                      <button
+                        onClick={() => router.push("/profile")}
+                        className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-colors duration-200"
+                      >
+                        Upgrade to Philosiq+
+                      </button>
+                    </div>
+                  )}
+              </div>
+            )}
+
+            <p className="text-xs text-gray-500 mt-4 text-center">
+              Impact score reflects how strongly an answer moved your result on
+              that axis (sign shows direction).
+            </p>
+          </div>
+
+          {/* Premium Feature Section - Philosiq+ Advanced Analysis */}
+          <div className="mb-16 relative">
+            <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg shadow-lg overflow-hidden border border-purple-200">
+              <div className="p-8 text-center relative">
+                {/* Blur overlay when locked */}
+                {!isPlusActive && (
+                  <div className="absolute inset-0 bg-white bg-opacity-90 backdrop-blur-sm z-10"></div>
+                )}
+
+                {/* Content */}
+                <div className="relative z-20">
+                  <h2 className="text-3xl font-bold mb-4 text-gray-800">
+                    {isPlusActive
+                      ? "Philosiq+ Advanced Analysis"
+                      : "Advanced Analysis"}
+                  </h2>
+                  <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+                    Unlock detailed personality insights, career
+                    recommendations, and compatibility analysis with other
+                    political archetypes.
+                  </p>
+
+                  {/* Blurred content preview */}
+                  <div
+                    className={`bg-white rounded-lg p-6 mb-6 ${
+                      isPlusActive ? "opacity-100" : "opacity-30 blur-sm"
+                    }`}
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                          <FaChartPie className="text-blue-600 text-xl" />
+                        </div>
+                        <h3 className="font-semibold text-gray-800">
+                          Personality Insights
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Deep dive into your character traits
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <div className="w-16 h-16 bg-green-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                          <FaInfoCircle className="text-green-600 text-xl" />
+                        </div>
+                        <h3 className="font-semibold text-gray-800">
+                          Career Guidance
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Professional paths that match your values
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <div className="w-16 h-16 bg-purple-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                          <FaEnvelope className="text-purple-600 text-xl" />
+                        </div>
+                        <h3 className="font-semibold text-gray-800">
+                          Compatibility Analysis
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          See how you align with other archetypes
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CTA buttons */}
+                  {!isPlusActive ? (
+                    <button
+                      onClick={() => router.push("/results")}
+                      className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    >
+                      Unblock with Philosiq+
+                    </button>
+                  ) : null}
+
+                  <p className="text-sm text-gray-500 mt-4">
+                    Premium features • Detailed analysis • Exclusive insights
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Axis-Specific AI Summaries - Philosiq+ Only */}
+          <div className="mb-16">
+            <AxisSpecificSummaries
+              answers={
+                result.answerBreakdown?.map((answer) => ({
+                  question: answer.question,
+                  answer: answer.answer,
+                  axis: answer.axis || "general",
+                })) || []
+              }
+              userEmail={localStorage.getItem("userEmail")}
+              isPhilosiQPlus={isPlusActive}
+            />
+          </div>
           {/* Download PDF Button */}
           <div className="text-center mt-8 flex flex-col items-center gap-4">
             <button
@@ -688,6 +1075,35 @@ export default function QuizResultDetail() {
                 </>
               )}
             </button>
+            <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-3">
+              <button
+                onClick={handleGenerateIQrypt}
+                disabled={genCodeLoading}
+                className="px-4 py-2 rounded-full border border-gray-300 bg-white hover:bg-gray-50 inline-flex items-center"
+                title="Generate a shareable IQrypt Code to compare with others"
+              >
+                {genCodeLoading ? (
+                  <>
+                    <FaSpinner className="animate-spin mr-2" /> Generating...
+                  </>
+                ) : (
+                  <>
+                    <FaKey className="mr-2" /> Generate IQrypt Code
+                  </>
+                )}
+              </button>
+              {generatedCode && (
+                <div className="flex items-center gap-2 text-sm bg-gray-100 px-3 py-2 rounded-full border border-gray-200">
+                  <span className="font-mono">{generatedCode}</span>
+                  <button
+                    onClick={() => navigator.clipboard.writeText(generatedCode)}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Copy
+                  </button>
+                </div>
+              )}
+            </div>
             <button
               onClick={handleDeleteResult}
               disabled={isDeleting || isPdfGenerating}
@@ -703,23 +1119,6 @@ export default function QuizResultDetail() {
                 </>
               )}
             </button>
-          </div>
-
-          {/* Debug Section - Toggle this with a button */}
-          <div className="mt-12 border-t pt-6">
-            <button
-              onClick={() => setShowDebug((prev) => !prev)}
-              className="text-gray-500 underline mb-4"
-            >
-              {showDebug ? "Hide Debug Info" : "Show Debug Info"}
-            </button>
-
-            {showDebug && (
-              <div className="bg-gray-100 p-4 rounded text-xs overflow-auto max-h-96">
-                <h3 className="font-bold mb-2">Result Data Structure:</h3>
-                <pre>{JSON.stringify(result, null, 2)}</pre>
-              </div>
-            )}
           </div>
         </div>
       </div>

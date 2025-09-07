@@ -1,5 +1,6 @@
 import { connectToDatabase } from "../../../utils/db";
 import jwt from "jsonwebtoken";
+import { ObjectId } from "mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -21,7 +22,12 @@ export default async function handler(req, res) {
     const { db } = await connectToDatabase();
 
     // Get user from database
-    const user = await db.collection("users").findOne({ _id: decoded.userId });
+    const userId = decoded.userId;
+    const filter =
+      typeof userId === "string"
+        ? { _id: new ObjectId(userId) }
+        : { _id: userId };
+    const user = await db.collection("users").findOne(filter);
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
@@ -36,4 +42,4 @@ export default async function handler(req, res) {
     }
     res.status(500).json({ message: "Failed to fetch user data" });
   }
-} 
+}

@@ -8,6 +8,8 @@ import {
   FaClipboardCheck,
   FaInfoCircle,
   FaUser,
+  FaUsers,
+  FaLock,
 } from "react-icons/fa";
 import axios from "axios";
 import { track } from "@vercel/analytics";
@@ -19,6 +21,7 @@ export default function QuizPage() {
   const [quizType, setQuizType] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [contextTexts, setContextTexts] = useState({});
   const [questions, setQuestions] = useState([]);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showingAxes, setShowingAxes] = useState(false);
@@ -29,16 +32,114 @@ export default function QuizPage() {
   const [authToken, setAuthToken] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState(null);
+  const [isPhilosiqPlus, setIsPhilosiqPlus] = useState(false);
+  const [autoProceed, setAutoProceed] = useState(true); // Auto-proceed toggle, default ON
   const router = useRouter();
 
-  // Check authentication status on mount
+  // Check authentication status and Philosiq+ status on mount
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
       setIsAuthenticated(true);
       setAuthToken(token);
+
+      // Check Philosiq+ status
+      const userEmail = localStorage.getItem("userEmail");
+      if (userEmail) {
+        checkPhilosiqPlusStatus(userEmail);
+      }
     }
   }, []);
+
+  // Function to check Philosiq+ status
+  const checkPhilosiqPlusStatus = async (email) => {
+    try {
+      console.log("Checking Philosiq+ status for:", email);
+      const response = await fetch(
+        `/api/user/plus-status?email=${encodeURIComponent(email)}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Philosiq+ status response:", data);
+        setIsPhilosiqPlus(data.active || false);
+      } else {
+        console.error("Failed to get Philosiq+ status:", response.status);
+      }
+    } catch (error) {
+      console.error("Failed to check Philosiq+ status:", error);
+    }
+  };
+
+  // Debug logging for Philosiq+ status
+  useEffect(() => {
+    console.log("Current Philosiq+ status:", isPhilosiqPlus);
+    console.log("Current authentication status:", isAuthenticated);
+  }, [isPhilosiqPlus, isAuthenticated]);
+
+  // Warn user before leaving the quiz
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (quizStarted) {
+        e.preventDefault();
+        e.returnValue =
+          "Are you sure you want to leave? All your quiz progress will be lost.";
+        return "Are you sure you want to leave? All your quiz progress will be lost.";
+      }
+    };
+
+    // Add event listeners
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [quizStarted]);
+
+  // Handle back button navigation
+  useEffect(() => {
+    if (quizStarted) {
+      // Push a state when quiz starts
+      window.history.pushState(
+        { quizActive: true },
+        "",
+        window.location.pathname
+      );
+
+      const handlePopState = (e) => {
+        if (quizStarted) {
+          // Show confirmation dialog
+          const confirmed = window.confirm(
+            "Are you sure you want to go back? All your quiz progress will be lost."
+          );
+
+          if (confirmed) {
+            // User confirmed, reset quiz state and allow navigation
+            setQuizStarted(false);
+            setQuestions([]);
+            setAnswers({});
+            setContextTexts({});
+            setCurrentQuestion(0);
+            // Navigate back
+            window.history.back();
+          } else {
+            // User cancelled, prevent navigation by pushing state again
+            window.history.pushState(
+              { quizActive: true },
+              "",
+              window.location.pathname
+            );
+          }
+        }
+      };
+
+      window.addEventListener("popstate", handlePopState);
+
+      return () => {
+        window.removeEventListener("popstate", handlePopState);
+      };
+    }
+  }, [quizStarted]);
 
   // Fallback questions in case the API fails
   const FALLBACK_QUESTIONS = [
@@ -349,6 +450,7 @@ export default function QuizPage() {
       setQuizStarted(true);
       setCurrentQuestion(0);
       setAnswers({});
+      setContextTexts({});
     } catch (error) {
       setError("Failed to start quiz. Please try again later.");
     } finally {
@@ -362,8 +464,8 @@ export default function QuizPage() {
       [questions[currentQuestion]?._id]: value,
     });
 
-    // Only auto-advance if not on the last question
-    if (currentQuestion < questions.length - 1) {
+    // Only auto-advance if auto-proceed is enabled and not on the last question
+    if (autoProceed && currentQuestion < questions.length - 1) {
       setIsTransitioning(true);
 
       // Wait for transition animation before changing question
@@ -372,6 +474,13 @@ export default function QuizPage() {
         setIsTransitioning(false);
       }, 400);
     }
+  };
+
+  const handleContextChange = (questionId, text) => {
+    setContextTexts({
+      ...contextTexts,
+      [questionId]: text,
+    });
   };
 
   const handleNext = () => {
@@ -406,6 +515,7 @@ export default function QuizPage() {
       const resultsData = {
         questions,
         answers,
+        contextTexts,
         // Save detailed axis information
         axisBreakdown: finalResults.axisResults,
         axisScores: finalResults.axisScores,
@@ -466,7 +576,7 @@ export default function QuizPage() {
   // Show error state
   if (error && !quizStarted) {
     return (
-      <Layout title="Quiz Error - PhilosiQ">
+      <Layout title="Quiz Error - Philosiq">
         <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
           <div className="text-center max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg">
             <div className="text-red-500 text-5xl mb-4">⚠️</div>
@@ -485,10 +595,13 @@ export default function QuizPage() {
   }
 
   return (
-    <Layout title="Political Quiz - PhilosiQ">
+    <Layout title="Political Quiz - Philosiq">
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
+        redirectUrl={
+          typeof window !== "undefined" ? window.location.pathname : "/quiz"
+        }
       />
 
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
@@ -567,6 +680,45 @@ export default function QuizPage() {
                       Start Full Quiz
                     </button>
                   </div>
+                </div>
+              </div>
+
+              {/* Compare Results Section - Show to All Users */}
+              <div className="mt-12 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-purple-100 p-3 rounded-full">
+                    <FaUsers className="text-purple-600 text-xl" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-gray-800">
+                      Compare Your Results
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {isPhilosiqPlus
+                        ? "Philosiq+ Exclusive Feature"
+                        : "Upgrade to Philosiq+ to unlock this feature"}
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-gray-700 mb-4">
+                  Compare your political archetype with friends, family, or
+                  public figures. See how your beliefs align or differ across
+                  all five political axes. This premium feature provides
+                  detailed side-by-side analysis and insights.
+                </p>
+
+                <div className="text-center">
+                  <button
+                    onClick={() =>
+                      router.push(isPhilosiqPlus ? "/compare" : "/profile")
+                    }
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-colors duration-200"
+                  >
+                    {isPhilosiqPlus
+                      ? "Compare Results"
+                      : "Upgrade to Philosiq+"}
+                  </button>
                 </div>
               </div>
 
@@ -773,13 +925,14 @@ export default function QuizPage() {
 
               <div className="mt-12 text-center">
                 <p className="text-gray-500 text-sm">
-                  Your responses are anonymous and will be used to determine your political archetype. However, if you choose to log in and save your results, your scores and email may be stored to allow you to revisit and compare your outcomes. This information will be kept private and will not be used for any purpose outside of this site.
+                  Your responses are anonymous and will be used to determine
+                  your political archetype.
                 </p>
               </div>
             </div>
           ) : (
             <div className="max-w-3xl mx-auto">
-              <div className="bg-white rounded-lg shadow-lg p-8">
+              <div className="bg-white rounded-lg shadow-lg p-8 relative">
                 {/* Quiz header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                   <h2 className="text-2xl font-bold mb-2 md:mb-0">
@@ -815,9 +968,36 @@ export default function QuizPage() {
                   }`}
                 >
                   {/* Question */}
-                  <h2 className="text-2xl font-bold mb-8">
+                  <h2 className="text-2xl font-bold mb-2">
                     {questions[currentQuestion]?.question}
                   </h2>
+
+                  {/* Auto-Proceed Toggle - Top */}
+                  <div className="mb-2 flex justify-end">
+                    <div className="flex items-center gap-3 bg-gray-50 rounded-lg px-4 py-2 border border-gray-200">
+                      <span className="text-sm font-medium text-gray-700">
+                        Auto-advance:
+                      </span>
+                      <button
+                        onClick={() => setAutoProceed(!autoProceed)}
+                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                          autoProceed
+                            ? `bg-primary-maroon focus:ring-primary-maroon ${
+                                quizType === "short"
+                                  ? "bg-secondary-darkBlue focus:ring-secondary-darkBlue"
+                                  : ""
+                              }`
+                            : "bg-gray-300 focus:ring-gray-400"
+                        }`}
+                      >
+                        <span
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                            autoProceed ? "translate-x-4" : "translate-x-0.5"
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </div>
 
                   {/* Answer options - REVERSED ORDER */}
                   <div className="space-y-4">
@@ -849,10 +1029,39 @@ export default function QuizPage() {
                       </button>
                     ))}
                   </div>
+
+                  {/* Additional Context Text Box */}
+                  <div className="mt-6">
+                    <label
+                      htmlFor="context"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Additional Context (Optional)
+                    </label>
+                    <textarea
+                      id="context"
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Feel free to add any additional thoughts, examples, or context about your answer..."
+                      value={
+                        contextTexts[questions[currentQuestion]?._id] || ""
+                      }
+                      onChange={(e) =>
+                        handleContextChange(
+                          questions[currentQuestion]?._id,
+                          e.target.value
+                        )
+                      }
+                    />
+                    <p className="mt-1 text-xs text-gray-500">
+                      This helps us provide more personalized insights about
+                      your political views.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Navigation buttons */}
-                <div className="flex justify-between mt-8">
+                <div className="flex justify-between items-center mt-8">
                   <button
                     onClick={handlePrevious}
                     disabled={currentQuestion === 0}
@@ -885,13 +1094,18 @@ export default function QuizPage() {
                     >
                       Submit
                     </button>
-                  ) : (
+                  ) : // Show Next button when auto-proceed is OFF and user has answered, or when auto-proceed is ON (for consistency)
+                  (!autoProceed &&
+                      answers[questions[currentQuestion]?._id] !== undefined) ||
+                    autoProceed ? (
                     <button
                       onClick={handleNext}
                       disabled={
+                        !autoProceed &&
                         answers[questions[currentQuestion]?._id] === undefined
                       }
                       className={`flex items-center gap-2 px-4 py-2 rounded ${
+                        !autoProceed &&
                         answers[questions[currentQuestion]?._id] === undefined
                           ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                           : quizType === "short"
@@ -901,6 +1115,10 @@ export default function QuizPage() {
                     >
                       Next <FaArrowRight />
                     </button>
+                  ) : (
+                    <div className="px-4 py-2 text-sm text-gray-500">
+                      Select an answer to continue
+                    </div>
                   )}
                 </div>
               </div>
