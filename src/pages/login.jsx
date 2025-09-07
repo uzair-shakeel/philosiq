@@ -40,15 +40,28 @@ export default function LoginPage() {
         throw new Error(data.message || "Login failed");
       }
 
-      // Store the auth token
+      // Store the auth token and basic user info for later use (Stripe)
       localStorage.setItem("authToken", data.token);
+      try {
+        if (data?.user?.email)
+          localStorage.setItem("userEmail", data.user.email);
+        if (data?.user?.name) localStorage.setItem("userName", data.user.name);
+      } catch {}
 
-      // Redirect to the specified page or home page
-      if (redirect) {
-        router.push(`/${redirect}`);
-      } else {
-        router.push("/");
+      // Redirect to the stored return URL, or redirect param, or home page
+      let redirectUrl = "/";
+
+      // First priority: check for stored return URL (includes query parameters)
+      const returnUrl = localStorage.getItem("returnUrl");
+      if (returnUrl) {
+        redirectUrl = returnUrl;
+        localStorage.removeItem("returnUrl"); // Clean up after use
+      } else if (redirect) {
+        // Second priority: use redirect parameter
+        redirectUrl = `/${redirect}`;
       }
+
+      router.push(redirectUrl);
     } catch (err) {
       setError(err.message);
     } finally {

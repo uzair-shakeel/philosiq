@@ -7,7 +7,6 @@ import {
   FaUser,
   FaSignInAlt,
   FaUserCircle,
-  FaHistory,
 } from "react-icons/fa";
 
 const Navbar = ({ user }) => {
@@ -15,12 +14,33 @@ const Navbar = ({ user }) => {
   const [scrolled, setScrolled] = useState(false);
   const [showBanner, setShowBanner] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [hasResults, setHasResults] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     // Check authentication status
     const token = localStorage.getItem("authToken");
     setIsAuthenticated(!!token);
+
+    // Check if there are saved quiz results
+    const checkForResults = () => {
+      try {
+        const savedResults = localStorage.getItem("quizResults");
+        setHasResults(!!savedResults);
+      } catch (error) {
+        console.error("Error checking for saved results:", error);
+        setHasResults(false);
+      }
+    };
+
+    checkForResults();
+
+    // Listen for storage changes to update results availability in real-time
+    const handleStorageChange = (e) => {
+      if (e.key === "quizResults") {
+        setHasResults(!!e.newValue);
+      }
+    };
 
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -31,7 +51,12 @@ const Navbar = ({ user }) => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -52,35 +77,22 @@ const Navbar = ({ user }) => {
     { name: "Contact Us", path: "/contact-us" },
   ];
 
-  if (isAuthenticated) {
-    navLinks.push({ name: "Quiz History", path: "/history", icon: FaHistory });
-  }
+  // Results button moved to authentication section
+
+  // Quiz History and Compare moved to profile page
+  // if (isAuthenticated) {
+  //   navLinks.push({ name: "Quiz History", path: "/history", icon: FaHistory });
+  //   navLinks.push({ name: "Compare", path: "/compare" });
+  // }
 
   const isHomePage = router.pathname === "/";
 
   return (
     <>
-      {/* Top Banner - only on homepage */}
-      {showBanner && isHomePage && (
-        <div className="bg-yellow-100 text-center text-sm text-black py-2 px-4 fixed top-0 w-full z-[60] flex justify-center items-center flex-wrap">
-          <span className="mr-4">
-            🚧 This website is currently in Beta 1.0! If you spot any bugs or
-            have suggestions, please email or fill out the form on the Contact
-            Us page!
-          </span>
-          <button
-            onClick={() => setShowBanner(false)}
-            className="text-black text-lg font-bold hover:text-red-600 ml-2"
-          >
-            &times;
-          </button>
-        </div>
-      )}
-
       <nav
-        className={`fixed w-full transition-all duration-300 z-50 ${
+        className={`fixed top-0 w-full transition-all duration-300 z-50 ${
           scrolled ? "bg-white shadow-md py-4" : "bg-white/70 py-4"
-        } ${showBanner && isHomePage ? "top-10" : "top-0"}`}
+        } `}
       >
         <div className="container-custom flex justify-between items-center">
           <Link href="/" className="flex items-center" shallow={false}>
@@ -110,24 +122,32 @@ const Navbar = ({ user }) => {
             ))}
 
             {/* Authentication Buttons */}
-            {isAuthenticated ? (
-              <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
+              {hasResults && (
                 <button
-                  onClick={handleLogout}
+                  onClick={() => router.push("/results")}
+                  className="flex items-center bg-blue-900 text-white px-4 py-2 rounded-full hover:bg-blue-950 transition-colors"
+                >
+                  Results
+                </button>
+              )}
+              {isAuthenticated ? (
+                <Link
+                  href="/profile"
                   className="bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors"
                 >
-                  Logout
+                  Profile
+                </Link>
+              ) : (
+                <button
+                  onClick={() => router.push("/login")}
+                  className="flex items-center bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors"
+                >
+                  <FaSignInAlt className="mr-2" />
+                  Login
                 </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => router.push("/login")}
-                className="flex items-center bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors"
-              >
-                <FaSignInAlt className="mr-2" />
-                Login
-              </button>
-            )}
+              )}
+            </div>
           </div>
 
           <button
@@ -164,38 +184,51 @@ const Navbar = ({ user }) => {
             ))}
 
             {/* Mobile Authentication Buttons */}
-            {isAuthenticated ? (
-              <>
-                <Link
-                  href="/profile"
-                  className="flex items-center text-neutral-dark hover:text-primary-maroon py-2"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <FaUserCircle className="mr-2" />
-                  Profile
-                </Link>
+            <div className="space-y-3">
+              {hasResults && (
                 <button
                   onClick={() => {
-                    handleLogout();
+                    router.push("/results");
                     setIsOpen(false);
                   }}
-                  className="w-full bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors"
+                  className="w-full bg-blue-900 text-white px-4 py-2 rounded-full hover:bg-blue-950 transition-colors"
                 >
-                  Logout
+                  Results
                 </button>
-              </>
-            ) : (
-              <button
-                onClick={() => {
-                  router.push("/login");
-                  setIsOpen(false);
-                }}
-                className="w-full bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors flex items-center justify-center"
-              >
-                <FaSignInAlt className="mr-2" />
-                Login
-              </button>
-            )}
+              )}
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    href="/profile"
+                    className="flex items-center text-neutral-dark hover:text-primary-maroon py-2"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <FaUserCircle className="mr-2" />
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsOpen(false);
+                    }}
+                    className="w-full bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => {
+                    router.push("/login");
+                    setIsOpen(false);
+                  }}
+                  className="w-full bg-primary-maroon text-white px-4 py-2 rounded-full hover:bg-primary-darkMaroon transition-colors flex items-center justify-center"
+                >
+                  <FaSignInAlt className="mr-2" />
+                  Login
+                </button>
+              )}
+            </div>
           </div>
         )}
       </nav>

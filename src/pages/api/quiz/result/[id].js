@@ -57,6 +57,29 @@ export default async function handler(req, res) {
         userId, // Ensure the result belongs to the authenticated user
       });
 
+      // Also check if there are any results with impact answers for debugging
+      const resultsWithImpact = await db
+        .collection("quiz_results")
+        .find({
+          userId,
+          impactAnswers: { $exists: true, $ne: null },
+        })
+        .limit(5)
+        .toArray();
+
+      console.log(
+        `Found ${resultsWithImpact.length} results with impact answers for user ${userId}`
+      );
+      if (resultsWithImpact.length > 0) {
+        console.log("Sample result with impact answers:", {
+          _id: resultsWithImpact[0]._id.toString(),
+          hasImpactAnswers: !!resultsWithImpact[0].impactAnswers,
+          impactAnswersKeys: resultsWithImpact[0].impactAnswers
+            ? Object.keys(resultsWithImpact[0].impactAnswers)
+            : [],
+        });
+      }
+
       if (!result) {
         return res.status(404).json({
           success: false,
@@ -83,6 +106,10 @@ export default async function handler(req, res) {
           axisBreakdownCount: result.axisBreakdown
             ? result.axisBreakdown.length
             : 0,
+          hasImpactAnswers: !!result.impactAnswers,
+          impactAnswersKeys: result.impactAnswers
+            ? Object.keys(result.impactAnswers)
+            : [],
         })
       );
 

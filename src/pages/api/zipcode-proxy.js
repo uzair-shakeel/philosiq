@@ -83,10 +83,10 @@ export default async function handler(req, res) {
         state_code: "NY",
         country: "United States",
         country_code: "US",
-        source: "special_case"
+        source: "special_case",
       },
       detectedCountry: "US",
-      source: "special_case"
+      source: "special_case",
     });
   }
 
@@ -425,8 +425,11 @@ function createFallbackLocation(postalCode, countryCode) {
  * Get location data for Pakistani postal codes from our database
  */
 function getPakistaniLocation(postalCode) {
-  // First digit of Pakistani postal codes often indicates the region
-  const firstDigit = postalCode.charAt(0);
+  // Normalize and derive helpers
+  const codeStr = String(postalCode).trim();
+  const codeNum = parseInt(codeStr, 10);
+  // First digit of Pakistani postal codes often indicates the region (broad)
+  const firstDigit = codeStr.charAt(0);
 
   // Map of first digits to regions in Pakistan
   const regionMap = {
@@ -435,24 +438,24 @@ function getPakistaniLocation(postalCode) {
       state: "Federal Territory",
       region: "Capital Territory",
     },
-    2: { city: "Karachi Region", state: "Sindh", region: "Southern Pakistan" },
+    2: {
+      city: "Peshawar Region",
+      state: "Khyber Pakhtunkhwa",
+      region: "Northwestern Pakistan",
+    },
     3: { city: "Lahore Region", state: "Punjab", region: "Eastern Pakistan" },
     4: {
       city: "Faisalabad Region",
       state: "Punjab",
       region: "Central Pakistan",
     },
-    5: {
-      city: "Peshawar Region",
-      state: "Khyber Pakhtunkhwa",
-      region: "Northwestern Pakistan",
-    },
+    5: { city: "Multan Region", state: "Punjab", region: "Southern Punjab" },
     6: {
       city: "Quetta Region",
       state: "Balochistan",
       region: "Western Pakistan",
     },
-    7: { city: "Multan Region", state: "Punjab", region: "Southern Punjab" },
+    7: { city: "Karachi Region", state: "Sindh", region: "Southern Pakistan" },
     8: {
       city: "Hyderabad Region",
       state: "Sindh",
@@ -496,6 +499,95 @@ function getPakistaniLocation(postalCode) {
       country_code: "PK",
       source: "fallback",
     };
+  }
+
+  // Range-based mappings for better accuracy on common cities
+  if (!Number.isNaN(codeNum)) {
+    const inRange = (min, max) => codeNum >= min && codeNum <= max;
+
+    // Karachi (covers most Karachi codes, e.g., 74200–75999)
+    if (inRange(74200, 75999)) {
+      return {
+        city: "Karachi",
+        state: "Sindh",
+        state_code: "PK",
+        country: "Pakistan",
+        country_code: "PK",
+        source: "fallback",
+      };
+    }
+
+    // Hyderabad (Sindh) roughly 71000–71999
+    if (inRange(71000, 71999)) {
+      return {
+        city: "Hyderabad",
+        state: "Sindh",
+        state_code: "PK",
+        country: "Pakistan",
+        country_code: "PK",
+        source: "fallback",
+      };
+    }
+
+    // Lahore 54000–54999
+    if (inRange(54000, 54999)) {
+      return {
+        city: "Lahore",
+        state: "Punjab",
+        state_code: "PK",
+        country: "Pakistan",
+        country_code: "PK",
+        source: "fallback",
+      };
+    }
+
+    // Faisalabad 38000–38999
+    if (inRange(38000, 38999)) {
+      return {
+        city: "Faisalabad",
+        state: "Punjab",
+        state_code: "PK",
+        country: "Pakistan",
+        country_code: "PK",
+        source: "fallback",
+      };
+    }
+
+    // Rawalpindi 46000–46999
+    if (inRange(46000, 46999)) {
+      return {
+        city: "Rawalpindi",
+        state: "Punjab",
+        state_code: "PK",
+        country: "Pakistan",
+        country_code: "PK",
+        source: "fallback",
+      };
+    }
+
+    // Multan 60000–60999
+    if (inRange(60000, 60999)) {
+      return {
+        city: "Multan",
+        state: "Punjab",
+        state_code: "PK",
+        country: "Pakistan",
+        country_code: "PK",
+        source: "fallback",
+      };
+    }
+
+    // Peshawar 25000–25999
+    if (inRange(25000, 25999)) {
+      return {
+        city: "Peshawar",
+        state: "Khyber Pakhtunkhwa",
+        state_code: "PK",
+        country: "Pakistan",
+        country_code: "PK",
+        source: "fallback",
+      };
+    }
   }
 
   // Otherwise use the region map based on first digit

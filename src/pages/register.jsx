@@ -17,6 +17,33 @@ export default function RegisterPage() {
     setIsLoading(true);
     setError("");
 
+    // Client-side validation
+    if (!name.trim()) {
+      setError("Name is required");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!email.trim()) {
+      setError("Email is required");
+      setIsLoading(false);
+      return;
+    }
+
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setError("Please enter a valid email address");
+      setIsLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch("/api/auth/signup", {
         method: "POST",
@@ -28,20 +55,33 @@ export default function RegisterPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Registration failed");
+        throw new Error(data.message || "Registration failed");
       }
 
       const data = await response.json();
 
       // Store the auth token but don't clear other localStorage items
       localStorage.setItem("authToken", data.token);
+      try {
+        if (data?.user?.email)
+          localStorage.setItem("userEmail", data.user.email);
+        if (data?.user?.name) localStorage.setItem("userName", data.user.name);
+      } catch {}
 
-      // Redirect to the specified page or home page
-      if (redirect) {
-        router.push(`/${redirect}`);
-      } else {
-        router.push("/");
+      // Redirect to the stored return URL, or redirect param, or home page
+      let redirectUrl = "/";
+
+      // First priority: check for stored return URL (includes query parameters)
+      const returnUrl = localStorage.getItem("returnUrl");
+      if (returnUrl) {
+        redirectUrl = returnUrl;
+        localStorage.removeItem("returnUrl"); // Clean up after use
+      } else if (redirect) {
+        // Second priority: use redirect parameter
+        redirectUrl = `/${redirect}`;
       }
+
+      router.push(redirectUrl);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -125,6 +165,20 @@ export default function RegisterPage() {
                     minLength={6}
                   />
                 </div>
+                <div className="mt-2 flex items-center gap-2">
+                  <div
+                    className={`w-2 h-2 rounded-full ${
+                      password.length >= 6 ? "bg-green-500" : "bg-gray-300"
+                    }`}
+                  ></div>
+                  <span
+                    className={`text-xs ${
+                      password.length >= 6 ? "text-green-600" : "text-gray-500"
+                    }`}
+                  >
+                    At least 6 characters
+                  </span>
+                </div>
               </div>
 
               <button
@@ -149,6 +203,10 @@ export default function RegisterPage() {
                 >
                   Login
                 </a>
+              </p>
+              <p className="mt-2 text-sm text-gray-500">
+                By registering, you'll be able to save your quiz results, track
+                your political journey, and access exclusive features.
               </p>
             </div>
           </div>

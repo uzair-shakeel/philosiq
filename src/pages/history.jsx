@@ -69,6 +69,11 @@ export default function HistoryPage() {
     // Check if user is authenticated
     const token = localStorage.getItem("authToken");
     if (!token) {
+      // Store current URL for return after login
+      if (typeof window !== "undefined") {
+        const currentUrl = window.location.pathname + window.location.search;
+        localStorage.setItem("returnUrl", currentUrl);
+      }
       router.push("/login?redirect=history");
       return;
     }
@@ -311,6 +316,15 @@ export default function HistoryPage() {
                       <FaCalendarAlt className="mr-2" />
                       {formatDate(result.createdAt)}
                     </div>
+
+                    {/* Show if Impact Answers are available */}
+                    {result.impactAnswers && (
+                      <div className="mb-4">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                          ⚡ Balance Board Available
+                        </span>
+                      </div>
+                    )}
 
                     <Link
                       href={`/history/${result._id}`}

@@ -1,7 +1,3 @@
-/**
- * resultsCalculator.js
- * Contains all logic for calculating political compass scores based on quiz answers
- */
 
 // Answer value mapping - Updated to match the values in quiz.jsx
 const ANSWER_VALUES = {
@@ -377,11 +373,8 @@ function determineAxisLetter(axis, score, rawScore) {
   // Handle aliases to ensure consistent axis naming
   const canonicalAxis = AXIS_ALIASES[axis] || axis;
 
-  // FIXED: Completely reversed the logic
-  // Now negative raw scores (left side on graph) map to RIGHT side letters
-  // and positive raw scores (right side on graph) map to LEFT side letters
-  // This aligns with the visual display in AxisGraph
-  const isRightSide = rawScore !== undefined ? rawScore < 0 : score < 50;
+
+  const isRightSide = rawScore !== undefined ? rawScore > 0 : score > 50;
 
   // Use the raw score to determine if we're on right or left side
   if (isRightSide) {

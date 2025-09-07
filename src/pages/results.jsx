@@ -9,20 +9,40 @@ import {
   FaTwitter,
   FaFacebook,
   FaLinkedin,
-  FaBug,
+  FaBug, 
   FaChevronDown,
   FaChevronUp,
   FaChartPie,
   FaInfoCircle,
   FaSpinner,
+  FaThumbsUp,
+  FaThumbsDown,
+  FaBalanceScale,
+  FaBolt,
+  FaCrown,
 } from "react-icons/fa";
 import ResultsProcessor from "../components/ResultsProcessor";
 import AxisGraph from "../components/AxisGraph";
 import DebugResultsTable from "../components/DebugResultsTable";
 import MindMapContributeModal from "../components/MindMapContributeModal";
+import AdSense from "../components/AdSense";
+import AIPersonalitySummary from "../components/AIPersonalitySummary";
+import AxisSpecificSummaries from "../components/AxisSpecificSummaries";
+import PoliticalCompass from "../components/PoliticalCompass";
+import { calculateAnswerScore, AXIS_ALIASES } from "../utils/resultsCalculator";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { track } from "@vercel/analytics";
+
+// Helper function to convert answer value to agreement text
+const getAgreementText = (answerValue) => {
+  if (answerValue === 2) return "Strongly Agree";
+  if (answerValue === 1) return "Agree";
+  if (answerValue === 0) return "Neutral";
+  if (answerValue === -1) return "Disagree";
+  if (answerValue === -2) return "Strongly Disagree";
+  return answerValue;
+};
 
 // Add this constant at the top level of the file, right after the imports
 // It will be accessible to all functions in the file
@@ -84,6 +104,36 @@ function ResultsContent({ results }) {
   const [allPercents, setAllPercents] = useState([]);
   const [showMindMapModal, setShowMindMapModal] = useState(false);
   const [isPdfGenerating, setIsPdfGenerating] = useState(false);
+  const [impactAnswers, setImpactAnswers] = useState(null);
+
+  // Visual theme per axis for the Impact Answers section
+  const AXIS_THEME = {
+    "Equity vs. Free Market": {
+      header: "from-blue-500 to-green-500",
+      aligned: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      against: "bg-rose-50 text-rose-700 border-rose-200",
+    },
+    "Libertarian vs. Authoritarian": {
+      header: "from-teal-500 to-orange-500",
+      aligned: "bg-teal-50 text-teal-700 border-teal-200",
+      against: "bg-orange-50 text-orange-700 border-orange-200",
+    },
+    "Progressive vs. Conservative": {
+      header: "from-sky-500 to-red-500",
+      aligned: "bg-sky-50 text-sky-700 border-sky-200",
+      against: "bg-red-50 text-red-700 border-red-200",
+    },
+    "Secular vs. Religious": {
+      header: "from-yellow-500 to-purple-500",
+      aligned: "bg-yellow-50 text-yellow-700 border-yellow-200",
+      against: "bg-purple-50 text-purple-700 border-purple-200",
+    },
+    "Globalism vs. Nationalism": {
+      header: "from-lime-500 to-rose-500",
+      aligned: "bg-lime-50 text-lime-700 border-lime-200",
+      against: "bg-rose-50 text-rose-700 border-rose-200",
+    },
+  };
 
   // Add state to store axis breakdown data
   const [axisBreakdownData, setAxisBreakdownData] = useState({});
@@ -104,6 +154,9 @@ function ResultsContent({ results }) {
   // Add state to track authentication
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [isPlusActive, setIsPlusActive] = useState(false);
+  const [isCheckingPlus, setIsCheckingPlus] = useState(true);
 
   // Add useEffect to check quiz type and authentication when component mounts
   useEffect(() => {
@@ -120,10 +173,236 @@ function ResultsContent({ results }) {
       // Check authentication
       const token = localStorage.getItem("authToken");
       setIsAuthenticated(!!token);
+      // Attempt to load user email and check Philosiq+ status
+      if (token) {
+        const storedEmail = localStorage.getItem("userEmail");
+        const check = async () => {
+          try {
+            let email = storedEmail;
+            if (!email) {
+              // fetch user to get email
+              const resp = await fetch("/api/auth/user", {
+                headers: { Authorization: `Bearer ${token}` },
+              });
+              if (resp.ok) {
+                const user = await resp.json();
+                email = user?.email;
+                if (email) localStorage.setItem("userEmail", email);
+              }
+            }
+            if (email) {
+              const statusResp = await fetch(
+                `/api/user/plus-status?email=${encodeURIComponent(email)}`
+              );
+              if (statusResp.ok) {
+                const { active } = await statusResp.json();
+                setIsPlusActive(!!active);
+              }
+            }
+          } catch (e) {
+            console.warn("Failed to check plus status", e);
+          } finally {
+            setIsCheckingPlus(false);
+          }
+        };
+        check();
+      } else {
+        setIsCheckingPlus(false);
+      }
     } catch (err) {
       console.error("Error determining quiz type or auth status:", err);
     }
   }, []);
+
+  // Compute Impact Answers when results and raw data are available
+  useEffect(() => {
+    try {
+      if (
+        !results ||
+        !results.axisResults ||
+        !rawData?.questions ||
+        !rawData?.answers
+      )
+        return;
+
+      // Build a quick lookup for axis result sign (-1, 0, 1)
+      const axisSignByName = {};
+      results.axisResults.forEach((ar) => {
+        const sign = ar?.rawScore === 0 ? 0 : ar?.rawScore > 0 ? 1 : -1;
+        axisSignByName[ar.name] = sign;
+      });
+
+      // Group answered questions by canonical axis with contribution
+      const grouped = {};
+      rawData.questions.forEach((q) => {
+        const answer = rawData.answers?.[q._id];
+        if (answer === undefined || answer === null) return;
+
+        const canonicalAxis = AXIS_ALIASES[q.axis] || q.axis;
+        const agreeWeight = q.weight_agree || q.weight || 1;
+        const disagreeWeight = q.weight_disagree || q.weight || 1;
+        const contribution = calculateAnswerScore(
+          answer,
+          agreeWeight,
+          disagreeWeight,
+          q.direction
+        );
+
+        if (!contribution) return; // skip neutral/no contribution
+
+        if (!grouped[canonicalAxis]) grouped[canonicalAxis] = [];
+        grouped[canonicalAxis].push({
+          id: q._id,
+          axis: canonicalAxis,
+          question: q.question,
+          topic: q.topic,
+          direction: q.direction,
+          answerValue: answer,
+          contribution,
+          abs: Math.abs(contribution),
+        });
+      });
+
+      // For each axis, pick top 2 aligned and top 2 against based on abs contribution
+      const result = {};
+      Object.keys(grouped).forEach((axisName) => {
+        const items = grouped[axisName].sort((a, b) => b.abs - a.abs);
+        const axisSign = axisSignByName[axisName] ?? 0;
+
+        if (axisSign === 0) {
+          // Centered: pick top positives as aligned, top negatives as against
+          const aligned = items.filter((x) => x.contribution > 0).slice(0, 2);
+          const against = items.filter((x) => x.contribution < 0).slice(0, 2);
+          result[axisName] = { aligned, against };
+        } else {
+          // Special handling for "Secular vs. Religious" axis - flip the logic
+          const isSecularAxis = axisName === "Secular vs. Religious";
+
+          const aligned = items
+            .filter((x) => {
+              if (isSecularAxis) {
+                // For Secular vs Religious, flip the logic
+                return axisSign > 0 ? x.contribution < 0 : x.contribution > 0;
+              } else {
+                return axisSign > 0 ? x.contribution > 0 : x.contribution < 0;
+              }
+            })
+            .slice(0, 2);
+          const against = items
+            .filter((x) => {
+              if (isSecularAxis) {
+                // For Secular vs Religious, flip the logic
+                return axisSign > 0 ? x.contribution > 0 : x.contribution < 0;
+              } else {
+                return axisSign > 0 ? x.contribution < 0 : x.contribution > 0;
+              }
+            })
+            .slice(0, 2);
+          result[axisName] = { aligned, against };
+        }
+      });
+
+      setImpactAnswers(result);
+    } catch (e) {
+      console.warn("Failed to compute Impact Answers", e);
+    }
+  }, [results, rawData]);
+
+  // Refresh plus status if redirected back from Stripe (and confirm session)
+  useEffect(() => {
+    const handleUpgradeSuccess = async () => {
+      const email = localStorage.getItem("userEmail");
+      const sessionId = router.query.session_id;
+      try {
+        if (router.query.upgrade === "success" && sessionId) {
+          await fetch(
+            `/api/stripe/confirm-session?session_id=${encodeURIComponent(
+              sessionId
+            )}`
+          );
+        }
+        if (email) {
+          const r = await fetch(
+            `/api/user/plus-status?email=${encodeURIComponent(email)}`
+          );
+          if (r.ok) {
+            const d = await r.json();
+            setIsPlusActive(!!d?.active);
+          }
+        }
+      } finally {
+        const { upgrade, session_id, ...rest } = router.query;
+        router.replace({ pathname: router.pathname, query: rest }, undefined, {
+          shallow: true,
+        });
+      }
+      try {
+        track("plus_upgrade_returned", { email });
+      } catch {}
+    };
+    if (router.query.upgrade === "success") handleUpgradeSuccess();
+  }, [router.query.upgrade, router.query.session_id]);
+
+  const startCheckout = async () => {
+    if (!isAuthenticated) {
+      setShowSubscriptionModal(false);
+      setShowLoginModal(true);
+      return;
+    }
+    try {
+      let email = localStorage.getItem("userEmail");
+      if (!email) {
+        const token = localStorage.getItem("authToken");
+        if (token) {
+          const r = await fetch("/api/auth/user", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (r.ok) {
+            const u = await r.json();
+            email = u?.email;
+            if (email) localStorage.setItem("userEmail", email);
+          }
+        }
+      }
+      if (!email) {
+        alert(
+          "We couldn't determine your email. Please login again and retry."
+        );
+        setShowSubscriptionModal(false);
+        return;
+      }
+      const resp = await fetch("/api/stripe/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.error || "Failed to start checkout");
+      track("plus_checkout_started", { email });
+      window.location.href = data.url;
+    } catch (e) {
+      console.error("startCheckout error", e);
+      alert(`Unable to start checkout: ${(e && e.message) || "Unknown error"}`);
+    }
+  };
+
+  const openBillingPortal = async () => {
+    try {
+      const email = localStorage.getItem("userEmail");
+      if (!email) return alert("No user email found.");
+      const resp = await fetch("/api/stripe/portal-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.error || "Failed to open portal");
+      window.location.href = data.url;
+    } catch (e) {
+      console.error(e);
+      alert("Unable to open billing portal.");
+    }
+  };
 
   // Track when results are viewed
   useEffect(() => {
@@ -695,7 +974,7 @@ function ResultsContent({ results }) {
       // Add title
       pdf.setFontSize(16);
       pdf.setFont("helvetica", "bold");
-      pdf.text("Philosiq Political Archetype Results", margin, y);
+      pdf.text("PhilosiQ Political Archetype Results", margin, y);
       y += 20;
 
       pdf.setFontSize(11);
@@ -964,6 +1243,38 @@ function ResultsContent({ results }) {
         })
       );
 
+      // Build per-question answer breakdown for comparison feature
+      const answerBreakdown = [];
+      try {
+        if (rawData?.questions && rawData?.answers) {
+          rawData.questions.forEach((q) => {
+            const ans = rawData.answers?.[q._id];
+            if (ans === undefined || ans === null) return;
+            const canonicalAxis = AXIS_ALIASES[q.axis] || q.axis;
+            const agreeWeight = q.weight_agree || q.weight || 1;
+            const disagreeWeight = q.weight_disagree || q.weight || 1;
+            const contribution = calculateAnswerScore(
+              ans,
+              agreeWeight,
+              disagreeWeight,
+              q.direction
+            );
+            // Store minimal fields necessary for cross-user comparison
+            answerBreakdown.push({
+              questionId: q._id,
+              axis: canonicalAxis,
+              topic: q.topic,
+              question: q.question,
+              answer: ans,
+              contribution,
+              context: rawData.contextTexts?.[q._id] || "",
+            });
+          });
+        }
+      } catch (e) {
+        console.warn("Failed to build answerBreakdown", e);
+      }
+
       const resultsData = {
         archetype: {
           name: results.archetype.name,
@@ -971,6 +1282,9 @@ function ResultsContent({ results }) {
         },
         secondaryArchetypes: secondaryArchetypesData,
         axisBreakdown: axisBreakdownArray,
+        answerBreakdown,
+        impactAnswers, // Add the impact answers data
+        isPlusActive, // Add the plus status
         quizType: isFullQuiz ? "full" : "short",
         requestId: Math.random().toString(36).substring(2), // Add for debugging
       };
@@ -1023,38 +1337,36 @@ function ResultsContent({ results }) {
             that fits you best
           </p>
 
- 
           <div className="flex justify-center">
-                 {/* Save Results Button - Prominent Position */}
-                 {!resultsSaved && isAuthenticated && (
-            <button
-              onClick={handleSaveResults}
-              disabled={resultsSaved || isSaving}
-              className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
-                resultsSaved
-                  ? "bg-green-500 text-white"
+            {/* Save Results Button - Prominent Position */}
+            {!resultsSaved && isAuthenticated && (
+              <button
+                onClick={handleSaveResults}
+                disabled={resultsSaved || isSaving}
+                className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
+                  resultsSaved
+                    ? "bg-green-500 text-white"
+                    : isSaving
+                    ? "bg-gray-300 text-gray-600"
+                    : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+                }`}
+              >
+                {resultsSaved
+                  ? "✓ Results Saved Successfully"
                   : isSaving
-                  ? "bg-gray-300 text-gray-600"
-                  : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-              }`}
-            >
-              {resultsSaved
-                ? "✓ Results Saved Successfully"
-                : isSaving
-                ? "Saving Your Results..."
-                : "Save Your Results to Account"}
-            </button>
-          )}
-          {!resultsSaved && !isAuthenticated && (
-            <button
-              onClick={() => setShowLoginModal(true)}
-              className="px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-            >
-              Save Results (Login Required)
-            </button>
-          )}
-
-        </div>
+                  ? "Saving Your Results..."
+                  : "Save Your Results to Account"}
+              </button>
+            )}
+            {!resultsSaved && !isAuthenticated && (
+              <button
+                onClick={() => setShowLoginModal(true)}
+                className="px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+              >
+                Save Results (Login Required)
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Login Modal or Redirect */}
@@ -1076,7 +1388,13 @@ function ResultsContent({ results }) {
                 <button
                   onClick={() => {
                     setShowLoginModal(false);
-                    router.push("/login?redirect=results");
+                    // Store current URL for return after login
+                    if (typeof window !== "undefined") {
+                      const currentUrl =
+                        window.location.pathname + window.location.search;
+                      localStorage.setItem("returnUrl", currentUrl);
+                    }
+                    router.push("/login");
                   }}
                   className="px-4 py-2 bg-primary-maroon text-white rounded hover:bg-primary-darkMaroon"
                 >
@@ -1086,6 +1404,19 @@ function ResultsContent({ results }) {
             </div>
           </div>
         )}
+
+        {/* Ad Section */}
+        <div className="mb-8">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="flex justify-center">
+              <AdSense
+                adSlot="1122334455"
+                className="max-w-4xl w-full"
+                style={{ minHeight: "90px" }}
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Primary Archetype Card */}
         <div className="mb-16">
@@ -1112,38 +1443,38 @@ function ResultsContent({ results }) {
                           label = letter === "E" ? "Equity" : "Free Market";
                           bgColor =
                             letter === "E"
-                              ? "bg-blue-100 text-blue-800"
-                              : "bg-green-100 text-green-800";
+                              ? "bg-blue-600 text-white"
+                              : "bg-green-600 text-white";
                           break;
                         case "Libertarian vs. Authoritarian":
                           label =
                             letter === "L" ? "Libertarian" : "Authoritarian";
                           bgColor =
                             letter === "L"
-                              ? "bg-indigo-100 text-indigo-800"
-                              : "bg-orange-100 text-orange-800";
+                              ? "bg-teal-500 text-white"
+                              : "bg-orange-500 text-white";
                           break;
                         case "Progressive vs. Conservative":
                           label =
                             letter === "P" ? "Progressive" : "Conservative";
                           bgColor =
                             letter === "P"
-                              ? "bg-purple-100 text-purple-800"
-                              : "bg-blue-100 text-blue-800";
+                              ? "bg-sky-500 text-white"
+                              : "bg-red-400 text-white";
                           break;
                         case "Secular vs. Religious":
                           label = letter === "S" ? "Secular" : "Religious";
                           bgColor =
                             letter === "S"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-purple-100 text-purple-800";
+                              ? "bg-yellow-400 text-white"
+                              : "bg-purple-500 text-white";
                           break;
                         case "Globalism vs. Nationalism":
                           label = letter === "G" ? "Globalism" : "Nationalism";
                           bgColor =
                             letter === "G"
-                              ? "bg-teal-100 text-teal-800"
-                              : "bg-red-100 text-red-800";
+                              ? "bg-lime-500 text-white"
+                              : "bg-rose-500 text-white";
                           break;
                         default:
                           label = letter;
@@ -1223,38 +1554,6 @@ function ResultsContent({ results }) {
           </div>
         </div>
 
-
-
-    
-
-        {/* Debug Section */}
-        {/* {rawData && (
-          <div className="mb-16 no-print">
-            <button
-              onClick={() => setShowDebug(!showDebug)}
-              className="w-full bg-gray-100 hover:bg-gray-200 p-4 rounded-lg flex items-center justify-center font-medium text-gray-700"
-            >
-              <FaBug className="mr-2" />
-              {showDebug ? "Hide" : "Show"} Debug Information
-              {showDebug ? (
-                <FaChevronUp className="ml-2" />
-              ) : (
-                <FaChevronDown className="ml-2" />
-              )}
-            </button>
-
-            {showDebug && (
-              <div className="mt-4 bg-white rounded-lg shadow-lg p-6 md:p-8">
-                <DebugResultsTable
-                  questions={rawData.questions}
-                  answers={rawData.answers}
-                  results={results}
-                />
-              </div>
-            )}
-          </div>
-        )} */}
-
         {/* Axis Breakdown */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold mb-6 text-center">
@@ -1291,6 +1590,261 @@ function ResultsContent({ results }) {
             })}
           </div>
         </div>
+
+        {/* AI Personality Summary */}
+        <div className="mb-16">
+          <AIPersonalitySummary
+            answers={
+              rawData?.questions?.map((q) => ({
+                question: q.text,
+                answer: rawData.answers?.[q._id] || 0,
+                axis: q.axis || "general",
+              })) || []
+            }
+            userEmail={localStorage.getItem("userEmail")}
+            isPhilosiQPlus={isPlusActive}
+            axisDataByName={axisBreakdownData}
+          />
+        </div>
+
+        {/* Political Compass */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold mb-6 text-center">
+            Political Compass
+          </h2>
+          <div className="max-w-2xl mx-auto">
+            <PoliticalCompass
+              axisResults={Object.values(axisBreakdownData)}
+              answers={results.originalAnswers}
+              questions={results.originalQuestions}
+            />
+          </div>
+        </div>
+
+        {/* Axis-Specific AI Summaries - Philosiq+ Only */}
+        <div className="mb-16">
+          <AxisSpecificSummaries
+            answers={
+              results.originalQuestions?.map((q, index) => {
+                console.log("Mapping question from results:", q); // Debug log
+                return {
+                  question: q.text || q.question || `Question ${index + 1}`,
+                  answer: results.originalAnswers?.[q._id] || 0,
+                  axis: q.axis || "general",
+                };
+              }) || []
+            }
+            userEmail={localStorage.getItem("userEmail")}
+            isPhilosiQPlus={isPlusActive}
+            axisDataByName={axisBreakdownData}
+          />
+        </div>
+
+        {/* Debug Section */}
+        {/* {rawData && (
+          <div className="mb-16 no-print">
+            <button
+              onClick={() => setShowDebug(!showDebug)}
+              className="w-full bg-gray-100 hover:bg-gray-200 p-4 rounded-lg flex items-center justify-center font-medium text-gray-700"
+            >
+              <FaBug className="mr-2" />
+              {showDebug ? "Hide" : "Show"} Debug Information
+              {showDebug ? (
+                <FaChevronUp className="ml-2" />
+              ) : (
+                <FaChevronDown className="ml-2" />
+              )}
+            </button>
+
+            {showDebug && (
+              <div className="mt-4 bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <DebugResultsTable
+                  questions={rawData.questions}
+                  answers={rawData.answers}
+                  results={results}
+                />
+              </div>
+            )}
+          </div>
+        )} */}
+
+        {/* Impact Answers */}
+        {impactAnswers && (
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold mb-2 text-center flex items-center justify-center gap-2">
+              <FaBolt className="text-yellow-500" /> The Balance Board
+            </h2>
+            <p className="text-center text-gray-600 mb-8">
+              The Balance Board is where your score's story comes to life. On
+              one side are the answers that propelled you toward your result. On
+              the other are the ones that pulled you back from the edge.
+              Together, they show why you landed exactly where you did
+            </p>
+
+            <div className="space-y-8">
+              {/* Show only first axis for free users, all axes for plus users */}
+              {results.axisResults
+                .filter((_, index) => isPlusActive || index === 0)
+                .map((axis, index) => {
+                  const data = impactAnswers[axis.name] || {
+                    aligned: [],
+                    against: [],
+                  };
+                  const theme = AXIS_THEME[axis.name] || {
+                    header: "from-gray-200 to-gray-100",
+                    aligned: "bg-green-50 text-green-700 border-green-200",
+                    against: "bg-red-50 text-red-700 border-red-200",
+                  };
+                  const formatScore = (n) => {
+                    const rounded = Math.round(n * 10) / 10;
+                    return (rounded > 0 ? "+" : "") + rounded;
+                  };
+                  return (
+                    <div
+                      key={axis.name}
+                      className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200"
+                    >
+                      <div
+                        className={`px-6 py-4 bg-gradient-to-r ${theme.header} text-white flex items-center justify-between`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <FaBalanceScale className="opacity-90" />
+                          <h3 className="text-lg font-bold">{axis.name}</h3>
+                        </div>
+                        {/* <span className="text-xs font-medium bg-white/20 px-3 py-1 rounded-full">
+                          {axis.positionStrength} {axis.userPosition}
+                        </span> */}
+                      </div>
+                      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <FaThumbsUp className="text-emerald-600" />
+                            <h4 className="font-semibold">
+                              Aligned with your view
+                            </h4>
+                          </div>
+                          {data.aligned.length === 0 ? (
+                            <p className="text-sm text-gray-500">
+                              No strong aligned answers.
+                            </p>
+                          ) : (
+                            <ul className="space-y-3">
+                              {data.aligned.map((item) => (
+                                <li
+                                  key={item.id}
+                                  className={`p-3 rounded-lg border ${theme.aligned} flex items-start justify-between`}
+                                >
+                                  <div>
+                                    <p className="text-sm font-medium text-gray-800">
+                                      {item.question}
+                                    </p>
+                                    {item.answerValue !== undefined && (
+                                      <p className="text-xs opacity-75 mt-1">
+                                        Your Answer:{" "}
+                                        {getAgreementText(item.answerValue)}
+                                      </p>
+                                    )}
+                                    {rawData?.contextTexts?.[item.id] && (
+                                      <p className="text-xs opacity-75 mt-1 text-blue-600">
+                                        Context: {rawData.contextTexts[item.id]}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <span className="ml-3 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-white/70 text-current border border-white">
+                                    {formatScore(item.contribution)}
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <FaThumbsDown className="text-rose-600" />
+                            <h4 className="font-semibold">
+                              Counter to your view
+                            </h4>
+                          </div>
+                          {data.against.length === 0 ? (
+                            <p className="text-sm text-gray-500">
+                              No strong counter answers.
+                            </p>
+                          ) : (
+                            <ul className="space-y-3">
+                              {data.against.map((item) => (
+                                <li
+                                  key={item.id}
+                                  className={`p-3 rounded-lg border ${theme.against} flex items-start justify-between`}
+                                >
+                                  <div>
+                                    <p className="text-sm font-medium text-gray-800">
+                                      {item.question}
+                                    </p>
+                                    {item.answerValue !== undefined && (
+                                      <p className="text-xs opacity-75 mt-1">
+                                        Your Answer:{" "}
+                                        {getAgreementText(item.answerValue)}
+                                      </p>
+                                    )}
+                                    {rawData?.contextTexts?.[item.id] && (
+                                      <p className="text-xs opacity-75 mt-1 text-blue-600">
+                                        Context: {rawData.contextTexts[item.id]}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <span className="ml-3 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-white/70 text-current border border-white">
+                                    {formatScore(item.contribution)}
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+              {/* Show upgrade prompt for free users after first axis */}
+              {!isPlusActive && results.axisResults.length > 1 && (
+                <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6 text-center">
+                  <div className="flex items-center justify-center gap-3 mb-4">
+                    <div className="bg-purple-100 p-3 rounded-full">
+                      <FaCrown className="text-purple-600 text-xl" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-800">
+                        Unlock All Axes
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Upgrade to Philosiq+ to see your complete Balance Board
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="text-gray-700 mb-4">
+                    You're currently seeing only the first axis. Upgrade to
+                    Philosiq+ to access all {results.axisResults.length} axes
+                    and get the full picture of what influenced your political
+                    archetype.
+                  </p>
+
+                  <button
+                    onClick={startCheckout}
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-colors duration-200"
+                  >
+                    Upgrade to Philosiq+
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <p className="text-xs text-gray-500 mt-4 text-center">
+              Impact score reflects how strongly an answer moved your result on
+              that axis (sign shows direction).
+            </p>
+          </div>
+        )}
 
         {/* MindMap Contribute Section - Add this before the Share Results section */}
         {isFullQuiz && (
@@ -1342,8 +1896,8 @@ function ResultsContent({ results }) {
           </div>
         )}
 
-          {/* Secondary Archetypes - Improved Design */}
-          {secondaryArchetypes.length > 0 && (
+        {/* Secondary Archetypes - Improved Design */}
+        {secondaryArchetypes.length > 0 && (
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-6 text-center">
               Your Secondary Archetypes
@@ -1379,25 +1933,25 @@ function ResultsContent({ results }) {
                         let bgColor = "bg-gray-200";
 
                         if (trait === "Equity")
-                          bgColor = "bg-blue-100 text-blue-800";
+                          bgColor = "bg-blue-600 text-white";
                         else if (trait === "Free Market")
-                          bgColor = "bg-green-100 text-green-800";
+                          bgColor = "bg-green-600 text-white";
                         else if (trait === "Libertarian")
-                          bgColor = "bg-indigo-100 text-indigo-800";
+                          bgColor = "bg-teal-500 text-white";
                         else if (trait === "Authoritarian")
-                          bgColor = "bg-orange-100 text-orange-800";
+                          bgColor = "bg-orange-500 text-white";
                         else if (trait === "Progressive")
-                          bgColor = "bg-purple-100 text-purple-800";
+                          bgColor = "bg-sky-500 text-white";
                         else if (trait === "Conservative")
-                          bgColor = "bg-blue-100 text-blue-800";
+                          bgColor = "bg-red-400 text-white";
                         else if (trait === "Secular")
-                          bgColor = "bg-yellow-100 text-yellow-800";
+                          bgColor = "bg-yellow-400 text-white";
                         else if (trait === "Religious")
-                          bgColor = "bg-purple-100 text-purple-800";
+                          bgColor = "bg-purple-500 text-white";
                         else if (trait === "Globalism")
-                          bgColor = "bg-teal-100 text-teal-800";
+                          bgColor = "bg-lime-500 text-white";
                         else if (trait === "Nationalism")
-                          bgColor = "bg-red-100 text-red-800";
+                          bgColor = "bg-rose-500 text-white";
 
                         return (
                           <span
@@ -1444,6 +1998,77 @@ function ResultsContent({ results }) {
           </div>
         )}
 
+        {/* Premium Feature Section - Blurred until Philosiq+ */}
+
+        {/* Subscription Modal */}
+        {showSubscriptionModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
+              <div className="text-center">
+                <h2 className="text-2xl font-bold mb-4 text-gray-800">
+                  Upgrade to Philosiq+
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  Unlock advanced analysis, detailed insights, and exclusive
+                  features to better understand your political archetype.
+                </p>
+
+                <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-6 rounded-lg mb-6">
+                  <h3 className="font-semibold text-lg mb-4">
+                    What's included:
+                  </h3>
+                  <ul className="text-left space-y-2 text-sm">
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      Detailed personality analysis
+                    </li>
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      Career recommendations
+                    </li>
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      Archetype compatibility insights
+                    </li>
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      Historical figure comparisons
+                    </li>
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      Advanced political positioning
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="text-center mb-6">
+                  <div className="text-3xl font-bold text-purple-600 mb-2">
+                    $4.99 / quarter
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowSubscriptionModal(false)}
+                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  >
+                    Maybe Later
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowSubscriptionModal(false);
+                      startCheckout();
+                    }}
+                    className="flex-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
+                  >
+                    Subscribe Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Share Results */}
         <div className="mb-16 no-print">
           <h2 className="text-3xl font-bold mb-8 text-center">
@@ -1462,7 +2087,7 @@ function ResultsContent({ results }) {
                   <div className="text-green-600">
                     <p className="mb-2">Results sent!</p>
                     <p className="text-sm">
-                      Check your inbox for your quiz results from Philosiq.
+                      Check your inbox for your Philosiq results.
                     </p>
                   </div>
                 ) : (
@@ -1545,8 +2170,6 @@ function ResultsContent({ results }) {
             </div>
           </div>
         </div>
-
-          
 
         {/* Take Quiz Again Button */}
         <div className="text-center no-print">

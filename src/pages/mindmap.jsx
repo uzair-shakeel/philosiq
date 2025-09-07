@@ -473,80 +473,25 @@ export default function MindMap() {
             </div>
           ) : (
             <>
-              {/* Archetype Distribution */}
-                  <div className="flex items-center mb-6">
-                    <h2 className="text-xl font-bold mr-2">Archetype Distribution</h2>
-                    <div className="relative group">
-                      <button
-                        className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-xs font-bold focus:outline-none"
-                        title="What is this?"
-                      >
-                        ?
-                      </button>
-                      <div className="absolute top-6 left-0 w-64 p-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
-                        This section shows the percentage of quiz takers who fall into each political archetype based on their quiz answers.
-                      </div>
-                    </div>
-                  </div>
-
-                {sortedArchetypes.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">
-                    No archetype data available for this filter yet.
-                  </p>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
-                    {sortedArchetypes.map(([archetype, percentage]) => (
-                      <div key={archetype} className="mb-2">
-                        <div className="flex justify-between items-center mb-1">
-                            <Link
-                              href={`/archetypes/${getArchetypeCode(archetype)}`}
-                              className="text-sm font-medium text-primary-maroon hover:underline"
-                            >
-                              {archetype}
-                            </Link>
-                          <span className="text-sm text-gray-600">
-                            {percentage.toFixed(1)}%
-                          </span>
-                        </div>
-                        <a
-                          href={`/archetypes/${getArchetypeCode(archetype)}`}
-                          className="block relative h-6 rounded-full overflow-hidden bg-gray-200 hover:shadow-md transition-all duration-300 group"
-                          title={`View ${archetype} details`}
-                        >
-                          <div
-                            className="h-full bg-primary-maroon absolute left-0 group-hover:bg-primary-darkMaroon transition-colors"
-                            style={{
-                              width: `${percentage}%`,
-                            }}
-                          ></div>
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="text-xs text-white font-medium flex items-center">
-                              View Details{" "}
-                              <FaArrowRight className="ml-1" size={10} />
-                            </span>
-                          </div>
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
               {/* Axis Letter Distribution */}
               <div className="bg-white rounded-lg shadow-lg p-6 mt-8">
-                  <div className="flex items-center mb-6">
-                    <h2 className="text-xl font-bold mr-2">Axis Distribution</h2>
-                    <div className="relative group">
-                      <button
-                        className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-xs font-bold focus:outline-none"
-                        title="What is this?"
-                      >
-                        ?
-                      </button>
-                      <div className="absolute top-6 left-0 w-64 p-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
-                        This section displays how quiz takers are distributed across each ideological axis (e.g., Equity vs. Free Market). It helps visualize the range of perspectives within your audience.
-                      </div>
+                <div className="flex items-center mb-6">
+                  <h2 className="text-xl font-bold mr-2">Axis Distribution</h2>
+                  <div className="relative group">
+                    <button
+                      className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-xs font-bold focus:outline-none"
+                      title="What is this?"
+                    >
+                      ?
+                    </button>
+                    <div className="absolute top-6 left-0 w-64 p-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                      This section displays how quiz takers are distributed
+                      across each ideological axis (e.g., Equity vs. Free
+                      Market). It helps visualize the range of perspectives
+                      within your audience.
                     </div>
                   </div>
+                </div>
                 {axisData && Object.keys(axisData).length > 0 ? (
                   <div className="space-y-6">
                     {Object.entries(axisData).map(([axis, distribution]) => {
@@ -664,6 +609,67 @@ export default function MindMap() {
                   </p>
                 )}
               </div>
+
+              {/* Archetype Distribution */}
+              <div className="flex items-center mt-12">
+                <h2 className="text-xl font-bold mr-2">
+                  Archetype Distribution
+                </h2>
+                <div className="relative group">
+                  <button
+                    className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-xs font-bold focus:outline-none"
+                    title="What is this?"
+                  >
+                    ?
+                  </button>
+                  <div className="absolute top-6 left-0 w-64 p-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                    This section shows the percentage of quiz takers who fall
+                    into each political archetype based on their quiz answers.
+                  </div>
+                </div>
+              </div>
+
+              {sortedArchetypes.length === 0 ? (
+                <p className="text-gray-500 text-center py-4">
+                  No archetype data available for this filter yet.
+                </p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                  {sortedArchetypes.map(([archetype, percentage]) => (
+                    <div key={archetype} className="mb-2">
+                      <div className="flex justify-between items-center mb-1">
+                        <Link
+                          href={`/archetypes/${getArchetypeCode(archetype)}`}
+                          className="text-sm font-medium text-primary-maroon hover:underline"
+                        >
+                          {archetype}
+                        </Link>
+                        <span className="text-sm text-gray-600">
+                          {percentage.toFixed(1)}%
+                        </span>
+                      </div>
+                      <a
+                        href={`/archetypes/${getArchetypeCode(archetype)}`}
+                        className="block relative h-6 rounded-full overflow-hidden bg-gray-200 hover:shadow-md transition-all duration-300 group"
+                        title={`View ${archetype} details`}
+                      >
+                        <div
+                          className="h-full bg-primary-maroon absolute left-0 group-hover:bg-primary-darkMaroon transition-colors"
+                          style={{
+                            width: `${percentage}%`,
+                          }}
+                        ></div>
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span className="text-xs text-white font-medium flex items-center">
+                            View Details{" "}
+                            <FaArrowRight className="ml-1" size={10} />
+                          </span>
+                        </div>
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              )}
             </>
           )}
 
@@ -673,8 +679,9 @@ export default function MindMap() {
               Contribute to Our MindMap
             </h2>
             <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Take the <strong>full quiz</strong> and help us build a more comprehensive view of how demographics and
-              political beliefs intersect by anonymously contributing your data.
+              Take the <strong>full quiz</strong> and help us build a more
+              comprehensive view of how demographics and political beliefs
+              intersect by anonymously contributing your data.
             </p>
             <Link
               href="/quiz"
