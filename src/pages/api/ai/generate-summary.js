@@ -162,7 +162,10 @@ export default async function handler(req, res) {
     }
 
     const openaiData = await openaiResponse.json();
-    const summary = openaiData.choices[0].message.content.trim();
+    let summary = openaiData.choices[0].message.content.trim();
+
+    // Simple fix: replace "undefined" with empty string
+    summary = summary.replace(/undefined/gi, "").trim();
 
     // Cache the summary in database
     await mongoose.connection.db.collection("ai_summaries").insertOne({

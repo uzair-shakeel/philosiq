@@ -229,7 +229,7 @@ const AIPersonalitySummary = ({
                 >
                   {summary}
                 </div>
-                {summary.length > 400 && (
+                {summary && summary.length > 400 && (
                   <button
                     onClick={() => setIsExpanded(!isExpanded)}
                     className="text-blue-600 text-sm font-medium mt-2 hover:text-blue-800"
