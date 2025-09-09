@@ -9,7 +9,7 @@ import {
   FaTwitter,
   FaFacebook,
   FaLinkedin,
-  FaBug, 
+  FaBug,
   FaChevronDown,
   FaChevronUp,
   FaChartPie,
@@ -1596,7 +1596,7 @@ function ResultsContent({ results }) {
           <AIPersonalitySummary
             answers={
               rawData?.questions?.map((q) => ({
-                question: q.text,
+                question: q.question,
                 answer: rawData.answers?.[q._id] || 0,
                 axis: q.axis || "general",
               })) || []
@@ -1628,7 +1628,7 @@ function ResultsContent({ results }) {
               results.originalQuestions?.map((q, index) => {
                 console.log("Mapping question from results:", q); // Debug log
                 return {
-                  question: q.text || q.question || `Question ${index + 1}`,
+                  question: q.question || `Question ${index + 1}`,
                   answer: results.originalAnswers?.[q._id] || 0,
                   axis: q.axis || "general",
                 };
