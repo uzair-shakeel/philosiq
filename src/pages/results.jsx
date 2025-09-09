@@ -1678,7 +1678,7 @@ function ResultsContent({ results }) {
               The Balance Board is where your score's story comes to life. On
               one side are the answers that propelled you toward your result. On
               the other are the ones that pulled you back from the edge.
-              Together, they show why you landed exactly where you did
+              Together, they show why you landed exactly where you did.
             </p>
 
             <div className="space-y-8">

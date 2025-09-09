@@ -497,31 +497,31 @@ function getPositionDescription(axis, score, strength, isDominantLeft) {
         "You think the system must be restructured to ensure collective well-being and shared ownership of economic outcomes.",
     },
 
-    "Free Market": {
-      Leaning:
-        "You believe voluntary exchange and competition usually produce the best results. Light regulation can help, but markets should lead.",
-      Inclined:
-        "You think economic freedom drives innovation and growth. Government should interfere as little as possible.",
-      Committed:
-        "You believe low taxes and limited rules let people and businesses thrive. Personal responsibility should guide outcomes.",
-      Extreme:
-        "You believe markets are the most moral and efficient system. The role of government should be almost nonexistent.",
+  "Free Market": {
+    Leaning:
+      "You believe voluntary exchange and competition usually produce the best results. Light regulation can help, but markets should lead.",
+    Inclined:
+      "You generally favor economic freedom and see markets as effective, though you recognize a role for government in ensuring fairness and stability.",
+    Committed:
+      "You believe low taxes and limited rules let people and businesses thrive. Personal responsibility should guide outcomes, with minimal but important government oversight.",
+    Extreme:
+      "You believe markets are the most moral and efficient system. The role of government should be almost nonexistent.",
     },
 
-    Libertarian: {
+    "Libertarian": {
       Leaning:
-        "You prefer personal choice over government direction. People should be free unless their actions harm others.",
+        "You lean toward valuing personal choice and limited rules, though you see a role for government in maintaining order and fairness.",
       Inclined:
-        "You believe individual rights should outweigh most collective rules. Freedom is the default, not the exception.",
+        "You generally think freedom should take priority, with government stepping in only when collective rules are clearly necessary.",
       Committed:
-        "You think government should exist only to protect basic rights. People should shape their lives without interference.",
+        "You believe government should exist mainly to protect basic rights. Beyond that, people should shape their lives without interference.",
       Extreme:
         "You want a society where almost all authority is voluntary. Freedom and consent replace law and control.",
     },
-
-    Authoritarian: {
+    
+    "Authoritarian": {
       Leaning:
-        "You think strong rules can help maintain order. Some freedoms may be limited to preserve social stability.",
+        "You see value in clear rules and leadership to keep society orderly, though personal freedoms still matter.",
       Inclined:
         "You believe unity and discipline are key to a strong society. Leadership should guide people more than public debate.",
       Committed:
@@ -541,9 +541,9 @@ function getPositionDescription(axis, score, strength, isDominantLeft) {
         "You think current systems are broken and must be replaced. Transformation is essential for real justice.",
     },
 
-    Conservative: {
+    "Conservative": {
       Leaning:
-        "You think change should be careful and slow. Traditions often hold wisdom that keeps society grounded.",
+        "You lean toward caution with change, preferring gradual adjustments while still being open to new ideas.",
       Inclined:
         "You value stability and heritage. Sudden shifts can cause more harm than good.",
       Committed:
