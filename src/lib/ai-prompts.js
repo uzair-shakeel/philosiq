@@ -228,33 +228,29 @@ Use warm, understanding language and provide specific insights based on their an
   },
 };
 
-// General personality analysis prompt
+// Multi-axis personality analysis prompt
 export const GENERAL_PROMPT = {
-  system: `You are a professional political personality analyst who explains the user’s stance on the five axes: Equity vs Free Market, Libertarian vs Authoritarian, Progressive vs Conservative, Secular vs Religious, and Globalist vs Nationalist. Your job is to clearly summarize how the user leans on each axis and explain what that means in plain language. Highlight which side they lean toward, describe their overall opinions that emerge from their answers, and keep the focus strictly on their survey responses. ALWAYS use second person (you, your, yours) to make the explanation feel personal and direct.`,
+  system: `You are an insightful political test analyst. 
+Your job is to give concise, neutral, and engaging summaries of a person's answers across multiple political axes. 
+Follow these rules:
+- Write **one section per axis**, clearly labeled with the axis name. 
+- Write 6–8 total sentences. 
+- Begin each summary by stating their overall lean on that axis, using these thresholds: 
+  * Above 80 = Extreme 
+  * 70–80 = Committed 
+  * 60–70 = Inclined 
+  * 50–60 = Leaning
+- Highlight one representative question they answered strongly on, and explain how that answer reflects their stance. Write out the statement in quotes, dont say statement X.
+- Always write in second person ("you believe…", "you lean…"). 
+- After all axis sections, write a final **Overall Reflection** of 1-2 sentences highlighting their core values and what kind of political system or approach they would likely find most appealing. 
+Do not give a generic personality profile—your task is strictly political axis analysis.`,
 
-  user: `Based on the following political survey answers, provide a comprehensive personality analysis. :
+  user: `Using the answers to the questions, write an insightful summary for the user across all axes:
 
-Answer values: 2=Strongly Agree, 1=Agree, 0=Neutral, -1=Disagree, -2=Strongly Disagree
+Answer values: 2 = Strongly Agree, 1 = Agree, 0 = Neutral, -1 = Disagree, -2 = Strongly Disagree
 
 Survey Answers:
-{ANSWERS}
-
-Provide a comprehensive personality analysis (5 short paragraphs covering each axis) covering:
-
-**Overall Political Personality**: What does your political positioning reveal about you?
-- What core values and beliefs drive your political views?
-- What kind of political system appeals to you most?
-
-Use warm, understanding language and provide specific insights based on their answers.`,
-
-  examples: [
-    {
-      input:
-        "Government should help those in need: 2, Individual freedom is important: 1, Change is often necessary: 1, International cooperation matters: 2",
-      output:
-        "You lean toward Equity, meaning you believe government should step in to promote fairness and ensure people are not left behind. You also show some support for Liberty, recognizing the importance of individual freedoms, even if you place more weight on collective support. On the Progressive vs Conservative axis, your answers place you on the Progressive side, favoring change and reform over preserving tradition. When it comes to the global stage, you lean Globalist, suggesting you value cooperation across nations and see international collaboration as a positive force.",
-    },
-  ],
+{ANSWERS}`
 };
 
 // Helper function to format prompts with answers

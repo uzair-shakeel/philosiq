@@ -20,7 +20,7 @@ const AIPersonalitySummary = ({
     }
 
     console.log("=== FRONTEND DEBUG ===");
-    console.log("User tier:", isPhilosiQPlus ? "PhilosiQ+" : "Free");
+    console.log("User tier:", isPhilosiQPlus ? "Philosiq+" : "Free");
     console.log("Total answers:", answers.length);
     console.log("Sample answers:", answers.slice(0, 3));
     console.log("User email:", userEmail);
