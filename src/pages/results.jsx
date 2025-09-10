@@ -1406,7 +1406,7 @@ function ResultsContent({ results }) {
         )}
 
         {/* Ad Section */}
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9441277012043156"
+        {  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9441277012043156"
                crossorigin="anonymous"></script>
           <!-- Philosiq -->
           <ins class="adsbygoogle"
@@ -1417,7 +1417,7 @@ function ResultsContent({ results }) {
                data-full-width-responsive="true"></ins>
           <script>
                (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
+          </script>}
 
         {/* Primary Archetype Card */}
         <div className="mb-16">
