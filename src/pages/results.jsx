@@ -1406,18 +1406,17 @@ function ResultsContent({ results }) {
         )}
 
         {/* Ad Section */}
-        {  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9441277012043156"
-               crossorigin="anonymous"></script>
-          <!-- Philosiq -->
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-9441277012043156"
-               data-ad-slot="7418047635"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-          <script>
-               (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>}
+        <div className="mb-8">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="flex justify-center">
+              <AdSense
+                adSlot="1122334455"
+                className="max-w-4xl w-full"
+                style={{ minHeight: "90px" }}
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Primary Archetype Card */}
         <div className="mb-16">
