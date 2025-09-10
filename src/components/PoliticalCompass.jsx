@@ -107,7 +107,7 @@ const PoliticalCompass = ({ axisResults, answers, questions }) => {
   // SIMPLIFIED PIXEL CALCULATION - DIRECT PERCENTAGE TO PIXELS
   // =============================================================================
 
-  const compassSize = 600; // Total canvas size: 600x600 pixels
+  const compassSize = 600; // Fixed size for consistent calculations
   const center = compassSize / 2; // Center point: 300px (needed for SVG lines)
   const margin = 20; // 20px margin on each side
   const pixelPerPercent = 5.6; // 560px usable area ÷ 100% = 5.6 pixels per percent
@@ -148,12 +148,13 @@ const PoliticalCompass = ({ axisResults, answers, questions }) => {
     <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
       <div className="flex flex-col items-center">
         {/* Compass Grid */}
-        <div className="relative my-4">
+        <div className="relative my-4 w-full max-w-full">
           <svg
             width={compassSize}
             height={compassSize}
-            className="border border-gray-300"
+            className="border border-gray-300 w-full h-auto max-w-full"
             viewBox={`0 0 ${compassSize} ${compassSize}`}
+            preserveAspectRatio="xMidYMid meet"
           >
             {/* Background quadrants matching the political compass layout */}
             <rect
@@ -248,19 +249,19 @@ const PoliticalCompass = ({ axisResults, answers, questions }) => {
           {/* Axis labels outside the SVG */}
           <div className="absolute inset-0 pointer-events-none">
             {/* Equity label */}
-            <div className="absolute left-6 top-1/2 -rotate-90 transform -translate-y-1/2 -translate-x-16 text-lg font-medium text-gray-700">
+            <div className="absolute left-4 md:left-2 top-1/2 -rotate-90 transform -translate-y-1/2 -translate-x-12 text-sm md:text-lg font-medium text-gray-700">
               Equity
             </div>
             {/* Free Market label */}
-            <div className="absolute -right-12 top-1/2 rotate-90 transform -translate-y-1/2 translate-x-4 text-lg font-medium text-gray-700">
+            <div className="absolute right-0 md:-right-4 top-1/2 rotate-90 transform -translate-y-1/2 translate-x-12 text-sm md:text-lg font-medium text-gray-700">
               Free Market
             </div>
             {/* Authoritarian label */}
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8 text-lg font-medium text-gray-700">
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-6 text-sm md:text-lg font-medium text-gray-700">
               Authoritarian
             </div>
             {/* Libertarian label */}
-            <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 translate-y-4 text-lg font-medium text-gray-700">
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-6 text-sm md:text-lg font-medium text-gray-700">
               Libertarian
             </div>
           </div>
