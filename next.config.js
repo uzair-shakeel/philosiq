@@ -2,28 +2,23 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  // Add this configuration to disable automatic static optimization for specific pages
-  // This can help with navigation issues
-  unstable_runtimeJS: true,
-  // Disable page transitions that might cause issues
   pageExtensions: ["jsx", "js", "tsx", "ts"],
-  // Add CORS headers for login API
   async headers() {
     return [
       {
-        // Apply these headers to login API
-        source: "/api/auth/login",
+        source: "/api/auth/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
           { key: "Access-Control-Allow-Origin", value: "*" },
-          { key: "Access-Control-Allow-Methods", value: "POST, OPTIONS" },
-          {
-            key: "Access-Control-Allow-Headers",
-            value: "Content-Type, Authorization",
-          },
+          { key: "Access-Control-Allow-Methods", value: "GET,POST,PUT,DELETE,OPTIONS" },
+          { key: "Access-Control-Allow-Headers", value: "Content-Type, Authorization" },
         ],
       },
     ];
+  },
+  // Add this if you're using Next.js 12+ and have async API routes
+  experimental: {
+    serverActions: true,
   },
 };
 
