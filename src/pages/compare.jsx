@@ -263,9 +263,15 @@ export default function ComparePage() {
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
             <FaExchangeAlt /> Compare Results
           </h1>
-          <p className="text-gray-600 mb-6">
-            To get your compare code, navigate to Profile, then to Quiz History, choose a quiz, and scroll down and click "Generate IQrypt Code"
-          </p>
+          
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <h2 className="text-lg font-semibold text-blue-800 mb-1">
+              Locate IQrypt Code
+            </h2>
+            <p className="text-sm text-blue-700">
+              Get your compare code on the profile page
+            </p>
+          </div>
 
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
