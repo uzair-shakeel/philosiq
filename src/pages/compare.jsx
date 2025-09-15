@@ -260,9 +260,12 @@ export default function ComparePage() {
     <Layout title="Compare - PhilosiQ">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
-          <h1 className="text-3xl font-bold mb-6 flex items-center gap-2">
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
             <FaExchangeAlt /> Compare Results
           </h1>
+          <p className="text-gray-600 mb-6">
+            To get your compare code, navigate to Profile, then to Quiz History, choose a quiz, and scroll down and click "Generate IQrypt Code"
+          </p>
 
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
