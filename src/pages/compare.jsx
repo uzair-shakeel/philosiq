@@ -268,10 +268,34 @@ export default function ComparePage() {
               To locate your IQrypt code, please follow these steps:
             </p>
             <ol className="list-decimal list-inside space-y-2 text-sm text-blue-700">
-              <li>Click <span className="font-semibold">Profile</span> in the top-right corner.</li>
-              <li>Select <span className="font-semibold">Quiz History</span>.</li>
-              <li>Find the quiz you’d like to compare and click <span className="font-semibold">View Full Results</span>.</li>
-              <li>Scroll to the bottom of the page and click <span className="font-semibold">Generate IQrypt Code</span>.</li>
+              <li>
+                Click{" "}
+                <a
+                  href="/profile"
+                  className="font-semibold text-blue-800 hover:underline"
+                >
+                  Profile
+                </a>{" "}
+                in the top-right corner.
+              </li>
+              <li>
+                Select{" "}
+                <a
+                  href="/history"
+                  className="font-semibold text-blue-800 hover:underline"
+                >
+                  Quiz History
+                </a>
+                .
+              </li>
+              <li>
+                Find the quiz you’d like to compare and click{" "}
+                <span className="font-semibold">View Full Results</span>.
+              </li>
+              <li>
+                Scroll to the bottom of the page and click{" "}
+                <span className="font-semibold">Generate IQrypt Code</span>.
+              </li>
               <li>Copy the generated code.</li>
             </ol>
           </div>
