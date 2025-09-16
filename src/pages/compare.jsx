@@ -260,17 +260,20 @@ export default function ComparePage() {
     <Layout title="Compare - PhilosiQ">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <FaExchangeAlt /> Compare Results
-          </h1>
-          
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <h2 className="text-lg font-semibold text-blue-800 mb-1">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+            <h2 className="text-lg font-semibold text-blue-800 mb-3">
               Locate IQrypt Code
             </h2>
-            <p className="text-sm text-blue-700">
-              Get your compare code on the profile page
+            <p className="text-sm text-blue-700 mb-4">
+              To locate your IQrypt code, please follow these steps:
             </p>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-blue-700">
+              <li>Click <span className="font-semibold">Profile</span> in the top-right corner.</li>
+              <li>Select <span className="font-semibold">Quiz History</span>.</li>
+              <li>Find the quiz you’d like to compare and click <span className="font-semibold">View Full Results</span>.</li>
+              <li>Scroll to the bottom of the page and click <span className="font-semibold">Generate IQrypt Code</span>.</li>
+              <li>Copy the generated code.</li>
+            </ol>
           </div>
 
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
