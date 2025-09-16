@@ -1721,19 +1721,6 @@ function ResultsContent({ results }) {
           </div>
         )}
 
-        {/* Ad Section */}
-        <div className="mb-8">
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex justify-center">
-              <AdSense
-                adSlot="1122334455"
-                className="max-w-4xl w-full"
-                style={{ minHeight: "90px" }}
-              />
-            </div>
-          </div>
-        </div>
-
         {/* Primary Archetype Card */}
         <div className="mb-16">
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-lg overflow-hidden border border-gray-200">

@@ -60,19 +60,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Ad Section */}
-        <section className="py-8 bg-gray-50">
-          <div className="container-custom">
-            <div className="flex justify-center">
-              <AdSense
-                adSlot="1234567890"
-                className="max-w-4xl w-full"
-                style={{ minHeight: "90px" }}
-              />
-            </div>
-          </div>
-        </section>
-
         {/* Stats Section */}
         <Stats />
 
@@ -210,19 +197,6 @@ export default function Home() {
 
         {/* Testimonials Section */}
         <Testimonials />
-
-        {/* Ad Section */}
-        <section className="py-8 bg-white">
-          <div className="container-custom">
-            <div className="flex justify-center">
-              <AdSense
-                adSlot="0987654321"
-                className="max-w-4xl w-full"
-                style={{ minHeight: "90px" }}
-              />
-            </div>
-          </div>
-        </section>
 
         {/* Call to Action */}
         <section className="py-16 bg-gradient-to-r from-primary-maroon to-secondary-darkBlue text-white">
