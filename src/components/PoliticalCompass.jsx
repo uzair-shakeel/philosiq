@@ -244,6 +244,15 @@ const PoliticalCompass = ({ axisResults, answers, questions }) => {
             />
             {/* Center dot for position */}
             <circle cx={markerX} cy={markerY} r="5" fill="#ffffff" />
+            {/* Logo watermark */}
+            <image
+              href="/Newiconlogo.png"
+              x={center - 250}
+              y={center - 250}
+              width="500"
+              height="500"
+              opacity="0.20"
+            />
           </svg>
 
           {/* Axis labels outside the SVG */}
