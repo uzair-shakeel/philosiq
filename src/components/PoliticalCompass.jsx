@@ -130,15 +130,15 @@ const PoliticalCompass = ({ axisResults, answers, questions }) => {
   // Libertarian: 83% → markerY = 580 - (83 × 5.6) = 580 - 464.8 = 115.2px
   // =============================================================================
 
-  // Check if we have the required data
-  if (!axisResults || !answers || !questions) {
+  // Check if we have at least axis results; answers/questions optional
+  if (!axisResults) {
     return (
       <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
         <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
           Political Compass
         </h3>
         <div className="text-center text-gray-500">
-          <p>Unable to generate political compass - missing data</p>
+          <p>Unable to generate political compass - missing axis data</p>
         </div>
       </div>
     );
@@ -244,6 +244,15 @@ const PoliticalCompass = ({ axisResults, answers, questions }) => {
             />
             {/* Center dot for position */}
             <circle cx={markerX} cy={markerY} r="5" fill="#ffffff" />
+            {/* Logo watermark */}
+            <image
+              href="/Newiconlogo.png"
+              x={center - 250}
+              y={center - 250}
+              width="500"
+              height="500"
+              opacity="0.20"
+            />
           </svg>
 
           {/* Axis labels outside the SVG */}

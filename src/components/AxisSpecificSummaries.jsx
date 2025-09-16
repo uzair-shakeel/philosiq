@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaBrain, FaSpinner, FaLightbulb, FaChartPie } from "react-icons/fa";
 
 const AXIS_NAMES = [
@@ -95,10 +95,26 @@ const AxisSpecificSummaries = ({
   userEmail,
   isPhilosiQPlus,
   axisDataByName = {},
+  pregeneratedSummaries = {},
+  pregeneratedLoading = {},
+  pregeneratedErrors = {},
 }) => {
   const [summaries, setSummaries] = useState({});
   const [loadingStates, setLoadingStates] = useState({});
   const [errors, setErrors] = useState({});
+
+  // Use pregenerated data if available
+  useEffect(() => {
+    if (Object.keys(pregeneratedSummaries).length > 0) {
+      setSummaries(pregeneratedSummaries);
+    }
+    if (Object.keys(pregeneratedLoading).length > 0) {
+      setLoadingStates(pregeneratedLoading);
+    }
+    if (Object.keys(pregeneratedErrors).length > 0) {
+      setErrors(pregeneratedErrors);
+    }
+  }, [pregeneratedSummaries, pregeneratedLoading, pregeneratedErrors]);
 
   // Group answers by axis
   const getAxisAnswers = (axisName) => {

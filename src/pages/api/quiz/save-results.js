@@ -59,6 +59,8 @@ export default async function handler(req, res) {
       answerBreakdown,
       impactAnswers,
       isPlusActive,
+      aiSummary,
+      axisSummaries,
     } = req.body;
 
     // Normalize secondaryArchetypes
@@ -118,6 +120,12 @@ export default async function handler(req, res) {
       normalizedImpactAnswers ? "Yes" : "No"
     );
     console.log(
+      "Received aiSummary:",
+      aiSummary && typeof aiSummary === "string" && aiSummary.length > 0
+        ? `Yes (${Math.min(aiSummary.length, 100)} chars...)`
+        : "No"
+    );
+    console.log(
       "Received isPlusActive:",
       normalizedIsPlusActive ? "Yes" : "No"
     );
@@ -156,6 +164,7 @@ export default async function handler(req, res) {
       },
       secondaryArchetypes: normalizedSecondaryArchetypes,
       axisBreakdown: normalizedAxisBreakdown,
+      aiSummary: aiSummary ? `${aiSummary.substring(0, 60)}...` : null,
       createdAt: new Date(),
       quizType: req.body.quizType || "full", // Add quizType if provided
     });
@@ -172,6 +181,11 @@ export default async function handler(req, res) {
       answerBreakdown: normalizedAnswerBreakdown,
       impactAnswers: normalizedImpactAnswers, // Add impact answers
       isPlusActive: normalizedIsPlusActive, // Add plus status
+      aiSummary:
+        typeof aiSummary === "string" && aiSummary.trim() !== ""
+          ? aiSummary
+          : null,
+      axisSummaries: axisSummaries || {}, // Add axis summaries
       quizType: quizType || "full", // Add the quiz type
       createdAt: new Date(),
     });
