@@ -158,6 +158,14 @@ function ResultsContent({ results }) {
   const [isPlusActive, setIsPlusActive] = useState(false);
   const [isCheckingPlus, setIsCheckingPlus] = useState(true);
 
+  // Pregeneration states
+  const [generalSummary, setGeneralSummary] = useState("");
+  const [generalSummaryLoading, setGeneralSummaryLoading] = useState(false);
+  const [generalSummaryError, setGeneralSummaryError] = useState("");
+  const [axisSummaries, setAxisSummaries] = useState({});
+  const [axisSummariesLoading, setAxisSummariesLoading] = useState({});
+  const [axisSummariesError, setAxisSummariesError] = useState({});
+
   // Add useEffect to check quiz type and authentication when component mounts
   useEffect(() => {
     try {
@@ -168,27 +176,39 @@ function ResultsContent({ results }) {
       if (storedData) {
         const parsedData = JSON.parse(storedData);
         setIsFullQuiz(parsedData.quizType === "full");
-        setResultsSaved(parsedData.isSaved || false); // Initialize resultsSaved
+        // Do not initialize resultsSaved from storage; it's per-session and auth-bound
       }
       // Check authentication
       const token = localStorage.getItem("authToken");
-      setIsAuthenticated(!!token);
+      const authed = !!token;
+      setIsAuthenticated(authed);
+      if (!authed) {
+        // Ensure saved state is cleared when logged out so success banner doesn't show
+        setResultsSaved(false);
+      }
       // Attempt to load user email and check Philosiq+ status
       if (token) {
         const storedEmail = localStorage.getItem("userEmail");
         const check = async () => {
           try {
             let email = storedEmail;
+            // Always verify token first
+            const resp = await fetch("/api/auth/user", {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!resp.ok) {
+              // Token invalid or expired, force logout state
+              console.warn("Invalid or expired token; clearing auth state");
+              localStorage.removeItem("authToken");
+              localStorage.removeItem("userEmail");
+              setIsAuthenticated(false);
+              setResultsSaved(false);
+              return;
+            }
+            const user = await resp.json();
             if (!email) {
-              // fetch user to get email
-              const resp = await fetch("/api/auth/user", {
-                headers: { Authorization: `Bearer ${token}` },
-              });
-              if (resp.ok) {
-                const user = await resp.json();
-                email = user?.email;
-                if (email) localStorage.setItem("userEmail", email);
-              }
+              email = user?.email;
+              if (email) localStorage.setItem("userEmail", email);
             }
             if (email) {
               const statusResp = await fetch(
@@ -200,7 +220,7 @@ function ResultsContent({ results }) {
               }
             }
           } catch (e) {
-            console.warn("Failed to check plus status", e);
+            console.error("Error checking plus status:", e);
           } finally {
             setIsCheckingPlus(false);
           }
@@ -209,10 +229,210 @@ function ResultsContent({ results }) {
       } else {
         setIsCheckingPlus(false);
       }
-    } catch (err) {
-      console.error("Error determining quiz type or auth status:", err);
+    } catch (error) {
+      console.error("Error initializing ResultsContent:", error);
+      setIsCheckingPlus(false);
     }
   }, []);
+
+  // Keep auth state in sync across tabs and after visibility changes
+  useEffect(() => {
+    const syncAuth = async () => {
+      const token = localStorage.getItem("authToken");
+      const authed = !!token;
+      if (!authed) {
+        if (isAuthenticated) setIsAuthenticated(false);
+        if (resultsSaved) setResultsSaved(false);
+        return;
+      }
+      // Verify token quickly to prevent stale auth
+      try {
+        const resp = await fetch("/api/auth/user", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!resp.ok) {
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("userEmail");
+          setIsAuthenticated(false);
+          setResultsSaved(false);
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch {
+        // Network error: don't flip auth to true; be conservative
+        setIsAuthenticated(false);
+        setResultsSaved(false);
+      }
+    };
+
+    const onStorage = (e) => {
+      if (!e || e.key === null || e.key === "authToken") {
+        syncAuth();
+      }
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") syncAuth();
+    };
+
+    window.addEventListener("storage", onStorage);
+    document.addEventListener("visibilitychange", onVisibility);
+    // Initial sync
+    syncAuth();
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [isAuthenticated, resultsSaved]);
+
+  // Re-verify token when isAuthenticated toggles to true
+  useEffect(() => {
+    const verify = async () => {
+      if (!isAuthenticated) return;
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        setIsAuthenticated(false);
+        setResultsSaved(false);
+        return;
+      }
+      try {
+        const resp = await fetch("/api/auth/user", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!resp.ok) {
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("userEmail");
+          setIsAuthenticated(false);
+          setResultsSaved(false);
+        }
+      } catch {
+        setIsAuthenticated(false);
+        setResultsSaved(false);
+      }
+    };
+    verify();
+  }, [isAuthenticated]);
+
+  // Pregenerate AI summaries when results are available
+  useEffect(() => {
+    const pregenerateSummaries = async () => {
+      if (!results || !rawData?.questions || !rawData?.answers) return;
+
+      const answers =
+        rawData.questions?.map((q) => ({
+          question: q.question,
+          answer: rawData.answers?.[q._id] || 0,
+          axis: q.axis || "general",
+        })) || [];
+
+      if (answers.length === 0) return;
+
+      // Pregenerate general summary
+      if (!generalSummary && !generalSummaryLoading) {
+        setGeneralSummaryLoading(true);
+        try {
+          const response = await fetch("/api/ai/generate-summary", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              answers: answers,
+              userEmail: localStorage.getItem("userEmail") || "",
+              userId: localStorage.getItem("userId") || "unknown",
+              axisDataByName: axisBreakdownData,
+            }),
+          });
+
+          const data = await response.json();
+          if (response.ok && data.summary) {
+            setGeneralSummary(data.summary);
+            // Store in session storage for saving
+            sessionStorage.setItem("aiSummary", data.summary);
+          } else {
+            setGeneralSummaryError(data.error || "Failed to generate summary");
+          }
+        } catch (error) {
+          setGeneralSummaryError(error.message);
+          console.error("General summary generation error:", error);
+        } finally {
+          setGeneralSummaryLoading(false);
+        }
+      }
+
+      // Pregenerate axis summaries for Philosiq+ users
+      if (isPlusActive && Object.keys(axisSummaries).length === 0) {
+        const axisNames = [
+          "Equity vs. Free Market",
+          "Libertarian vs. Authoritarian",
+          "Progressive vs. Conservative",
+          "Secular vs. Religious",
+          "Globalism vs. Nationalism",
+        ];
+
+        for (const axisName of axisNames) {
+          if (axisSummariesLoading[axisName]) continue; // Already loading
+
+          setAxisSummariesLoading((prev) => ({ ...prev, [axisName]: true }));
+
+          try {
+            // Filter answers for this axis
+            const axisAnswers = answers.filter(
+              (answer) => answer.axis === axisName
+            );
+
+            if (axisAnswers.length > 0) {
+              const axisData = axisBreakdownData[axisName];
+
+              const response = await fetch("/api/ai/generate-axis-summary", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  axisName,
+                  answers: axisAnswers,
+                  userEmail: localStorage.getItem("userEmail") || "",
+                  userId: localStorage.getItem("userId") || "unknown",
+                  axisData: axisData || null,
+                }),
+              });
+
+              const data = await response.json();
+              if (response.ok && data.summary) {
+                setAxisSummaries((prev) => ({
+                  ...prev,
+                  [axisName]: data.summary,
+                }));
+              } else {
+                setAxisSummariesError((prev) => ({
+                  ...prev,
+                  [axisName]: data.error || "Failed to generate summary",
+                }));
+              }
+            }
+          } catch (error) {
+            setAxisSummariesError((prev) => ({
+              ...prev,
+              [axisName]: error.message,
+            }));
+            console.error(
+              `Axis summary generation error for ${axisName}:`,
+              error
+            );
+          } finally {
+            setAxisSummariesLoading((prev) => ({ ...prev, [axisName]: false }));
+          }
+        }
+      }
+    };
+
+    pregenerateSummaries();
+  }, [
+    results,
+    rawData,
+    axisBreakdownData,
+    isPlusActive,
+    generalSummary,
+    generalSummaryLoading,
+    axisSummaries,
+    axisSummariesLoading,
+  ]);
 
   // Compute Impact Answers when results and raw data are available
   useEffect(() => {
@@ -1165,16 +1385,36 @@ function ResultsContent({ results }) {
 
   // Starting at line 615
   const handleSaveResults = async () => {
+    if (!isAuthenticated) {
+      // If not logged in, prompt login instead of proceeding
+      setShowLoginModal(true);
+      return;
+    }
     if (resultsSaved || isSaving) return;
 
     setIsSaving(true);
     try {
-      await saveFinalResultsToDatabase(results, secondaryArchetypes);
-      setResultsSaved(true);
-      track("results_saved", {
-        archetype: results.archetype?.name || "Unknown",
-        quizType: isFullQuiz ? "full" : "short",
-      });
+      console.log("Attempting to save results...");
+      const response = await saveFinalResultsToDatabase(
+        results,
+        secondaryArchetypes
+      );
+      console.log("Save response:", response);
+
+      if (response && response.success) {
+        setResultsSaved(true);
+        track("results_saved", {
+          archetype: results.archetype?.name || "Unknown",
+          quizType: isFullQuiz ? "full" : "short",
+        });
+        console.log("Results saved successfully, resultId:", response.resultId);
+      } else {
+        console.error(
+          "Failed to save results:",
+          response?.message || "Unknown error"
+        );
+        alert("Failed to save results. Please try again.");
+      }
     } catch (error) {
       console.error("Error saving results:", error);
       alert("Failed to save results. Please try again.");
@@ -1186,22 +1426,16 @@ function ResultsContent({ results }) {
   // Starting at line 629
   const saveFinalResultsToDatabase = async (results, secondaryArchetypes) => {
     try {
-      const storedData = JSON.parse(sessionStorage.getItem("quizResults"));
-      if (storedData?.isSaved) {
-        console.log("Results already saved, skipping database save.");
-        return;
-      }
-
       console.log("Saving results to database");
       const token = localStorage.getItem("authToken");
       if (!token) {
-        console.log("No auth token found, skipping database save.");
-        return;
+        console.log("No auth token found, user not authenticated.");
+        return { success: false, message: "User not authenticated" };
       }
 
       if (!results || !results.archetype || !results.archetype.name) {
         console.error("Invalid results data, missing archetype name");
-        return;
+        return { success: false, message: "Invalid results data" };
       }
 
       const traits = Object.entries(axisLetters).map(([axis, letter]) => {
@@ -1275,6 +1509,81 @@ function ResultsContent({ results }) {
         console.warn("Failed to build answerBreakdown", e);
       }
 
+      // Use pregenerated axis summaries or generate them if not available
+      let finalAxisSummaries = {};
+      if (isPlusActive && answerBreakdown.length > 0) {
+        // Use pregenerated summaries if available
+        if (Object.keys(axisSummaries).length > 0) {
+          finalAxisSummaries = axisSummaries;
+          console.log("Using pregenerated axis summaries");
+        } else {
+          // Fallback: generate axis summaries if not pregenerated
+          try {
+            console.log("Generating axis summaries for Philosiq+ user...");
+            const axisNames = [
+              "Equity vs. Free Market",
+              "Libertarian vs. Authoritarian",
+              "Progressive vs. Conservative",
+              "Secular vs. Religious",
+              "Globalism vs. Nationalism",
+            ];
+
+            for (const axisName of axisNames) {
+              try {
+                // Filter answers for this axis
+                const axisAnswers = answerBreakdown
+                  .filter((answer) => answer.axis === axisName)
+                  .map((answer) => ({
+                    question: answer.question,
+                    answer: answer.answer,
+                    axis: answer.axis,
+                  }));
+
+                if (axisAnswers.length > 0) {
+                  const axisData = axisBreakdownData[axisName];
+                  const userEmail = localStorage.getItem("userEmail");
+
+                  const response = await fetch(
+                    "/api/ai/generate-axis-summary",
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        axisName,
+                        answers: axisAnswers,
+                        userEmail: userEmail || "",
+                        userId: localStorage.getItem("userId") || "unknown",
+                        axisData: axisData || null,
+                      }),
+                    }
+                  );
+
+                  if (response.ok) {
+                    const data = await response.json();
+                    finalAxisSummaries[axisName] = data.summary;
+                    console.log(
+                      `Generated summary for ${axisName}:`,
+                      data.summary?.substring(0, 100) + "..."
+                    );
+                  } else {
+                    console.warn(`Failed to generate summary for ${axisName}`);
+                  }
+                }
+              } catch (error) {
+                console.error(
+                  `Error generating summary for ${axisName}:`,
+                  error
+                );
+              }
+            }
+          } catch (error) {
+            console.error("Error generating axis summaries:", error);
+          }
+        }
+      }
+
       const resultsData = {
         archetype: {
           name: results.archetype.name,
@@ -1284,6 +1593,14 @@ function ResultsContent({ results }) {
         axisBreakdown: axisBreakdownArray,
         answerBreakdown,
         impactAnswers, // Add the impact answers data
+        aiSummary: (() => {
+          try {
+            return sessionStorage.getItem("aiSummary") || null;
+          } catch {
+            return null;
+          }
+        })(),
+        axisSummaries: finalAxisSummaries, // Add the axis summaries
         isPlusActive, // Add the plus status
         quizType: isFullQuiz ? "full" : "short",
         requestId: Math.random().toString(36).substring(2), // Add for debugging
@@ -1300,18 +1617,15 @@ function ResultsContent({ results }) {
         body: JSON.stringify(resultsData),
       });
 
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to save results: ${errorText}`);
+        throw new Error(responseData.message || "Failed to save results");
       }
 
-      // Update sessionStorage to mark results as saved
-      sessionStorage.setItem(
-        "quizResults",
-        JSON.stringify({ ...storedData, isSaved: true })
-      );
       console.log("Results saved successfully.");
-      return true;
+      return responseData;
     } catch (error) {
       console.error("Error saving data to database:", error);
       throw error;
@@ -1339,32 +1653,34 @@ function ResultsContent({ results }) {
 
           <div className="flex justify-center">
             {/* Save Results Button - Prominent Position */}
-            {!resultsSaved && isAuthenticated && (
-              <button
-                onClick={handleSaveResults}
-                disabled={resultsSaved || isSaving}
-                className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
-                  resultsSaved
-                    ? "bg-green-500 text-white"
-                    : isSaving
-                    ? "bg-gray-300 text-gray-600"
-                    : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-                }`}
-              >
-                {resultsSaved
-                  ? "✓ Results Saved Successfully"
-                  : isSaving
-                  ? "Saving Your Results..."
-                  : "Save Your Results to Account"}
-              </button>
+            {!resultsSaved && (
+              <>
+                {isAuthenticated ? (
+                  <button
+                    onClick={handleSaveResults}
+                    disabled={isSaving}
+                    className={`px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all ${
+                      isSaving
+                        ? "bg-gray-300 text-gray-600"
+                        : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+                    }`}
+                  >
+                    {isSaving ? "Saving..." : "Save Your Results to Account"}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowLoginModal(true)}
+                    className="px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
+                  >
+                    Login to Save Results
+                  </button>
+                )}
+              </>
             )}
-            {!resultsSaved && !isAuthenticated && (
-              <button
-                onClick={() => setShowLoginModal(true)}
-                className="px-8 py-3 rounded-full font-medium text-lg shadow-md transition-all bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg"
-              >
-                Save Results (Login Required)
-              </button>
+            {resultsSaved && isAuthenticated && (
+              <div className="px-8 py-3 rounded-full font-medium text-lg bg-green-500 text-white">
+                ✓ Results Saved Successfully
+              </div>
             )}
           </div>
         </div>
@@ -1604,6 +1920,9 @@ function ResultsContent({ results }) {
             userEmail={localStorage.getItem("userEmail")}
             isPhilosiQPlus={isPlusActive}
             axisDataByName={axisBreakdownData}
+            pregeneratedSummary={generalSummary}
+            pregeneratedLoading={generalSummaryLoading}
+            pregeneratedError={generalSummaryError}
           />
         </div>
 
@@ -1637,6 +1956,9 @@ function ResultsContent({ results }) {
             userEmail={localStorage.getItem("userEmail")}
             isPhilosiQPlus={isPlusActive}
             axisDataByName={axisBreakdownData}
+            pregeneratedSummaries={axisSummaries}
+            pregeneratedLoading={axisSummariesLoading}
+            pregeneratedErrors={axisSummariesError}
           />
         </div>
 

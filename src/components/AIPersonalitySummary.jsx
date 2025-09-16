@@ -6,6 +6,9 @@ const AIPersonalitySummary = ({
   userEmail,
   isPhilosiQPlus,
   axisDataByName = {},
+  pregeneratedSummary = "",
+  pregeneratedLoading = false,
+  pregeneratedError = "",
 }) => {
   const [summary, setSummary] = useState("");
   const [loading, setLoading] = useState(false);
@@ -13,7 +16,60 @@ const AIPersonalitySummary = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [summaryInfo, setSummaryInfo] = useState(null);
 
+  // Use pregenerated summary or auto-generate if not available
+  useEffect(() => {
+    try {
+      if (!answers || answers.length === 0) return;
+
+      // Use pregenerated summary if available
+      if (pregeneratedSummary && pregeneratedSummary.trim() !== "") {
+        setSummary(pregeneratedSummary);
+        setLoading(false);
+        setError("");
+        return;
+      }
+
+      // Use pregenerated error if available
+      if (pregeneratedError) {
+        setError(pregeneratedError);
+        setLoading(false);
+        return;
+      }
+
+      // Use pregenerated loading state
+      if (pregeneratedLoading) {
+        setLoading(true);
+        setError("");
+        return;
+      }
+
+      // Fallback to auto-generation if no pregenerated data
+      if (loading || summary) return; // already in progress or done
+      const cacheKey =
+        userEmail && userEmail.trim() !== ""
+          ? userEmail
+          : `anonymous_${JSON.stringify(answers).length}`;
+      const sessionFlagKey = `aiSummaryGenerated_${cacheKey}`;
+      const alreadyGenerated =
+        sessionStorage.getItem(sessionFlagKey) === "true";
+      if (!alreadyGenerated) {
+        // Fire and forget; generateSummary already has safety checks
+        generateSummary();
+      }
+    } catch (e) {
+      // Non-blocking
+      console.warn("Auto-generate summary skipped:", e);
+    }
+  }, [
+    answers,
+    userEmail,
+    pregeneratedSummary,
+    pregeneratedLoading,
+    pregeneratedError,
+  ]);
+
   const generateSummary = async () => {
+    if (loading || summary) return; // prevent duplicate triggers
     if (!answers || answers.length === 0) {
       setError("No answers available for analysis");
       return;
@@ -30,6 +86,12 @@ const AIPersonalitySummary = ({
     setError("");
 
     try {
+      const cacheKey =
+        userEmail && userEmail.trim() !== ""
+          ? userEmail
+          : `anonymous_${JSON.stringify(answers).length}`;
+      const sessionFlagKey = `aiSummaryGenerated_${cacheKey}`;
+
       const response = await fetch("/api/ai/generate-summary", {
         method: "POST",
         headers: {
@@ -57,6 +119,16 @@ const AIPersonalitySummary = ({
         totalAnswers: data.totalAnswers,
         processedAnswers: data.processedAnswers,
       });
+
+      // Mark as generated for this session so we don't re-generate
+      try {
+        sessionStorage.setItem(sessionFlagKey, "true");
+      } catch {}
+
+      // Persist the generated summary so it can be saved with quiz history
+      try {
+        sessionStorage.setItem("aiSummary", data.summary || "");
+      } catch {}
 
       if (data.cached) {
         console.log("Using cached summary");

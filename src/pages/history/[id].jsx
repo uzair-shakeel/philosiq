@@ -16,6 +16,8 @@ import {
   FaInfoCircle,
   FaEnvelope,
   FaCrown,
+  FaBrain,
+  FaLightbulb,
 } from "react-icons/fa";
 import AxisGraph from "../../components/AxisGraph";
 import { jsPDF } from "jspdf";
@@ -32,6 +34,30 @@ const getAgreementText = (answerValue) => {
   if (answerValue === -2) return "Strongly Disagree";
   return answerValue;
 };
+
+// Local component to render a collapsible AI summary block
+function SummaryBlock({ text }) {
+  const [expanded, setExpanded] = useState(false);
+  if (!text) return null;
+  const limit = 500;
+  const needsToggle = text.length > limit;
+  const shown = expanded || !needsToggle ? text : text.slice(0, limit) + "...";
+  return (
+    <div>
+      <div className="text-gray-800 leading-relaxed whitespace-pre-wrap">
+        {shown}
+      </div>
+      {needsToggle && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="mt-2 text-purple-600 text-sm font-medium hover:text-purple-800"
+        >
+          {expanded ? "Show less" : "Read more"}
+        </button>
+      )}
+    </div>
+  );
+}
 
 // Visual theme per axis for the Impact Answers section (matching results page)
 const AXIS_THEME = {
@@ -557,93 +583,7 @@ export default function QuizResultDetail() {
               </div>
             </div>
           </div>
-          {/* Secondary Archetypes - If Available */}
-          {result.secondaryArchetypes &&
-            result.secondaryArchetypes.length > 0 && (
-              <div className="mb-16">
-                <h2 className="text-3xl font-bold mb-6 text-center">
-                  Secondary Archetypes
-                </h2>
-                <p className="text-center text-gray-600 mb-8">
-                  You also showed strong alignment with these political
-                  archetypes
-                </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {result.secondaryArchetypes.map((archetype, index) => (
-                    <div
-                      key={index}
-                      className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300"
-                    >
-                      <div className="bg-gradient-to-r from-gray-100 to-gray-50 p-4 relative">
-                        {/* Decorative element */}
-                        <div className="absolute top-0 right-0 w-12 h-12 bg-blue-50 rounded-full opacity-30 translate-x-1/3 -translate-y-1/3"></div>
-
-                        <div className="flex justify-between items-center relative">
-                          <h3 className="text-2xl font-bold text-gray-800">
-                            {archetype.name}
-                          </h3>
-                          <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-sm">
-                            {archetype.match}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="p-5">
-                        <div className="flex flex-wrap gap-2 mb-5">
-                          {archetype.traits?.map((trait, i) => {
-                            // Define colors for different traits
-                            let bgColor = "bg-gray-200";
-
-                            if (trait === "Equity")
-                              bgColor = "bg-blue-100 text-blue-800";
-                            else if (trait === "Free Market")
-                              bgColor = "bg-green-100 text-green-800";
-                            else if (trait === "Libertarian")
-                              bgColor = "bg-indigo-100 text-indigo-800";
-                            else if (trait === "Authoritarian")
-                              bgColor = "bg-orange-100 text-orange-800";
-                            else if (trait === "Progressive")
-                              bgColor = "bg-purple-100 text-purple-800";
-                            else if (trait === "Conservative")
-                              bgColor = "bg-blue-100 text-blue-800";
-                            else if (trait === "Secular")
-                              bgColor = "bg-yellow-100 text-yellow-800";
-                            else if (trait === "Religious")
-                              bgColor = "bg-purple-100 text-purple-800";
-                            else if (trait === "Globalism")
-                              bgColor = "bg-teal-100 text-teal-800";
-                            else if (trait === "Nationalism")
-                              bgColor = "bg-red-100 text-red-800";
-
-                            return (
-                              <span
-                                key={i}
-                                className={`${bgColor} px-3 py-1 rounded-full text-sm font-medium shadow-sm`}
-                              >
-                                {trait}
-                              </span>
-                            );
-                          })}
-                        </div>
-
-                        <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
-                          <p className="text-sm text-gray-600">
-                            <span className="font-medium">
-                              Difference from primary:
-                            </span>{" "}
-                            Flipped position on{" "}
-                            <span className="font-semibold text-blue-700">
-                              {archetype.flippedAxis?.replace(" vs. ", "/")}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           {/* Axis Breakdown */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-6 text-center">
@@ -770,6 +710,29 @@ export default function QuizResultDetail() {
             </div>
           </div>
 
+          {/* AI Personality Summary (General) */}
+          {result.aiSummary && (
+            <div className="mb-16">
+              <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-purple-100 p-3 rounded-full">
+                    <FaInfoCircle className="text-purple-600 text-xl" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      AI Personality Analysis
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Saved with your result
+                    </p>
+                  </div>
+                </div>
+
+                <SummaryBlock text={result.aiSummary} />
+              </div>
+            </div>
+          )}
+
           {/* Political Compass */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-6 text-center">
@@ -782,6 +745,179 @@ export default function QuizResultDetail() {
                 questions={result.questions}
               />
             </div>
+          </div>
+
+          {/* Axis-Specific AI Summaries - Philosiq+ Only */}
+          <div className="mb-16">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
+                <FaBrain className="text-blue-600" />
+                Axis-Specific AI Analysis
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Get detailed, personalized analysis for each political
+                dimension. Each summary focuses specifically on your answers and
+                positioning for that particular axis, providing deeper insights
+                than general analysis.
+              </p>
+
+              {!isPlusActive && (
+                <div className="mt-4 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-4 max-w-2xl mx-auto">
+                  <p className="text-purple-700 text-sm">
+                    <strong>Philosiq+ Exclusive:</strong> Unlock all 5 detailed
+                    axis analyses to get comprehensive insights into your
+                    political positioning.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {isPlusActive &&
+            result.axisSummaries &&
+            Object.keys(result.axisSummaries).length > 0 ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {Object.entries(result.axisSummaries).map(
+                  ([axisName, summary]) => (
+                    <div
+                      key={axisName}
+                      className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-3 rounded-full">
+                          <FaChartPie className="text-blue-600 text-xl" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-gray-800">
+                            {axisName}
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            AI Analysis Complete
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
+                          <div className="flex items-start gap-3">
+                            <FaBrain className="text-blue-600 text-lg mt-1 flex-shrink-0" />
+                            <div className="flex-1">
+                              <h4 className="font-medium text-gray-800 mb-2">
+                                {axisName} Analysis
+                              </h4>
+                              <div className="text-gray-700 leading-relaxed text-sm">
+                                {summary}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            ) : isPlusActive ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {[
+                  "Equity vs. Free Market",
+                  "Libertarian vs. Authoritarian",
+                  "Progressive vs. Conservative",
+                  "Secular vs. Religious",
+                  "Globalism vs. Nationalism",
+                ].map((axisName) => (
+                  <div
+                    key={axisName}
+                    className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow relative"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-3 rounded-full">
+                        <FaChartPie className="text-blue-600 text-xl" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          {axisName}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Analysis not available
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="text-center py-6">
+                      <FaLightbulb className="text-gray-400 text-3xl mx-auto mb-3" />
+                      <p className="text-gray-600 mb-4 text-sm">
+                        This result was saved before axis summaries were
+                        available
+                      </p>
+                      <p className="text-gray-500 text-xs">
+                        Take a new quiz to get comprehensive analysis for this
+                        dimension
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {[
+                  "Equity vs. Free Market",
+                  "Libertarian vs. Authoritarian",
+                  "Progressive vs. Conservative",
+                  "Secular vs. Religious",
+                  "Globalism vs. Nationalism",
+                ].map((axisName) => (
+                  <div
+                    key={axisName}
+                    className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow relative"
+                  >
+                    {/* Lock indicator */}
+                    <div className="absolute top-4 right-4">
+                      <div className="bg-gradient-to-r from-purple-500 to-blue-500 text-white p-2 rounded-full">
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* Card content */}
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-3 rounded-full">
+                        <FaChartPie className="text-blue-600 text-xl" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          {axisName}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Locked for free users
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="text-center py-6">
+                      <FaLightbulb className="text-gray-400 text-3xl mx-auto mb-3" />
+                      <p className="text-gray-600 mb-4 text-sm">
+                        Generate a detailed analysis focused specifically on
+                        your {axisName.toLowerCase()} positioning
+                      </p>
+                      <button
+                        onClick={() => router.push("/profile")}
+                        className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-sm"
+                      >
+                        Upgrade to Unlock
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Impact Answers - The Balance Board */}
@@ -961,103 +1097,94 @@ export default function QuizResultDetail() {
             </p>
           </div>
 
-          {/* Premium Feature Section - Philosiq+ Advanced Analysis */}
-          <div className="mb-16 relative">
-            <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg shadow-lg overflow-hidden border border-purple-200">
-              <div className="p-8 text-center relative">
-                {/* Blur overlay when locked */}
-                {!isPlusActive && (
-                  <div className="absolute inset-0 bg-white bg-opacity-90 backdrop-blur-sm z-10"></div>
-                )}
+          {/* Secondary Archetypes - If Available */}
+          {result.secondaryArchetypes &&
+            result.secondaryArchetypes.length > 0 && (
+              <div className="mb-16">
+                <h2 className="text-3xl font-bold mb-6 text-center">
+                  Secondary Archetypes
+                </h2>
+                <p className="text-center text-gray-600 mb-8">
+                  You also showed strong alignment with these political
+                  archetypes
+                </p>
 
-                {/* Content */}
-                <div className="relative z-20">
-                  <h2 className="text-3xl font-bold mb-4 text-gray-800">
-                    {isPlusActive
-                      ? "Philosiq+ Advanced Analysis"
-                      : "Advanced Analysis"}
-                  </h2>
-                  <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
-                    Unlock detailed personality insights, career
-                    recommendations, and compatibility analysis with other
-                    political archetypes.
-                  </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {result.secondaryArchetypes.map((archetype, index) => (
+                    <div
+                      key={index}
+                      className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300"
+                    >
+                      <div className="bg-gradient-to-r from-gray-100 to-gray-50 p-4 relative">
+                        {/* Decorative element */}
+                        <div className="absolute top-0 right-0 w-12 h-12 bg-blue-50 rounded-full opacity-30 translate-x-1/3 -translate-y-1/3"></div>
 
-                  {/* Blurred content preview */}
-                  <div
-                    className={`bg-white rounded-lg p-6 mb-6 ${
-                      isPlusActive ? "opacity-100" : "opacity-30 blur-sm"
-                    }`}
-                  >
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="text-center">
-                        <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-3 flex items-center justify-center">
-                          <FaChartPie className="text-blue-600 text-xl" />
+                        <div className="flex justify-between items-center relative">
+                          <h3 className="text-2xl font-bold text-gray-800">
+                            {archetype.name}
+                          </h3>
+                          <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-sm">
+                            {archetype.match}
+                          </span>
                         </div>
-                        <h3 className="font-semibold text-gray-800">
-                          Personality Insights
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                          Deep dive into your character traits
-                        </p>
                       </div>
-                      <div className="text-center">
-                        <div className="w-16 h-16 bg-green-100 rounded-full mx-auto mb-3 flex items-center justify-center">
-                          <FaInfoCircle className="text-green-600 text-xl" />
+
+                      <div className="p-5">
+                        <div className="flex flex-wrap gap-2 mb-5">
+                          {archetype.traits?.map((trait, i) => {
+                            // Define colors for different traits
+                            let bgColor = "bg-gray-200";
+
+                            if (trait === "Equity")
+                              bgColor = "bg-blue-100 text-blue-800";
+                            else if (trait === "Free Market")
+                              bgColor = "bg-green-100 text-green-800";
+                            else if (trait === "Libertarian")
+                              bgColor = "bg-indigo-100 text-indigo-800";
+                            else if (trait === "Authoritarian")
+                              bgColor = "bg-orange-100 text-orange-800";
+                            else if (trait === "Progressive")
+                              bgColor = "bg-purple-100 text-purple-800";
+                            else if (trait === "Conservative")
+                              bgColor = "bg-blue-100 text-blue-800";
+                            else if (trait === "Secular")
+                              bgColor = "bg-yellow-100 text-yellow-800";
+                            else if (trait === "Religious")
+                              bgColor = "bg-purple-100 text-purple-800";
+                            else if (trait === "Globalism")
+                              bgColor = "bg-teal-100 text-teal-800";
+                            else if (trait === "Nationalism")
+                              bgColor = "bg-red-100 text-red-800";
+
+                            return (
+                              <span
+                                key={i}
+                                className={`${bgColor} px-3 py-1 rounded-full text-sm font-medium shadow-sm`}
+                              >
+                                {trait}
+                              </span>
+                            );
+                          })}
                         </div>
-                        <h3 className="font-semibold text-gray-800">
-                          Career Guidance
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                          Professional paths that match your values
-                        </p>
-                      </div>
-                      <div className="text-center">
-                        <div className="w-16 h-16 bg-purple-100 rounded-full mx-auto mb-3 flex items-center justify-center">
-                          <FaEnvelope className="text-purple-600 text-xl" />
+
+                        <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
+                          <p className="text-sm text-gray-600">
+                            <span className="font-medium">
+                              Difference from primary:
+                            </span>{" "}
+                            Flipped position on{" "}
+                            <span className="font-semibold text-blue-700">
+                              {archetype.flippedAxis?.replace(" vs. ", "/")}
+                            </span>
+                          </p>
                         </div>
-                        <h3 className="font-semibold text-gray-800">
-                          Compatibility Analysis
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                          See how you align with other archetypes
-                        </p>
                       </div>
                     </div>
-                  </div>
-
-                  {/* CTA buttons */}
-                  {!isPlusActive ? (
-                    <button
-                      onClick={() => router.push("/results")}
-                      className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                    >
-                      Unblock with Philosiq+
-                    </button>
-                  ) : null}
-
-                  <p className="text-sm text-gray-500 mt-4">
-                    Premium features • Detailed analysis • Exclusive insights
-                  </p>
+                  ))}
                 </div>
               </div>
-            </div>
-          </div>
+            )}
 
-          {/* Axis-Specific AI Summaries - Philosiq+ Only */}
-          <div className="mb-16">
-            <AxisSpecificSummaries
-              answers={
-                result.answerBreakdown?.map((answer) => ({
-                  question: answer.question,
-                  answer: answer.answer,
-                  axis: answer.axis || "general",
-                })) || []
-              }
-              userEmail={localStorage.getItem("userEmail")}
-              isPhilosiQPlus={isPlusActive}
-            />
-          </div>
           {/* Download PDF Button */}
           <div className="text-center mt-8 flex flex-col items-center gap-4">
             <button

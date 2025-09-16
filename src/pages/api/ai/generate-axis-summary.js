@@ -50,7 +50,11 @@ export default async function handler(req, res) {
         answersHash: JSON.stringify(answers).length,
       });
 
-    if (existingSummary) {
+    if (
+      existingSummary &&
+      existingSummary.summary &&
+      existingSummary.summary !== "undefined"
+    ) {
       return res.status(200).json({
         summary: existingSummary.summary,
         cached: true,
@@ -156,7 +160,7 @@ export default async function handler(req, res) {
                   content: formattedPrompt,
                 },
               ],
-              max_tokens: 600, // Increased to prevent cut-off sentences
+              max_tokens: 1200, // Increased to prevent cut-off sentences
               temperature: 0.7,
             }),
           }
@@ -190,7 +194,10 @@ export default async function handler(req, res) {
     }
 
     const openaiData = await openaiResponse.json();
-    const summary = openaiData.choices[0]?.message?.content?.trim();
+    let summary = openaiData.choices[0]?.message?.content?.trim();
+
+    // Simple fix: replace "undefined" with empty string
+    summary = summary.replace(/undefined/gi, "").trim();
 
     if (!summary) {
       return res.status(500).json({
