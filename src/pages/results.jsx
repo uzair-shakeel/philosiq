@@ -2589,7 +2589,7 @@ function getArchetypeDescription(archetypeName) {
     "The Commander":
       "You support strong leadership, economic equity, and conservative traditions, in service of a global order.",
     "The Steward":
-      "You prioritize traditional values and market economics, with a balanced approach to authority and national sovereignty.",
+      "You prioritize traditional values and economic equity, with a balanced approach to authority and national sovereignty.",
     "The Shepherd":
       "You seek a stable society built on faith, tradition, and fairness, with global compassion and structure.",
     "The High Priest":
