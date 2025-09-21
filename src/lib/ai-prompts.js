@@ -239,7 +239,7 @@ Follow these rules:
     4) Secular vs. Religious
     5) Globalist vs. Nationalist
 - Write 6–8 total sentences. 
-- Begin each section by stating their stance on the axis. For example, if they scored 78% Equity, then you would say "You are commited to Equity" using these thresholds: 
+- Begin each section by stating their stance on the axis. List out the score they got that is above 50% for that axis, and then say they either are either leaning, inclined, committed, or exteme using these thresholds below: 
   * Above 80 = Extreme 
   * 70–80 = Committed 
   * 60–70 = Inclined 
