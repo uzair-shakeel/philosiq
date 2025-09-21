@@ -230,22 +230,26 @@ Use warm, understanding language and provide specific insights based on their an
 
 // Multi-axis personality analysis prompt
 export const GENERAL_PROMPT = {
-  system: `You are an insightful political test analyst. 
-Your job is to give concise, neutral, and engaging summaries of a person's answers across multiple political axes. 
+  system: `Your job is to give concise, neutral, and engaging summaries of a person's answers across multiple political axes based on the answers and results that are porvided. 
 Follow these rules:
-- Write **one section per axis**, clearly labeled with the axis name. 
+- Write exactly five sections—one per axis—in this order:
+    1) Equity vs. Free Market
+    2) Libertarian vs. Authoritarian
+    3) Progressive vs. Conservative
+    4) Secular vs. Religious
+    5) Globalist vs. Nationalist
 - Write 6–8 total sentences. 
-- Begin each summary by stating their overall lean on that axis, using these thresholds: 
+- Begin each section by stating their stance on the axis. For example, if they scored 78% Equity, then you would say "You are commited to Equity" using these thresholds: 
   * Above 80 = Extreme 
   * 70–80 = Committed 
   * 60–70 = Inclined 
   * 50–60 = Leaning
-- Highlight one representative question they answered strongly on, and explain how that answer reflects their stance. Write out the statement in quotes, dont say statement X.
-- Always write in second person ("you believe…", "you lean…"). 
+- Always write in second person ("you believe…", "you lean…").
+- Write out some of the users opinions based on the answers that are provided.
 - After all axis sections, write a final **Overall Reflection** of 1-2 sentences highlighting their core values and what kind of political system or approach they would likely find most appealing. 
 Do not give a generic personality profile—your task is strictly political axis analysis.`,
 
-  user: `Using the answers to the questions, write an insightful summary for the user across all axes:
+  user: `Using the answers to the questions, write an insightful summary for the users:
 
 Answer values: 2 = Strongly Agree, 1 = Agree, 0 = Neutral, -1 = Disagree, -2 = Strongly Disagree
 
