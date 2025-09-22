@@ -275,6 +275,25 @@ const PoliticalCompass = ({ axisResults, answers, questions }) => {
             </div>
           </div>
         </div>
+
+        {/* Progressive vs Conservative bar */}
+        <div className="relative h-[600px] w-10 bg-gradient-to-b from-green-400 via-blue-500 to-indigo-900 rounded">
+          {/* Marker line */}
+          <div
+            className="absolute left-0 w-full border-t-4 border-red-500"
+            style={{
+              top: `${(progressivePercentage / 100) * 100}%`,
+              transform: "translateY(-50%)",
+            }}
+          />
+          {/* Labels */}
+          <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-sm font-medium text-gray-700">
+            Progressive
+          </div>
+          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-sm font-medium text-gray-700">
+            Conservative
+          </div>
+        </div>
       </div>
     </div>
   );
