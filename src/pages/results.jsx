@@ -1641,16 +1641,6 @@ function ResultsContent({ results }) {
   );
 
   return (
-    <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
-      <div className="container-custom">
-        {/* Main Results Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold mb-2">Your Quiz Results</h1>
-          <p className="text-lg text-gray-600 mb-4">
-            Importiq has crunched the numbers—here's the political archetype
-            that fits you best
-          </p>
-
           <div className="flex justify-center">
             {/* Save Results Button - Prominent Position */}
             {!resultsSaved && (
