@@ -52,7 +52,7 @@ const AISummaryCard = ({
         <div className="text-center py-6">
           <FaSpinner className="text-blue-600 text-2xl mx-auto mb-3 animate-spin" />
           <p className="text-gray-600 text-sm">
-            AI is analyzing your {axisName.toLowerCase()} positioning...
+            We are analyzing your {axisName.toLowerCase()} positioning...
           </p>
         </div>
       )}
@@ -291,7 +291,7 @@ const AxisSpecificSummaries = ({
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
           <FaBrain className="text-blue-600" />
-          Axis-Specific AI Analysis
+          Premium Axis-Specific Analysis
         </h2>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
           Get detailed, personalized analysis for each political dimension. Each
