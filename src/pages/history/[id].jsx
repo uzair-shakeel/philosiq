@@ -1186,69 +1186,86 @@ export default function QuizResultDetail() {
             )}
 
           {/* Download PDF Button */}
-          <div className="text-center mt-8 flex flex-col items-center gap-4">
-            <button
-              onClick={handleDownloadPDF}
-              disabled={isPdfGenerating || isDeleting}
-              className="bg-primary-maroon text-white px-6 py-3 rounded-full inline-flex items-center hover:bg-primary-darkMaroon transition-colors disabled:bg-gray-400"
-            >
-              {isPdfGenerating ? (
-                <>
-                  <FaSpinner className="animate-spin mr-2" /> Generating PDF...
-                </>
-              ) : (
-                <>
-                  <FaDownload className="mr-2" /> Download as PDF
-                </>
-              )}
-            </button>
-            <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-3">
+import { useState } from "react";
+
+function YourComponent() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (code) => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000); // reset after 2s
+  };
+
+  return (
+    <>
+      {/* Download PDF Button */}
+      <div className="text-center mt-8 flex flex-col items-center gap-4">
+        <button
+          onClick={handleDownloadPDF}
+          disabled={isPdfGenerating || isDeleting}
+          className="bg-primary-maroon text-white px-6 py-3 rounded-full inline-flex items-center hover:bg-primary-darkMaroon transition-colors disabled:bg-gray-400"
+        >
+          {isPdfGenerating ? (
+            <>
+              <FaSpinner className="animate-spin mr-2" /> Generating PDF...
+            </>
+          ) : (
+            <>
+              <FaDownload className="mr-2" /> Download as PDF
+            </>
+          )}
+        </button>
+
+        <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button
+            onClick={handleGenerateIQrypt}
+            disabled={genCodeLoading}
+            className="px-4 py-2 rounded-full border border-gray-300 bg-white hover:bg-gray-50 inline-flex items-center"
+            title="Generate a shareable IQrypt Code to compare with others"
+          >
+            {genCodeLoading ? (
+              <>
+                <FaSpinner className="animate-spin mr-2" /> Generating...
+              </>
+            ) : (
+              <>
+                <FaKey className="mr-2" /> Generate IQrypt Code
+              </>
+            )}
+          </button>
+
+          {generatedCode && (
+            <div className="flex items-center gap-2 text-sm bg-gray-100 px-3 py-2 rounded-full border border-gray-200">
+              <span className="font-mono">{generatedCode}</span>
               <button
-                onClick={handleGenerateIQrypt}
-                disabled={genCodeLoading}
-                className="px-4 py-2 rounded-full border border-gray-300 bg-white hover:bg-gray-50 inline-flex items-center"
-                title="Generate a shareable IQrypt Code to compare with others"
+                onClick={() => handleCopy(generatedCode)}
+                className={`${
+                  copied ? "text-green-600 font-semibold" : "text-blue-600 hover:underline"
+                }`}
               >
-                {genCodeLoading ? (
-                  <>
-                    <FaSpinner className="animate-spin mr-2" /> Generating...
-                  </>
-                ) : (
-                  <>
-                    <FaKey className="mr-2" /> Generate IQrypt Code
-                  </>
-                )}
+                {copied ? "Copied" : "Copy"}
               </button>
-              {generatedCode && (
-                <div className="flex items-center gap-2 text-sm bg-gray-100 px-3 py-2 rounded-full border border-gray-200">
-                  <span className="font-mono">{generatedCode}</span>
-                  <button
-                    onClick={() => navigator.clipboard.writeText(generatedCode)}
-                    className="text-blue-600 hover:underline"
-                  >
-                    Copy
-                  </button>
-                </div>
-              )}
             </div>
-            <button
-              onClick={handleDeleteResult}
-              disabled={isDeleting || isPdfGenerating}
-              className="bg-red-600 text-white px-6 py-3 rounded-full inline-flex items-center hover:bg-red-800 transition-colors disabled:bg-gray-400"
-            >
-              {isDeleting ? (
-                <>
-                  <FaSpinner className="animate-spin mr-2" /> Deleting...
-                </>
-              ) : (
-                <>
-                  <FaExclamationCircle className="mr-2" /> Delete Result
-                </>
-              )}
-            </button>
-          </div>
+          )}
         </div>
+
+        <button
+          onClick={handleDeleteResult}
+          disabled={isDeleting || isPdfGenerating}
+          className="bg-red-600 text-white px-6 py-3 rounded-full inline-flex items-center hover:bg-red-800 transition-colors disabled:bg-gray-400"
+        >
+          {isDeleting ? (
+            <>
+              <FaSpinner className="animate-spin mr-2" /> Deleting...
+            </>
+          ) : (
+            <>
+              <FaExclamationCircle className="mr-2" /> Delete Result
+            </>
+          )}
+        </button>
       </div>
-    </Layout>
+    </>
   );
 }
