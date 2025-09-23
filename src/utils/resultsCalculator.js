@@ -191,28 +191,40 @@ function calculateAxisScores(questions, answers) {
   const rawNormalizedScores = {};
 
   // Normalize scores to 0-100 scale for display
-  const normalizedScores = {};
+ const rawNormalizedScores = {};
+const normalizedScores = {};
 
-  Object.keys(rawScores).forEach((axis) => {
-    const config = AXIS_CONFIG[axis];
-    if (!config) return;
+Object.keys(rawScores).forEach((axis) => {
+  const config = AXIS_CONFIG[axis];
+  if (!config) return;
 
-    // Get values for formula components
-    const A = rawScores[axis] || 0; // User's raw score
-    const B = disagreeWeights[axis] || 0; // Sum of disagree weights
-    const C = agreeWeights[axis] || 0; // Sum of agree weights
-    const maxScore = config.maxScore || 100; // Get max score from config
+  const A = rawScores[axis] || 0;           // user's raw total
+  const B = disagreeWeights[axis] || 0;    // sum of disagree weights
+  const C = agreeWeights[axis] || 0;       // sum of agree weights
+  const denominator = B + C;
 
-    // Apply the formula: (A-B)/(B+C) to get a value between -1 and 1
-    // Then multiply by 100 to get percentage between -100% and 100%
-    // Handle division by zero by defaulting to 0
-    const denominator = B + C;
-    let normalizedRaw = denominator === 0 ? 0 : ((A - B) / denominator) * 100;
+  let normalizedRaw = 0; // -100..100
+  let displayScore = 50; // 0..100
 
-    // Ensure the score is a finite number between -100 and 100
-    normalizedRaw = isFinite(normalizedRaw)
-      ? Math.max(-100, Math.min(100, normalizedRaw))
-      : 0;
+  if (denominator !== 0) {
+    // fraction from 0..1 where 0 => fully negative (-B) and 1 => fully positive (+C)
+    const frac = (A + B) / denominator;
+
+    // raw -100..100
+    normalizedRaw = (frac * 2 - 1) * 100;
+
+    // display 0..100
+    displayScore = frac * 100;
+  }
+
+  // clamp & sanitize
+  rawNormalizedScores[axis] = isFinite(normalizedRaw)
+    ? Math.max(-100, Math.min(100, normalizedRaw))
+    : 0;
+
+  normalizedScores[axis] = isFinite(displayScore)
+    ? Math.round(Math.max(0, Math.min(100, displayScore)))
+    : 50;
 
     // Store raw normalized score (-100 to 100)
     rawNormalizedScores[axis] = normalizedRaw;
