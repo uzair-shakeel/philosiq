@@ -2212,7 +2212,7 @@ function ResultsContent({ results }) {
               Your Secondary Archetypes
             </h2>
             <p className="text-center text-gray-600 mb-8">
-              You also show strong alignment with these political archetypes
+              Out of 32 unique archetypes, you also share strong alignment with these two.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
