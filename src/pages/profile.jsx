@@ -340,6 +340,72 @@ export default function ProfilePage() {
     }
   };
 
+  const openBillingPortal = async () => {
+    try {
+      setIsLoading(true);
+      setError("");
+      
+      const email = user?.email || localStorage.getItem("userEmail");
+      if (!email) {
+        throw new Error("No user email found. Please log in again.");
+      }
+      
+      // Add current URL as return URL
+      const returnUrl = window.location.href;
+      
+      const response = await fetch("/api/stripe/portal-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          email,
+          returnUrl 
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        console.error("Portal session error:", data);
+        
+        // Handle specific error cases
+        if (data.error === "No Stripe customer") {
+          throw new Error("No subscription found. Please contact support.");
+        }
+        
+        // Handle Stripe mode mismatch
+        if (data.details && data.details.includes('test mode')) {
+          throw new Error("Subscription is in test mode. Please contact support for assistance.");
+        }
+        
+        // Handle other errors
+        throw new Error(data.details || data.error || "Failed to open billing portal");
+      }
+      
+      if (!data?.url) {
+        throw new Error("Invalid response from server. Please try again.");
+      }
+      
+      // Redirect to the portal
+      window.location.href = data.url;
+      
+    } catch (error) {
+      console.error("Billing portal error:", error);
+      
+      // Show a user-friendly error message
+      let errorMessage = "Unable to open billing portal. ";
+      
+      if (error.message.includes('test mode')) {
+        errorMessage += "Your subscription is in test mode. Please contact support for assistance.";
+      } else {
+        errorMessage += error.message || "Please try again or contact support.";
+      }
+      
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -673,7 +739,7 @@ export default function ProfilePage() {
                     Subscription Status
                   </h3>
                   <button
-                    onClick={loadSubscriptionDetails}
+                    onClick={handleManualRefresh}
                     disabled={loadingSubscription}
                     className="p-2 text-gray-500 hover:text-gray-700 transition-colors duration-200"
                     title="Refresh subscription details"
@@ -781,7 +847,7 @@ export default function ProfilePage() {
                         {/* Subscription Management Buttons */}
                         <div className="pt-3 space-y-2">
                           <button
-                            onClick={handleUpgradeToPlus}
+                            onClick={openBillingPortal}
                             disabled={isLoading}
                             className="w-full bg-primary-maroon hover:bg-primary-darkMaroon text-white py-2 px-3 rounded-lg text-xs font-medium transition-colors duration-200 flex items-center justify-center"
                           >
@@ -791,10 +857,7 @@ export default function ProfilePage() {
                                 Processing...
                               </>
                             ) : (
-                              <>
-                                <FaSync className="mr-2" />
-                                Renew Subscription
-                              </>
+                              "Cancel Subscription"
                             )}
                           </button>
                         </div>
