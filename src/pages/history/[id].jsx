@@ -100,6 +100,7 @@ export default function QuizResultDetail() {
   const [genCodeLoading, setGenCodeLoading] = useState(false);
   const [generatedCode, setGeneratedCode] = useState("");
   const [isPlusActive, setIsPlusActive] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -381,6 +382,26 @@ export default function QuizResultDetail() {
       alert("Failed to generate PDF. Please try again.");
     } finally {
       setIsPdfGenerating(false);
+    }
+  };
+
+  const copyIQryptCode = async () => {
+    try {
+      if (!generatedCode) return;
+      if (navigator.clipboard && window.ClipboardItem) {
+        const text = generatedCode;
+        const html = `<span style=\"font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace\">${text}</span>`;
+        const item = new ClipboardItem({
+          "text/plain": new Blob([text], { type: "text/plain" }),
+          "text/html": new Blob([html], { type: "text/html" }),
+        });
+        await navigator.clipboard.write([item]);
+      } else {
+        await navigator.clipboard.writeText(generatedCode);
+      }
+      setCopiedCode(true);
+    } catch (e) {
+      alert("Failed to copy code");
     }
   };
 
@@ -1223,10 +1244,11 @@ export default function QuizResultDetail() {
                 <div className="flex items-center gap-2 text-sm bg-gray-100 px-3 py-2 rounded-full border border-gray-200">
                   <span className="font-mono">{generatedCode}</span>
                   <button
-                    onClick={() => navigator.clipboard.writeText(generatedCode)}
+                    onClick={copyIQryptCode}
                     className="text-blue-600 hover:underline"
+                    title="Copy code"
                   >
-                    Copy
+                    {copiedCode ? "Copied!" : "Copy Code"}
                   </button>
                 </div>
               )}
