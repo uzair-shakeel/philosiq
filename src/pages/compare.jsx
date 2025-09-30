@@ -258,19 +258,20 @@ export default function ComparePage() {
 
   return (
     <Layout title="Compare - PhilosiQ">
-      <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
-        <div className="container-custom">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-            <h2 className="text-lg font-semibold text-blue-800 mb-3">
-              Locate IQrypt Code
-            </h2>
-            <p className="text-sm text-blue-700 mb-4">
-              To locate your IQrypt code, please follow these steps:
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+          <header className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-0">
+              Compare Your Results
+            </h1>
+            <p className="text-sm sm:text-base text-gray-600 sm:mt-0">
+              See how your political views compare with others
             </p>
-            <ol className="list-decimal list-inside space-y-2 text-sm text-blue-700">
-              <li>
-                Click{" "}
-                <a
+          </header>
+          <ol className="list-decimal list-inside space-y-2 text-sm text-blue-700">
+            <li>
+              Click{" "}
+              <a
                   href="/profile"
                   className="font-semibold text-blue-800 hover:underline"
                 >
@@ -300,14 +301,14 @@ export default function ComparePage() {
             </ol>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Your Saved Quiz
                 </label>
                 <select
-                  className="w-full border border-gray-300 rounded-lg p-2"
+                  className="w-full border border-gray-300 rounded-lg p-2 text-sm sm:text-base"
                   value={leftId}
                   onChange={(e) => setLeftId(e.target.value)}
                 >
@@ -324,29 +325,29 @@ export default function ComparePage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   IQrypt Code (from a friend)
                 </label>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
-                    className="flex-1 border border-gray-300 rounded-lg p-2 font-mono"
+                    className="w-full border border-gray-300 rounded-lg p-2 font-mono text-sm sm:text-base"
                     placeholder="Paste code here"
                     value={rightCode}
                     onChange={(e) => setRightCode(e.target.value.trim())}
                   />
                   <button
                     onClick={() => rightCode && loadRight(rightCode)}
-                    className="px-4 py-2 bg-gray-800 text-white rounded-lg flex items-center"
+                    className="px-3 sm:px-4 py-2 bg-gray-800 text-white rounded-lg flex items-center justify-center text-sm sm:text-base whitespace-nowrap"
                   >
                     <FaSearch className="mr-2" /> Load
                   </button>
                 </div>
               </div>
             </div>
-            <div className="mt-4 flex gap-3">
+            <div className="mt-4 flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => leftId && loadLeft(leftId)}
-                className="px-4 py-2 bg-primary-maroon text-white rounded-lg"
+                className="px-4 py-2 bg-primary-maroon text-white rounded-lg text-sm sm:text-base w-full sm:w-auto"
                 disabled={!leftId}
               >
-                Load My Quiz
+                {loading ? 'Loading...' : 'Load My Quiz'}
               </button>
               {resolving && (
                 <FaSpinner className="animate-spin text-gray-500" />
@@ -357,9 +358,9 @@ export default function ComparePage() {
           {(leftResult || rightResult) && (
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-semibold mb-4">Comparison</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div className="border rounded-lg p-4">
-                  <h3 className="font-semibold mb-1">You</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
+                <div className="border rounded-lg p-3 sm:p-4">
+                  <h3 className="font-semibold text-sm sm:text-base mb-1">You</h3>
                   {leftResult ? (
                     <p className="text-sm text-gray-700">
                       {leftResult.archetype?.name || "Unknown"} •{" "}
@@ -369,8 +370,8 @@ export default function ComparePage() {
                     <p className="text-sm text-gray-500">Not loaded</p>
                   )}
                 </div>
-                <div className="border rounded-lg p-4">
-                  <h3 className="font-semibold mb-1">Other</h3>
+                <div className="border rounded-lg p-3 sm:p-4">
+                  <h3 className="font-semibold text-sm sm:text-base mb-1">Other</h3>
                   {rightResult ? (
                     <p className="text-sm text-gray-700">
                       {rightResult.archetype?.name || "Unknown"} •{" "}
@@ -391,7 +392,7 @@ export default function ComparePage() {
                         {ax.leftLabel} vs {ax.rightLabel}
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                       <div className="bg-gray-50 p-3 rounded">
                         <div className="text-xs text-gray-500 mb-1">You</div>
                         {ax.left !== null ? (
@@ -900,7 +901,7 @@ export default function ComparePage() {
                               <table className="min-w-full">
                                 <thead className="bg-gray-50">
                                   <tr>
-                                    <th className="text-left px-6 py-3 w-36 font-medium text-gray-700 text-xs uppercase tracking-wide">
+                                    <th className="text-left px-6 py-3 w-20 md:w-36 font-medium text-gray-700 text-xs uppercase tracking-wide">
                                       Topic
                                     </th>
                                     <th className="text-left px-6 py-3 font-medium text-gray-700 text-xs uppercase tracking-wide">
@@ -960,7 +961,7 @@ export default function ComparePage() {
                                             : "bg-gray-50/30"
                                         }`}
                                       >
-                                        <td className="px-6 py-3 align-top whitespace-nowrap">
+                                        <td className="px-3 sm:px-6 py-3 align-top md:whitespace-nowrap">
                                           {row.topic ? (
                                             <span className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">
                                               {row.topic}
@@ -972,7 +973,7 @@ export default function ComparePage() {
                                           )}
                                         </td>
 
-                                        <td className="px-6 py-3 align-top">
+                                        <td className="px-3 min-w-64 sm:px-6 py-3 align-top">
                                           <div className="pr-4">
                                             <p className="text-gray-900 font-medium text-sm leading-relaxed">
                                               {row.question || ""}
@@ -980,10 +981,10 @@ export default function ComparePage() {
                                           </div>
                                         </td>
 
-                                        <td className="px-6 py-3 align-top whitespace-nowrap">
+                                        <td className="px-3 sm:px-6 py-3 align-top whitespace-nowrap">
                                           {row.left ? (
                                             <div className="flex items-center gap-3">
-                                              <span className="font-mono text-sm font-semibold bg-blue-100 text-blue-800 px-3 py-1.5 rounded border border-blue-200">
+                                              <span className="font-mono text-xs sm:text-sm font-semibold bg-blue-100 text-blue-800 px-2 sm:px-3 py-1 sm:py-1.5 rounded border border-blue-200 whitespace-nowrap">
                                                 {row.left.answer === -2
                                                   ? "Strongly Disagree"
                                                   : row.left.answer === -1
@@ -1005,10 +1006,10 @@ export default function ComparePage() {
                                           )}
                                         </td>
 
-                                        <td className="px-6 py-3 align-top whitespace-nowrap">
+                                        <td className="px-3 sm:px-6 py-3 align-top whitespace-nowrap">
                                           {row.right ? (
                                             <div className="flex items-center gap-3">
-                                              <span className="font-mono text-sm font-semibold bg-indigo-100 text-indigo-800 px-3 py-1.5 rounded border border-indigo-200">
+                                              <span className="font-mono text-xs sm:text-sm font-semibold bg-indigo-100 text-indigo-800 px-2 sm:px-3 py-1 sm:py-1.5 rounded border border-indigo-200 whitespace-nowrap">
                                                 {row.right.answer === -2
                                                   ? "Strongly Disagree"
                                                   : row.right.answer === -1
@@ -1030,12 +1031,12 @@ export default function ComparePage() {
                                           )}
                                         </td>
 
-                                        <td className="px-6 py-3 align-top whitespace-nowrap">
+                                        <td className="px-3 sm:px-6 py-3 align-top whitespace-nowrap">
                                           <div className="flex justify-center">
                                             {row.delta !== null ? (
                                               <div className="text-center">
                                                 <span
-                                                  className={`inline-block px-3 py-1.5 rounded-lg text-sm font-medium ${
+                                                  className={`inline-block px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm font-medium ${
                                                     row.delta === 0
                                                       ? "bg-green-100 text-green-800 border border-green-200"
                                                       : Math.abs(row.delta) ===
@@ -1074,7 +1075,7 @@ export default function ComparePage() {
             </div>
           )}
         </div>
-      </div>
+      
     </Layout>
   );
 }
