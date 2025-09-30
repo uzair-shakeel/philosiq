@@ -16,6 +16,7 @@ export default function ResultsProcessor({ children }) {
   }, []);
 
   const processResults = async () => {
+    const start = Date.now();
     try {
       setLoading(true);
 
@@ -124,6 +125,12 @@ export default function ResultsProcessor({ children }) {
       console.error("Error processing results:", err);
       setError(`Failed to process quiz results: ${err.message}`);
     } finally {
+      // Ensure a branded processing screen shows for at least ~3.5s
+      const MIN_MS = 3500;
+      const elapsed = Date.now() - start;
+      if (elapsed < MIN_MS) {
+        await new Promise((resolve) => setTimeout(resolve, MIN_MS - elapsed));
+      }
       setLoading(false);
     }
   };
@@ -131,12 +138,14 @@ export default function ResultsProcessor({ children }) {
   // If loading, show a loading indicator
   if (loading) {
     return (
-      <div className="text-center py-12">
-        <div className="w-16 h-16 border-4 border-primary-maroon border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <h2 className="text-2xl font-bold mb-2">Processing Results</h2>
-        <p className="text-gray-600">
-          Please wait while we calculate your results...
-        </p>
+      <div className="min-h-[50vh] flex flex-col items-center justify-center text-center py-40">
+        <div className="w-16 h-16 border-4 border-primary-maroon border-t-transparent rounded-full animate-spin mb-6"></div>
+        <h2 className="text-2xl font-bold mb-1">processing results</h2>
+        <p className="text-gray-600 mb-8">Please wait while we calculate your results...</p>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-gray-500 text-sm">Presented by</span>
+          <img src="/LOGO.png" alt="Philosiq" className="h-10 w-auto opacity-90" />
+        </div>
       </div>
     );
   }
