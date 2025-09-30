@@ -2008,6 +2008,24 @@ function ResultsContent({ results }) {
                     const rounded = Math.round(n * 10) / 10;
                     return (rounded > 0 ? "+" : "") + rounded;
                   };
+                  
+                  // Calculate which side is dominant based on score (same logic as AxisGraph)
+                  const leftPercent = axis.score || 50;
+                  const rightPercent = 100 - leftPercent;
+                  const isDominantLeft = leftPercent > rightPercent;
+                  const dominantSide = isDominantLeft ? axis.leftLabel : axis.rightLabel;
+                  const dominantPercent = isDominantLeft ? leftPercent : rightPercent;
+                  
+                  // Determine strength based on percentage
+                  const getStrength = (percent) => {
+                    if (percent >= 80) return "Very Strong";
+                    if (percent >= 70) return "Strong";
+                    if (percent >= 60) return "Moderate";
+                    if (percent >= 55) return "Slight";
+                    return "Weak";
+                  };
+                  const strengthLabel = getStrength(dominantPercent);
+                  
                   return (
                     <div
                       key={axis.name}
@@ -2020,9 +2038,9 @@ function ResultsContent({ results }) {
                           <FaBalanceScale className="opacity-90" />
                           <h3 className="text-lg font-bold">{axis.name}</h3>
                         </div>
-                        {/* <span className="text-xs font-medium bg-white/20 px-3 py-1 rounded-full">
-                          {axis.positionStrength} {axis.userPosition}
-                        </span> */}
+                        <span className="text-sm font-medium bg-white/20 px-3 py-1 rounded-full">
+                          Your Result: {dominantSide}
+                        </span>
                       </div>
                       <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
