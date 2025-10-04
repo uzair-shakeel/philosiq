@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Layout from "../components/Layout";
+import AxisGraph from "../components/AxisGraph";
 import { useRouter } from "next/router";
 import {
   FaExchangeAlt,
@@ -259,7 +260,7 @@ export default function ComparePage() {
   return (
     <Layout title="Compare - PhilosiQ">
       <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:pt-40 sm:pb-16">
           <header className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-0">
               Compare Your Results
@@ -383,47 +384,205 @@ export default function ComparePage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-4">
-                {compareAxes.map((ax) => (
-                  <div key={ax.name} className="border rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-semibold">{ax.name}</h4>
-                      <div className="text-xs text-gray-500">
-                        {ax.leftLabel} vs {ax.rightLabel}
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-gray-50 p-3 rounded">
-                        <div className="text-xs text-gray-500 mb-1">You</div>
-                        {ax.left !== null ? (
-                          <div className="flex items-center gap-2">
-                            <FaCheckCircle className="text-green-600" />
-                            <span>{ax.left}%</span>
+              <div className="space-y-6">
+                {compareAxes.map((ax) => {
+                  // Calculate positions and differences
+                  const leftPercent = ax.left || 50;
+                  const rightPercent = ax.right || 50;
+                  const difference = Math.abs(leftPercent - rightPercent);
+                  
+                  // Determine dominant sides
+                  const leftDominant = leftPercent > 50 ? ax.leftLabel : ax.rightLabel;
+                  const rightDominant = rightPercent > 50 ? ax.leftLabel : ax.rightLabel;
+                  
+                  // Calculate alignment
+                  const isAligned = (leftPercent > 50 && rightPercent > 50) || (leftPercent <= 50 && rightPercent <= 50);
+                  const alignmentText = isAligned ? "Aligned" : "Opposite sides";
+                  const alignmentColor = isAligned ? "text-green-600" : "text-red-600";
+                  
+                  // Get strength labels
+                  const getStrength = (percent) => {
+                    const dominantPercent = Math.max(percent, 100 - percent);
+                    if (dominantPercent >= 80) return "Very Strong";
+                    if (dominantPercent >= 70) return "Strong";
+                    if (dominantPercent >= 60) return "Moderate";
+                    if (dominantPercent >= 55) return "Slight";
+                    return "Weak";
+                  };
+                  
+                  return (
+                    <div key={ax.name} className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                      {/* Header */}
+                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="text-lg font-bold text-gray-900">{ax.name}</h4>
+                          <div className={`text-sm font-medium ${alignmentColor} flex items-center gap-1`}>
+                            {isAligned ? <FaCheckCircle /> : <FaTimesCircle />}
+                            {alignmentText}
                           </div>
-                        ) : (
-                          <div className="flex items-center gap-2 text-gray-400">
-                            <FaTimesCircle />
-                            <span>Not available</span>
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          <span className="font-medium">{ax.leftLabel}</span> vs <span className="font-medium">{ax.rightLabel}</span>
+                          {difference > 0 && (
+                            <span className="ml-2 text-xs bg-gray-200 px-2 py-1 rounded-full">
+                              {difference.toFixed(1)}% difference
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Detailed Comparison */}
+                      <div className="p-6">
+                        {/* Full Axis Graph with Both Positions */}
+                        <div className="mb-6">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                              <FaUsers className="text-blue-600" />
+                              Axis Comparison View
+                            </h5>
+                            
+                            {/* Custom Dual-Position Axis Graph */}
+                            <div className="space-y-4">
+                              {/* Axis Title */}
+                              <h6 className="text-base font-semibold text-gray-900">{ax.name}</h6>
+                              
+                              {/* Axis Labels */}
+                              <div className="flex justify-between items-center">
+                                <div className="text-xs font-medium">
+                                  <span className="px-2 py-0.5 rounded-full text-white bg-blue-600">
+                                    {ax.leftLabel}
+                                  </span>
+                                </div>
+                                <div className="text-xs font-medium">
+                                  <span className="px-2 py-0.5 rounded-full text-white bg-green-600">
+                                    {ax.rightLabel}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Axis bar with both positions */}
+                              <div className="relative h-12 rounded-full overflow-hidden border border-gray-300">
+                                {/* Left side gradient */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-gray-300 to-green-600"></div>
+                                
+                                {/* Your position marker */}
+                                {ax.left !== null && (
+                                  <div
+                                    className="absolute top-0 bottom-0 w-2 h-full bg-yellow-400 border-2 border-yellow-600 z-30 transform -translate-x-1/2 shadow-lg"
+                                    style={{ left: `${Math.max(1, Math.min(99, leftPercent))}%` }}
+                                  ></div>
+                                )}
+                                
+                                {/* Other's position marker */}
+                                {ax.right !== null && (
+                                  <div
+                                    className="absolute top-0 bottom-0 w-2 h-full bg-red-500 border-2 border-red-700 z-30 transform -translate-x-1/2 shadow-lg"
+                                    style={{ left: `${Math.max(1, Math.min(99, rightPercent))}%` }}
+                                  ></div>
+                                )}
+
+                                {/* Position labels */}
+                                {ax.left !== null && (
+                                  <div
+                                    className="absolute -top-8 transform -translate-x-1/2 z-40"
+                                    style={{ left: `${Math.max(1, Math.min(99, leftPercent))}%` }}
+                                  >
+                                    <div className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-yellow-600">
+                                      You: {ax.left}%
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                {ax.right !== null && (
+                                  <div
+                                    className="absolute -bottom-8 transform -translate-x-1/2 z-40"
+                                    style={{ left: `${Math.max(1, Math.min(99, rightPercent))}%` }}
+                                  >
+                                    <div className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-red-700">
+                                      Other: {ax.right}%
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Legend */}
+                              <div className="flex items-center justify-center gap-6 text-xs">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-3 h-3 bg-yellow-400 rounded border-2 border-yellow-600"></div>
+                                  <span className="font-medium">Your Position</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-3 h-3 bg-red-500 rounded border-2 border-red-700"></div>
+                                  <span className="font-medium">Other's Position</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Detailed Stats */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                              <span className="font-semibold text-blue-900">You</span>
+                            </div>
+                            {ax.left !== null ? (
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-2xl font-bold text-blue-900">{ax.left}%</span>
+                                  <span className="text-sm font-medium text-blue-700 bg-blue-100 px-2 py-1 rounded">
+                                    {getStrength(leftPercent)} {leftDominant}
+                                  </span>
+                                </div>
+                                <div className="text-sm text-blue-700">
+                                  Leans <strong>{leftPercent > 50 ? Math.round(leftPercent - 50) : Math.round(50 - leftPercent)}%</strong> toward {leftDominant}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="text-gray-500">No data available</div>
+                            )}
+                          </div>
+
+                          <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="w-3 h-3 bg-indigo-600 rounded-full"></div>
+                              <span className="font-semibold text-indigo-900">Other</span>
+                            </div>
+                            {ax.right !== null ? (
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-2xl font-bold text-indigo-900">{ax.right}%</span>
+                                  <span className="text-sm font-medium text-indigo-700 bg-indigo-100 px-2 py-1 rounded">
+                                    {getStrength(rightPercent)} {rightDominant}
+                                  </span>
+                                </div>
+                                <div className="text-sm text-indigo-700">
+                                  Leans <strong>{rightPercent > 50 ? Math.round(rightPercent - 50) : Math.round(50 - rightPercent)}%</strong> toward {rightDominant}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="text-gray-500">No data available</div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Comparison Summary */}
+                        {ax.left !== null && ax.right !== null && (
+                          <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                            <div className="text-sm text-gray-700">
+                              <strong>Comparison:</strong> {
+                                isAligned 
+                                  ? `Both of you lean toward the ${leftDominant} side, with a ${difference.toFixed(1)}% difference in strength.`
+                                  : `You're on opposite sides - you lean ${leftDominant} while they lean ${rightDominant}, with a ${difference.toFixed(1)}% gap.`
+                              }
+                            </div>
                           </div>
                         )}
                       </div>
-                      <div className="bg-gray-50 p-3 rounded">
-                        <div className="text-xs text-gray-500 mb-1">Other</div>
-                        {ax.right !== null ? (
-                          <div className="flex items-center gap-2">
-                            <FaCheckCircle className="text-green-600" />
-                            <span>{ax.right}%</span>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-2 text-gray-400">
-                            <FaTimesCircle />
-                            <span>Not available</span>
-                          </div>
-                        )}
-                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Detailed Question Analysis */}
