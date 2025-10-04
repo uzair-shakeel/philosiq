@@ -495,13 +495,15 @@ function ResultsContent({ results }) {
           const against = items.filter((x) => x.contribution < 0).slice(0, 2);
           result[axisName] = { aligned, against };
         } else {
-          // Special handling for "Secular vs. Religious" axis - flip the logic
+          // Special handling for axes that need flipped logic
           const isSecularAxis = axisName === "Secular vs. Religious";
+          const isEquityAxis = axisName === "Equity vs. Free Market";
+          const needsFlip = isSecularAxis || isEquityAxis;
 
           const aligned = items
             .filter((x) => {
-              if (isSecularAxis) {
-                // For Secular vs Religious, flip the logic
+              if (needsFlip) {
+                // For axes that need flipped logic
                 return axisSign > 0 ? x.contribution < 0 : x.contribution > 0;
               } else {
                 return axisSign > 0 ? x.contribution > 0 : x.contribution < 0;
@@ -510,8 +512,8 @@ function ResultsContent({ results }) {
             .slice(0, 2);
           const against = items
             .filter((x) => {
-              if (isSecularAxis) {
-                // For Secular vs Religious, flip the logic
+              if (needsFlip) {
+                // For axes that need flipped logic
                 return axisSign > 0 ? x.contribution > 0 : x.contribution < 0;
               } else {
                 return axisSign > 0 ? x.contribution < 0 : x.contribution > 0;
