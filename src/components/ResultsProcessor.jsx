@@ -144,7 +144,7 @@ export default function ResultsProcessor({ children }) {
         <p className="text-gray-600 mb-8">Please wait while we calculate your results...</p>
         <div className="flex flex-col items-center gap-2">
           <span className="text-gray-500 text-sm">Presented by</span>
-          <img src="/LOGO.png" alt="Philosiq" className="h-10 w-auto opacity-90" />
+          <img src="/Philosiq+.png" alt="Philosiq" className="h-10 w-auto opacity-90" />
         </div>
       </div>
     );
