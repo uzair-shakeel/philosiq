@@ -568,25 +568,25 @@ export default function QuizResultDetail() {
                     let bgColor = "bg-gray-200";
 
                     if (trait === "Equity")
-                      bgColor = "bg-blue-100 text-blue-800";
+                      bgColor = "bg-blue-600 text-white";
                     else if (trait === "Free Market")
-                      bgColor = "bg-green-100 text-green-800";
+                      bgColor = "bg-green-600 text-white";
                     else if (trait === "Libertarian")
-                      bgColor = "bg-indigo-100 text-indigo-800";
+                      bgColor = "bg-teal-500 text-white";
                     else if (trait === "Authoritarian")
-                      bgColor = "bg-orange-100 text-orange-800";
+                      bgColor = "bg-orange-500 text-white";
                     else if (trait === "Progressive")
-                      bgColor = "bg-purple-100 text-purple-800";
+                      bgColor = "bg-sky-500 text-white";
                     else if (trait === "Conservative")
-                      bgColor = "bg-blue-100 text-blue-800";
+                      bgColor = "bg-red-400 text-white";
                     else if (trait === "Secular")
-                      bgColor = "bg-yellow-100 text-yellow-800";
+                      bgColor = "bg-yellow-400 text-white";
                     else if (trait === "Religious")
-                      bgColor = "bg-purple-100 text-purple-800";
+                      bgColor = "bg-purple-500 text-white";
                     else if (trait === "Globalism")
-                      bgColor = "bg-teal-100 text-teal-800";
+                      bgColor = "bg-lime-500 text-white";
                     else if (trait === "Nationalism")
-                      bgColor = "bg-red-100 text-red-800";
+                      bgColor = "bg-rose-500 text-white";
 
                     return (
                       <span
