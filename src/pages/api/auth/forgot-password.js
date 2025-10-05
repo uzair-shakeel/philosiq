@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       },
       { upsert: true }
     );
-
+    
     const baseUrl =
       process.env.NEXT_PUBLIC_BASE_URL || "https://philosiq-testing.vercel.app";
     const resetUrl = `${baseUrl}/reset-password?token=${token}`;

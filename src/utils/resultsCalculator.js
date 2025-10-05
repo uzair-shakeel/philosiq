@@ -203,11 +203,12 @@ function calculateAxisScores(questions, answers) {
     const C = agreeWeights[axis] || 0; // Sum of agree weights
     const maxScore = config.maxScore || 100; // Get max score from config
 
-    // Apply the formula: (A-B)/(B+C) to get a value between -1 and 1
+    // Apply the formula: (A-B)/((B+C)/2) to get a value between -1 and 1
     // Then multiply by 100 to get percentage between -100% and 100%
     // Handle division by zero by defaulting to 0
-    const denominator = B + C;
-    let normalizedRaw = denominator === 0 ? 0 : ((A - B) / denominator) * 100;
+    // Total Weight = ((Sum of Agree Weights + Sum of Disagree Weights)/2)
+    const totalWeight = (B + C) / 2;
+    let normalizedRaw = totalWeight === 0 ? 0 : ((A - B) / totalWeight) * 100;
 
     // Ensure the score is a finite number between -100 and 100
     normalizedRaw = isFinite(normalizedRaw)
@@ -217,12 +218,11 @@ function calculateAxisScores(questions, answers) {
     // Store raw normalized score (-100 to 100)
     rawNormalizedScores[axis] = normalizedRaw;
 
-    // FIXED: Use the sum of weights (B+C) as the max score instead of the hardcoded maxScore
+    // FIXED: Use the average of weights ((B+C)/2) as the max score instead of the hardcoded maxScore
     // This makes the display score formula match the raw normalization formula
-    // NEW FORMULA: Convert to 0-100 scale using (User Score + Sum of Weights) / (Sum of Weights * 2) * 100
-    const totalWeight = denominator; // B + C = sum of all weights
+    // NEW FORMULA: Convert to 0-100 scale using (User Score + Total Weight) / (Total Weight * 2) * 100
     const displayScore =
-      denominator === 0 ? 50 : ((A + totalWeight) / (totalWeight * 2)) * 100;
+      totalWeight === 0 ? 50 : ((A + totalWeight) / (totalWeight * 2)) * 100;
 
     // Round to whole number
     normalizedScores[axis] = Math.round(displayScore);
