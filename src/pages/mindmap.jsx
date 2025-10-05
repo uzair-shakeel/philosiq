@@ -339,7 +339,7 @@ export default function MindMap() {
   );
 
   return (
-    <Layout title="MindMap - PhilosiQ">
+    <Layout title="MindMap - Philosiq">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
           <div className="text-center mb-12">
