@@ -4,7 +4,7 @@ import { FaBrain, FaLock, FaSpinner, FaLightbulb } from "react-icons/fa";
 const AIPersonalitySummary = ({
   answers,
   userEmail,
-  isPhilosiQPlus,
+  isPhilosiqPlus,
   axisDataByName = {},
   pregeneratedSummary = "",
   pregeneratedLoading = false,
@@ -76,7 +76,7 @@ const AIPersonalitySummary = ({
     }
 
     console.log("=== FRONTEND DEBUG ===");
-    console.log("User tier:", isPhilosiQPlus ? "Philosiq+" : "Free");
+    console.log("User tier:", isPhilosiqPlus ? "Philosiq+" : "Free");
     console.log("Total answers:", answers.length);
     console.log("Sample answers:", answers.slice(0, 3));
     console.log("User email:", userEmail);
@@ -143,7 +143,7 @@ const AIPersonalitySummary = ({
     }
   };
 
-  if (!isPhilosiQPlus) {
+  if (!isPhilosiqPlus) {
     return (
       <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6 mb-6">
         <div className="flex items-center gap-3 mb-4">
@@ -241,7 +241,7 @@ const AIPersonalitySummary = ({
             Premium Personality Analysis
           </h3>
           <p className="text-sm text-gray-600">
-            Comprehensive analysis with PhilosiQ+
+            Comprehensive analysis with Philosiq+
           </p>
         </div>
       </div>
