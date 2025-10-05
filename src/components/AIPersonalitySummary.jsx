@@ -152,16 +152,16 @@ const AIPersonalitySummary = ({
           </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-800">
-              AI Personality Analysis
+              Free Personality Analysis
             </h3>
             <p className="text-sm text-gray-600">Free Tier Available</p>
           </div>
         </div>
 
         <p className="text-gray-700 mb-4">
-          Get a comprehensive AI-powered analysis of your political personality
-          based on all your quiz answers. All users receive detailed analysis of
-          their complete responses with the same quality and depth.
+          Get a comprehensive analysis of your political personality
+          based on your quiz answers. All users receive detailed analysis of
+          their responses with the same quality and depth.
         </p>
 
         {!summary && !loading && (
@@ -238,7 +238,7 @@ const AIPersonalitySummary = ({
         </div>
         <div>
           <h3 className="text-lg font-semibold text-gray-800">
-            AI Personality Analysis
+            Premium Personality Analysis
           </h3>
           <p className="text-sm text-gray-600">
             Comprehensive analysis with PhilosiQ+
@@ -250,7 +250,7 @@ const AIPersonalitySummary = ({
         <div className="text-center py-8">
           <FaLightbulb className="text-gray-400 text-4xl mx-auto mb-3" />
           <p className="text-gray-600 mb-4">
-            Get a comprehensive AI-powered analysis of your political
+            Get a comprehensive analysis of your political
             personality based on all your quiz answers. All users receive
             detailed analysis with the same quality and depth.
           </p>
