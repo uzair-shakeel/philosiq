@@ -599,6 +599,13 @@ export default function QuizResultDetail() {
                   })}
                 </div>
 
+                {/* Description box */}
+                <div className="p-2 mb-6 max-w-3xl mx-auto">
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    {getArchetypeDescription(result.archetype?.name)}
+                  </p>
+                </div>
+
                 {/* Bottom decorative element */}
                 <div className="absolute bottom-0 right-0 w-32 h-32 bg-yellow-50 rounded-full opacity-30 translate-x-1/3 translate-y-1/3"></div>
               </div>
@@ -1209,6 +1216,13 @@ export default function QuizResultDetail() {
                           })}
                         </div>
 
+                        {/* Description */}
+                        <div className="mb-4">
+                          <p className="text-sm text-gray-600 leading-relaxed">
+                            {getArchetypeDescription(archetype.name)}
+                          </p>
+                        </div>
+
                         <div className="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-inner">
                           <p className="text-sm text-gray-600">
                             <span className="font-medium">
@@ -1294,4 +1308,80 @@ export default function QuizResultDetail() {
       </div>
     </Layout>
   );
+}
+
+// Helper function to get a description for the archetype
+function getArchetypeDescription(archetypeName) {
+  const descriptions = {
+    "The Utopian":
+      "You envision a world rooted in equality, individual freedom, progressive change, secularism, and global cooperation.",
+    "The Reformer":
+      "You champion equality and freedom while embracing progressive ideals, secular governance, and national sovereignty.",
+    "The Prophet":
+      "You seek equality and liberty through progressive change, guided by faith and global compassion.",
+    "The Firebrand":
+      "You fight for equality and freedom with progressive zeal, rooted in faith and national pride.",
+    "The Philosopher":
+      "You value equality and liberty, balancing progressive ideals with conservative wisdom and global perspective.",
+    "The Localist":
+      "You support equality and freedom through progressive change, with conservative values and local focus.",
+    "The Missionary":
+      "You promote equality and liberty via progressive reform, guided by conservative faith and global mission.",
+    "The Guardian":
+      "You defend equality and freedom with progressive vision, conservative traditions, and national devotion.",
+    "The Technocrat":
+      "You pursue equality through structured authority, progressive innovation, secular governance, and global systems.",
+    "The Enforcer":
+      "You maintain equality via strong authority, progressive policies, secular rule, and national order.",
+    "The Zealot":
+      "You enforce equality through authority, progressive change, religious conviction, and global mission.",
+    "The Purist":
+      "You uphold equality with authority, progressive ideals, religious principles, and national purity.",
+    "The Commander":
+      "You support strong leadership, economic equity, and conservative traditions, in service of a global order.",
+    "The Steward":
+      "You prioritize traditional values and economic equity, with a balanced approach to authority and national sovereignty.",
+    "The Shepherd":
+      "You seek a stable society built on faith, tradition, and fairness, with global compassion and structure.",
+    "The High Priest":
+      "You lead with authority, equity, conservative values, religious conviction, and national devotion.",
+    "The Futurist":
+      "You embrace market freedom and individual liberty, driving progressive change through secular innovation and global connectivity.",
+    "The Maverick":
+      "You champion free markets and liberty with progressive vision, secular governance, and national independence.",
+    "The Evangelist":
+      "You promote market freedom and liberty through progressive change, guided by faith and global outreach.",
+    "The Dissenter":
+      "You defend free markets and liberty with progressive ideals, religious conviction, and national sovereignty.",
+    "The Globalist":
+      "You support market freedom and liberty, balancing progressive and conservative values with global engagement.",
+    "The Patriot":
+      "You champion free markets and liberty through progressive-conservative synthesis and national pride.",
+    "The Industrialist":
+      "You advance market freedom and liberty via progressive innovation, conservative faith, and global commerce.",
+    "The Traditionalist":
+      "You uphold market freedom and liberty with progressive-conservative balance, religious values, and national heritage.",
+    "The Overlord":
+      "You wield authority to maintain market freedom, progressive policies, secular governance, and global dominance.",
+    "The Corporatist":
+      "You use authority to preserve market freedom, progressive systems, secular rule, and national strength.",
+    "The Moralizer":
+      "You enforce market freedom through authority, progressive change, religious guidance, and global influence.",
+    "The Builder":
+      "You construct market freedom via authority, progressive development, religious principles, and national greatness.",
+    "The Executive":
+      "You lead with authority, supporting market freedom, conservative-progressive balance, and global strategy.",
+    "The Ironhand":
+      "You rule with authority, maintaining market freedom, conservative values, and national supremacy.",
+    "The Regent":
+      "You govern with authority, preserving market freedom, conservative traditions, religious guidance, and global reach.",
+    "The Crusader":
+      "You fight for a sacred national identity, upheld by tradition, authority, and free-market values.",
+
+    // Add more descriptions as needed
+    "Unknown Archetype":
+      "Your unique combination of political values doesn't fit neatly into our defined archetypes.",
+  };
+
+  return descriptions[archetypeName] || descriptions["Unknown Archetype"];
 }
