@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Custom404() {
   return (
-    <Layout title="Page Not Found - PhilosiQ">
+    <Layout title="Page Not Found - Philosiq">
       <div className="pt-24 pb-16 min-h-screen flex items-center justify-center bg-neutral-light">
         <div className="text-center">
           <h1 className="text-9xl font-bold text-primary-maroon">404</h1>
