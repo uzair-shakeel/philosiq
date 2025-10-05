@@ -120,7 +120,7 @@ export default function ContactPage() {
   };
 
   return (
-    <Layout title="Contact Us - PhilosiQ">
+    <Layout title="Contact Us - Philosiq">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom max-w-4xl mx-auto">
           <div className="text-center mb-12">
