@@ -227,7 +227,7 @@ export default function ComparePage() {
 
   if (loading) {
     return (
-      <Layout title="Compare - PhilosiQ">
+      <Layout title="Compare - Philosiq">
         <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
           <FaSpinner className="animate-spin text-3xl text-primary-maroon" />
         </div>
@@ -237,7 +237,7 @@ export default function ComparePage() {
 
   if (!isPlusActive) {
     return (
-      <Layout title="Compare - PhilosiQ">
+      <Layout title="Compare - Philosiq">
         <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
           <div className="bg-white p-8 rounded-lg shadow-md text-center max-w-md">
             <FaUsers className="mx-auto text-4xl text-gray-400 mb-3" />
@@ -258,7 +258,7 @@ export default function ComparePage() {
   }
 
   return (
-    <Layout title="Compare - PhilosiQ">
+    <Layout title="Compare - Philosiq">
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:pt-40 sm:pb-16">
           <header className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6">
