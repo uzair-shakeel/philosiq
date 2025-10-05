@@ -57,10 +57,10 @@ async function main() {
     const info = await transporter.sendMail({
       from: process.env.EMAIL_FROM || '"Test Sender" <test@example.com>',
       to: process.env.EMAIL_TO || "test@example.com",
-      subject: "PhilosiQ Contact Form - Test Email",
-      text: "This is a test email to verify the PhilosiQ contact form notification system.",
+      subject: "Philosiq Contact Form - Test Email",
+      text: "This is a test email to verify the Philosiq contact form notification system.",
       html: `
-        <h2>PhilosiQ Email Test</h2>
+        <h2>Philosiq Email Test</h2>
         <p>This is a test email to verify that the contact form notification system is working correctly.</p>
         <p>If you're seeing this, the email configuration is working!</p>
       `,
