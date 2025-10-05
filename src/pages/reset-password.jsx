@@ -40,7 +40,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <Layout title="Reset Password - PhilosiQ">
+    <Layout title="Reset Password - Philosiq">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
           <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
