@@ -140,7 +140,7 @@ export default function ResultsProcessor({ children }) {
     return (
       <div className="min-h-[50vh] flex flex-col items-center justify-center text-center py-40">
         <div className="w-16 h-16 border-4 border-primary-maroon border-t-transparent rounded-full animate-spin mb-6"></div>
-        <h2 className="text-2xl font-bold mb-1">processing results</h2>
+        <h2 className="text-2xl font-bold mb-1">Loading Your Results.</h2>
         <p className="text-gray-600 mb-8">Please wait while we calculate your results...</p>
         <div className="flex flex-col items-center gap-2">
           <span className="text-gray-500 text-sm">Presented by</span>
