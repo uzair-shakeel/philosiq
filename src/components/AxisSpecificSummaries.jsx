@@ -93,7 +93,7 @@ const AISummaryCard = ({
 const AxisSpecificSummaries = ({
   answers,
   userEmail,
-  isPhilosiQPlus,
+  isPhilosiqPlus,
   axisDataByName = {},
   pregeneratedSummaries = {},
   pregeneratedLoading = {},
@@ -299,7 +299,7 @@ const AxisSpecificSummaries = ({
           particular axis, providing deeper insights than general analysis.
         </p>
 
-        {!isPhilosiQPlus && (
+        {!isPhilosiqPlus && (
           <div className="mt-4 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-4 max-w-2xl mx-auto">
             <p className="text-purple-700 text-sm">
               <strong>Philosiq+ Exclusive:</strong> Unlock all 5 detailed axis
@@ -312,7 +312,7 @@ const AxisSpecificSummaries = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {AXIS_NAMES.map((axisName) => {
-          if (!isPhilosiQPlus) {
+          if (!isPhilosiqPlus) {
             return (
               <LockedAxisCard
                 key={axisName}
