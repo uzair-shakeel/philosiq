@@ -465,11 +465,11 @@ export default function ArchetypePage() {
   };
 
   return (
-    <Layout title="Political Archetypes - PhilosiQ">
+    <Layout title="Discover Archetypes - Philosiq">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">Political Archetypes</h1>
+            <h1 className="text-4xl font-bold mb-4">Discover Archetypes</h1>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Explore the various political archetypes that represent different
               ideological positions across the political spectrum.
