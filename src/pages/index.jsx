@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <>
       <Analytics />
-      <Layout title="PhilosiQ - Discover Your Political Identity">
+      <Layout title="Philosiq - Home">
         {/* Hero Section */}
         <section className="relative h-screen flex items-center">
           <div className="absolute inset-0 bg-gradient-to-r from-secondary-darkBlue to-primary-darkMaroon opacity-80 z-10"></div>
