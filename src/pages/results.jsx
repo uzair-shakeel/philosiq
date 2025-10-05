@@ -2232,7 +2232,7 @@ function ResultsContent({ results }) {
               Your Secondary Archetypes
             </h2>
             <p className="text-center text-gray-600 mb-8">
-              You also show strong alignment with these political archetypes
+              Out of 32 unique archetypes, you also share strong alignment with these two.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -2609,7 +2609,7 @@ function getArchetypeDescription(archetypeName) {
     "The Commander":
       "You support strong leadership, economic equity, and conservative traditions, in service of a global order.",
     "The Steward":
-      "You prioritize traditional values and market economics, with a balanced approach to authority and national sovereignty.",
+      "You prioritize traditional values and economic equity, with a balanced approach to authority and national sovereignty.",
     "The Shepherd":
       "You seek a stable society built on faith, tradition, and fairness, with global compassion and structure.",
     "The High Priest":
