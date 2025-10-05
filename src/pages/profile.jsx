@@ -418,7 +418,7 @@ export default function ProfilePage() {
   // Check if user is authenticated
   if (!user) {
     return (
-      <Layout title="Profile - PhilosiQ">
+      <Layout title="Profile - Philosiq">
         <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
           <FaSpinner className="animate-spin text-3xl text-primary-maroon" />
         </div>
@@ -427,7 +427,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <Layout title="Profile - PhilosiQ">
+    <Layout title="Profile - Philosiq">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
           <div className="mb-6">
