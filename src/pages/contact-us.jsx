@@ -72,7 +72,7 @@ export default function ContactUs() {
   };
 
   return (
-    <Layout title="Contact Us - PhilosiQ">
+    <Layout title="Contact Us - Philosiq">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom max-w-full px-4">
           <div className="text-center mb-12">
