@@ -372,7 +372,7 @@ export default function ComparePage() {
                   )}
                 </div>
                 <div className="border rounded-lg p-3 sm:p-4">
-                  <h3 className="font-semibold text-sm sm:text-base mb-1">Other</h3>
+                  <h3 className="font-semibold text-sm sm:text-base mb-1">Friend</h3>
                   {rightResult ? (
                     <p className="text-sm text-gray-700">
                       {rightResult.archetype?.name || "Unknown"} •{" "}
@@ -473,7 +473,7 @@ export default function ComparePage() {
                                   ></div>
                                 )}
                                 
-                                {/* Other's position marker */}
+                                {/* Friend's position marker */}
                                 {ax.right !== null && (
                                   <div
                                     className="absolute top-0 bottom-0 w-2 h-full bg-red-500 border-2 border-red-700 z-30 transform -translate-x-1/2 shadow-lg"
@@ -499,7 +499,7 @@ export default function ComparePage() {
                                     style={{ left: `${Math.max(1, Math.min(99, rightPercent))}%` }}
                                   >
                                     <div className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-red-700">
-                                      Other: {ax.right}%
+                                      Friend: {ax.right}%
                                     </div>
                                   </div>
                                 )}
@@ -513,7 +513,7 @@ export default function ComparePage() {
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <div className="w-3 h-3 bg-red-500 rounded border-2 border-red-700"></div>
-                                  <span className="font-medium">Other's Position</span>
+                                  <span className="font-medium">Friend's Position</span>
                                 </div>
                               </div>
                             </div>
@@ -547,7 +547,7 @@ export default function ComparePage() {
                           <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
                             <div className="flex items-center gap-2 mb-2">
                               <div className="w-3 h-3 bg-indigo-600 rounded-full"></div>
-                              <span className="font-semibold text-indigo-900">Other</span>
+                              <span className="font-semibold text-indigo-900">Friend</span>
                             </div>
                             {ax.right !== null ? (
                               <div className="space-y-2">
