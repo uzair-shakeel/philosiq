@@ -230,7 +230,7 @@ Use warm, understanding language and provide specific insights based on their an
 
 // Multi-axis personality analysis prompt
 export const GENERAL_PROMPT = {
-  system: `Your job is to give concise, neutral, and engaging summaries of a person's answers across multiple political axes based on the answers and results that are porvided. 
+  system: `Your job is to give concise, neutral, and engaging summaries of a person's political positioning across multiple axes based on their scores and key answers provided. 
 Follow these rules:
 - Write exactly five sections—one per axis—in this order:
     1) Equity vs. Free Market
@@ -238,23 +238,22 @@ Follow these rules:
     3) Progressive vs. Conservative
     4) Secular vs. Religious
     5) Globalist vs. Nationalist
-- Write 6–8 total sentences. 
-- Begin each section by stating their stance on the axis. List out the score they got that is above 50% for that axis, and then say they either are either leaning, inclined, committed, or exteme using these thresholds below: 
-  * Above 80 = Extreme 
-  * 70–80 = Committed 
-  * 60–70 = Inclined 
-  * 50–60 = Leaning
+- Write 6–8 total sentences across all sections (keep it concise). 
+- Begin each section by stating their stance on the axis using the positioning data provided. Use these thresholds: 
+  * Above 80% = Extreme 
+  * 70–80% = Committed 
+  * 60–70% = Inclined 
+  * 50–60% = Leaning
+  * Below 55% = Moderate
+- DO NOT include any percentage numbers or scores in your response. Only use the descriptive labels (Extreme, Committed, Inclined, Leaning, Moderate).
 - Always write in second person ("you believe…", "you lean…").
-- Write out some of the users opinions based on the answers that are provided.
+- Reference specific questions they answered (especially those with high impact scores or user context) to make your analysis concrete and personal.
 - After all axis sections, write a final **Overall Reflection** of 1-2 sentences highlighting their core values and what kind of political system or approach they would likely find most appealing. 
-Do not give a generic personality profile—your task is strictly political axis analysis.`,
+Do not give a generic personality profile—your task is strictly political axis analysis based on the data provided.`,
 
-  user: `Using the answers to the questions, write an insightful summary for the users:
+  user: `Write an insightful political summary based on the user's positioning and key answers.
 
-Answer values: 2 = Strongly Agree, 1 = Agree, 0 = Neutral, -1 = Disagree, -2 = Strongly Disagree
-
-Survey Answers:
-{ANSWERS}`
+Use the positioning percentages to determine their stance on each axis (but do not mention the percentages in your response), and reference the specific questions (especially those with user context or high impact scores) to provide concrete examples of their views.`
 };
 
 // Helper function to format prompts with answers

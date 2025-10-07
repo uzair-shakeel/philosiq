@@ -326,6 +326,35 @@ function ResultsContent({ results }) {
 
       if (answers.length === 0) return;
 
+      // Build answerBreakdown with contribution scores
+      const answerBreakdown = [];
+      try {
+        rawData.questions.forEach((q) => {
+          const ans = rawData.answers?.[q._id];
+          if (ans === undefined || ans === null) return;
+          const canonicalAxis = AXIS_ALIASES[q.axis] || q.axis;
+          const agreeWeight = q.weight_agree || q.weight || 1;
+          const disagreeWeight = q.weight_disagree || q.weight || 1;
+          const contribution = calculateAnswerScore(
+            ans,
+            agreeWeight,
+            disagreeWeight,
+            q.direction
+          );
+          answerBreakdown.push({
+            questionId: q._id,
+            axis: canonicalAxis,
+            topic: q.topic,
+            question: q.question,
+            answer: ans,
+            contribution,
+            context: rawData.contextTexts?.[q._id] || "",
+          });
+        });
+      } catch (e) {
+        console.warn("Failed to build answerBreakdown", e);
+      }
+
       // Pregenerate general summary
       if (!generalSummary && !generalSummaryLoading) {
         setGeneralSummaryLoading(true);
@@ -338,6 +367,10 @@ function ResultsContent({ results }) {
               userEmail: localStorage.getItem("userEmail") || "",
               userId: localStorage.getItem("userId") || "unknown",
               axisDataByName: axisBreakdownData,
+              rawData: {
+                ...rawData,
+                answerBreakdown: answerBreakdown, // Include the breakdown with contributions
+              },
             }),
           });
 

@@ -324,35 +324,34 @@ export default function ComparePage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  IQrypt Code (from a friend)
+                  Friend's IQrypt Code
                 </label>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <input
-                    className="w-full border border-gray-300 rounded-lg p-2 font-mono text-sm sm:text-base"
-                    placeholder="Paste code here"
-                    value={rightCode}
-                    onChange={(e) => setRightCode(e.target.value.trim())}
-                  />
-                  <button
-                    onClick={() => rightCode && loadRight(rightCode)}
-                    className="px-3 sm:px-4 py-2 bg-gray-800 text-white rounded-lg flex items-center justify-center text-sm sm:text-base whitespace-nowrap"
-                  >
-                    <FaSearch className="mr-2" /> Load
-                  </button>
-                </div>
+                <input
+                  className="w-full border border-gray-300 rounded-lg p-2 font-mono text-sm sm:text-base"
+                  placeholder="Paste code here"
+                  value={rightCode}
+                  onChange={(e) => setRightCode(e.target.value.trim())}
+                />
               </div>
             </div>
             <div className="mt-4 flex flex-col sm:flex-row gap-3">
               <button
-                onClick={() => leftId && loadLeft(leftId)}
-                className="px-4 py-2 bg-primary-maroon text-white rounded-lg text-sm sm:text-base w-full sm:w-auto"
-                disabled={!leftId}
+                onClick={async () => {
+                  if (!leftId || !rightCode) return;
+                  await Promise.all([
+                    loadLeft(leftId),
+                    loadRight(rightCode)
+                  ]);
+                }}
+                className="px-4 py-2 bg-primary-maroon text-white rounded-lg text-sm sm:text-base w-full sm:w-auto disabled:bg-gray-400 disabled:cursor-not-allowed"
+                disabled={!leftId || !rightCode || resolving}
               >
-                {loading ? 'Loading...' : 'Load My Quiz'}
+                {resolving ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <FaSpinner className="animate-spin" /> Loading...
+                  </span>
+                ) : 'Load Results'}
               </button>
-              {resolving && (
-                <FaSpinner className="animate-spin text-gray-500" />
-              )}
             </div>
           </div>
 
@@ -372,7 +371,7 @@ export default function ComparePage() {
                   )}
                 </div>
                 <div className="border rounded-lg p-3 sm:p-4">
-                  <h3 className="font-semibold text-sm sm:text-base mb-1">Other</h3>
+                  <h3 className="font-semibold text-sm sm:text-base mb-1">Friend</h3>
                   {rightResult ? (
                     <p className="text-sm text-gray-700">
                       {rightResult.archetype?.name || "Unknown"} •{" "}
@@ -400,14 +399,15 @@ export default function ComparePage() {
                   const alignmentText = isAligned ? "Aligned" : "Opposite sides";
                   const alignmentColor = isAligned ? "text-green-600" : "text-red-600";
                   
-                  // Get strength labels
+                  // Get strength labels - updated scale
                   const getStrength = (percent) => {
                     const dominantPercent = Math.max(percent, 100 - percent);
-                    if (dominantPercent >= 80) return "Very Strong";
-                    if (dominantPercent >= 70) return "Strong";
-                    if (dominantPercent >= 60) return "Moderate";
-                    if (dominantPercent >= 55) return "Slight";
-                    return "Weak";
+                    if (dominantPercent >= 90) return "Extreme";
+                    if (dominantPercent >= 80) return "Committed";
+                    if (dominantPercent >= 70) return "Inclined";
+                    if (dominantPercent >= 60) return "Leaning";
+                    if (dominantPercent >= 55) return "Moderate";
+                    return "Neutral";
                   };
                   
                   return (
@@ -449,12 +449,26 @@ export default function ComparePage() {
                               {/* Axis Labels */}
                               <div className="flex justify-between items-center">
                                 <div className="text-xs font-medium">
-                                  <span className="px-2 py-0.5 rounded-full text-white bg-blue-600">
+                                  <span className={`px-2 py-0.5 rounded-full text-white ${
+                                    ax.name === "Equity vs. Free Market" ? "bg-blue-600" :
+                                    ax.name === "Libertarian vs. Authoritarian" ? "bg-teal-500" :
+                                    ax.name === "Progressive vs. Conservative" ? "bg-sky-500" :
+                                    ax.name === "Secular vs. Religious" ? "bg-yellow-400" :
+                                    ax.name === "Globalism vs. Nationalism" ? "bg-lime-500" :
+                                    "bg-blue-600"
+                                  }`}> 
                                     {ax.leftLabel}
                                   </span>
                                 </div>
                                 <div className="text-xs font-medium">
-                                  <span className="px-2 py-0.5 rounded-full text-white bg-green-600">
+                                  <span className={`px-2 py-0.5 rounded-full text-white ${
+                                    ax.name === "Equity vs. Free Market" ? "bg-green-600" :
+                                    ax.name === "Libertarian vs. Authoritarian" ? "bg-orange-500" :
+                                    ax.name === "Progressive vs. Conservative" ? "bg-red-400" :
+                                    ax.name === "Secular vs. Religious" ? "bg-purple-500" :
+                                    ax.name === "Globalism vs. Nationalism" ? "bg-rose-500" :
+                                    "bg-green-600"
+                                  }`}>
                                     {ax.rightLabel}
                                   </span>
                                 </div>
@@ -463,7 +477,14 @@ export default function ComparePage() {
                               {/* Axis bar with both positions */}
                               <div className="relative h-12 rounded-full overflow-hidden border border-gray-300">
                                 {/* Left side gradient */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-gray-300 to-green-600"></div>
+                                <div className={`absolute inset-0 ${
+                                  ax.name === "Equity vs. Free Market" ? "bg-gradient-to-r from-blue-600 via-gray-300 to-green-600" :
+                                  ax.name === "Libertarian vs. Authoritarian" ? "bg-gradient-to-r from-teal-500 via-gray-300 to-orange-500" :
+                                  ax.name === "Progressive vs. Conservative" ? "bg-gradient-to-r from-sky-500 via-gray-300 to-red-400" :
+                                  ax.name === "Secular vs. Religious" ? "bg-gradient-to-r from-yellow-400 via-gray-300 to-purple-500" :
+                                  ax.name === "Globalism vs. Nationalism" ? "bg-gradient-to-r from-lime-500 via-gray-300 to-rose-500" :
+                                  "bg-gradient-to-r from-blue-600 via-gray-300 to-green-600"
+                                }`}></div>
                                 
                                 {/* Your position marker */}
                                 {ax.left !== null && (
@@ -513,7 +534,7 @@ export default function ComparePage() {
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <div className="w-3 h-3 bg-red-500 rounded border-2 border-red-700"></div>
-                                  <span className="font-medium">Other's Position</span>
+                                  <span className="font-medium">Friend's Position</span>
                                 </div>
                               </div>
                             </div>
@@ -536,7 +557,7 @@ export default function ComparePage() {
                                   </span>
                                 </div>
                                 <div className="text-sm text-blue-700">
-                                  Leans <strong>{leftPercent > 50 ? Math.round(leftPercent - 50) : Math.round(50 - leftPercent)}%</strong> toward {leftDominant}
+                                  Leans <strong>{leftPercent > 50 ? Math.round((leftPercent - 50) * 2) : Math.round((50 - leftPercent) * 2)}%</strong> {leftDominant}
                                 </div>
                               </div>
                             ) : (
@@ -547,7 +568,7 @@ export default function ComparePage() {
                           <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
                             <div className="flex items-center gap-2 mb-2">
                               <div className="w-3 h-3 bg-indigo-600 rounded-full"></div>
-                              <span className="font-semibold text-indigo-900">Other</span>
+                              <span className="font-semibold text-indigo-900">Friend</span>
                             </div>
                             {ax.right !== null ? (
                               <div className="space-y-2">
@@ -558,7 +579,7 @@ export default function ComparePage() {
                                   </span>
                                 </div>
                                 <div className="text-sm text-indigo-700">
-                                  Leans <strong>{rightPercent > 50 ? Math.round(rightPercent - 50) : Math.round(50 - rightPercent)}%</strong> toward {rightDominant}
+                                  Leans <strong>{rightPercent > 50 ? Math.round((rightPercent - 50) * 2) : Math.round((50 - rightPercent) * 2)}%</strong> {rightDominant}
                                 </div>
                               </div>
                             ) : (
@@ -898,78 +919,6 @@ export default function ComparePage() {
                                           </div>
                                         </div>
                                       </div>
-
-                                      {/* Answer Comparison Bar */}
-                                      {leftAnswer !== undefined &&
-                                        leftAnswer !== null &&
-                                        rightAnswer !== undefined &&
-                                        rightAnswer !== null && (
-                                          <div className="mt-8 pt-8 border-t-2 border-gray-200">
-                                            <div className="flex items-center justify-between mb-4">
-                                              <span className="text-lg font-black text-gray-700">
-                                                Answer Comparison
-                                              </span>
-                                              <span className="px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-800 font-bold rounded-full border border-purple-200">
-                                                {Math.abs(
-                                                  leftAnswer - rightAnswer
-                                                ) === 0
-                                                  ? "🤝 Same answer"
-                                                  : Math.abs(
-                                                      leftAnswer - rightAnswer
-                                                    ) === 1
-                                                  ? "🤔 Slightly different"
-                                                  : Math.abs(
-                                                      leftAnswer - rightAnswer
-                                                    ) === 2
-                                                  ? "😮 Very different"
-                                                  : "💥 Polar opposite"}
-                                              </span>
-                                            </div>
-
-                                            <div className="relative">
-                                              <div className="flex items-center justify-between mb-3">
-                                                <div className="flex items-center space-x-3">
-                                                  <div className="w-4 h-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full" />
-                                                  <span className="text-sm font-bold text-blue-600">
-                                                    You: {leftAnswer}
-                                                  </span>
-                                                </div>
-                                                <div className="flex items-center space-x-3">
-                                                  <span className="text-sm font-bold text-indigo-600">
-                                                    Friend: {rightAnswer}
-                                                  </span>
-                                                  <div className="w-4 h-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full" />
-                                                </div>
-                                              </div>
-
-                                              <div className="relative bg-gray-200 rounded-full h-4 overflow-hidden">
-                                                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 opacity-20" />
-                                                <div
-                                                  className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 rounded-full transition-all duration-1000 ease-out shadow-lg"
-                                                  style={{
-                                                    width: `${
-                                                      Math.abs(
-                                                        leftAnswer - rightAnswer
-                                                      ) === 0
-                                                        ? 100
-                                                        : Math.abs(
-                                                            leftAnswer -
-                                                              rightAnswer
-                                                          ) === 1
-                                                        ? 75
-                                                        : Math.abs(
-                                                            leftAnswer -
-                                                              rightAnswer
-                                                          ) === 2
-                                                        ? 50
-                                                        : 25
-                                                    }%`,
-                                                  }}
-                                                />
-                                              </div>
-                                            </div>
-                                          </div>
-                                        )}
                                     </div>
                                   </div>
                                 );
