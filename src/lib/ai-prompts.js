@@ -1,6 +1,3 @@
-// AI Prompt Library for Philosiq
-// These prompts are designed to be fine-tunable and axis-specific
-
 export const AXIS_PROMPTS = {
   // Economic Dimension
   "Equity vs. Free Market": {
@@ -228,7 +225,6 @@ Use warm, understanding language and provide specific insights based on their an
   },
 };
 
-// Multi-axis personality analysis prompt
 export const GENERAL_PROMPT = {
   system: `Your job is to give concise, neutral, and engaging summaries of a person's political positioning across multiple axes based on their scores and key answers provided. 
 Follow these rules:
@@ -256,7 +252,6 @@ Do not give a generic personality profile—your task is strictly political axis
 Use the positioning percentages to determine their stance on each axis (but do not mention the percentages in your response), and reference the specific questions (especially those with user context or high impact scores) to provide concrete examples of their views.`
 };
 
-// Helper function to format prompts with answers
 export const formatPrompt = (promptTemplate, answers, axisName = null) => {
   const formattedAnswers = answers
     .map((q, i) => `${i + 1}. ${q.question}: ${q.answer}`)
@@ -265,12 +260,10 @@ export const formatPrompt = (promptTemplate, answers, axisName = null) => {
   return promptTemplate.replace("{ANSWERS}", formattedAnswers);
 };
 
-// Helper function to get prompt for specific axis
 export const getAxisPrompt = (axisName) => {
   return AXIS_PROMPTS[axisName] || AXIS_PROMPTS["Equity vs. Free Market"];
 };
 
-// Helper function to get general prompt
 export const getGeneralPrompt = () => {
   return GENERAL_PROMPT;
 };

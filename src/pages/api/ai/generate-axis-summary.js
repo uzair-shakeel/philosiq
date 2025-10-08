@@ -15,10 +15,8 @@ export default async function handler(req, res) {
 
     console.log("axisDataaaaaaaa", axisData);
 
-    // Connect to database
     const mongoose = await connectToDatabase();
 
-    // Get user info and check Philosiq+ status
     const user = await mongoose.connection.db
       .collection("users")
       .findOne({ email: userEmail });
@@ -41,7 +39,6 @@ export default async function handler(req, res) {
     console.log("Total answers for this axis:", answers.length);
     console.log("Sample answer structure:", answers.slice(0, 2));
 
-    // Check if we already have a cached summary for this user and axis
     const existingSummary = await mongoose.connection.db
       .collection("ai_axis_summaries")
       .findOne({
@@ -62,11 +59,9 @@ export default async function handler(req, res) {
       });
     }
 
-    // Get the specialized prompt for this axis
     const axisPrompt = getAxisPrompt(axisName);
     let formattedPrompt = formatPrompt(axisPrompt.user, answers, axisName);
 
-    // If positioning data provided, append concise positioning context
     if (
       axisData &&
       axisData.leftPercent !== undefined &&
@@ -77,27 +72,22 @@ export default async function handler(req, res) {
       const posLabel = axisData.userPosition || "";
       const posStrength = axisData.positionStrength || "";
 
-      // Check if user is in the moderate range (50-55% on either side)
       const isModerate =
         (leftP >= 50 && leftP <= 55) || (rightP >= 50 && rightP <= 55);
 
       if (isModerate) {
-        // For moderate users, provide balanced analysis instruction
         formattedPrompt += `\n\nSpecial Positioning Context:\n- Left: ${leftP}%\n- Right: ${rightP}%\n- Position: MODERATE/NEUTRAL on this axis\n\nIMPORTANT: Since this user scores in the moderate range (50-55%), provide a BALANCED analysis that discusses BOTH sides of this axis. Acknowledge their moderate position and explain how they likely see merit in both perspectives. Do not lean heavily toward one side - instead, focus on their nuanced, balanced approach to this dimension.`;
       } else {
-        // For non-moderate users, use regular positioning context
         formattedPrompt += `\n\nAdditional Positioning Context:\n- Left: ${leftP}%\n- Right: ${rightP}%\n- Position: ${posLabel}${
           posStrength ? ` (${posStrength})` : ""
         }`;
       }
     }
 
-    // Add specific questions the user strongly agreed/disagreed with
     const strongAnswers = answers.filter(
       (answer) => Math.abs(answer.answer) === 2
     );
 
-    // Debug: Log the answers structure
     console.log("=== STRONG ANSWERS DEBUG ===");
     console.log("Total answers:", answers.length);
     console.log("Strong answers count:", strongAnswers.length);
@@ -110,10 +100,8 @@ export default async function handler(req, res) {
         const stance =
           answer.answer === 2 ? "Strongly Agreed" : "Strongly Disagreed";
 
-        // Ensure we have the question text, fallback to a generic description if missing
         let questionText = answer.question;
         if (!questionText || questionText === "undefined") {
-          // Try to reconstruct from other available data
           if (answer.axis) {
             questionText = `A question about ${answer.axis} (answer: ${answer.answer})`;
           } else {
@@ -131,7 +119,6 @@ export default async function handler(req, res) {
     console.log(formattedPrompt.substring(0, 500) + "...");
     console.log("=== END PROMPT DEBUG ===");
 
-    // Try different models with fallback
     const models = ["gpt-3.5-turbo-0125", "gpt-3.5-turbo", "gpt-4o-mini"];
     let openaiResponse = null;
     let lastError = null;
@@ -160,7 +147,7 @@ export default async function handler(req, res) {
                   content: formattedPrompt,
                 },
               ],
-              max_tokens: 1200, // Increased to prevent cut-off sentences
+              max_tokens: 1200, 
               temperature: 0.7,
             }),
           }
@@ -173,9 +160,8 @@ export default async function handler(req, res) {
           lastError = `Model ${model} failed with status: ${openaiResponse.status}`;
           console.log(lastError);
 
-          // If rate limited, wait longer before trying next model
           if (openaiResponse.status === 429) {
-            const waitTime = 5000; // Wait 5 seconds for rate limits
+            const waitTime = 5000; 
             console.log(`Rate limited, waiting ${waitTime / 1000} seconds...`);
             await new Promise((resolve) => setTimeout(resolve, waitTime));
           }
@@ -196,7 +182,6 @@ export default async function handler(req, res) {
     const openaiData = await openaiResponse.json();
     let summary = openaiData.choices[0]?.message?.content?.trim();
 
-    // Simple fix: replace "undefined" with empty string
     summary = summary.replace(/undefined/gi, "").trim();
 
     if (!summary) {
@@ -208,7 +193,6 @@ export default async function handler(req, res) {
     console.log("Generated summary length:", summary.length);
     console.log("Sample summary:", summary.substring(0, 100) + "...");
 
-    // Save the summary to database for caching
     try {
       await mongoose.connection.db.collection("ai_axis_summaries").insertOne({
         userEmail: userEmail,
@@ -220,7 +204,6 @@ export default async function handler(req, res) {
       });
     } catch (dbError) {
       console.error("Failed to save summary to database:", dbError);
-      // Continue even if saving fails
     }
 
     return res.status(200).json({

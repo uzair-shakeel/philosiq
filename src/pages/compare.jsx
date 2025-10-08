@@ -489,8 +489,8 @@ export default function ComparePage() {
                                 {/* Your position marker */}
                                 {ax.left !== null && (
                                   <div
-                                    className="absolute top-0 bottom-0 w-2 h-full bg-yellow-400 border-2 border-yellow-600 z-30 transform -translate-x-1/2 shadow-lg"
-                                    style={{ left: `${Math.max(1, Math.min(99, leftPercent))}%` }}
+                                    className="absolute top-0 bottom-0 w-2 h-full bg-yellow-400 border-2 border-yellow-600 z-30"
+                                    style={{ right: '2px' }}
                                   ></div>
                                 )}
                                 
@@ -498,7 +498,7 @@ export default function ComparePage() {
                                 {ax.right !== null && (
                                   <div
                                     className="absolute top-0 bottom-0 w-2 h-full bg-red-500 border-2 border-red-700 z-30 transform -translate-x-1/2 shadow-lg"
-                                    style={{ left: `${Math.max(1, Math.min(99, rightPercent))}%` }}
+                                    style={{ left: `${100 - rightPercent}%` }}
                                   ></div>
                                 )}
 
@@ -506,7 +506,7 @@ export default function ComparePage() {
                                 {ax.left !== null && (
                                   <div
                                     className="absolute -top-8 transform -translate-x-1/2 z-40"
-                                    style={{ left: `${Math.max(1, Math.min(99, leftPercent))}%` }}
+                                    style={{ left: `${100 - leftPercent}%` }}
                                   >
                                     <div className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-yellow-600">
                                       You: {ax.left}%
@@ -517,7 +517,7 @@ export default function ComparePage() {
                                 {ax.right !== null && (
                                   <div
                                     className="absolute -bottom-8 transform -translate-x-1/2 z-40"
-                                    style={{ left: `${Math.max(1, Math.min(99, rightPercent))}%` }}
+                                    style={{ left: `${100 - rightPercent}%` }}
                                   >
                                     <div className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-red-700">
                                       Other: {ax.right}%
@@ -556,6 +556,10 @@ export default function ComparePage() {
                                     {getStrength(leftPercent)} {leftDominant}
                                   </span>
                                 </div>
+                                <div className="text-sm text-blue-700 space-y-1">
+                                  <div><strong>{ax.left}%</strong> {ax.leftLabel}</div>
+                                  <div><strong>{(100 - ax.left)}%</strong> {ax.rightLabel}</div>
+                                </div>
                                 <div className="text-sm text-blue-700">
                                   Leans <strong>{leftPercent > 50 ? Math.round((leftPercent - 50) * 2) : Math.round((50 - leftPercent) * 2)}%</strong> {leftDominant}
                                 </div>
@@ -578,6 +582,10 @@ export default function ComparePage() {
                                     {getStrength(rightPercent)} {rightDominant}
                                   </span>
                                 </div>
+                                <div className="text-sm text-indigo-700 space-y-1">
+                                  <div><strong>{ax.right}%</strong> {ax.leftLabel}</div>
+                                  <div><strong>{(100 - ax.right)}%</strong> {ax.rightLabel}</div>
+                                </div>
                                 <div className="text-sm text-indigo-700">
                                   Leans <strong>{rightPercent > 50 ? Math.round((rightPercent - 50) * 2) : Math.round((50 - rightPercent) * 2)}%</strong> {rightDominant}
                                 </div>
@@ -588,18 +596,7 @@ export default function ComparePage() {
                           </div>
                         </div>
 
-                        {/* Comparison Summary */}
-                        {ax.left !== null && ax.right !== null && (
-                          <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                            <div className="text-sm text-gray-700">
-                              <strong>Comparison:</strong> {
-                                isAligned 
-                                  ? `Both of you lean toward the ${leftDominant} side, with a ${difference.toFixed(1)}% difference in strength.`
-                                  : `You're on opposite sides - you lean ${leftDominant} while they lean ${rightDominant}, with a ${difference.toFixed(1)}% gap.`
-                              }
-                            </div>
-                          </div>
-                        )}
+                       
                       </div>
                     </div>
                   );
