@@ -244,12 +244,12 @@ Follow these rules:
   * 70–80 = Committed 
   * 60–70 = Inclined 
   * 50–60 = Leaning
-- Always write in second person ("you believe…", "you lean…").
+- Always write in second person ("you believe…", "you lean…"). Additionally, start each section with "On the Equity vs Free Market Axis" as an example.
 - Write out some of the users opinions based on the answers that are provided.
 - After all axis sections, write a final **Overall Reflection** of 1-2 sentences highlighting their core values and what kind of political system or approach they would likely find most appealing. 
 Do not give a generic personality profile—your task is strictly political axis analysis.`,
 
-  user: `Using the answers to the questions, write an insightful summary for the users:
+  user: `Using the answers and questions to write an insightful summary for the users:
 
 Answer values: 2 = Strongly Agree, 1 = Agree, 0 = Neutral, -1 = Disagree, -2 = Strongly Disagree
 
