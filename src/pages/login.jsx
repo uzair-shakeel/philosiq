@@ -70,7 +70,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Layout title="Login - PhilosiQ">
+    <Layout title="Login - Philosiq">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
           <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">

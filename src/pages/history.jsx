@@ -227,7 +227,7 @@ export default function HistoryPage() {
   };
 
   return (
-    <Layout title="Your Quiz History - PhilosiQ">
+    <Layout title="Your Quiz History - Philosiq">
       <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
         <div className="container-custom">
           {/* Header */}

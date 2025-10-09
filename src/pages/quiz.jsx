@@ -595,7 +595,7 @@ export default function QuizPage() {
   }
 
   return (
-    <Layout title="Political Quiz - Philosiq">
+    <Layout title="Quiz Page - Philosiq">
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}

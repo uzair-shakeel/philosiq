@@ -227,7 +227,7 @@ export default function ComparePage() {
 
   if (loading) {
     return (
-      <Layout title="Compare - PhilosiQ">
+      <Layout title="Compare - Philosiq">
         <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
           <FaSpinner className="animate-spin text-3xl text-primary-maroon" />
         </div>
@@ -237,7 +237,7 @@ export default function ComparePage() {
 
   if (!isPlusActive) {
     return (
-      <Layout title="Compare - PhilosiQ">
+      <Layout title="Compare - Philosiq">
         <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
           <div className="bg-white p-8 rounded-lg shadow-md text-center max-w-md">
             <FaUsers className="mx-auto text-4xl text-gray-400 mb-3" />
@@ -258,7 +258,7 @@ export default function ComparePage() {
   }
 
   return (
-    <Layout title="Compare - PhilosiQ">
+    <Layout title="Compare - Philosiq">
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:pt-40 sm:pb-16">
           <header className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6">
@@ -494,7 +494,7 @@ export default function ComparePage() {
                                   ></div>
                                 )}
                                 
-                                {/* Other's position marker */}
+                                {/* Friend's position marker */}
                                 {ax.right !== null && (
                                   <div
                                     className="absolute top-0 bottom-0 w-2 h-full bg-red-500 border-2 border-red-700 z-30 transform -translate-x-1/2 shadow-lg"
@@ -520,7 +520,7 @@ export default function ComparePage() {
                                     style={{ left: `${Math.max(1, Math.min(99, 100 - rightPercent))}%` }}
                                   >
                                     <div className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-red-700">
-                                      Other: {ax.right}%
+                                      Friend: {ax.right}%
                                     </div>
                                   </div>
                                 )}

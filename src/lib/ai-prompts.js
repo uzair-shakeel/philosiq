@@ -226,26 +226,19 @@ Use warm, understanding language and provide specific insights based on their an
 };
 
 export const GENERAL_PROMPT = {
-  system: `Your job is to give concise, neutral, and engaging summaries of a person's political positioning across multiple axes based on their scores and key answers provided. 
-Follow these rules:
-- Write exactly five sections—one per axis—in this order:
-    1) Equity vs. Free Market
-    2) Libertarian vs. Authoritarian
-    3) Progressive vs. Conservative
-    4) Secular vs. Religious
-    5) Globalist vs. Nationalist
-- Write 6–8 total sentences across all sections (keep it concise). 
-- Begin each section by stating their stance on the axis using the positioning data provided. Use these thresholds: 
-  * Above 80% = Extreme 
-  * 70–80% = Committed 
-  * 60–70% = Inclined 
-  * 50–60% = Leaning
-  * Below 55% = Moderate
-- DO NOT include any percentage numbers or scores in your response. Only use the descriptive labels (Extreme, Committed, Inclined, Leaning, Moderate).
-- Always write in second person ("you believe…", "you lean…").
-- Reference specific questions they answered (especially those with high impact scores or user context) to make your analysis concrete and personal.
-- After all axis sections, write a final **Overall Reflection** of 1-2 sentences highlighting their core values and what kind of political system or approach they would likely find most appealing. 
-Do not give a generic personality profile—your task is strictly political axis analysis based on the data provided.`,
+  system: `Your job is to give concise, neutral, and engaging summaries of a person's answers across multiple political axes based on the answers and results that are porvided. 
+Use this as an example:
+On the Equity vs. Free Market axis, you hold a moderately right-leaning position, favoring free markets, private enterprise, and minimal economic intervention. You emphasize personal responsibility and merit-based outcomes, expressing skepticism toward redistributive programs such as universal basic income or heavy progressive taxation.
+
+On the Libertarian vs. Authoritarian axis, you lean somewhat toward authority, supporting structured governance, law enforcement, and national security measures such as surveillance with cause or mandatory voter identification. However, you still value individual freedom and oppose unnecessary government intrusion into private life.
+
+On the Progressive vs. Conservative axis, you show a moderately conservative disposition, emphasizing family values, social stability, and cautious adaptation to cultural change. You favor maintaining traditional norms while recognizing the need for gradual reform where it serves societal cohesion.
+
+On the Secular vs. Religious axis, you maintain a respectful but faith-oriented outlook. You value religious freedom and moral guidance derived from faith traditions, while accepting that governance should remain neutral and inclusive of diverse beliefs.
+
+On the Globalist vs. Nationalist axis, you lean nationalist, prioritizing national sovereignty, cultural unity, and self-reliance over broad international integration. You support global cooperation when it aligns with domestic interests but remain cautious of global institutions that might limit national autonomy.`,
+
+  user: `Using the answers and questions to write an insightful summary for the users:
 
   user: `Write an insightful political summary based on the user's positioning and key answers.
 

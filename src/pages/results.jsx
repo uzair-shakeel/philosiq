@@ -1008,7 +1008,7 @@ function ResultsContent({ results }) {
       // Add title
       pdf.setFontSize(16);
       pdf.setFont("helvetica", "bold");
-      pdf.text("PhilosiQ Political Archetype Results", margin, y);
+      pdf.text("Philosiq Political Archetype Results", margin, y);
       y += 20;
 
       pdf.setFontSize(11);
@@ -1229,7 +1229,7 @@ function ResultsContent({ results }) {
       // Add title
       pdf.setFontSize(16);
       pdf.setFont("helvetica", "bold");
-      pdf.text("PhilosiQ Political Archetype Results", margin, y);
+      pdf.text("Philosiq Political Archetype Results", margin, y);
       y += 20;
 
       pdf.setFontSize(11);
@@ -1940,7 +1940,7 @@ function ResultsContent({ results }) {
               })) || []
             }
             userEmail={localStorage.getItem("userEmail")}
-            isPhilosiQPlus={isPlusActive}
+            isPhilosiqPlus={isPlusActive}
             axisDataByName={axisBreakdownData}
             pregeneratedSummary={generalSummary}
             pregeneratedLoading={generalSummaryLoading}
@@ -1976,7 +1976,7 @@ function ResultsContent({ results }) {
               }) || []
             }
             userEmail={localStorage.getItem("userEmail")}
-            isPhilosiQPlus={isPlusActive}
+            isPhilosiqPlus={isPlusActive}
             axisDataByName={axisBreakdownData}
             pregeneratedSummaries={axisSummaries}
             pregeneratedLoading={axisSummariesLoading}
