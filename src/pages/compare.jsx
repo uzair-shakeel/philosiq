@@ -489,8 +489,8 @@ export default function ComparePage() {
                                 {/* Your position marker */}
                                 {ax.left !== null && (
                                   <div
-                                    className="absolute top-0 bottom-0 w-2 h-full bg-yellow-400 border-2 border-yellow-600 z-30"
-                                    style={{ right: '2px' }}
+                                    className="absolute top-0 bottom-0 w-2 h-full bg-yellow-400 border-2 border-yellow-600 z-30 transform -translate-x-1/2 shadow-lg"
+                                    style={{ left: ax.left === 0 ? '99.5%' : `${leftPercent}%` }}
                                   ></div>
                                 )}
                                 
@@ -498,7 +498,7 @@ export default function ComparePage() {
                                 {ax.right !== null && (
                                   <div
                                     className="absolute top-0 bottom-0 w-2 h-full bg-red-500 border-2 border-red-700 z-30 transform -translate-x-1/2 shadow-lg"
-                                    style={{ left: `${100 - rightPercent}%` }}
+                                    style={{ left: `${Math.max(1, Math.min(99, 100 - rightPercent))}%` }}
                                   ></div>
                                 )}
 
@@ -506,7 +506,7 @@ export default function ComparePage() {
                                 {ax.left !== null && (
                                   <div
                                     className="absolute -top-8 transform -translate-x-1/2 z-40"
-                                    style={{ left: `${100 - leftPercent}%` }}
+                                    style={{ left: `${Math.max(1, Math.min(99, 100 - leftPercent))}%` }}
                                   >
                                     <div className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-yellow-600">
                                       You: {ax.left}%
@@ -517,7 +517,7 @@ export default function ComparePage() {
                                 {ax.right !== null && (
                                   <div
                                     className="absolute -bottom-8 transform -translate-x-1/2 z-40"
-                                    style={{ left: `${100 - rightPercent}%` }}
+                                    style={{ left: `${Math.max(1, Math.min(99, 100 - rightPercent))}%` }}
                                   >
                                     <div className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-red-700">
                                       Other: {ax.right}%
@@ -550,12 +550,12 @@ export default function ComparePage() {
                             </div>
                             {ax.left !== null ? (
                               <div className="space-y-2">
-                                <div className="flex items-center justify-between">
+                                {/* <div className="flex items-center justify-between">
                                   <span className="text-2xl font-bold text-blue-900">{ax.left}%</span>
                                   <span className="text-sm font-medium text-blue-700 bg-blue-100 px-2 py-1 rounded">
                                     {getStrength(leftPercent)} {leftDominant}
                                   </span>
-                                </div>
+                                </div> */}
                                 <div className="text-sm text-blue-700 space-y-1">
                                   <div><strong>{ax.left}%</strong> {ax.leftLabel}</div>
                                   <div><strong>{(100 - ax.left)}%</strong> {ax.rightLabel}</div>
@@ -576,12 +576,12 @@ export default function ComparePage() {
                             </div>
                             {ax.right !== null ? (
                               <div className="space-y-2">
-                                <div className="flex items-center justify-between">
+                                {/* <div className="flex items-center justify-between">
                                   <span className="text-2xl font-bold text-indigo-900">{ax.right}%</span>
                                   <span className="text-sm font-medium text-indigo-700 bg-indigo-100 px-2 py-1 rounded">
                                     {getStrength(rightPercent)} {rightDominant}
                                   </span>
-                                </div>
+                                </div> */}
                                 <div className="text-sm text-indigo-700 space-y-1">
                                   <div><strong>{ax.right}%</strong> {ax.leftLabel}</div>
                                   <div><strong>{(100 - ax.right)}%</strong> {ax.rightLabel}</div>
