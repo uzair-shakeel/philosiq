@@ -324,35 +324,34 @@ export default function ComparePage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  IQrypt Code (from a friend)
+                  Friend's IQrypt Code
                 </label>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <input
-                    className="w-full border border-gray-300 rounded-lg p-2 font-mono text-sm sm:text-base"
-                    placeholder="Paste code here"
-                    value={rightCode}
-                    onChange={(e) => setRightCode(e.target.value.trim())}
-                  />
-                  <button
-                    onClick={() => rightCode && loadRight(rightCode)}
-                    className="px-3 sm:px-4 py-2 bg-gray-800 text-white rounded-lg flex items-center justify-center text-sm sm:text-base whitespace-nowrap"
-                  >
-                    <FaSearch className="mr-2" /> Load
-                  </button>
-                </div>
+                <input
+                  className="w-full border border-gray-300 rounded-lg p-2 font-mono text-sm sm:text-base"
+                  placeholder="Paste code here"
+                  value={rightCode}
+                  onChange={(e) => setRightCode(e.target.value.trim())}
+                />
               </div>
             </div>
             <div className="mt-4 flex flex-col sm:flex-row gap-3">
               <button
-                onClick={() => leftId && loadLeft(leftId)}
-                className="px-4 py-2 bg-primary-maroon text-white rounded-lg text-sm sm:text-base w-full sm:w-auto"
-                disabled={!leftId}
+                onClick={async () => {
+                  if (!leftId || !rightCode) return;
+                  await Promise.all([
+                    loadLeft(leftId),
+                    loadRight(rightCode)
+                  ]);
+                }}
+                className="px-4 py-2 bg-primary-maroon text-white rounded-lg text-sm sm:text-base w-full sm:w-auto disabled:bg-gray-400 disabled:cursor-not-allowed"
+                disabled={!leftId || !rightCode || resolving}
               >
-                {loading ? 'Loading...' : 'Load My Quiz'}
+                {resolving ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <FaSpinner className="animate-spin" /> Loading...
+                  </span>
+                ) : 'Load Results'}
               </button>
-              {resolving && (
-                <FaSpinner className="animate-spin text-gray-500" />
-              )}
             </div>
           </div>
 
@@ -400,14 +399,15 @@ export default function ComparePage() {
                   const alignmentText = isAligned ? "Aligned" : "Opposite sides";
                   const alignmentColor = isAligned ? "text-green-600" : "text-red-600";
                   
-                  // Get strength labels
+                  // Get strength labels - updated scale
                   const getStrength = (percent) => {
                     const dominantPercent = Math.max(percent, 100 - percent);
-                    if (dominantPercent >= 80) return "Very Strong";
-                    if (dominantPercent >= 70) return "Strong";
-                    if (dominantPercent >= 60) return "Moderate";
-                    if (dominantPercent >= 55) return "Slight";
-                    return "Weak";
+                    if (dominantPercent >= 90) return "Extreme";
+                    if (dominantPercent >= 80) return "Committed";
+                    if (dominantPercent >= 70) return "Inclined";
+                    if (dominantPercent >= 60) return "Leaning";
+                    if (dominantPercent >= 55) return "Moderate";
+                    return "Neutral";
                   };
                   
                   return (
@@ -449,12 +449,26 @@ export default function ComparePage() {
                               {/* Axis Labels */}
                               <div className="flex justify-between items-center">
                                 <div className="text-xs font-medium">
-                                  <span className="px-2 py-0.5 rounded-full text-white bg-blue-600">
+                                  <span className={`px-2 py-0.5 rounded-full text-white ${
+                                    ax.name === "Equity vs. Free Market" ? "bg-blue-600" :
+                                    ax.name === "Libertarian vs. Authoritarian" ? "bg-teal-500" :
+                                    ax.name === "Progressive vs. Conservative" ? "bg-sky-500" :
+                                    ax.name === "Secular vs. Religious" ? "bg-yellow-400" :
+                                    ax.name === "Globalism vs. Nationalism" ? "bg-lime-500" :
+                                    "bg-blue-600"
+                                  }`}> 
                                     {ax.leftLabel}
                                   </span>
                                 </div>
                                 <div className="text-xs font-medium">
-                                  <span className="px-2 py-0.5 rounded-full text-white bg-green-600">
+                                  <span className={`px-2 py-0.5 rounded-full text-white ${
+                                    ax.name === "Equity vs. Free Market" ? "bg-green-600" :
+                                    ax.name === "Libertarian vs. Authoritarian" ? "bg-orange-500" :
+                                    ax.name === "Progressive vs. Conservative" ? "bg-red-400" :
+                                    ax.name === "Secular vs. Religious" ? "bg-purple-500" :
+                                    ax.name === "Globalism vs. Nationalism" ? "bg-rose-500" :
+                                    "bg-green-600"
+                                  }`}>
                                     {ax.rightLabel}
                                   </span>
                                 </div>
@@ -463,13 +477,20 @@ export default function ComparePage() {
                               {/* Axis bar with both positions */}
                               <div className="relative h-12 rounded-full overflow-hidden border border-gray-300">
                                 {/* Left side gradient */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-gray-300 to-green-600"></div>
+                                <div className={`absolute inset-0 ${
+                                  ax.name === "Equity vs. Free Market" ? "bg-gradient-to-r from-blue-600 via-gray-300 to-green-600" :
+                                  ax.name === "Libertarian vs. Authoritarian" ? "bg-gradient-to-r from-teal-500 via-gray-300 to-orange-500" :
+                                  ax.name === "Progressive vs. Conservative" ? "bg-gradient-to-r from-sky-500 via-gray-300 to-red-400" :
+                                  ax.name === "Secular vs. Religious" ? "bg-gradient-to-r from-yellow-400 via-gray-300 to-purple-500" :
+                                  ax.name === "Globalism vs. Nationalism" ? "bg-gradient-to-r from-lime-500 via-gray-300 to-rose-500" :
+                                  "bg-gradient-to-r from-blue-600 via-gray-300 to-green-600"
+                                }`}></div>
                                 
                                 {/* Your position marker */}
                                 {ax.left !== null && (
                                   <div
                                     className="absolute top-0 bottom-0 w-2 h-full bg-yellow-400 border-2 border-yellow-600 z-30 transform -translate-x-1/2 shadow-lg"
-                                    style={{ left: `${Math.max(1, Math.min(99, leftPercent))}%` }}
+                                    style={{ left: ax.left === 0 ? '99.5%' : `${leftPercent}%` }}
                                   ></div>
                                 )}
                                 
@@ -477,7 +498,7 @@ export default function ComparePage() {
                                 {ax.right !== null && (
                                   <div
                                     className="absolute top-0 bottom-0 w-2 h-full bg-red-500 border-2 border-red-700 z-30 transform -translate-x-1/2 shadow-lg"
-                                    style={{ left: `${Math.max(1, Math.min(99, rightPercent))}%` }}
+                                    style={{ left: `${Math.max(1, Math.min(99, 100 - rightPercent))}%` }}
                                   ></div>
                                 )}
 
@@ -485,7 +506,7 @@ export default function ComparePage() {
                                 {ax.left !== null && (
                                   <div
                                     className="absolute -top-8 transform -translate-x-1/2 z-40"
-                                    style={{ left: `${Math.max(1, Math.min(99, leftPercent))}%` }}
+                                    style={{ left: `${Math.max(1, Math.min(99, 100 - leftPercent))}%` }}
                                   >
                                     <div className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-yellow-600">
                                       You: {ax.left}%
@@ -496,7 +517,7 @@ export default function ComparePage() {
                                 {ax.right !== null && (
                                   <div
                                     className="absolute -bottom-8 transform -translate-x-1/2 z-40"
-                                    style={{ left: `${Math.max(1, Math.min(99, rightPercent))}%` }}
+                                    style={{ left: `${Math.max(1, Math.min(99, 100 - rightPercent))}%` }}
                                   >
                                     <div className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-red-700">
                                       Friend: {ax.right}%
@@ -529,14 +550,18 @@ export default function ComparePage() {
                             </div>
                             {ax.left !== null ? (
                               <div className="space-y-2">
-                                <div className="flex items-center justify-between">
+                                {/* <div className="flex items-center justify-between">
                                   <span className="text-2xl font-bold text-blue-900">{ax.left}%</span>
                                   <span className="text-sm font-medium text-blue-700 bg-blue-100 px-2 py-1 rounded">
                                     {getStrength(leftPercent)} {leftDominant}
                                   </span>
+                                </div> */}
+                                <div className="text-sm text-blue-700 space-y-1">
+                                  <div><strong>{ax.left}%</strong> {ax.leftLabel}</div>
+                                  <div><strong>{(100 - ax.left)}%</strong> {ax.rightLabel}</div>
                                 </div>
                                 <div className="text-sm text-blue-700">
-                                  Leans <strong>{leftPercent > 50 ? Math.round(leftPercent - 50) : Math.round(50 - leftPercent)}%</strong> toward {leftDominant}
+                                  Leans <strong>{leftPercent > 50 ? Math.round((leftPercent - 50) * 2) : Math.round((50 - leftPercent) * 2)}%</strong> {leftDominant}
                                 </div>
                               </div>
                             ) : (
@@ -551,14 +576,18 @@ export default function ComparePage() {
                             </div>
                             {ax.right !== null ? (
                               <div className="space-y-2">
-                                <div className="flex items-center justify-between">
+                                {/* <div className="flex items-center justify-between">
                                   <span className="text-2xl font-bold text-indigo-900">{ax.right}%</span>
                                   <span className="text-sm font-medium text-indigo-700 bg-indigo-100 px-2 py-1 rounded">
                                     {getStrength(rightPercent)} {rightDominant}
                                   </span>
+                                </div> */}
+                                <div className="text-sm text-indigo-700 space-y-1">
+                                  <div><strong>{ax.right}%</strong> {ax.leftLabel}</div>
+                                  <div><strong>{(100 - ax.right)}%</strong> {ax.rightLabel}</div>
                                 </div>
                                 <div className="text-sm text-indigo-700">
-                                  Leans <strong>{rightPercent > 50 ? Math.round(rightPercent - 50) : Math.round(50 - rightPercent)}%</strong> toward {rightDominant}
+                                  Leans <strong>{rightPercent > 50 ? Math.round((rightPercent - 50) * 2) : Math.round((50 - rightPercent) * 2)}%</strong> {rightDominant}
                                 </div>
                               </div>
                             ) : (
@@ -567,18 +596,7 @@ export default function ComparePage() {
                           </div>
                         </div>
 
-                        {/* Comparison Summary */}
-                        {ax.left !== null && ax.right !== null && (
-                          <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                            <div className="text-sm text-gray-700">
-                              <strong>Comparison:</strong> {
-                                isAligned 
-                                  ? `Both of you lean toward the ${leftDominant} side, with a ${difference.toFixed(1)}% difference in strength.`
-                                  : `You're on opposite sides - you lean ${leftDominant} while they lean ${rightDominant}, with a ${difference.toFixed(1)}% gap.`
-                              }
-                            </div>
-                          </div>
-                        )}
+                       
                       </div>
                     </div>
                   );
@@ -898,78 +916,6 @@ export default function ComparePage() {
                                           </div>
                                         </div>
                                       </div>
-
-                                      {/* Answer Comparison Bar */}
-                                      {leftAnswer !== undefined &&
-                                        leftAnswer !== null &&
-                                        rightAnswer !== undefined &&
-                                        rightAnswer !== null && (
-                                          <div className="mt-8 pt-8 border-t-2 border-gray-200">
-                                            <div className="flex items-center justify-between mb-4">
-                                              <span className="text-lg font-black text-gray-700">
-                                                Answer Comparison
-                                              </span>
-                                              <span className="px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-800 font-bold rounded-full border border-purple-200">
-                                                {Math.abs(
-                                                  leftAnswer - rightAnswer
-                                                ) === 0
-                                                  ? "🤝 Same answer"
-                                                  : Math.abs(
-                                                      leftAnswer - rightAnswer
-                                                    ) === 1
-                                                  ? "🤔 Slightly different"
-                                                  : Math.abs(
-                                                      leftAnswer - rightAnswer
-                                                    ) === 2
-                                                  ? "😮 Very different"
-                                                  : "💥 Polar opposite"}
-                                              </span>
-                                            </div>
-
-                                            <div className="relative">
-                                              <div className="flex items-center justify-between mb-3">
-                                                <div className="flex items-center space-x-3">
-                                                  <div className="w-4 h-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full" />
-                                                  <span className="text-sm font-bold text-blue-600">
-                                                    You: {leftAnswer}
-                                                  </span>
-                                                </div>
-                                                <div className="flex items-center space-x-3">
-                                                  <span className="text-sm font-bold text-indigo-600">
-                                                    Friend: {rightAnswer}
-                                                  </span>
-                                                  <div className="w-4 h-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full" />
-                                                </div>
-                                              </div>
-
-                                              <div className="relative bg-gray-200 rounded-full h-4 overflow-hidden">
-                                                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 opacity-20" />
-                                                <div
-                                                  className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 rounded-full transition-all duration-1000 ease-out shadow-lg"
-                                                  style={{
-                                                    width: `${
-                                                      Math.abs(
-                                                        leftAnswer - rightAnswer
-                                                      ) === 0
-                                                        ? 100
-                                                        : Math.abs(
-                                                            leftAnswer -
-                                                              rightAnswer
-                                                          ) === 1
-                                                        ? 75
-                                                        : Math.abs(
-                                                            leftAnswer -
-                                                              rightAnswer
-                                                          ) === 2
-                                                        ? 50
-                                                        : 25
-                                                    }%`,
-                                                  }}
-                                                />
-                                              </div>
-                                            </div>
-                                          </div>
-                                        )}
                                     </div>
                                   </div>
                                 );

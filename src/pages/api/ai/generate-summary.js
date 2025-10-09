@@ -7,16 +7,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { answers, userId, userEmail, axisDataByName } = req.body;
+    const { answers, userId, userEmail, axisDataByName, rawData } = req.body;
 
     if (!answers || !Array.isArray(answers)) {
       return res.status(400).json({ error: "Invalid answers data" });
     }
 
-    // Connect to database
     const mongoose = await connectToDatabase();
 
-    // Get user info (optional - allow anonymous users)
     let user = null;
     let isPlusUser = false;
 
@@ -30,22 +28,83 @@ export default async function handler(req, res) {
       }
     }
 
-    // For free users (including anonymous), use all answers for better accuracy
-    let processedAnswers = answers;
-    let isLimited = false;
-
     console.log("=== AI SUMMARY REQUEST DEBUG ===");
     console.log("User tier:", isPlusUser ? "PhilosiQ+" : "Free/Anonymous");
     console.log("Total answers received:", answers.length);
-    console.log("Sample answer structure:", answers.slice(0, 2));
-    console.log("User email:", userEmail || "Anonymous");
+    console.log("Raw data available:", !!rawData);
 
-    // Note: All users now get analysis of their complete answers for better accuracy
-    console.log("Using all answers for analysis (no limit)");
+    const questionsWithContext = [];
+    if (rawData?.contextTexts && rawData?.questions) {
+      Object.entries(rawData.contextTexts).forEach(([questionId, contextText]) => {
+        if (contextText && contextText.trim().length > 0) {
+          const question = rawData.questions.find(q => q._id === questionId);
+          const answer = rawData.answers?.[questionId];
+          if (question && answer !== undefined) {
+            questionsWithContext.push({
+              question: question.question,
+              answer: answer,
+              axis: question.axis || "general",
+              context: contextText,
+              questionId: questionId
+            });
+          }
+        }
+      });
+    }
+    console.log("Questions with user context:", questionsWithContext.length);
+
+    const topQuestionsByAxis = {};
+    if (rawData?.answerBreakdown && Array.isArray(rawData.answerBreakdown)) {
+      const byAxis = {};
+      rawData.answerBreakdown.forEach(item => {
+        const axis = item.axis || "general";
+        if (!byAxis[axis]) byAxis[axis] = [];
+        byAxis[axis].push(item);
+      });
+
+      Object.entries(byAxis).forEach(([axis, items]) => {
+        const sorted = items
+          .filter(item => Math.abs(item.contribution) >= 5) 
+          .sort((a, b) => Math.abs(b.contribution) - Math.abs(a.contribution))
+          .slice(0, 3);
+        
+        if (sorted.length > 0) {
+          topQuestionsByAxis[axis] = sorted.map(item => ({
+            question: item.question,
+            answer: item.answer,
+            axis: axis,
+            contribution: item.contribution
+          }));
+        }
+      });
+    }
+    console.log("Top questions by axis:", Object.keys(topQuestionsByAxis).length, "axes");
+
+    const processedAnswers = [];
+    const addedQuestionIds = new Set();
+
+    questionsWithContext.forEach(q => {
+      if (!addedQuestionIds.has(q.questionId)) {
+        processedAnswers.push(q);
+        addedQuestionIds.add(q.questionId);
+      }
+    });
+
+    Object.values(topQuestionsByAxis).forEach(axisQuestions => {
+      axisQuestions.forEach(q => {
+        const id = q.question;
+        if (!addedQuestionIds.has(id)) {
+          processedAnswers.push(q);
+          addedQuestionIds.add(id);
+        }
+      });
+    });
+
     console.log("Final processed answers:", processedAnswers.length);
-    console.log("Sample processed answer:", processedAnswers[0]);
+    console.log("Breakdown - With context:", questionsWithContext.length, "Top impact:", processedAnswers.length - questionsWithContext.length);
+    
+    let isLimited = false;
 
-    // Check if we already have a cached summary for this user (or anonymous session)
     const cacheKey =
       userEmail || `anonymous_${JSON.stringify(processedAnswers).length}`;
     const existingSummary = await mongoose.connection.db
@@ -66,14 +125,12 @@ export default async function handler(req, res) {
       });
     }
 
-    // Get the specialized prompt for general analysis
     const generalPrompt = getGeneralPrompt();
-    let formattedPrompt = formatPrompt(generalPrompt.user, processedAnswers);
-
-    // If axis data provided, append positioning context for all axes
+    
+    let formattedPrompt = "";
+    
     if (axisDataByName && Object.keys(axisDataByName).length > 0) {
-      console.log("Adding axis positioning data to general prompt");
-      formattedPrompt += "\n\nYour Calculated Political Positioning:";
+      formattedPrompt += "USER'S POLITICAL POSITIONING:\n";
       Object.entries(axisDataByName).forEach(([axisName, data]) => {
         if (
           data &&
@@ -84,16 +141,32 @@ export default async function handler(req, res) {
           const rightP = Number(data.rightPercent).toFixed(1);
           const posLabel = data.userPosition || "";
           const posStrength = data.positionStrength || "";
-          formattedPrompt += `\n- ${axisName}: ${leftP}% Left, ${rightP}% Right (${posLabel}${
+          formattedPrompt += `- ${axisName}: ${leftP}% ${data.leftLabel}, ${rightP}% ${data.rightLabel} (${posLabel}${
             posStrength ? ` - ${posStrength}` : ""
-          })`;
+          })\n`;
         }
       });
-      formattedPrompt +=
-        "\n\nPlease reference these specific percentages and positions in your analysis.";
+      formattedPrompt += "\n";
     }
+    
+    if (processedAnswers.length > 0) {
+      formattedPrompt += "KEY QUESTIONS & ANSWERS:\n";
+      formattedPrompt += "Answer values: 2=Strongly Agree, 1=Agree, 0=Neutral, -1=Disagree, -2=Strongly Disagree\n\n";
+      
+      processedAnswers.forEach((q, i) => {
+        formattedPrompt += `${i + 1}. [${q.axis}] ${q.question}: ${q.answer}`;
+        if (q.context) {
+          formattedPrompt += ` (User's context: "${q.context}")`;
+        }
+        if (q.contribution) {
+          formattedPrompt += ` [Impact: ${q.contribution > 0 ? '+' : ''}${q.contribution}]`;
+        }
+        formattedPrompt += "\n";
+      });
+    }
+    
+    formattedPrompt += "\n" + generalPrompt.user.replace("{ANSWERS}", "").trim();
 
-    // Set max tokens - increased for more comprehensive summaries
     const maxTokens = 3000;
 
     console.log("Final prompt length:", formattedPrompt.length);
@@ -102,7 +175,6 @@ export default async function handler(req, res) {
     console.log(formattedPrompt.substring(0, 500) + "...");
     console.log("=== END PROMPT DEBUG ===");
 
-    // Try different models with fallback
     const models = ["gpt-3.5-turbo-0125", "gpt-3.5-turbo", "gpt-4o-mini"];
     let openaiResponse = null;
     let lastError = null;
@@ -144,9 +216,8 @@ export default async function handler(req, res) {
           lastError = `Model ${model} failed with status: ${openaiResponse.status}`;
           console.log(lastError);
 
-          // If rate limited, wait longer before trying next model
           if (openaiResponse.status === 429) {
-            const waitTime = 5000; // Wait 5 seconds for rate limits
+            const waitTime = 5000; 
             console.log(`Rate limited, waiting ${waitTime / 1000} seconds...`);
             await new Promise((resolve) => setTimeout(resolve, waitTime));
           }
@@ -164,10 +235,8 @@ export default async function handler(req, res) {
     const openaiData = await openaiResponse.json();
     let summary = openaiData.choices[0].message.content.trim();
 
-    // Simple fix: replace "undefined" with empty string
     summary = summary.replace(/undefined/gi, "").trim();
 
-    // Cache the summary in database
     await mongoose.connection.db.collection("ai_summaries").insertOne({
       userEmail: cacheKey,
       userId: userId,
