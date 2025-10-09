@@ -238,8 +238,6 @@ On the Secular vs. Religious axis, you maintain a respectful but faith-oriented 
 
 On the Globalist vs. Nationalist axis, you lean nationalist, prioritizing national sovereignty, cultural unity, and self-reliance over broad international integration. You support global cooperation when it aligns with domestic interests but remain cautious of global institutions that might limit national autonomy.`,
 
-  user: `Using the answers and questions to write an insightful summary for the users:
-
   user: `Write an insightful political summary based on the user's positioning and key answers.
 
 Use the positioning percentages to determine their stance on each axis (but do not mention the percentages in your response), and reference the specific questions (especially those with user context or high impact scores) to provide concrete examples of their views.`
