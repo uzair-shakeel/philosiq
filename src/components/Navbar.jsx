@@ -73,6 +73,7 @@ const Navbar = ({ user }) => {
     { name: "Home", path: "/" },
     { name: "Archetypes", path: "/archetypes" },
     { name: "Quiz", path: "/quiz" },
+    { name: "Icons", path: "/icons" },
     { name: "MindMap", path: "/mindmap", useFullNavigation: true },
     { name: "Contact Us", path: "/contact-us" },
   ];
