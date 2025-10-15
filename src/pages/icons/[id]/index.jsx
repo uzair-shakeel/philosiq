@@ -304,7 +304,7 @@ export default function IconProfilePage() {
                 )}
 
                 {/* Description */}
-                <p className="text-gray-700 mb-6 leading-relaxed">
+                <p className="text-gray-700 mb-6 leading-relaxed whitespace-normal break-words">
                   {icon.description}
                 </p>
 
