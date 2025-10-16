@@ -1,15 +1,19 @@
-import { searchWikipedia, getWikipediaPage, validateIconCandidate } from '../../../utils/wikipedia';
+import {
+  searchWikipedia,
+  getWikipediaPage,
+  validateIconCandidate,
+} from "../../../utils/wikipedia";
 
 export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' });
+  if (req.method !== "GET") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
   try {
     const { q: query, limit = 10 } = req.query;
 
     if (!query || query.trim().length === 0) {
-      return res.status(400).json({ message: 'Search query is required' });
+      return res.status(400).json({ message: "Search query is required" });
     }
 
     const searchResults = await searchWikipedia(query.trim(), parseInt(limit));
@@ -28,8 +32,10 @@ export default async function handler(req, res) {
             occupation: pageData.occupation,
             birthDate: pageData.birthDate,
             deathDate: pageData.deathDate,
-            extract: pageData.extract?.substring(0, 200) + '...',
+            extract: pageData.extract?.substring(0, 200) + "...",
             validation,
+            characterType: validation.characterType,
+            isFictional: validation.isFictional,
           };
         } catch (error) {
           console.error(`Error validating ${result.title}:`, error);
@@ -37,7 +43,7 @@ export default async function handler(req, res) {
             ...result,
             validation: {
               isValid: false,
-              reasons: ['Unable to validate this page'],
+              reasons: ["Unable to validate this page"],
               confidence: 0,
             },
           };
@@ -47,7 +53,7 @@ export default async function handler(req, res) {
 
     // Sort by validation confidence and filter out clearly invalid results
     const validResults = enhancedResults
-      .filter(result => result.validation.confidence > 0)
+      .filter((result) => result.validation.confidence > 0)
       .sort((a, b) => b.validation.confidence - a.validation.confidence);
 
     return res.status(200).json({
@@ -55,10 +61,10 @@ export default async function handler(req, res) {
       total: validResults.length,
     });
   } catch (error) {
-    console.error('Error searching Wikipedia:', error);
-    return res.status(500).json({ 
-      message: 'Failed to search Wikipedia',
-      error: error.message 
+    console.error("Error searching Wikipedia:", error);
+    return res.status(500).json({
+      message: "Failed to search Wikipedia",
+      error: error.message,
     });
   }
 }

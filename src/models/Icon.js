@@ -26,7 +26,7 @@ const IconSchema = new mongoose.Schema(
     },
     imageUrl: {
       type: String,
-      required: [true, "Image URL is required"],
+      default: "",
     },
     occupation: {
       type: String,
@@ -41,6 +41,21 @@ const IconSchema = new mongoose.Schema(
     },
     nationality: {
       type: String,
+    },
+    // Character type classification
+    characterType: {
+      type: String,
+      enum: ["real", "fictional"],
+      default: "real",
+    },
+    isFictional: {
+      type: Boolean,
+      default: false,
+    },
+    // Source media for fictional characters
+    sourceMedia: {
+      type: String,
+      trim: true,
     },
     // Political compass scores (calculated from answers)
     scores: {

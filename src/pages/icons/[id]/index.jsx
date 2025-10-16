@@ -354,7 +354,19 @@ export default function IconProfilePage() {
                 <h1 className="text-4xl font-bold text-gray-900 mb-2">
                   {icon.name}
                 </h1>
-                <p className="text-xl text-gray-600 mb-4">{icon.occupation}</p>
+                <div className="flex items-center gap-3 mb-4">
+                  <p className="text-xl text-gray-600">{icon.occupation}</p>
+                  {icon.isFictional && (
+                    <span className="px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-full">
+                      Fictional Character
+                    </span>
+                  )}
+                  {icon.characterType === "real" && (
+                    <span className="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">
+                      Real Person
+                    </span>
+                  )}
+                </div>
 
                 {/* Dates */}
                 {(icon.birthDate || icon.deathDate) && (

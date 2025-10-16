@@ -14,6 +14,26 @@ import {
 } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
 
+// Helper function to extract source media from character description
+function extractSourceMedia(extract) {
+  if (!extract) return "";
+
+  const sourcePatterns = [
+    /from\s+(?:the\s+)?(?:film|movie|television|tv|series|show|anime|manga|comic|book|novel|game|video game)\s+(?:called\s+)?["']?([^"'.]+)["']?/i,
+    /in\s+(?:the\s+)?(?:film|movie|television|tv|series|show|anime|manga|comic|book|novel|game|video game)\s+(?:called\s+)?["']?([^"'.]+)["']?/i,
+    /(?:film|movie|television|tv|series|show|anime|manga|comic|book|novel|game|video game)\s+(?:called\s+)?["']?([^"'.]+)["']?/i,
+  ];
+
+  for (const pattern of sourcePatterns) {
+    const match = extract.match(pattern);
+    if (match && match[1]) {
+      return match[1].trim();
+    }
+  }
+
+  return "";
+}
+
 export default function CreateIconPage() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
@@ -91,6 +111,11 @@ export default function CreateIconPage() {
         birthDate: selectedPerson.birthDate || "",
         deathDate: selectedPerson.deathDate || "",
         nationality: "",
+        characterType: selectedPerson.characterType || "real",
+        isFictional: selectedPerson.isFictional || false,
+        sourceMedia: selectedPerson.isFictional
+          ? extractSourceMedia(selectedPerson.extract)
+          : "",
       };
 
       const response = await axios.post("/api/icons", iconData, {
@@ -185,7 +210,7 @@ export default function CreateIconPage() {
                           type="text"
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          placeholder="e.g., Barack Obama, Albert Einstein, Marie Curie..."
+                          placeholder="e.g., Barack Obama, Albert Einstein, Harry Potter, Luke Skywalker..."
                           className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-maroon focus:border-transparent transition-shadow"
                           disabled={searching}
                         />
@@ -410,9 +435,19 @@ function PersonCard({ person, onSelect }) {
               <h3 className="text-xl font-bold text-gray-900 truncate mb-1">
                 {person.title}
               </h3>
-              <p className="text-base text-gray-600 mb-2">
-                {person.occupation}
-              </p>
+              <div className="flex items-center gap-3 mb-2">
+                <p className="text-base text-gray-600">{person.occupation}</p>
+                {person.isFictional && (
+                  <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
+                    Fictional Character
+                  </span>
+                )}
+                {person.characterType === "real" && (
+                  <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                    Real Person
+                  </span>
+                )}
+              </div>
               {(person.birthDate || person.deathDate) && (
                 <p className="text-sm text-gray-500 mb-3">
                   {person.birthDate && person.deathDate

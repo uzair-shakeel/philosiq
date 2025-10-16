@@ -73,7 +73,7 @@ export default function IconsPage() {
         <title>Philosiq Icons - Political Profiles of Famous People</title>
         <meta
           name="description"
-          content="Explore the political compass positions of famous historical and contemporary figures based on community-sourced answers."
+          content="Explore the political compass positions of famous historical figures, contemporary personalities, and fictional characters based on community-sourced answers."
         />
       </Head>
 
@@ -89,7 +89,8 @@ export default function IconsPage() {
               </h1>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Discover the political compass positions of influential figures
-                throughout history
+                throughout history, contemporary personalities, and fictional
+                characters
               </p>
             </div>
 
@@ -112,7 +113,7 @@ export default function IconsPage() {
                       type="text"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="Search by name..."
+                      placeholder="Search by name (e.g., Barack Obama, Harry Potter, Luke Skywalker)..."
                       className="w-full px-4 py-3 mb-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-secondary-darkBlue focus:border-transparent"
                     />
                     <button
@@ -313,7 +314,19 @@ function IconCard({ icon }) {
             <h3 className="text-xl font-bold text-gray-900 group-hover:text-secondary-darkBlue transition-colors mb-1">
               {icon.name}
             </h3>
-            <p className="text-sm text-gray-600 mb-2">{icon.occupation}</p>
+            <div className="flex items-center gap-2 mb-2">
+              <p className="text-sm text-gray-600">{icon.occupation}</p>
+              {icon.isFictional && (
+                <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
+                  Fictional
+                </span>
+              )}
+              {icon.characterType === "real" && (
+                <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                  Real Person
+                </span>
+              )}
+            </div>
 
             {/* Birth/Death dates */}
             {(icon.birthDate || icon.deathDate) && (
