@@ -1,7 +1,14 @@
 import dbConnect from "../../../lib/mongodb/connection";
-import Icon from "../../../models/Icon";
+import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
+
+// Clear any cached Icon model to ensure we get the latest schema
+if (mongoose.models.Icon) {
+  delete mongoose.models.Icon;
+}
+
+import Icon from "../../../models/Icon";
 
 export default async function handler(req, res) {
   await dbConnect();
@@ -107,7 +114,7 @@ async function handlePost(req, res) {
       wikipediaTitle,
       wikipediaPageId,
       description,
-      imageUrl,
+      imageUrl: imageUrl || null,
       occupation,
       birthDate,
       deathDate,

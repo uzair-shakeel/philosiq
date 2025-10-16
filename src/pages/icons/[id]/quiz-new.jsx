@@ -1,15 +1,25 @@
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import Link from 'next/link';
-import axios from 'axios';
-import { FaUser, FaPlus, FaMinus, FaCheck, FaSpinner, FaExternalLinkAlt, FaTimes, FaArrowLeft } from 'react-icons/fa';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import Head from "next/head";
+import Link from "next/link";
+import axios from "axios";
+import {
+  FaUser,
+  FaPlus,
+  FaMinus,
+  FaCheck,
+  FaSpinner,
+  FaExternalLinkAlt,
+  FaTimes,
+  FaArrowLeft,
+  FaEdit,
+} from "react-icons/fa";
 
 export default function IconQuizPage() {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const { id } = router.query;
-  
+
   const [icon, setIcon] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -18,14 +28,18 @@ export default function IconQuizPage() {
   const [selectedQuestionId, setSelectedQuestionId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const answerOptions = [
-    { value: 'Strongly Agree', label: 'Strongly Agree', color: 'bg-green-600' },
-    { value: 'Agree', label: 'Agree', color: 'bg-green-400' },
-    { value: 'Neutral', label: 'Neutral', color: 'bg-gray-400' },
-    { value: 'Disagree', label: 'Disagree', color: 'bg-red-400' },
-    { value: 'Strongly Disagree', label: 'Strongly Disagree', color: 'bg-red-600' },
+    { value: "Strongly Agree", label: "Strongly Agree", color: "bg-green-600" },
+    { value: "Agree", label: "Agree", color: "bg-green-400" },
+    { value: "Neutral", label: "Neutral", color: "bg-gray-400" },
+    { value: "Disagree", label: "Disagree", color: "bg-red-400" },
+    {
+      value: "Strongly Disagree",
+      label: "Strongly Disagree",
+      color: "bg-red-600",
+    },
   ];
 
   useEffect(() => {
@@ -54,26 +68,32 @@ export default function IconQuizPage() {
       setLoading(true);
       const [iconResponse, questionsResponse] = await Promise.all([
         axios.get(`/api/icons/${id}`),
-        axios.get('/api/questions/public', { params: { active: true } })
+        axios.get("/api/questions/public", { params: { active: true } }),
       ]);
-      
+
       setIcon(iconResponse.data.icon);
       setQuestions(questionsResponse.data.questions);
-      
+
       // Initialize state for all questions
       const initialSources = {};
-      
-      questionsResponse.data.questions.forEach(q => {
-        initialSources[q._id] = [{ title: '', url: '', description: '', type: 'article' }];
+
+      questionsResponse.data.questions.forEach((q) => {
+        initialSources[q._id] = [
+          { title: "", url: "", description: "", type: "article" },
+        ];
       });
-      
+
       setSources(initialSources);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
       if (error.response) {
-        setError(`Failed to load quiz data: ${error.response.data?.message || error.response.statusText}`);
+        setError(
+          `Failed to load quiz data: ${
+            error.response.data?.message || error.response.statusText
+          }`
+        );
       } else if (error.request) {
-        setError('Failed to load quiz data: Network error');
+        setError("Failed to load quiz data: Network error");
       } else {
         setError(`Failed to load quiz data: ${error.message}`);
       }
@@ -83,59 +103,63 @@ export default function IconQuizPage() {
   };
 
   const handleAnswerChange = (questionId, answer) => {
-    setAnswers(prev => ({ ...prev, [questionId]: answer }));
+    setAnswers((prev) => ({ ...prev, [questionId]: answer }));
   };
 
   const handleSourceChange = (questionId, sourceIndex, field, value) => {
-    setSources(prev => ({
+    setSources((prev) => ({
       ...prev,
-      [questionId]: prev[questionId].map((source, index) => 
+      [questionId]: prev[questionId].map((source, index) =>
         index === sourceIndex ? { ...source, [field]: value } : source
-      )
+      ),
     }));
   };
 
   const addSource = (questionId) => {
-    setSources(prev => ({
+    setSources((prev) => ({
       ...prev,
-      [questionId]: [...prev[questionId], { title: '', url: '', description: '', type: 'article' }]
+      [questionId]: [
+        ...prev[questionId],
+        { title: "", url: "", description: "", type: "article" },
+      ],
     }));
   };
 
   const removeSource = (questionId, sourceIndex) => {
-    setSources(prev => ({
+    setSources((prev) => ({
       ...prev,
-      [questionId]: prev[questionId].filter((_, index) => index !== sourceIndex)
+      [questionId]: prev[questionId].filter(
+        (_, index) => index !== sourceIndex
+      ),
     }));
   };
 
-  const allQuestionsHaveSources = () => {
-    return Object.keys(answers).every(questionId => {
-      const questionSources = sources[questionId] || [];
-      return questionSources.some(s => s.title && s.url);
-    });
+  const hasAtLeastOneAnswer = () => {
+    return Object.keys(answers).length > 0;
   };
 
   const handleSubmitAnswers = async () => {
     setSubmitting(true);
-    setError('');
+    setError("");
 
     try {
-      const answersToSubmit = Object.entries(answers).map(([questionId, answer]) => ({
-        iconId: id,
-        questionId,
-        answer,
-        sources: sources[questionId].filter(s => s.title && s.url),
-        reasoning: reasoning[questionId] || '',
-      }));
+      const answersToSubmit = Object.entries(answers).map(
+        ([questionId, answer]) => ({
+          iconId: id,
+          questionId,
+          answer,
+          sources: sources[questionId].filter((s) => s.title && s.url),
+          reasoning: reasoning[questionId] || "",
+        })
+      );
 
       // Submit all answers
       await Promise.all(
-        answersToSubmit.map(answerData => 
-          axios.post('/api/icons/answers', answerData, {
+        answersToSubmit.map((answerData) =>
+          axios.post("/api/icons/answers", answerData, {
             headers: {
-              'Authorization': `Bearer ${user.token}`,
-              'Content-Type': 'application/json',
+              Authorization: `Bearer ${user.token}`,
+              "Content-Type": "application/json",
             },
           })
         )
@@ -144,8 +168,8 @@ export default function IconQuizPage() {
       // Redirect to the icon profile page
       router.push(`/icons/${id}`);
     } catch (error) {
-      console.error('Error submitting answers:', error);
-      setError('Failed to submit answers. Please try again.');
+      console.error("Error submitting answers:", error);
+      setError("Failed to submit answers. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -172,13 +196,18 @@ export default function IconQuizPage() {
     );
   }
 
-  const selectedQuestion = questions.find(q => q._id === selectedQuestionId);
+  const selectedQuestion = questions.find((q) => q._id === selectedQuestionId);
 
   return (
     <>
       <Head>
-        <title>{icon ? `Quiz: ${icon.name}` : 'Icon Quiz'} - Philosiq Icons</title>
-        <meta name="description" content={`Take the political quiz as ${icon?.name || 'this icon'}`} />
+        <title>
+          {icon ? `Quiz: ${icon.name}` : "Icon Quiz"} - Philosiq Icons
+        </title>
+        <meta
+          name="description"
+          content={`Take the political quiz as ${icon?.name || "this icon"}`}
+        />
       </Head>
 
       <div className="min-h-screen bg-gray-50">
@@ -187,13 +216,18 @@ export default function IconQuizPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
               <div className="flex items-center">
-                <Link href="/icons" className="flex items-center text-gray-600 hover:text-gray-900">
+                <Link
+                  href="/icons"
+                  className="flex items-center text-gray-600 hover:text-gray-900"
+                >
                   <FaArrowLeft className="mr-2" />
                   Back to Icons
                 </Link>
               </div>
               <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-600">Welcome, {user.name}</span>
+                <span className="text-sm text-gray-600">
+                  Welcome, {user.name}
+                </span>
               </div>
             </div>
           </div>
@@ -205,8 +239,8 @@ export default function IconQuizPage() {
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200">
                 {icon?.imageUrl && (
-                  <img 
-                    src={icon.imageUrl} 
+                  <img
+                    src={icon.imageUrl}
                     alt={icon.name}
                     className="w-full h-full object-cover"
                   />
@@ -214,10 +248,11 @@ export default function IconQuizPage() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  {icon?.name || 'Loading...'}
+                  {icon?.name || "Loading..."}
                 </h1>
                 <p className="text-gray-600">
-                  Answer questions as if you were {icon?.name}. Provide sources to support your answers.
+                  Answer questions as if you were {icon?.name}. Provide sources
+                  to support your answers.
                 </p>
               </div>
             </div>
@@ -237,10 +272,12 @@ export default function IconQuizPage() {
             <div className="bg-gray-50 px-6 py-4 border-b">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900">
-                  {icon?.name?.split(' ').slice(-1)[0] || 'Icon'} vs. Free Market
+                  {icon?.name?.split(" ").slice(-1)[0] || "Icon"} vs. Free
+                  Market
                 </h2>
                 <div className="text-sm text-gray-600">
-                  {Object.keys(answers).length} of {questions.length} questions answered
+                  {Object.keys(answers).length} of {questions.length} questions
+                  answered
                 </div>
               </div>
               <div className="text-sm text-gray-600 mt-1">
@@ -273,8 +310,10 @@ export default function IconQuizPage() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {questions.map((question, index) => {
                     const userAnswer = answers[question._id];
-                    const hasValidSources = sources[question._id]?.some(s => s.title && s.url);
-                    
+                    const hasValidSources = sources[question._id]?.some(
+                      (s) => s.title && s.url
+                    );
+
                     return (
                       <tr key={question._id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -297,23 +336,37 @@ export default function IconQuizPage() {
                         </td>
                         <td className="px-6 py-4 text-center">
                           {userAnswer ? (
-                            <span className={`px-2 py-1 text-xs font-medium rounded-full text-white ${
-                              userAnswer === 'Strongly Agree' ? 'bg-green-600' :
-                              userAnswer === 'Agree' ? 'bg-green-400' :
-                              userAnswer === 'Neutral' ? 'bg-gray-400' :
-                              userAnswer === 'Disagree' ? 'bg-red-400' :
-                              userAnswer === 'Strongly Disagree' ? 'bg-red-600' : 'bg-gray-400'
-                            }`}>
+                            <button
+                              onClick={() =>
+                                handleAnswerChange(question._id, "")
+                              }
+                              className={`px-3 py-1 text-xs font-medium rounded-full text-white transition-all duration-200 hover:scale-105 hover:shadow-md cursor-pointer ${
+                                userAnswer === "Strongly Agree"
+                                  ? "bg-green-600 hover:bg-green-700"
+                                  : userAnswer === "Agree"
+                                  ? "bg-green-400 hover:bg-green-500"
+                                  : userAnswer === "Neutral"
+                                  ? "bg-gray-400 hover:bg-gray-500"
+                                  : userAnswer === "Disagree"
+                                  ? "bg-red-400 hover:bg-red-500"
+                                  : userAnswer === "Strongly Disagree"
+                                  ? "bg-red-600 hover:bg-red-700"
+                                  : "bg-gray-400 hover:bg-gray-500"
+                              }`}
+                              title="Click to change answer"
+                            >
                               {userAnswer}
-                            </span>
+                            </button>
                           ) : (
                             <select
-                              value={userAnswer || ''}
-                              onChange={(e) => handleAnswerChange(question._id, e.target.value)}
+                              value={userAnswer || ""}
+                              onChange={(e) =>
+                                handleAnswerChange(question._id, e.target.value)
+                              }
                               className="text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
                               <option value="">Select...</option>
-                              {answerOptions.map(option => (
+                              {answerOptions.map((option) => (
                                 <option key={option.value} value={option.value}>
                                   {option.label}
                                 </option>
@@ -334,7 +387,9 @@ export default function IconQuizPage() {
                                 </span>
                               )}
                               <button
-                                onClick={() => setSelectedQuestionId(question._id)}
+                                onClick={() =>
+                                  setSelectedQuestionId(question._id)
+                                }
                                 className="text-blue-600 hover:text-blue-800 text-xs font-medium"
                               >
                                 View Source
@@ -355,15 +410,19 @@ export default function IconQuizPage() {
             <div className="bg-gray-50 px-6 py-4 border-t">
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-600">
-                  Complete all questions with sources to submit
+                  {Object.keys(answers).length === 0
+                    ? "Answer at least one question to submit"
+                    : `Submit ${Object.keys(answers).length} answer${
+                        Object.keys(answers).length === 1 ? "" : "s"
+                      } (sources optional)`}
                 </div>
                 <button
                   onClick={handleSubmitAnswers}
-                  disabled={submitting || Object.keys(answers).length !== questions.length || !allQuestionsHaveSources()}
+                  disabled={submitting || !hasAtLeastOneAnswer()}
                   className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
                 >
                   {submitting && <FaSpinner className="animate-spin" />}
-                  Submit
+                  Submit Answers
                 </button>
               </div>
             </div>
@@ -396,17 +455,30 @@ export default function IconQuizPage() {
                       {selectedQuestion.topic}
                     </span>
                   </div>
-                  <p className="text-gray-900 font-medium">{selectedQuestion.question}</p>
+                  <p className="text-gray-900 font-medium">
+                    {selectedQuestion.question}
+                  </p>
                   {answers[selectedQuestion._id] && (
                     <div className="mt-2">
-                      <span className="text-sm text-gray-600">Your answer: </span>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full text-white ${
-                        answers[selectedQuestion._id] === 'Strongly Agree' ? 'bg-green-600' :
-                        answers[selectedQuestion._id] === 'Agree' ? 'bg-green-400' :
-                        answers[selectedQuestion._id] === 'Neutral' ? 'bg-gray-400' :
-                        answers[selectedQuestion._id] === 'Disagree' ? 'bg-red-400' :
-                        answers[selectedQuestion._id] === 'Strongly Disagree' ? 'bg-red-600' : 'bg-gray-400'
-                      }`}>
+                      <span className="text-sm text-gray-600">
+                        Your answer:{" "}
+                      </span>
+                      <span
+                        className={`px-2 py-1 text-xs font-medium rounded-full text-white ${
+                          answers[selectedQuestion._id] === "Strongly Agree"
+                            ? "bg-green-600"
+                            : answers[selectedQuestion._id] === "Agree"
+                            ? "bg-green-400"
+                            : answers[selectedQuestion._id] === "Neutral"
+                            ? "bg-gray-400"
+                            : answers[selectedQuestion._id] === "Disagree"
+                            ? "bg-red-400"
+                            : answers[selectedQuestion._id] ===
+                              "Strongly Disagree"
+                            ? "bg-red-600"
+                            : "bg-gray-400"
+                        }`}
+                      >
                         {answers[selectedQuestion._id]}
                       </span>
                     </div>
@@ -415,18 +487,28 @@ export default function IconQuizPage() {
 
                 {/* Sources */}
                 <div className="mb-6">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Sources (Required)</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                    Sources (Optional)
+                  </h4>
                   <p className="text-sm text-gray-600 mb-4">
-                    Provide sources that support how {icon?.name} would answer this question.
+                    Provide sources that support how {icon?.name} would answer
+                    this question.
                   </p>
 
                   {sources[selectedQuestion._id]?.map((source, index) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-4 mb-4">
+                    <div
+                      key={index}
+                      className="border border-gray-200 rounded-lg p-4 mb-4"
+                    >
                       <div className="flex justify-between items-center mb-3">
-                        <h5 className="font-medium text-gray-900">Source {index + 1}</h5>
+                        <h5 className="font-medium text-gray-900">
+                          Source {index + 1}
+                        </h5>
                         {sources[selectedQuestion._id].length > 1 && (
                           <button
-                            onClick={() => removeSource(selectedQuestion._id, index)}
+                            onClick={() =>
+                              removeSource(selectedQuestion._id, index)
+                            }
                             className="text-red-600 hover:text-red-700"
                           >
                             <FaMinus />
@@ -442,7 +524,14 @@ export default function IconQuizPage() {
                           <input
                             type="text"
                             value={source.title}
-                            onChange={(e) => handleSourceChange(selectedQuestion._id, index, 'title', e.target.value)}
+                            onChange={(e) =>
+                              handleSourceChange(
+                                selectedQuestion._id,
+                                index,
+                                "title",
+                                e.target.value
+                              )
+                            }
                             placeholder="e.g., Speech at Democratic Convention"
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           />
@@ -454,7 +543,14 @@ export default function IconQuizPage() {
                           <input
                             type="url"
                             value={source.url}
-                            onChange={(e) => handleSourceChange(selectedQuestion._id, index, 'url', e.target.value)}
+                            onChange={(e) =>
+                              handleSourceChange(
+                                selectedQuestion._id,
+                                index,
+                                "url",
+                                e.target.value
+                              )
+                            }
                             placeholder="https://..."
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           />
@@ -468,7 +564,14 @@ export default function IconQuizPage() {
                           </label>
                           <select
                             value={source.type}
-                            onChange={(e) => handleSourceChange(selectedQuestion._id, index, 'type', e.target.value)}
+                            onChange={(e) =>
+                              handleSourceChange(
+                                selectedQuestion._id,
+                                index,
+                                "type",
+                                e.target.value
+                              )
+                            }
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           >
                             <option value="article">Article</option>
@@ -487,7 +590,14 @@ export default function IconQuizPage() {
                           <input
                             type="text"
                             value={source.description}
-                            onChange={(e) => handleSourceChange(selectedQuestion._id, index, 'description', e.target.value)}
+                            onChange={(e) =>
+                              handleSourceChange(
+                                selectedQuestion._id,
+                                index,
+                                "description",
+                                e.target.value
+                              )
+                            }
                             placeholder="Brief description..."
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           />
@@ -507,10 +617,17 @@ export default function IconQuizPage() {
 
                 {/* Reasoning */}
                 <div className="mb-6">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Reasoning (Optional)</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                    Reasoning (Optional)
+                  </h4>
                   <textarea
-                    value={reasoning[selectedQuestion._id] || ''}
-                    onChange={(e) => setReasoning(prev => ({ ...prev, [selectedQuestion._id]: e.target.value }))}
+                    value={reasoning[selectedQuestion._id] || ""}
+                    onChange={(e) =>
+                      setReasoning((prev) => ({
+                        ...prev,
+                        [selectedQuestion._id]: e.target.value,
+                      }))
+                    }
                     placeholder={`Explain why ${icon?.name} would answer this way...`}
                     rows={4}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
