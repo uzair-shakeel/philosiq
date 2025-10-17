@@ -85,12 +85,12 @@ export default function IconsPage() {
             {/* Header */}
             <div className="text-center mb-12">
               <h1 className="text-4xl font-bold mb-4">
-                Explore Political Icons
+                Welcome to Philosiq Icons!
               </h1>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Discover the political compass positions of influential figures
+                Discover and contribute to the political positions of influential figures
                 throughout history, contemporary personalities, and fictional
-                characters
+                characters. 
               </p>
             </div>
 
@@ -162,8 +162,8 @@ export default function IconsPage() {
                     </h2>
                     <p className="text-gray-100 text-sm opacity-90">
                       {searchTerm
-                        ? "Icons matching your search criteria"
-                        : "Most engaged political profiles and their positions"}
+                        ? "Existing icons matching your search criteria."
+                        : "Most engaged existing icons and their positions"}
                     </p>
                   </div>
                   <div className="flex items-center gap-4">
