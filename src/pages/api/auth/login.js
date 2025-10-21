@@ -77,7 +77,7 @@ export default async function handler(req, res) {
         email: user.email,
       },
       JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7000d" }
     );
 
     // Return success with token
