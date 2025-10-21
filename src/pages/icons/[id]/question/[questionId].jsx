@@ -671,20 +671,7 @@ export default function QuestionDetailPage() {
                   />
                 </div>
 
-                {/* Confidence */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Confidence: {confidence}%
-                  </label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={confidence}
-                    onChange={(e) => setConfidence(parseInt(e.target.value))}
-                    className="w-full"
-                  />
-                </div>
+                {/* Confidence removed */}
 
                 <div className="flex justify-end gap-3">
                   <button
