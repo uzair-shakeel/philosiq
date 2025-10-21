@@ -85,12 +85,12 @@ export default function IconsPage() {
             {/* Header */}
             <div className="text-center mb-12">
               <h1 className="text-4xl font-bold mb-4">
-                Explore Political Icons
+                Welcome to Philosiq Icons!
               </h1>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Discover the political compass positions of influential figures
+                Discover and contribute to the political positions of influential figures
                 throughout history, contemporary personalities, and fictional
-                characters
+                characters. 
               </p>
             </div>
 
@@ -100,7 +100,7 @@ export default function IconsPage() {
               <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="bg-secondary-darkBlue text-white p-6">
                   <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-bold">Search Icons</h2>
+                    <h2 className="text-2xl font-bold">Search Existing Icons</h2>
                     <FaSearch className="text-3xl" />
                   </div>
                   <p className="text-sm opacity-90">
@@ -120,7 +120,7 @@ export default function IconsPage() {
                       type="submit"
                       className="w-full bg-secondary-darkBlue hover:bg-secondary-blue text-white font-bold py-3 px-4 rounded transition-colors duration-300"
                     >
-                      Search Icons
+                      Search Existing Icons
                     </button>
                   </form>
                 </div>
@@ -146,7 +146,7 @@ export default function IconsPage() {
                     onClick={handleCreateNew}
                     className="w-full bg-primary-maroon hover:bg-primary-darkMaroon text-white font-bold py-3 px-4 rounded transition-colors duration-300"
                   >
-                    Create Icon
+                    Create New Icon
                   </button>
                 </div>
               </div>
@@ -162,8 +162,8 @@ export default function IconsPage() {
                     </h2>
                     <p className="text-gray-100 text-sm opacity-90">
                       {searchTerm
-                        ? "Icons matching your search criteria"
-                        : "Most engaged political profiles and their positions"}
+                        ? "Existing icons matching your search criteria."
+                        : "Most engaged existing icons and their positions"}
                     </p>
                   </div>
                   <div className="flex items-center gap-4">
