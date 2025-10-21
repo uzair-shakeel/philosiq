@@ -342,31 +342,97 @@ function IconCard({ icon }) {
           </div>
         </div>
 
-        {/* Political Axes */}
+        {/* Political Axes (refined dual-colored bars with clean labels) */}
         <div className="mt-auto border-t border-gray-100">
           <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-white">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
-              {Object.entries(icon.scores || {}).map(([axis, score]) => (
-                <div key={axis} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 truncate mr-3">
-                    {axisLabels[axis]?.split(" ↔ ")[0]}
-                  </span>
-                  <span
-                    className={`text-sm font-semibold ${getScoreColor(
-                      score
-                    )} px-2 py-0.5 rounded-full bg-opacity-10 ${
-                      score > 20
-                        ? "bg-primary-maroon"
-                        : score < -20
-                        ? "bg-secondary-darkBlue"
-                        : ""
-                    }`}
-                  >
-                    {score > 0 ? "+" : ""}
-                    {score}
-                  </span>
-                </div>
-              ))}
+            <div className="space-y-2">
+              {[
+                { key: 'equityVsFreeMarket', axis: 'Equity vs. Free Market' },
+                { key: 'libertarianVsAuthoritarian', axis: 'Libertarian vs. Authoritarian' },
+                { key: 'progressiveVsConservative', axis: 'Progressive vs. Conservative' },
+                { key: 'secularVsReligious', axis: 'Secular vs. Religious' },
+                { key: 'globalismVsNationalism', axis: 'Globalism vs. Nationalism' },
+              ].map(({ key, axis }) => {
+                const score = Number((icon.scores || {})[key] || 0); // -100..100
+                const leftPct = Math.max(0, Math.min(100, Math.round(50 - score / 2)));
+                const rightPct = 100 - leftPct;
+
+                // Colors aligned with AxisGraph.jsx
+                let leftColor = 'bg-blue-600';
+                let rightColor = 'bg-green-600';
+                let leftBadge = 'bg-blue-100 text-blue-700';
+                let rightBadge = 'bg-green-100 text-green-700';
+                switch (axis) {
+                  case 'Equity vs. Free Market':
+                    leftColor = 'bg-blue-600';
+                    rightColor = 'bg-green-600';
+                    leftBadge = 'bg-blue-100 text-blue-700';
+                    rightBadge = 'bg-green-100 text-green-700';
+                    break;
+                  case 'Libertarian vs. Authoritarian':
+                    leftColor = 'bg-teal-500';
+                    rightColor = 'bg-orange-500';
+                    leftBadge = 'bg-teal-100 text-teal-700';
+                    rightBadge = 'bg-orange-100 text-orange-700';
+                    break;
+                  case 'Progressive vs. Conservative':
+                    leftColor = 'bg-sky-500';
+                    rightColor = 'bg-red-400';
+                    leftBadge = 'bg-sky-100 text-sky-700';
+                    rightBadge = 'bg-red-100 text-red-700';
+                    break;
+                  case 'Secular vs. Religious':
+                    leftColor = 'bg-yellow-400';
+                    rightColor = 'bg-purple-500';
+                    leftBadge = 'bg-yellow-100 text-yellow-800';
+                    rightBadge = 'bg-purple-100 text-purple-700';
+                    break;
+                  case 'Globalism vs. Nationalism':
+                    leftColor = 'bg-lime-500';
+                    rightColor = 'bg-rose-500';
+                    leftBadge = 'bg-lime-100 text-lime-700';
+                    rightBadge = 'bg-rose-100 text-rose-700';
+                    break;
+                  default:
+                    break;
+                }
+
+                const [leftLabel, rightLabel] = axis.split(' vs. ');
+                const dominantLeft = leftPct >= rightPct;
+
+                return (
+                  <div key={key}>
+                    <div className="flex items-center justify-between text-xs text-gray-700 mb-1">
+                      <span className="flex items-center gap-2">
+                        {leftLabel}
+                        {dominantLeft && (
+                          <span className={`px-1.5 py-0.5 rounded-full font-medium ${leftBadge}`}>{leftPct}%</span>
+                        )}
+                      </span>
+                      <span className="flex items-center gap-2">
+                        {!dominantLeft && (
+                          <span className={`px-1.5 py-0.5 rounded-full font-medium ${rightBadge}`}>{rightPct}%</span>
+                        )}
+                        {rightLabel}
+                      </span>
+                    </div>
+                    <div className="h-2.5 rounded-full border border-gray-200 bg-white overflow-hidden relative">
+                      <div
+                        className={`absolute left-0 top-0 bottom-0 ${leftColor} flex items-center justify-start text-[10px] font-semibold text-white`}
+                        style={{ width: `${leftPct}%` }}
+                      >
+                        {/* left fill */}
+                      </div>
+                      <div
+                        className={`absolute right-0 top-0 bottom-0 ${rightColor} flex items-center justify-end text-[10px] font-semibold text-white`}
+                        style={{ width: `${rightPct}%` }}
+                      >
+                        {/* right fill */}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

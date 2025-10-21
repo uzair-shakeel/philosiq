@@ -26,6 +26,7 @@ export default function IconProfilePage() {
   const { id } = router.query;
 
   const [icon, setIcon] = useState(null);
+  const [fullDescription, setFullDescription] = useState("");
   const [answers, setAnswers] = useState([]);
   const [alternativeAnswers, setAlternativeAnswers] = useState({});
   const [userVotes, setUserVotes] = useState({});
@@ -73,6 +74,55 @@ export default function IconProfilePage() {
       ]);
 
       setIcon(iconResponse.data.icon);
+      // Always try to fetch the full first paragraph from Wikipedia (prefer full intro via action=query)
+      try {
+        const title = iconResponse?.data?.icon?.wikipediaTitle;
+        const stored = iconResponse?.data?.icon?.description || "";
+        if (title) {
+          // 1) Try full intro with first paragraph using MediaWiki action API
+          try {
+            const r = await axios.get(
+              `https://en.wikipedia.org/w/api.php`,
+              {
+                params: {
+                  origin: '*',
+                  format: 'json',
+                  action: 'query',
+                  prop: 'extracts',
+                  explaintext: 1,
+                  exintro: 1,
+                  redirects: 1,
+                  titles: title,
+                },
+              }
+            );
+            const pages = r?.data?.query?.pages || {};
+            const page = Object.values(pages)[0];
+            const fullIntro = (page?.extract || '').trim();
+            // Take the entire first paragraph (until a double newline) if present
+            const firstPara = fullIntro.split(/\n\s*\n/)[0] || fullIntro;
+            if (firstPara && firstPara.length > stored.length) {
+              setFullDescription(firstPara);
+            } else if (fullIntro) {
+              setFullDescription(fullIntro);
+            } else {
+              throw new Error('Empty extract');
+            }
+          } catch {
+            // 2) Fallback to REST summary API
+            const wiki = await axios.get(
+              `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`
+            );
+            const extract = (wiki?.data?.extract || '').trim();
+            setFullDescription(extract || stored);
+          }
+        } else {
+          setFullDescription(stored);
+        }
+      } catch (e) {
+        // Fallback to stored description on any error
+        setFullDescription(iconResponse?.data?.icon?.description || "");
+      }
 
       // Separate accepted and alternative answers
       const acceptedAnswers = answersResponse.data.answers.filter(
@@ -323,7 +373,7 @@ export default function IconProfilePage() {
 
         {/* Hero Section */}
         <div className="bg-white shadow-sm border-b mt-20">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-4">
               <Link
                 href="/icons"
@@ -340,17 +390,17 @@ export default function IconProfilePage() {
                   <img
                     src={icon.imageUrl}
                     alt={icon.name}
-                    className="w-48 h-60 object-cover rounded-lg shadow-md"
+                    className="w-40 h-52 object-cover rounded-lg shadow-md"
                   />
                 ) : (
-                  <div className="w-48 h-60 bg-gray-200 rounded-lg shadow-md flex items-center justify-center">
+                  <div className="w-40 h-52 bg-gray-200 rounded-lg shadow-md flex items-center justify-center">
                     <FaUser className="h-20 w-20 text-gray-400" />
                   </div>
                 )}
               </div>
 
               {/* Info */}
-              <div className="flex-1">
+              <div className="flex-[3] min-w-0">
                 <h1 className="text-4xl font-bold text-gray-900 mb-2">
                   {icon.name}
                 </h1>
@@ -381,9 +431,72 @@ export default function IconProfilePage() {
                 )}
 
                 {/* Description */}
-                <p className="text-gray-700 mb-6 leading-relaxed whitespace-normal break-words">
-                  {icon.description}
+                <p className="text-gray-700 mb-6 leading-relaxed whitespace-normal break-words overflow-visible">
+                  {fullDescription || icon.description}
                 </p>
+
+                {/* Axis Percentage Bars (refined, labels with small badges) */}
+                <div className="mb-6">
+                  <div className="space-y-3">
+                    {[
+                      { key: 'equityVsFreeMarket', axis: 'Equity vs. Free Market' },
+                      { key: 'libertarianVsAuthoritarian', axis: 'Libertarian vs. Authoritarian' },
+                      { key: 'progressiveVsConservative', axis: 'Progressive vs. Conservative' },
+                      { key: 'secularVsReligious', axis: 'Secular vs. Religious' },
+                      { key: 'globalismVsNationalism', axis: 'Globalism vs. Nationalism' },
+                    ].map(({ key, axis }) => {
+                      const score = Number(icon?.scores?.[key] || 0);
+                      const leftPct = Math.max(0, Math.min(100, Math.round(50 - score / 2)));
+                      const rightPct = 100 - leftPct;
+                      let leftColor = 'bg-blue-600', rightColor = 'bg-green-600';
+                      let leftBadge = 'bg-blue-100 text-blue-700', rightBadge = 'bg-green-100 text-green-700';
+                      switch (axis) {
+                        case 'Libertarian vs. Authoritarian':
+                          leftColor = 'bg-teal-500'; rightColor = 'bg-orange-500';
+                          leftBadge = 'bg-teal-100 text-teal-700'; rightBadge = 'bg-orange-100 text-orange-700';
+                          break;
+                        case 'Progressive vs. Conservative':
+                          leftColor = 'bg-sky-500'; rightColor = 'bg-red-400';
+                          leftBadge = 'bg-sky-100 text-sky-700'; rightBadge = 'bg-red-100 text-red-700';
+                          break;
+                        case 'Secular vs. Religious':
+                          leftColor = 'bg-yellow-400'; rightColor = 'bg-purple-500';
+                          leftBadge = 'bg-yellow-100 text-yellow-800'; rightBadge = 'bg-purple-100 text-purple-700';
+                          break;
+                        case 'Globalism vs. Nationalism':
+                          leftColor = 'bg-lime-500'; rightColor = 'bg-rose-500';
+                          leftBadge = 'bg-lime-100 text-lime-700'; rightBadge = 'bg-rose-100 text-rose-700';
+                          break;
+                        default:
+                          break;
+                      }
+                      const [leftLabel, rightLabel] = axis.split(' vs. ');
+                      const dominantLeft = leftPct >= rightPct;
+                      return (
+                        <div key={key}>
+                          <div className="flex items-center justify-between text-xs text-gray-700 mb-1">
+                            <span className="flex items-center gap-2">
+                              {leftLabel}
+                              {dominantLeft && (
+                                <span className={`px-1.5 py-0.5 rounded-full font-medium ${leftBadge}`}>{leftPct}%</span>
+                              )}
+                            </span>
+                            <span className="flex items-center gap-2">
+                              {!dominantLeft && (
+                                <span className={`px-1.5 py-0.5 rounded-full font-medium ${rightBadge}`}>{rightPct}%</span>
+                              )}
+                              {rightLabel}
+                            </span>
+                          </div>
+                          <div className="h-2.5 rounded-full border border-gray-200 bg-white overflow-hidden relative">
+                            <div className={`absolute left-0 top-0 bottom-0 ${leftColor}`} style={{ width: `${leftPct}%` }} />
+                            <div className={`absolute right-0 top-0 bottom-0 ${rightColor}`} style={{ width: `${rightPct}%` }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
 
                 {/* Stats */}
                 <div className="flex flex-wrap gap-6 text-sm text-gray-600 mb-6">
@@ -418,7 +531,7 @@ export default function IconProfilePage() {
               </div>
 
               {/* Political Compass */}
-              <div className="flex-shrink-0">
+              <div className="flex-[1] min-w-[280px] md:max-w-[320px]">
                 <PoliticalCompass icon={icon} />
               </div>
             </div>
@@ -502,6 +615,7 @@ export default function IconProfilePage() {
                             userVotes={userVotes}
                             user={user}
                             iconId={id}
+                            iconScores={icon?.scores || {}}
                           />
                         ))}
                       </div>
@@ -685,6 +799,7 @@ function AnswerCard({
   userVotes,
   user,
   iconId,
+  iconScores,
 }) {
   const getAnswerColor = (answerValue) => {
     switch (answerValue) {
@@ -724,6 +839,86 @@ function AnswerCard({
             View Details
           </Link>
         </div>
+
+        {/* Compact Axis Bar (refined to match cards/results) */}
+        {(() => {
+          const axisName = answer.question.axis;
+          const keyMap = {
+            'Equity vs. Free Market': 'equityVsFreeMarket',
+            'Libertarian vs. Authoritarian': 'libertarianVsAuthoritarian',
+            'Progressive vs. Conservative': 'progressiveVsConservative',
+            'Secular vs. Religious': 'secularVsReligious',
+            'Globalism vs. Nationalism': 'globalismVsNationalism',
+          };
+          const k = keyMap[axisName];
+          const score = Number((iconScores || {})[k] || 0); // -100..100
+          const leftPct = Math.max(0, Math.min(100, Math.round(50 - score / 2)));
+          const rightPct = 100 - leftPct;
+
+          let leftColor = 'bg-blue-600';
+          let rightColor = 'bg-green-600';
+          let leftBadge = 'bg-blue-100 text-blue-700';
+          let rightBadge = 'bg-green-100 text-green-700';
+          switch (axisName) {
+            case 'Equity vs. Free Market':
+              leftColor = 'bg-blue-600';
+              rightColor = 'bg-green-600';
+              leftBadge = 'bg-blue-100 text-blue-700';
+              rightBadge = 'bg-green-100 text-green-700';
+              break;
+            case 'Libertarian vs. Authoritarian':
+              leftColor = 'bg-teal-500';
+              rightColor = 'bg-orange-500';
+              leftBadge = 'bg-teal-100 text-teal-700';
+              rightBadge = 'bg-orange-100 text-orange-700';
+              break;
+            case 'Progressive vs. Conservative':
+              leftColor = 'bg-sky-500';
+              rightColor = 'bg-red-400';
+              leftBadge = 'bg-sky-100 text-sky-700';
+              rightBadge = 'bg-red-100 text-red-700';
+              break;
+            case 'Secular vs. Religious':
+              leftColor = 'bg-yellow-400';
+              rightColor = 'bg-purple-500';
+              leftBadge = 'bg-yellow-100 text-yellow-800';
+              rightBadge = 'bg-purple-100 text-purple-700';
+              break;
+            case 'Globalism vs. Nationalism':
+              leftColor = 'bg-lime-500';
+              rightColor = 'bg-rose-500';
+              leftBadge = 'bg-lime-100 text-lime-700';
+              rightBadge = 'bg-rose-100 text-rose-700';
+              break;
+            default:
+              break;
+          }
+
+          const dominantLeft = leftPct >= rightPct;
+
+          return (
+            <div className="mt-2">
+              <div className="flex items-center justify-between text-xs text-gray-700 mb-1">
+                <span className="flex items-center gap-2">
+                  {axisName.split(' vs. ')[0]}
+                  {dominantLeft && (
+                    <span className={`px-1.5 py-0.5 rounded-full font-medium ${leftBadge}`}>{leftPct}%</span>
+                  )}
+                </span>
+                <span className="flex items-center gap-2">
+                  {!dominantLeft && (
+                    <span className={`px-1.5 py-0.5 rounded-full font-medium ${rightBadge}`}>{rightPct}%</span>
+                  )}
+                  {axisName.split(' vs. ')[1]}
+                </span>
+              </div>
+              <div className="h-2.5 rounded-full border border-gray-200 bg-white overflow-hidden relative">
+                <div className={`absolute left-0 top-0 bottom-0 ${leftColor}`} style={{ width: `${leftPct}%` }} />
+                <div className={`absolute right-0 top-0 bottom-0 ${rightColor}`} style={{ width: `${rightPct}%` }} />
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       {/* Accepted Answer */}
