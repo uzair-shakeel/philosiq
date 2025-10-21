@@ -303,9 +303,10 @@ export default function IconQuizPage() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {questions.map((question, index) => {
                     const userAnswer = answers[question._id];
-                    const hasValidSources = sources[question._id]?.some(
+                    const validCount = (sources[question._id] || []).filter(
                       (s) => s.title && s.url
-                    );
+                    ).length;
+                    const hasValidSources = validCount > 0;
 
                     return (
                       <tr key={question._id} className="hover:bg-gray-50">
@@ -369,25 +370,26 @@ export default function IconQuizPage() {
                         </td>
                         <td className="px-6 py-4 text-center">
                           {userAnswer ? (
-                            <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => setSelectedQuestionId(question._id)}
+                              className={`inline-flex items-center min-w-[150px] flex item-center justify-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-full transition-colors shadow-sm
+                                ${hasValidSources
+                                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                  : 'border border-amber-500 text-amber-700 hover:bg-amber-50'}`}
+                              title={hasValidSources ? 'View Sources' : 'Add Source'}
+                            >
                               {hasValidSources ? (
-                                <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-                                  Full Alignment
-                                </span>
+                                <>
+                                  <FaExternalLinkAlt className="h-3 w-3" />
+                                  View Sources ({validCount})
+                                </>
                               ) : (
-                                <span className="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-                                  Need Sources
-                                </span>
+                                <>
+                                  <FaPlus className="h-3 w-3" />
+                                  Add Source
+                                </>
                               )}
-                              <button
-                                onClick={() =>
-                                  setSelectedQuestionId(question._id)
-                                }
-                                className="text-blue-600 hover:text-blue-800 text-xs font-medium"
-                              >
-                                View Source
-                              </button>
-                            </div>
+                            </button>
                           ) : (
                             <span className="text-gray-400 text-xs">-</span>
                           )}
