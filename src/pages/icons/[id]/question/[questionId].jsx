@@ -243,10 +243,14 @@ export default function QuestionDetailPage() {
     );
   }
 
-  const acceptedAnswer = answers.find((a) => a.isAccepted);
-  const alternativeAnswers = answers
-    .filter((a) => !a.isAccepted)
-    .sort((a, b) => b.netVotes - a.netVotes);
+  // Compute primary = most confirmed (by netVotes or upvotes), others as alternatives
+  const sortedByConfirm = [...answers].sort((a, b) => {
+    const av = typeof a.netVotes === 'number' ? a.netVotes : (a.upvotes || 0);
+    const bv = typeof b.netVotes === 'number' ? b.netVotes : (b.upvotes || 0);
+    return bv - av;
+  });
+  const acceptedAnswer = sortedByConfirm[0];
+  const alternativeAnswers = sortedByConfirm.slice(1);
 
   return (
     <>
@@ -336,32 +340,23 @@ export default function QuestionDetailPage() {
                   </div>
 
                   {user && (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm text-gray-500">
+                        Confirmed by {Math.max(0, Number(acceptedAnswer?.upvotes || 0))}
+                      </span>
                       <button
                         onClick={() => handleVote(acceptedAnswer._id, "upvote")}
                         disabled={voting[acceptedAnswer._id]}
-                        className={`flex items-center gap-1 px-3 py-1 rounded text-sm transition-colors ${
-                          userVotes[acceptedAnswer._id] === "upvote"
-                            ? "bg-green-100 text-green-700"
-                            : "text-gray-600 hover:text-green-600"
+                        className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold shadow-sm transition-colors ${
+                          voting[acceptedAnswer._id]
+                            ? "bg-green-500 text-white opacity-80"
+                            : "bg-green-600 text-white hover:bg-green-700"
                         }`}
                       >
-                        <FaThumbsUp />
-                        {acceptedAnswer.upvotes}
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleVote(acceptedAnswer._id, "downvote")
-                        }
-                        disabled={voting[acceptedAnswer._id]}
-                        className={`flex items-center gap-1 px-3 py-1 rounded text-sm transition-colors ${
-                          userVotes[acceptedAnswer._id] === "downvote"
-                            ? "bg-red-100 text-red-700"
-                            : "text-gray-600 hover:text-red-600"
-                        }`}
-                      >
-                        <FaThumbsDown />
-                        {acceptedAnswer.downvotes}
+                        {voting[acceptedAnswer._id] && (
+                          <FaSpinner className="animate-spin mr-2" />
+                        )}
+                        Confirm Current Answer
                       </button>
                     </div>
                   )}
@@ -449,36 +444,26 @@ export default function QuestionDetailPage() {
                           {answer.answer}
                         </span>
                         {/* confidence removed */}
-                        <span className="text-xs text-gray-500">
-                          Net votes: {answer.netVotes}
-                        </span>
                       </div>
 
                       {user && (
                         <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-500">
+                            Confirmed by {Math.max(0, Number(answer.upvotes || 0))}
+                          </span>
                           <button
                             onClick={() => handleVote(answer._id, "upvote")}
                             disabled={voting[answer._id]}
-                            className={`flex items-center gap-1 px-3 py-1 rounded text-sm transition-colors ${
-                              userVotes[answer._id] === "upvote"
-                                ? "bg-green-100 text-green-700"
-                                : "text-gray-600 hover:text-green-600"
+                            className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-semibold shadow-sm transition-colors ${
+                              voting[answer._id]
+                                ? "bg-green-500 text-white opacity-80"
+                                : "bg-green-600 text-white hover:bg-green-700"
                             }`}
                           >
-                            <FaThumbsUp />
-                            {answer.upvotes}
-                          </button>
-                          <button
-                            onClick={() => handleVote(answer._id, "downvote")}
-                            disabled={voting[answer._id]}
-                            className={`flex items-center gap-1 px-3 py-1 rounded text-sm transition-colors ${
-                              userVotes[answer._id] === "downvote"
-                                ? "bg-red-100 text-red-700"
-                                : "text-gray-600 hover:text-red-600"
-                            }`}
-                          >
-                            <FaThumbsDown />
-                            {answer.downvotes}
+                            {voting[answer._id] && (
+                              <FaSpinner className="animate-spin mr-2" />
+                            )}
+                            Confirm
                           </button>
                         </div>
                       )}

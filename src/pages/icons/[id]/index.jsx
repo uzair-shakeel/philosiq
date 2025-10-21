@@ -124,22 +124,30 @@ export default function IconProfilePage() {
         setFullDescription(iconResponse?.data?.icon?.description || "");
       }
 
-      // Separate accepted and alternative answers
-      const acceptedAnswers = answersResponse.data.answers.filter(
-        (a) => a.isAccepted
-      );
-      const alternatives = {};
-
-      answersResponse.data.answers.forEach((answer) => {
-        if (!answer.isAccepted) {
-          if (!alternatives[answer.question._id]) {
-            alternatives[answer.question._id] = [];
-          }
-          alternatives[answer.question._id].push(answer);
-        }
+      // Build primary answer per question = highest confirmed (upvotes/netVotes)
+      const byQuestion = {};
+      (answersResponse.data.answers || []).forEach((a) => {
+        const qid = a.question?._id || a.question;
+        if (!qid) return;
+        if (!byQuestion[qid]) byQuestion[qid] = [];
+        byQuestion[qid].push(a);
       });
 
-      setAnswers(acceptedAnswers);
+      const primaryAnswers = [];
+      const alternatives = {};
+      Object.keys(byQuestion).forEach((qid) => {
+        const list = byQuestion[qid];
+        const sorted = [...list].sort((x, y) => {
+          const ax = (typeof x.netVotes === 'number' ? x.netVotes : x.upvotes || 0);
+          const ay = (typeof y.netVotes === 'number' ? y.netVotes : y.upvotes || 0);
+          return ay - ax;
+        });
+        const best = sorted[0];
+        if (best) primaryAnswers.push(best);
+        alternatives[qid] = sorted.slice(1);
+      });
+
+      setAnswers(primaryAnswers);
       setAlternativeAnswers(alternatives);
 
       // If user is logged in, fetch their votes
@@ -153,6 +161,30 @@ export default function IconProfilePage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const recomputePrimaryFromState = () => {
+    const byQuestion = {};
+    (answers || []).forEach((a) => {
+      const qid = a.question?._id || a.question;
+      if (!qid) return;
+      if (!byQuestion[qid]) byQuestion[qid] = [];
+      byQuestion[qid].push(a);
+    });
+
+    const primaryAnswers = [];
+    Object.keys(byQuestion).forEach((qid) => {
+      const list = byQuestion[qid];
+      const sorted = [...list].sort((x, y) => {
+        const ax = (typeof x.netVotes === 'number' ? x.netVotes : x.upvotes || 0);
+        const ay = (typeof y.netVotes === 'number' ? y.netVotes : y.upvotes || 0);
+        return ay - ax;
+      });
+      const best = sorted[0];
+      if (best) primaryAnswers.push(best);
+    });
+
+    setAnswers(primaryAnswers);
   };
 
   const handleVote = async (answerId, voteType, counterEvidence) => {
@@ -225,6 +257,8 @@ export default function IconProfilePage() {
       const serverType = response.data?.currentVoteType || voteType;
       setUserVotes((prev) => ({ ...prev, [answerId]: serverType }));
       setLastVoteAt((prev) => ({ ...prev, [answerId]: now }));
+      // After any vote, re-evaluate which answer is primary per question
+      recomputePrimaryFromState();
     } catch (error) {
       console.error("Error voting:", error);
     } finally {
@@ -818,6 +852,39 @@ function AnswerCard({
     }
   };
 
+  // Recompute the primary (most confirmed) answer per question from current state
+  const recomputePrimaryFromState = () => {
+    // Gather all answers by question id from current primary + alternatives
+    const byQ = {};
+    (answers || []).forEach((a) => {
+      const qid = a?.question?._id || a?.question;
+      if (!qid) return;
+      (byQ[qid] = byQ[qid] || []).push(a);
+    });
+    Object.keys(alternativeAnswers || {}).forEach((qid) => {
+      (alternativeAnswers[qid] || []).forEach((a) => {
+        (byQ[qid] = byQ[qid] || []).push(a);
+      });
+    });
+
+    const newPrimary = [];
+    const newAlts = {};
+    Object.keys(byQ).forEach((qid) => {
+      const list = byQ[qid];
+      const sorted = [...list].sort((x, y) => {
+        const ax = typeof x?.netVotes === 'number' ? x.netVotes : (x?.upvotes || 0);
+        const ay = typeof y?.netVotes === 'number' ? y.netVotes : (y?.upvotes || 0);
+        return ay - ax;
+      });
+      const best = sorted[0];
+      if (best) newPrimary.push(best);
+      newAlts[qid] = sorted.slice(1);
+    });
+
+    setAnswers(newPrimary);
+    setAlternativeAnswers(newAlts);
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       {/* Question */}
@@ -834,9 +901,9 @@ function AnswerCard({
           </h3>
           <Link
             href={`/icons/${iconId}/question/${answer.question._id}`}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-semibold bg-red-600 text-white hover:bg-red-700"
           >
-            View Details
+            Vote to change
           </Link>
         </div>
 
@@ -935,35 +1002,20 @@ function AnswerCard({
           </div>
 
           {user && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-500">
+                Confirmed by {Math.max(0, Number(answer.upvotes || 0))}
+              </span>
               <button
                 onClick={() => onUpvote(answer._id)}
                 disabled={votingLoading[answer._id]}
-                className={`flex items-center gap-1 px-2 py-1 rounded text-sm transition-colors ${
-                  userVotes[answer._id] === "upvote"
-                    ? "bg-green-100 text-green-700"
-                    : "text-gray-600 hover:text-green-600"
-                }`}
+                className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold shadow-sm transition-colors
+                  ${votingLoading[answer._id]
+                    ? 'bg-green-500 text-white opacity-80'
+                    : 'bg-green-600 text-white hover:bg-green-700'}`}
               >
-                {votingLoading[answer._id] ? (
-                  <FaSpinner className="animate-spin" />
-                ) : (
-                  <FaThumbsUp />
-                )}
-                {answer.upvotes}
-              </button>
-
-              <button
-                onClick={() => onDownvote(answer._id)}
-                disabled={votingLoading[answer._id]}
-                className={`flex items-center gap-1 px-2 py-1 rounded text-sm transition-colors ${
-                  userVotes[answer._id] === "downvote"
-                    ? "bg-red-100 text-red-700"
-                    : "text-gray-600 hover:text-red-600"
-                }`}
-              >
-                <FaThumbsDown />
-                {answer.downvotes}
+                {votingLoading[answer._id] && <FaSpinner className="animate-spin mr-2" />}
+                Confirm Current Answer
               </button>
             </div>
           )}
@@ -1032,47 +1084,54 @@ function AnswerCard({
                     >
                       {alt.answer}
                     </span>
-
                     {user && (
                       <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-500">
+                          Confirmed by {Math.max(0, Number(alt.upvotes || 0))}
+                        </span>
                         <button
                           onClick={() => onUpvote(alt._id)}
                           disabled={votingLoading[alt._id]}
-                          className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
-                            userVotes[alt._id] === "upvote"
-                              ? "bg-green-100 text-green-700"
-                              : "text-gray-600 hover:text-green-600"
+                          className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-semibold shadow-sm transition-colors ${
+                            votingLoading[alt._id]
+                              ? 'bg-green-500 text-white opacity-80'
+                              : 'bg-green-600 text-white hover:bg-green-700'
                           }`}
                         >
-                          <FaThumbsUp />
-                          {alt.upvotes}
-                        </button>
-
-                        <button
-                          onClick={() => onDownvote(alt._id)}
-                          disabled={votingLoading[alt._id]}
-                          className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
-                            userVotes[alt._id] === "downvote"
-                              ? "bg-red-100 text-red-700"
-                              : "text-gray-600 hover:text-red-600"
-                          }`}
-                        >
-                          <FaThumbsDown />
-                          {alt.downvotes}
+                          {votingLoading[alt._id] && (
+                            <FaSpinner className="animate-spin mr-2" />
+                          )}
+                          Confirm
                         </button>
                       </div>
                     )}
                   </div>
+
+                  {/* Optional: show minimal source info if present */}
+                  {alt.sources && alt.sources.length > 0 && (
+                    <div className="mb-2">
+                      <h5 className="text-xs font-medium text-gray-700">Sources:</h5>
+                      <ul className="mt-1 space-y-1">
+                        {alt.sources.slice(0, 2).map((s, idx) => (
+                          <li key={idx} className="text-xs text-gray-600">
+                            <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700">
+                              {s.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
                   <div className="text-xs text-gray-600">
                     By {alt.submittedBy.name}
                   </div>
                 </div>
               ))}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+);
 }
