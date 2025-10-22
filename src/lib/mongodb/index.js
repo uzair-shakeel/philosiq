@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+// Ensure models are registered once per cold start
+import "../../models/Icon";
+import "../../models/Question";
+import "../../models/IconAnswer";
 
 const MONGODB_URI =
   process.env.MONGODB_URI ||
