@@ -399,6 +399,8 @@ function IconCard({ icon }) {
 
                 const [leftLabel, rightLabel] = axis.split(' vs. ');
                 const dominantLeft = leftPct >= rightPct;
+                const leftBarClass = dominantLeft ? leftColor : 'bg-gray-200';
+                const rightBarClass = dominantLeft ? 'bg-gray-200' : rightColor;
 
                 return (
                   <div key={key}>
@@ -418,13 +420,13 @@ function IconCard({ icon }) {
                     </div>
                     <div className="h-2.5 rounded-full border border-gray-200 bg-white overflow-hidden relative">
                       <div
-                        className={`absolute left-0 top-0 bottom-0 ${leftColor} flex items-center justify-start text-[10px] font-semibold text-white`}
+                        className={`absolute left-0 top-0 bottom-0 ${leftBarClass} flex items-center justify-start text-[10px] font-semibold ${dominantLeft ? 'text-white' : 'text-gray-600'}`}
                         style={{ width: `${leftPct}%` }}
                       >
                         {/* left fill */}
                       </div>
                       <div
-                        className={`absolute right-0 top-0 bottom-0 ${rightColor} flex items-center justify-end text-[10px] font-semibold text-white`}
+                        className={`absolute right-0 top-0 bottom-0 ${rightBarClass} flex items-center justify-end text-[10px] font-semibold ${!dominantLeft ? 'text-white' : 'text-gray-600'}`}
                         style={{ width: `${rightPct}%` }}
                       >
                         {/* right fill */}

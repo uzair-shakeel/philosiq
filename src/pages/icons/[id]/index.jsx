@@ -506,11 +506,14 @@ export default function IconProfilePage() {
                       }
                       const [leftLabel, rightLabel] = axis.split(' vs. ');
                       const dominantLeft = leftPct >= rightPct;
+                      const leftBarClass = dominantLeft ? leftColor : 'bg-gray-200';
+                      const rightBarClass = dominantLeft ? 'bg-gray-200' : rightColor;
                       return (
                         <div key={key}>
                           <div className="flex items-center justify-between text-xs text-gray-700 mb-1">
                             <span className="flex items-center gap-2">
                               {leftLabel}
+
                               {dominantLeft && (
                                 <span className={`px-1.5 py-0.5 rounded-full font-medium ${leftBadge}`}>{leftPct}%</span>
                               )}
@@ -523,14 +526,14 @@ export default function IconProfilePage() {
                             </span>
                           </div>
                           <div className="h-2.5 rounded-full border border-gray-200 bg-white overflow-hidden relative">
-                            <div className={`absolute left-0 top-0 bottom-0 ${leftColor}`} style={{ width: `${leftPct}%` }} />
-                            <div className={`absolute right-0 top-0 bottom-0 ${rightColor}`} style={{ width: `${rightPct}%` }} />
+                            <div className={`absolute left-0 top-0 bottom-0 ${leftBarClass}`} style={{ width: `${leftPct}%` }} />
+                            <div className={`absolute right-0 top-0 bottom-0 ${rightBarClass}`} style={{ width: `${rightPct}%` }} />
                           </div>
                         </div>
                       );
                     })}
-                  </div>
-                </div>
+                    </div>
+                    </div>
 
                 {/* Stats */}
                 <div className="flex flex-wrap gap-6 text-sm text-gray-600 mb-6">
@@ -962,6 +965,8 @@ function AnswerCard({
           }
 
           const dominantLeft = leftPct >= rightPct;
+          const leftBarClass = dominantLeft ? leftColor : 'bg-gray-200';
+          const rightBarClass = dominantLeft ? 'bg-gray-200' : rightColor;
 
           return (
             <div className="mt-2">
@@ -980,8 +985,8 @@ function AnswerCard({
                 </span>
               </div>
               <div className="h-2.5 rounded-full border border-gray-200 bg-white overflow-hidden relative">
-                <div className={`absolute left-0 top-0 bottom-0 ${leftColor}`} style={{ width: `${leftPct}%` }} />
-                <div className={`absolute right-0 top-0 bottom-0 ${rightColor}`} style={{ width: `${rightPct}%` }} />
+                <div className={`absolute left-0 top-0 bottom-0 ${leftBarClass}`} style={{ width: `${leftPct}%` }} />
+                <div className={`absolute right-0 top-0 bottom-0 ${rightBarClass}`} style={{ width: `${rightPct}%` }} />
               </div>
             </div>
           );
