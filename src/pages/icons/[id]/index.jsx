@@ -44,6 +44,7 @@ export default function IconProfilePage() {
     description: "",
   });
   const [axisOpen, setAxisOpen] = useState({});
+  const [descExpanded, setDescExpanded] = useState(false);
 
   useEffect(() => {
     // Check authentication
@@ -465,9 +466,30 @@ export default function IconProfilePage() {
                 )}
 
                 {/* Description */}
-                <p className="text-gray-700 mb-6 leading-relaxed whitespace-normal break-words overflow-visible">
-                  {fullDescription || icon.description}
-                </p>
+                {(() => {
+                  const text = (fullDescription || icon.description || "").trim();
+                  const words = text ? text.split(/\s+/) : [];
+                  const overLimit = words.length > 100;
+                  const display = descExpanded || !overLimit
+                    ? text
+                    : words.slice(0, 100).join(" ") + "…";
+                  return (
+                    <div className="mb-6">
+                      <p className="text-gray-700 leading-relaxed whitespace-normal break-words overflow-visible">
+                        {display}
+                      </p>
+                      {overLimit && (
+                        <button
+                          type="button"
+                          onClick={() => setDescExpanded((v) => !v)}
+                          className="mt-2 text-blue-600 hover:text-blue-700 font-medium"
+                        >
+                          {descExpanded ? "See less" : "See more"}
+                        </button>
+                      )}
+                    </div>
+                  );
+                })()}
 
                 {/* Axis Percentage Bars (refined, labels with small badges) */}
                 <div className="mb-6">
