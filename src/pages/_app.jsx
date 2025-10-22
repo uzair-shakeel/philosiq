@@ -44,12 +44,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   // Fetch user authentication status
   const fetchUser = async () => {
     try {
-      const response = await axios.get(
-        `${BACKEND_HOSTNAME}/api/auth/protected`,
-        {
-          withCredentials: true,
-        }
-      );
+      const url = BACKEND_HOSTNAME
+        ? `${BACKEND_HOSTNAME}/api/auth/user`
+        : "/api/auth/user";
+      const response = await axios.get(url, { withCredentials: true });
       setUser(response.data.user);
     } catch (error) {
       setUser(null);
