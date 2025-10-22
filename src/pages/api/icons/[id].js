@@ -1,6 +1,9 @@
 import dbConnect from '../../../lib/mongodb/connection';
 import Icon from '../../../models/Icon';
 import IconAnswer from '../../../models/IconAnswer';
+import Question from '../../../models/Question';
+// eslint-disable-next-line no-unused-vars
+const __ensureModelsRegistered = [Icon?.modelName, Question?.modelName];
 import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
 

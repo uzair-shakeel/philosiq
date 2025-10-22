@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import "./Icon";
+import "./Question";
 
 // Define the IconAnswer schema for answers given by/for icons
 const IconAnswerSchema = new mongoose.Schema(
