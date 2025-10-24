@@ -352,7 +352,14 @@ export default function IconProfilePage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <video
+          src="/Loading.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-[80%] h-[80%] object-contain"
+        />
       </div>
     );
   }
@@ -441,16 +448,6 @@ export default function IconProfilePage() {
                 </h1>
                 <div className="flex items-center gap-3 mb-4">
                   <p className="text-xl text-gray-600">{icon.occupation}</p>
-                  {(icon.isFictional || icon.characterType === "fictional") && (
-                    <span className="px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-full">
-                      Fictional Character
-                    </span>
-                  )}
-                  {icon.characterType === "real" && (
-                    <span className="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">
-                      Real Person
-                    </span>
-                  )}
                 </div>
 
                 {/* Dates */}
