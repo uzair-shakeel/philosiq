@@ -26,6 +26,7 @@ export default function IconQuizPage() {
   const [answers, setAnswers] = useState({});
   const [sources, setSources] = useState({});
   const [reasoning, setReasoning] = useState({});
+  const [acceptedByQuestion, setAcceptedByQuestion] = useState({});
   const [selectedQuestionId, setSelectedQuestionId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -67,13 +68,32 @@ export default function IconQuizPage() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [iconResponse, questionsResponse] = await Promise.all([
+      const [iconResponse, questionsResponse, answersResponse] = await Promise.all([
         axios.get(`/api/icons/${id}`),
         axios.get("/api/questions/public", { params: { active: true } }),
+        axios.get("/api/icons/answers", { params: { iconId: id, includeAlternatives: true } }),
       ]);
 
       setIcon(iconResponse.data.icon);
       setQuestions(questionsResponse.data.questions);
+
+      // Compute accepted answer per question (most confirmed by netVotes or upvotes)
+      const byQ = {};
+      (answersResponse?.data?.answers || []).forEach((a) => {
+        const qid = a?.question?._id || a?.question;
+        if (!qid) return;
+        (byQ[qid] = byQ[qid] || []).push(a);
+      });
+      const acceptedMap = {};
+      Object.keys(byQ).forEach((qid) => {
+        const sorted = byQ[qid].sort((x, y) => {
+          const ax = typeof x?.netVotes === 'number' ? x.netVotes : (x?.upvotes || 0);
+          const ay = typeof y?.netVotes === 'number' ? y.netVotes : (y?.upvotes || 0);
+          return ay - ax;
+        });
+        if (sorted[0]) acceptedMap[qid] = sorted[0];
+      });
+      setAcceptedByQuestion(acceptedMap);
 
       // Initialize state for all questions
       const initialAnswers = {};
@@ -86,6 +106,13 @@ export default function IconQuizPage() {
         ];
       });
 
+      // Prefill user's selections with the accepted answers (can be changed by user)
+      Object.keys(acceptedMap).forEach((qid) => {
+        const ansText = acceptedMap[qid]?.answer;
+        if (ansText) initialAnswers[qid] = ansText;
+      });
+
+      setAnswers(initialAnswers);
       setSources(initialSources);
       setReasoning(initialReasoning);
     } catch (error) {
@@ -331,9 +358,21 @@ export default function IconQuizPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-center">
-                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">
-                            Not Set
-                          </span>
+                          {acceptedByQuestion[question._id] ? (
+                            <span className={`px-2 py-1 text-xs font-medium rounded-full text-white ${
+                              acceptedByQuestion[question._id].answer === 'Strongly Agree' ? 'bg-green-600' :
+                              acceptedByQuestion[question._id].answer === 'Agree' ? 'bg-green-400' :
+                              acceptedByQuestion[question._id].answer === 'Neutral' ? 'bg-gray-400' :
+                              acceptedByQuestion[question._id].answer === 'Disagree' ? 'bg-red-400' :
+                              acceptedByQuestion[question._id].answer === 'Strongly Disagree' ? 'bg-red-600' : 'bg-gray-400'
+                            }`}>
+                              {acceptedByQuestion[question._id].answer}
+                            </span>
+                          ) : (
+                            <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">
+                              Not Set
+                            </span>
+                          )}
                         </td>
                         <td className="px-6 py-4 text-center">
                           {userAnswer ? (
