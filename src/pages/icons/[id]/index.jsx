@@ -756,6 +756,16 @@ function PoliticalCompass({ icon }) {
             </>
           ))}
 
+          {/* Logo watermark to match results page */}
+          <image
+            href="/Newiconlogo.png"
+            x={center - 140}
+            y={center - 140}
+            width="280"
+            height="280"
+            opacity="0.20"
+          />
+
           {/* Axes */}
           <line
             x1={center}
@@ -931,88 +941,7 @@ function AnswerCard({
             Vote to change
           </Link>
         </div>
-
-        {/* Compact Axis Bar (refined to match cards/results) */}
-        {(() => {
-          const axisName = answer.question.axis;
-          const keyMap = {
-            'Equity vs. Free Market': 'equityVsFreeMarket',
-            'Libertarian vs. Authoritarian': 'libertarianVsAuthoritarian',
-            'Progressive vs. Conservative': 'progressiveVsConservative',
-            'Secular vs. Religious': 'secularVsReligious',
-            'Globalism vs. Nationalism': 'globalismVsNationalism',
-          };
-          const k = keyMap[axisName];
-          const score = Number((iconScores || {})[k] || 0); // -100..100
-          const leftPct = Math.max(0, Math.min(100, Math.round(50 - score / 2)));
-          const rightPct = 100 - leftPct;
-
-          let leftColor = 'bg-blue-600';
-          let rightColor = 'bg-green-600';
-          let leftBadge = 'bg-blue-100 text-blue-700';
-          let rightBadge = 'bg-green-100 text-green-700';
-          switch (axisName) {
-            case 'Equity vs. Free Market':
-              leftColor = 'bg-blue-600';
-              rightColor = 'bg-green-600';
-              leftBadge = 'bg-blue-100 text-blue-700';
-              rightBadge = 'bg-green-100 text-green-700';
-              break;
-            case 'Libertarian vs. Authoritarian':
-              leftColor = 'bg-teal-500';
-              rightColor = 'bg-orange-500';
-              leftBadge = 'bg-teal-100 text-teal-700';
-              rightBadge = 'bg-orange-100 text-orange-700';
-              break;
-            case 'Progressive vs. Conservative':
-              leftColor = 'bg-sky-500';
-              rightColor = 'bg-red-400';
-              leftBadge = 'bg-sky-100 text-sky-700';
-              rightBadge = 'bg-red-100 text-red-700';
-              break;
-            case 'Secular vs. Religious':
-              leftColor = 'bg-yellow-400';
-              rightColor = 'bg-purple-500';
-              leftBadge = 'bg-yellow-100 text-yellow-800';
-              rightBadge = 'bg-purple-100 text-purple-700';
-              break;
-            case 'Globalism vs. Nationalism':
-              leftColor = 'bg-lime-500';
-              rightColor = 'bg-rose-500';
-              leftBadge = 'bg-lime-100 text-lime-700';
-              rightBadge = 'bg-rose-100 text-rose-700';
-              break;
-            default:
-              break;
-          }
-
-          const dominantLeft = leftPct >= rightPct;
-          const leftBarClass = dominantLeft ? leftColor : 'bg-gray-200';
-          const rightBarClass = dominantLeft ? 'bg-gray-200' : rightColor;
-
-          return (
-            <div className="mt-2">
-              <div className="flex items-center justify-between text-xs text-gray-700 mb-1">
-                <span className="flex items-center gap-2">
-                  {axisName.split(' vs. ')[0]}
-                  {dominantLeft && (
-                    <span className={`px-1.5 py-0.5 rounded-full font-medium ${leftBadge}`}>{leftPct}%</span>
-                  )}
-                </span>
-                <span className="flex items-center gap-2">
-                  {!dominantLeft && (
-                    <span className={`px-1.5 py-0.5 rounded-full font-medium ${rightBadge}`}>{rightPct}%</span>
-                  )}
-                  {axisName.split(' vs. ')[1]}
-                </span>
-              </div>
-              <div className="h-2.5 rounded-full border border-gray-200 bg-white overflow-hidden relative">
-                <div className={`absolute left-0 top-0 bottom-0 ${leftBarClass}`} style={{ width: `${leftPct}%` }} />
-                <div className={`absolute right-0 top-0 bottom-0 ${rightBarClass}`} style={{ width: `${rightPct}%` }} />
-              </div>
-            </div>
-          );
-        })()}
+        
       </div>
 
       {/* Accepted Answer */}
