@@ -290,6 +290,10 @@ function IconCard({ icon }) {
     return "text-gray-600";
   };
 
+  // Derive fictional/real flags robustly per icon
+  const isFictional = Boolean(icon?.isFictional) || (icon?.characterType && icon.characterType.toLowerCase() === 'fictional');
+  const isReal = icon?.characterType && icon.characterType.toLowerCase() === 'real';
+
   return (
     <Link href={`/icons/${icon._id}`}>
       <div className="group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200 flex flex-col h-full transform hover:-translate-y-1">
@@ -316,12 +320,12 @@ function IconCard({ icon }) {
             </h3>
             <div className="flex items-center gap-2 mb-2">
               <p className="text-sm text-gray-600">{icon.occupation}</p>
-              {icon.isFictional && (
+              {isFictional && (
                 <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
                   Fictional
                 </span>
               )}
-              {icon.characterType === "real" && (
+              {isReal && (
                 <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
                   Real Person
                 </span>
@@ -357,39 +361,41 @@ function IconCard({ icon }) {
                 const leftPct = Math.max(0, Math.min(100, Math.round(50 - score / 2)));
                 const rightPct = 100 - leftPct;
 
-                // Colors aligned with AxisGraph.jsx
-                let leftColor = 'bg-blue-600';
-                let rightColor = 'bg-green-600';
+                // Colors aligned with AxisGraph.jsx (strong + muted variants)
+                let leftStrong = 'bg-blue-600';
+                let rightStrong = 'bg-green-600';
+                let leftMuted = 'bg-blue-200';
+                let rightMuted = 'bg-green-200';
                 let leftBadge = 'bg-blue-100 text-blue-700';
                 let rightBadge = 'bg-green-100 text-green-700';
                 switch (axis) {
                   case 'Equity vs. Free Market':
-                    leftColor = 'bg-blue-600';
-                    rightColor = 'bg-green-600';
+                    leftStrong = 'bg-blue-600'; rightStrong = 'bg-green-600';
+                    leftMuted = 'bg-blue-200'; rightMuted = 'bg-green-200';
                     leftBadge = 'bg-blue-100 text-blue-700';
                     rightBadge = 'bg-green-100 text-green-700';
                     break;
                   case 'Libertarian vs. Authoritarian':
-                    leftColor = 'bg-teal-500';
-                    rightColor = 'bg-orange-500';
+                    leftStrong = 'bg-teal-500'; rightStrong = 'bg-orange-500';
+                    leftMuted = 'bg-teal-200'; rightMuted = 'bg-orange-200';
                     leftBadge = 'bg-teal-100 text-teal-700';
                     rightBadge = 'bg-orange-100 text-orange-700';
                     break;
                   case 'Progressive vs. Conservative':
-                    leftColor = 'bg-sky-500';
-                    rightColor = 'bg-red-400';
+                    leftStrong = 'bg-sky-500'; rightStrong = 'bg-red-400';
+                    leftMuted = 'bg-sky-200'; rightMuted = 'bg-red-200';
                     leftBadge = 'bg-sky-100 text-sky-700';
                     rightBadge = 'bg-red-100 text-red-700';
                     break;
                   case 'Secular vs. Religious':
-                    leftColor = 'bg-yellow-400';
-                    rightColor = 'bg-purple-500';
+                    leftStrong = 'bg-yellow-400'; rightStrong = 'bg-purple-500';
+                    leftMuted = 'bg-yellow-200'; rightMuted = 'bg-purple-200';
                     leftBadge = 'bg-yellow-100 text-yellow-800';
                     rightBadge = 'bg-purple-100 text-purple-700';
                     break;
                   case 'Globalism vs. Nationalism':
-                    leftColor = 'bg-lime-500';
-                    rightColor = 'bg-rose-500';
+                    leftStrong = 'bg-lime-500'; rightStrong = 'bg-rose-500';
+                    leftMuted = 'bg-lime-200'; rightMuted = 'bg-rose-200';
                     leftBadge = 'bg-lime-100 text-lime-700';
                     rightBadge = 'bg-rose-100 text-rose-700';
                     break;
@@ -399,8 +405,8 @@ function IconCard({ icon }) {
 
                 const [leftLabel, rightLabel] = axis.split(' vs. ');
                 const dominantLeft = leftPct >= rightPct;
-                const leftBarClass = dominantLeft ? leftColor : 'bg-gray-200';
-                const rightBarClass = dominantLeft ? 'bg-gray-200' : rightColor;
+                const leftBarClass = dominantLeft ? leftStrong : leftMuted;
+                const rightBarClass = dominantLeft ? rightMuted : rightStrong;
 
                 return (
                   <div key={key}>

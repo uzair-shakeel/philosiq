@@ -202,6 +202,13 @@ export default function IconQuizPage() {
     );
   }
 
+  // Ensure consistent ordering: group by axis, then by topic
+  const sortedQuestions = [...questions].sort((a, b) => {
+    const ax = (a.axis || '').localeCompare(b.axis || '');
+    if (ax !== 0) return ax;
+    return (a.topic || '').localeCompare(b.topic || '');
+  });
+
   return (
     <>
       <Head>
@@ -301,7 +308,7 @@ export default function IconQuizPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {questions.map((question, index) => {
+                  {sortedQuestions.map((question, index) => {
                     const userAnswer = answers[question._id];
                     const validCount = (sources[question._id] || []).filter(
                       (s) => s.title && s.url

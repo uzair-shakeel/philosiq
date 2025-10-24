@@ -441,7 +441,7 @@ export default function IconProfilePage() {
                 </h1>
                 <div className="flex items-center gap-3 mb-4">
                   <p className="text-xl text-gray-600">{icon.occupation}</p>
-                  {icon.isFictional && (
+                  {(icon.isFictional || icon.characterType === "fictional") && (
                     <span className="px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-full">
                       Fictional Character
                     </span>
@@ -504,23 +504,28 @@ export default function IconProfilePage() {
                       const score = Number(icon?.scores?.[key] || 0);
                       const leftPct = Math.max(0, Math.min(100, Math.round(50 - score / 2)));
                       const rightPct = 100 - leftPct;
-                      let leftColor = 'bg-blue-600', rightColor = 'bg-green-600';
+                      let leftStrong = 'bg-blue-600', rightStrong = 'bg-green-600';
+                      let leftMuted = 'bg-blue-200', rightMuted = 'bg-green-200';
                       let leftBadge = 'bg-blue-100 text-blue-700', rightBadge = 'bg-green-100 text-green-700';
                       switch (axis) {
                         case 'Libertarian vs. Authoritarian':
-                          leftColor = 'bg-teal-500'; rightColor = 'bg-orange-500';
+                          leftStrong = 'bg-teal-500'; rightStrong = 'bg-orange-500';
+                          leftMuted = 'bg-teal-200'; rightMuted = 'bg-orange-200';
                           leftBadge = 'bg-teal-100 text-teal-700'; rightBadge = 'bg-orange-100 text-orange-700';
                           break;
                         case 'Progressive vs. Conservative':
-                          leftColor = 'bg-sky-500'; rightColor = 'bg-red-400';
+                          leftStrong = 'bg-sky-500'; rightStrong = 'bg-red-400';
+                          leftMuted = 'bg-sky-200'; rightMuted = 'bg-red-200';
                           leftBadge = 'bg-sky-100 text-sky-700'; rightBadge = 'bg-red-100 text-red-700';
                           break;
                         case 'Secular vs. Religious':
-                          leftColor = 'bg-yellow-400'; rightColor = 'bg-purple-500';
+                          leftStrong = 'bg-yellow-400'; rightStrong = 'bg-purple-500';
+                          leftMuted = 'bg-yellow-200'; rightMuted = 'bg-purple-200';
                           leftBadge = 'bg-yellow-100 text-yellow-800'; rightBadge = 'bg-purple-100 text-purple-700';
                           break;
                         case 'Globalism vs. Nationalism':
-                          leftColor = 'bg-lime-500'; rightColor = 'bg-rose-500';
+                          leftStrong = 'bg-lime-500'; rightStrong = 'bg-rose-500';
+                          leftMuted = 'bg-lime-200'; rightMuted = 'bg-rose-200';
                           leftBadge = 'bg-lime-100 text-lime-700'; rightBadge = 'bg-rose-100 text-rose-700';
                           break;
                         default:
@@ -528,8 +533,8 @@ export default function IconProfilePage() {
                       }
                       const [leftLabel, rightLabel] = axis.split(' vs. ');
                       const dominantLeft = leftPct >= rightPct;
-                      const leftBarClass = dominantLeft ? leftColor : 'bg-gray-200';
-                      const rightBarClass = dominantLeft ? 'bg-gray-200' : rightColor;
+                      const leftBarClass = dominantLeft ? leftStrong : leftMuted;
+                      const rightBarClass = dominantLeft ? rightMuted : rightStrong;
                       return (
                         <div key={key}>
                           <div className="flex items-center justify-between text-xs text-gray-700 mb-1">
