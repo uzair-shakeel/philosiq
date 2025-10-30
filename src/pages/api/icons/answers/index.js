@@ -41,7 +41,6 @@ async function handleGet(req, res) {
     }
     
     const answers = await IconAnswer.find(query)
-      .populate('icon', 'name imageUrl')
       .populate('question')
       .sort({ netVotes: -1, createdAt: -1 })
       .lean();
@@ -130,10 +129,7 @@ async function handlePost(req, res) {
     });
     
     await iconAnswer.save();
-    await iconAnswer.populate([
-      { path: 'icon', select: 'name imageUrl' },
-      { path: 'question' },
-    ]);
+    await iconAnswer.populate([{ path: 'question' }]);
     
     // If this is the first answer, update icon scores
     if (!existingAcceptedAnswer) {
