@@ -2,10 +2,9 @@ import dbConnect from '../../../../lib/mongodb/connection';
 import IconAnswer from '../../../../models/IconAnswer';
 import Icon from '../../../../models/Icon';
 import Question from '../../../../models/Question';
-// Ensure models are registered (avoid tree-shaking removing these imports in prod)
-// Accessing modelName forces evaluation/registration with mongoose
-// eslint-disable-next-line no-unused-vars
-const __ensureModelsRegistered = [Icon?.modelName, Question?.modelName];
+// Always execute model modules to register schemas (prevents serverless tree-shake issues)
+import '../../../../models/Icon';
+import '../../../../models/Question';
 import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
 
