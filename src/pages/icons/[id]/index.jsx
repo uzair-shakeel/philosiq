@@ -353,7 +353,7 @@ export default function IconProfilePage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <video
-          src="/Loading.mp4"
+          src="/Loading.gif"
           autoPlay
           loop
           muted
