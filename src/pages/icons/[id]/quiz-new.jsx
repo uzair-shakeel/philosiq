@@ -330,7 +330,7 @@ export default function IconQuizPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-center">
-                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">
+                          <span className="inline-flex items-center justify-center min-w-[120px] px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">
                             Not Set
                           </span>
                         </td>
@@ -340,7 +340,7 @@ export default function IconQuizPage() {
                               onClick={() =>
                                 handleAnswerChange(question._id, "")
                               }
-                              className={`px-3 py-1 text-xs font-medium rounded-full text-white transition-all duration-200 hover:scale-105 hover:shadow-md cursor-pointer ${
+                              className={`inline-flex items-center justify-center min-w-[120px] px-3 py-1 text-xs font-medium rounded-full text-white transition-all duration-200 hover:scale-105 hover:shadow-md cursor-pointer ${
                                 userAnswer === "Strongly Agree"
                                   ? "bg-green-600 hover:bg-green-700"
                                   : userAnswer === "Agree"
@@ -464,7 +464,7 @@ export default function IconQuizPage() {
                         Your answer:{" "}
                       </span>
                       <span
-                        className={`px-2 py-1 text-xs font-medium rounded-full text-white ${
+                        className={`inline-flex items-center justify-center min-w-[120px] px-2 py-1 text-xs font-medium rounded-full text-white ${
                           answers[selectedQuestion._id] === "Strongly Agree"
                             ? "bg-green-600"
                             : answers[selectedQuestion._id] === "Agree"

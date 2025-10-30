@@ -327,7 +327,7 @@ export default function QuestionDetailPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium text-white ${getAnswerColor(
+                      className={`inline-flex items-center justify-center min-w-[140px] px-3 py-1 rounded-full text-sm font-medium text-white ${getAnswerColor(
                         acceptedAnswer.answer
                       )}`}
                     >
@@ -437,7 +437,7 @@ export default function QuestionDetailPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <span
-                          className={`px-3 py-1 rounded-full text-sm font-medium text-white ${getAnswerColor(
+                          className={`inline-flex items-center justify-center min-w-[140px] px-3 py-1 rounded-full text-sm font-medium text-white ${getAnswerColor(
                             answer.answer
                           )}`}
                         >
