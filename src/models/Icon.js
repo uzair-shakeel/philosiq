@@ -111,7 +111,6 @@ const IconSchema = new mongoose.Schema(
 
 // Index for search functionality
 IconSchema.index({ name: "text", description: "text", occupation: "text" });
-IconSchema.index({ wikipediaPageId: 1 });
 IconSchema.index({ createdBy: 1 });
 
 export default mongoose.models.Icon || mongoose.model("Icon", IconSchema);

@@ -358,7 +358,7 @@ export default function IconProfilePage() {
           loop
           muted
           playsInline
-          className="w-[80%] h-[80%] object-contain"
+          className="w-[10%] h-[10%] object-contain"
         />
       </div>
     );

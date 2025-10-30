@@ -15,6 +15,7 @@ import {
   FaGlobe,
   FaEnvelope,
   FaCog,
+  FaUserCircle,
 } from "react-icons/fa";
 
 export default function AdminLayout({ children, title }) {
@@ -160,6 +161,17 @@ export default function AdminLayout({ children, title }) {
               >
                 <FaEnvelope className="mr-3" />
                 Contact Messages
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/admin/icons"
+                className={`flex items-center px-4 py-2 rounded-md ${isActive(
+                  "/admin/icons"
+                )}`}
+              >
+                <FaUserCircle className="mr-3" />
+                Icons
               </Link>
             </li>
             <li>

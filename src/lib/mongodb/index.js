@@ -29,8 +29,6 @@ async function connectToDatabase() {
 
   if (!cached.promise) {
     const opts = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       serverSelectionTimeoutMS: 10000, // Timeout after 10s instead of default 30s
     };
 

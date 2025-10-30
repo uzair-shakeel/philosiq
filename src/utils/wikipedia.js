@@ -2,6 +2,7 @@ import axios from "axios";
 
 const WIKIPEDIA_API_BASE = "https://en.wikipedia.org/api/rest_v1";
 const WIKIPEDIA_API_ACTION = "https://en.wikipedia.org/w/api.php";
+const WIKIDATA_API = "https://www.wikidata.org/w/api.php";
 
 /**
  * Search for Wikipedia articles by title
@@ -83,7 +84,20 @@ export async function getWikipediaPage(title) {
     const categories = page.categories || [];
     const birthYear = extractYearFromCategories(categories, "births");
     const deathYear = extractYearFromCategories(categories, "deaths");
-    const occupation = extractOccupationFromCategories(categories);
+    let occupation = extractOccupationFromCategories(categories);
+
+    // If we have a Wikidata ID, try to get canonical profession(s) (P106)
+    if (pageProps.wikibase_item) {
+      try {
+        const professions = await getWikidataProfessions(pageProps.wikibase_item);
+        if (professions.length > 0) {
+          // Prefer a concise, high-priority label when multiple professions exist
+          occupation = selectPreferredProfession(professions) || professions[0];
+        }
+      } catch (e) {
+        // Silent fallback to category-based occupation
+      }
+    }
 
     return {
       pageId: parseInt(pageId),
@@ -260,6 +274,92 @@ function extractOccupationFromCategories(categories) {
   }
 
   return "Public Figure";
+}
+
+/**
+ * Fetch canonical profession labels (P106) from Wikidata for an entity
+ * @param {string} wikidataId - e.g., "Q937" for Albert Einstein
+ * @returns {Promise<string[]>} Array of profession labels (capitalized)
+ */
+async function getWikidataProfessions(wikidataId) {
+  // Step 1: Get entity claims to extract profession (P106) IDs
+  const entityRes = await axios.get(WIKIDATA_API, {
+    params: {
+      action: "wbgetentities",
+      format: "json",
+      ids: wikidataId,
+      props: "claims",
+      origin: "*",
+    },
+  });
+
+  const entity = entityRes.data.entities?.[wikidataId];
+  const p106Claims = entity?.claims?.P106 || [];
+  const professionIds = p106Claims
+    .map((c) => c.mainsnak?.datavalue?.value?.id)
+    .filter(Boolean);
+
+  if (professionIds.length === 0) return [];
+
+  // Step 2: Resolve labels for the profession IDs in one call
+  const labelsRes = await axios.get(WIKIDATA_API, {
+    params: {
+      action: "wbgetentities",
+      format: "json",
+      ids: professionIds.join("|"),
+      props: "labels",
+      languages: "en",
+      origin: "*",
+    },
+  });
+
+  const entities = labelsRes.data.entities || {};
+  const labels = Object.values(entities)
+    .map((e) => e.labels?.en?.value)
+    .filter(Boolean)
+    .map((s) => s.trim());
+
+  // Normalize capitalization (Title Case) for UI consistency
+  return labels.map((l) =>
+    l
+      .split(" ")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ")
+  );
+}
+
+/**
+ * Choose the most representative profession when multiple are present
+ */
+function selectPreferredProfession(professions) {
+  const priority = [
+    "Theoretical Physicist",
+    "Physicist",
+    "Scientist",
+    "Mathematician",
+    "Philosopher",
+    "Politician",
+    "Actor",
+    "Singer",
+    "Musician",
+    "Businessperson",
+    "Entrepreneur",
+    "Author",
+    "Writer",
+  ];
+
+  // Exact match priority first
+  for (const p of priority) {
+    if (professions.includes(p)) return p;
+  }
+
+  // Partial match fallback
+  for (const p of priority) {
+    const match = professions.find((x) => x.toLowerCase().includes(p.toLowerCase()));
+    if (match) return match;
+  }
+
+  return null;
 }
 
 /**
