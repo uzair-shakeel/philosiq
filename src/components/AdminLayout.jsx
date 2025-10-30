@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
+import SmallLoader from "./SmallLoader";
 import {
   FaHome,
   FaQuestion,
@@ -43,8 +44,8 @@ export default function AdminLayout({ children, title }) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-neutral-light">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-primary-maroon border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <SmallLoader size={48} className="mx-auto mb-4" />
+          <p className="text-gray-600 text-sm">Loading...</p>
         </div>
       </div>
     );
