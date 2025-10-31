@@ -5,6 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 import { FaSearch, FaPlus, FaUser, FaCalendar, FaGlobe } from "react-icons/fa";
 import Navbar from "../components/Navbar";
+import SmallLoader from "../components/SmallLoader";
 
 export default function IconsPage() {
   const router = useRouter();
@@ -180,8 +181,7 @@ export default function IconsPage() {
             {loading && (
               <div className="flex flex-col items-center justify-center py-32">
                 <div className="relative">
-                  <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary-maroon border-opacity-20"></div>
-                  <div className="absolute top-0 left-0 animate-spin rounded-full h-16 w-16 border-4 border-transparent border-t-primary-maroon"></div>
+                <SmallLoader />
                 </div>
                 <p className="mt-4 text-gray-500">Loading icons...</p>
               </div>
