@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function SmallLoader({ size = 40, className = "" }) {
+export default function SmallLoader({ size = 100, className = "" }) {
   const dimension = typeof size === "number" ? `${size}px` : size;
   return (
     <div className={`inline-flex items-center justify-center ${className}`} style={{ width: dimension, height: dimension }}>
