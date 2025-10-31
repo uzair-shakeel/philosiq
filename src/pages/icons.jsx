@@ -3,14 +3,14 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
-import { FaSearch, FaPlus, FaUser, FaCalendar, FaGlobe } from "react-Icons/fa";
+import { FaSearch, FaPlus, FaUser, FaCalendar, FaGlobe } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import SmallLoader from "../components/SmallLoader";
 
 export default function IconsPage() {
   const router = useRouter();
   const [user, setUser] = useState(null);
-  const [Icons, setIcons] = useState([]);
+  const [icons, setIcons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [pagination, setPagination] = useState({});
@@ -36,7 +36,7 @@ export default function IconsPage() {
   const fetchIcons = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/api/Icons", {
+      const response = await axios.get("/api/icons", {
         params: {
           page: currentPage,
           limit: 12,
@@ -45,10 +45,10 @@ export default function IconsPage() {
           sortOrder: "desc",
         },
       });
-      setIcons(response.data.Icons);
+      setIcons(response.data.icons);
       setPagination(response.data.pagination);
     } catch (error) {
-      console.error("Error fetching Icons:", error);
+      console.error("Error fetching icons:", error);
     } finally {
       setLoading(false);
     }
@@ -62,10 +62,10 @@ export default function IconsPage() {
 
   const handleCreateNew = () => {
     if (!user) {
-      router.push("/login?redirect=Icons/create");
+      router.push("/login?redirect=icons/create");
       return;
     }
-    router.push("/Icons/create");
+    router.push("/icons/create");
   };
 
   return (
@@ -140,7 +140,7 @@ export default function IconsPage() {
                 </div>
                 <div className="p-6">
                   <p className="text-gray-600 mb-6">
-                    Contribute to our database by creating a new Icon profile
+                    Contribute to our database by creating a new icon profile
                     for a historical or contemporary figure.
                   </p>
                   <button
@@ -163,13 +163,13 @@ export default function IconsPage() {
                     </h2>
                     <p className="text-gray-100 text-sm opacity-90">
                       {searchTerm
-                        ? "Existing Icons matching your search criteria."
-                        : "Most engaged existing Icons and their positions"}
+                        ? "Existing icons matching your search criteria."
+                        : "Most engaged existing icons and their positions"}
                     </p>
                   </div>
                   <div className="flex items-center gap-4">
                     <span className="px-4 py-2 bg-white bg-opacity-10 rounded-lg text-white text-sm font-medium">
-                      {Icons.length} {Icons.length === 1 ? "Icon" : "Icons"}{" "}
+                      {icons.length} {icons.length === 1 ? "icon" : "icons"}{" "}
                       found
                     </span>
                   </div>
@@ -183,26 +183,26 @@ export default function IconsPage() {
                 <div className="relative">
                 <SmallLoader />
                 </div>
-                <p className="mt-4 text-gray-500">Loading Icons...</p>
+                <p className="mt-4 text-gray-500">Loading icons...</p>
               </div>
             )}
 
             {/* Icons Grid */}
             {!loading && (
               <div className="space-y-8">
-                {Icons.length === 0 ? (
+                {icons.length === 0 ? (
                   <div className="text-center py-20">
                     <div className="max-w-md mx-auto bg-white rounded-xl p-8 shadow-sm">
                       <div className="mb-6 w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
                         <FaUser className="h-10 w-10 text-gray-300" />
                       </div>
                       <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                        {searchTerm ? "No Icons found" : "No Icons yet"}
+                        {searchTerm ? "No icons found" : "No icons yet"}
                       </h3>
                       <p className="text-gray-600 mb-8">
                         {searchTerm
-                          ? "Try a different search term or create a new Icon."
-                          : "Be the first to create an Icon for a famous person!"}
+                          ? "Try a different search term or create a new icon."
+                          : "Be the first to create an icon for a famous person!"}
                       </p>
                       <button
                         onClick={handleCreateNew}
@@ -215,8 +215,8 @@ export default function IconsPage() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {Icons.map((Icon) => (
-                      <IconCard key={Icon._id} Icon={Icon} />
+                    {icons.map((icon) => (
+                      <IconCard key={icon._id} icon={icon} />
                     ))}
                   </div>
                 )}
@@ -275,7 +275,7 @@ export default function IconsPage() {
   );
 }
 
-function IconCard({ Icon }) {
+function IconCard({ icon }) {
   const axisLabels = {
     equityVsFreeMarket: "Equity ↔ Free Market",
     libertarianVsAuthoritarian: "Libertarian ↔ Authoritarian",
@@ -290,20 +290,20 @@ function IconCard({ Icon }) {
     return "text-gray-600";
   };
 
-  // Derive fictional/real flags robustly per Icon
-  const isFictional = Boolean(Icon?.isFictional) || (Icon?.characterType && Icon.characterType.toLowerCase() === 'fictional');
-  const isReal = Icon?.characterType && Icon.characterType.toLowerCase() === 'real';
+  // Derive fictional/real flags robustly per icon
+  const isFictional = Boolean(icon?.isFictional) || (icon?.characterType && icon.characterType.toLowerCase() === 'fictional');
+  const isReal = icon?.characterType && icon.characterType.toLowerCase() === 'real';
 
   return (
-    <Link href={`/Icons/${Icon._id}`}>
+    <Link href={`/icons/${icon._id}`}>
       <div className="group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200 flex flex-col h-full transform hover:-translate-y-1">
         <div className="flex p-6">
           {/* Image */}
           <div className="flex-shrink-0">
-            {Icon.imageUrl ? (
+            {icon.imageUrl ? (
               <img
-                src={Icon.imageUrl}
-                alt={Icon.name}
+                src={icon.imageUrl}
+                alt={icon.name}
                 className="w-24 h-24 object-cover rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300"
               />
             ) : (
@@ -316,21 +316,21 @@ function IconCard({ Icon }) {
           {/* Content */}
           <div className="ml-6 flex-1 min-w-0">
             <h3 className="text-xl font-bold text-gray-900 group-hover:text-secondary-darkBlue transition-colors mb-1">
-              {Icon.name}
+              {icon.name}
             </h3>
             <div className="flex items-center gap-2 mb-2">
-              <p className="text-sm text-gray-600">{Icon.occupation}</p>
+              <p className="text-sm text-gray-600">{icon.occupation}</p>
             </div>
 
             {/* Birth/Death dates */}
-            {(Icon.birthDate || Icon.deathDate) && (
+            {(icon.birthDate || icon.deathDate) && (
               <div className="flex items-center text-sm text-gray-500">
                 <FaCalendar className="mr-2 h-4 w-4 text-gray-400" />
-                {Icon.birthDate && Icon.deathDate
-                  ? `${Icon.birthDate} - ${Icon.deathDate}`
-                  : Icon.birthDate
-                  ? `Born ${Icon.birthDate}`
-                  : `Died ${Icon.deathDate}`}
+                {icon.birthDate && icon.deathDate
+                  ? `${icon.birthDate} - ${icon.deathDate}`
+                  : icon.birthDate
+                  ? `Born ${icon.birthDate}`
+                  : `Died ${icon.deathDate}`}
               </div>
             )}
           </div>
@@ -347,7 +347,7 @@ function IconCard({ Icon }) {
                 { key: 'secularVsReligious', axis: 'Secular vs. Religious' },
                 { key: 'globalismVsNationalism', axis: 'Globalism vs. Nationalism' },
               ].map(({ key, axis }) => {
-                const score = Number((Icon.scores || {})[key] || 0); // -100..100
+                const score = Number((icon.scores || {})[key] || 0); // -100..100
                 const leftPct = Math.max(0, Math.min(100, Math.round(50 - score / 2)));
                 const rightPct = 100 - leftPct;
 
@@ -438,7 +438,7 @@ function IconCard({ Icon }) {
         {/* Footer */}
         <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
           <span className="text-sm font-medium text-gray-500">
-            {Icon.totalAnswers || 0} answers
+            {icon.totalAnswers || 0} answers
           </span>
           <span className="inline-flex items-center text-sm font-semibold text-secondary-darkBlue group-hover:translate-x-1 transition-transform duration-300">
             View Profile <span className="ml-2">→</span>
