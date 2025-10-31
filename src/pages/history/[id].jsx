@@ -24,6 +24,7 @@ import { jsPDF } from "jspdf";
 import { FaKey } from "react-icons/fa";
 import AxisSpecificSummaries from "../../components/AxisSpecificSummaries";
 import PoliticalCompass from "../../components/PoliticalCompass";
+import SmallLoader from "../../components/SmallLoader";
 
 // Helper function to convert answer value to agreement text
 const getAgreementText = (answerValue) => {
@@ -472,7 +473,7 @@ export default function QuizResultDetail() {
         <div className="pt-24 pb-16 min-h-screen bg-neutral-light">
           <div className="container-custom">
             <div className="flex flex-col items-center justify-center py-16">
-              <FaSpinner className="animate-spin text-4xl text-primary-maroon mb-4" />
+              <SmallLoader />
               <p className="text-lg">Loading quiz result...</p>
             </div>
           </div>
@@ -1250,7 +1251,7 @@ export default function QuizResultDetail() {
             >
               {isPdfGenerating ? (
                 <>
-                  <FaSpinner className="animate-spin mr-2" /> Generating PDF...
+                  <SmallLoader /> Generating PDF...
                 </>
               ) : (
                 <>
@@ -1267,7 +1268,7 @@ export default function QuizResultDetail() {
               >
                 {genCodeLoading ? (
                   <>
-                    <FaSpinner className="animate-spin mr-2" /> Generating...
+                    <SmallLoader /> Generating...
                   </>
                 ) : (
                   <>
@@ -1295,7 +1296,7 @@ export default function QuizResultDetail() {
             >
               {isDeleting ? (
                 <>
-                  <FaSpinner className="animate-spin mr-2" /> Deleting...
+                  <SmallLoader /> Deleting...
                 </>
               ) : (
                 <>

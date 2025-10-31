@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { useRouter } from "next/router";
 import axios from "axios";
+import SmallLoader from "../../components/SmallLoader";
 
 export default function ShortQuizManager() {
   const router = useRouter();
@@ -336,7 +337,7 @@ export default function ShortQuizManager() {
                     }`}
                   >
                     {saving ? (
-                      <FaSpinner className="animate-spin mr-2" />
+                      <SmallLoader />
                     ) : (
                       <FaSave className="mr-2" />
                     )}
@@ -429,7 +430,7 @@ export default function ShortQuizManager() {
           {/* Questions List */}
           {loading ? (
             <div className="text-center py-12">
-              <FaSpinner className="animate-spin text-4xl text-primary-maroon mx-auto mb-4" />
+              <SmallLoader />
               <p className="text-gray-600">Loading questions...</p>
             </div>
           ) : filteredQuestions.length === 0 ? (

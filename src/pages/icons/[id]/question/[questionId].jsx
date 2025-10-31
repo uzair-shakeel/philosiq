@@ -18,6 +18,8 @@ import {
   FaFlag,
 } from "react-icons/fa";
 import Navbar from "../../../../components/Navbar";
+import SmallLoader from "../../../../components/SmallLoader";
+import minDelay from "../../../../utils/minDelay";
 
 export default function QuestionDetailPage() {
   const router = useRouter();
@@ -75,7 +77,7 @@ export default function QuestionDetailPage() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [iconResponse, answersResponse] = await Promise.all([
+      const [iconResponse, answersResponse] = await minDelay(Promise.all([
         axios.get(`/api/icons/${id}`),
         axios.get("/api/icons/answers", {
           params: {
@@ -84,7 +86,7 @@ export default function QuestionDetailPage() {
             includeAlternatives: true,
           },
         }),
-      ]);
+      ]), 1000);
 
       setIcon(iconResponse.data.icon);
       setAnswers(answersResponse.data.answers);
@@ -220,7 +222,7 @@ export default function QuestionDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <SmallLoader size={60} />
       </div>
     );
   }
@@ -354,7 +356,7 @@ export default function QuestionDetailPage() {
                         }`}
                       >
                         {voting[acceptedAnswer._id] && (
-                          <FaSpinner className="animate-spin mr-2" />
+                          <SmallLoader size={16} className="mr-2" />
                         )}
                         Confirm Current Answer
                       </button>
@@ -461,7 +463,7 @@ export default function QuestionDetailPage() {
                             }`}
                           >
                             {voting[answer._id] && (
-                              <FaSpinner className="animate-spin mr-2" />
+                              <SmallLoader size={16} className="mr-2" />
                             )}
                             Confirm
                           </button>
@@ -670,7 +672,7 @@ export default function QuestionDetailPage() {
                     disabled={submitting || !newAnswer}
                     className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
-                    {submitting && <FaSpinner className="animate-spin" />}
+                    {submitting && <SmallLoader />}
                     Submit Answer
                   </button>
                 </div>

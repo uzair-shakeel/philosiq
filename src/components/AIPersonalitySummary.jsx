@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { FaBrain, FaLock, FaSpinner, FaLightbulb } from "react-icons/fa";
+import { FaBrain, FaLock, FaLightbulb } from "react-icons/fa";
+import SmallLoader from "./SmallLoader";
+import minDelay from "../utils/minDelay";
 
 const AIPersonalitySummary = ({
   answers,
@@ -92,7 +94,7 @@ const AIPersonalitySummary = ({
           : `anonymous_${JSON.stringify(answers).length}`;
       const sessionFlagKey = `aiSummaryGenerated_${cacheKey}`;
 
-      const response = await fetch("/api/ai/generate-summary", {
+      const response = await minDelay(fetch("/api/ai/generate-summary", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +105,7 @@ const AIPersonalitySummary = ({
           userId: localStorage.getItem("userId") || "unknown",
           axisDataByName: axisDataByName,
         }),
-      });
+      }), 1000);
 
       const data = await response.json();
 
@@ -177,11 +179,9 @@ const AIPersonalitySummary = ({
 
         {loading && (
           <div className="text-center py-4">
-            <FaSpinner className="text-purple-600 text-3xl mx-auto mb-3 animate-spin" />
+            <SmallLoader size={48} className="mx-auto mb-3" />
             <p className="text-gray-600">AI is analyzing your personality...</p>
-            <p className="text-sm text-gray-500 mt-2">
-              This may take a few moments
-            </p>
+            <p className="text-sm text-gray-500 mt-2">This may take a few moments</p>
           </div>
         )}
 
@@ -265,11 +265,9 @@ const AIPersonalitySummary = ({
 
       {loading && (
         <div className="text-center py-8">
-          <FaSpinner className="text-blue-600 text-3xl mx-auto mb-3 animate-spin" />
+          <SmallLoader size={48} className="mx-auto mb-3" />
           <p className="text-gray-600">AI is analyzing your personality...</p>
-          <p className="text-sm text-gray-500 mt-2">
-            This may take a few moments
-          </p>
+          <p className="text-sm text-gray-500 mt-2">This may take a few moments</p>
         </div>
       )}
 

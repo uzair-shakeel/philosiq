@@ -3,17 +3,8 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
-import {
-  FaUser,
-  FaPlus,
-  FaMinus,
-  FaCheck,
-  FaSpinner,
-  FaExternalLinkAlt,
-  FaTimes,
-  FaArrowLeft,
-  FaEdit,
-} from "react-icons/fa";
+import { FaUser, FaPlus, FaMinus, FaCheck, FaExternalLinkAlt, FaTimes, FaArrowLeft, FaEdit } from "react-icons/fa";
+import SmallLoader from "../../../components/SmallLoader";
 
 export default function IconQuizPage() {
   const router = useRouter();
@@ -178,7 +169,7 @@ export default function IconQuizPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <SmallLoader size={60} />
       </div>
     );
   }
@@ -421,7 +412,7 @@ export default function IconQuizPage() {
                   disabled={submitting || !hasAtLeastOneAnswer()}
                   className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
                 >
-                  {submitting && <FaSpinner className="animate-spin" />}
+                  {submitting && <SmallLoader />}
                   Submit Answers
                 </button>
               </div>

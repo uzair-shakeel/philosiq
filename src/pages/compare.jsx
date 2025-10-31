@@ -10,6 +10,7 @@ import {
   FaCheckCircle,
   FaTimesCircle,
 } from "react-icons/fa";
+import SmallLoader from "../components/SmallLoader";
 
 // Helper function to create styled pill components
 const pill = (value) => {
@@ -228,9 +229,7 @@ export default function ComparePage() {
   if (loading) {
     return (
       <Layout title="Compare - Philosiq">
-        <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
-          <FaSpinner className="animate-spin text-3xl text-primary-maroon" />
-        </div>
+        <SmallLoader />
       </Layout>
     );
   }
@@ -347,9 +346,7 @@ export default function ComparePage() {
                 disabled={!leftId || !rightCode || resolving}
               >
                 {resolving ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <FaSpinner className="animate-spin" /> Loading...
-                  </span>
+                  <SmallLoader />
                 ) : 'Load Results'}
               </button>
             </div>

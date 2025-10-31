@@ -13,6 +13,7 @@ import {
   FaArrowLeft,
 } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
+import SmallLoader from "../../components/SmallLoader";
 
 // Helper function to extract source media from character description
 function extractSourceMedia(extract) {
@@ -148,7 +149,7 @@ export default function CreateIconPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <SmallLoader />
       </div>
     );
   }
@@ -223,7 +224,7 @@ export default function CreateIconPage() {
                       className="sm:mt-12 px-8 py-4 bg-primary-maroon text-white rounded-lg hover:bg-primary-darkMaroon disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200 text-lg font-medium"
                     >
                       {searching ? (
-                        <FaSpinner className="animate-spin" />
+                        <SmallLoader />
                       ) : (
                         <>
                           <FaSearch className="mr-2" />
@@ -369,7 +370,7 @@ export default function CreateIconPage() {
                       className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                     >
                       {creating ? (
-                        <FaSpinner className="animate-spin mr-2" />
+                        <SmallLoader />
                       ) : (
                         <FaCheck className="mr-2" />
                       )}

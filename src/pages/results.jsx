@@ -33,6 +33,7 @@ import { calculateAnswerScore, AXIS_ALIASES } from "../utils/resultsCalculator";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { track } from "@vercel/analytics";
+import SmallLoader from "../components/SmallLoader";
 
 // Helper function to convert answer value to agreement text
 const getAgreementText = (answerValue) => {
@@ -2478,7 +2479,7 @@ function ResultsContent({ results }) {
                     >
                       {isPdfGenerating ? (
                         <>
-                          <FaSpinner className="animate-spin mr-2" /> Sending...
+                          <SmallLoader /> Sending...
                         </>
                       ) : (
                         "Send Results"
@@ -2505,7 +2506,7 @@ function ResultsContent({ results }) {
                 >
                   {isPdfGenerating ? (
                     <>
-                      <FaSpinner className="animate-spin mr-2" /> Generating
+                      <SmallLoader /> Generating
                       PDF...
                     </>
                   ) : (

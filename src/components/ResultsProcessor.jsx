@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { calculateResults } from "../utils/resultsCalculator";
+import SmallLoader from "./SmallLoader";
 
 /**
  * Component that processes quiz results from session storage
@@ -139,7 +140,7 @@ export default function ResultsProcessor({ children }) {
   if (loading) {
     return (
       <div className="min-h-[50vh] flex flex-col items-center justify-center text-center py-40">
-        <div className="w-16 h-16 border-4 border-primary-maroon border-t-transparent rounded-full animate-spin mb-6"></div>
+        <SmallLoader size={64} className="mb-6" />
         <h2 className="text-2xl font-bold mb-1">Loading Your Results.</h2>
         <p className="text-gray-600 mb-8">Please wait while we calculate your results...</p>
         <div className="flex flex-col items-center gap-2">

@@ -19,6 +19,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import Navbar from "../../../components/Navbar";
+import SmallLoader from "../../../components/SmallLoader";
 
 export default function IconProfilePage() {
   const router = useRouter();
@@ -972,7 +973,7 @@ function AnswerCard({
                     ? 'bg-green-500 text-white opacity-80'
                     : 'bg-green-600 text-white hover:bg-green-700'}`}
               >
-                {votingLoading[answer._id] && <FaSpinner className="animate-spin mr-2" />}
+                {votingLoading[answer._id] && <SmallLoader />}
                 Confirm Current Answer
               </button>
             </div>
@@ -1057,7 +1058,7 @@ function AnswerCard({
                           }`}
                         >
                           {votingLoading[alt._id] && (
-                            <FaSpinner className="animate-spin mr-2" />
+                            <SmallLoader />
                           )}
                           Confirm
                         </button>

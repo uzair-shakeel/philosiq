@@ -9,6 +9,7 @@ import {
   FaHistory,
   FaTrash,
 } from "react-icons/fa";
+import SmallLoader from "../components/SmallLoader";
 
 // Custom Modal Component
 function CustomModal({
@@ -241,8 +242,7 @@ export default function HistoryPage() {
           {/* Loading State */}
           {loading && (
             <div className="flex flex-col items-center justify-center py-12">
-              <FaSpinner className="animate-spin text-4xl text-primary-maroon mb-4" />
-              <p className="text-lg">Loading your quiz history...</p>
+<SmallLoader />              <p className="text-lg">Loading your quiz history...</p>
             </div>
           )}
 
@@ -339,7 +339,7 @@ export default function HistoryPage() {
                     >
                       {deletingId === result._id ? (
                         <>
-                          <FaSpinner className="animate-spin mr-2" />{" "}
+                          <SmallLoader />{" "}
                           Deleting...
                         </>
                       ) : (

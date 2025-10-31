@@ -18,6 +18,7 @@ import {
   FaHistory,
   FaUsers,
 } from "react-icons/fa";
+import SmallLoader from "../components/SmallLoader";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -419,9 +420,7 @@ export default function ProfilePage() {
   if (!user) {
     return (
       <Layout title="Profile - Philosiq">
-        <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
-          <FaSpinner className="animate-spin text-3xl text-primary-maroon" />
-        </div>
+         <SmallLoader />
       </Layout>
     );
   }
@@ -754,7 +753,7 @@ export default function ProfilePage() {
 
                 {loadingSubscription ? (
                   <div className="flex items-center justify-center py-4">
-                    <FaSpinner className="animate-spin text-gray-400" />
+                    <SmallLoader />
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -791,7 +790,7 @@ export default function ProfilePage() {
                           >
                             {isLoading ? (
                               <>
-                                <FaSpinner className="animate-spin mr-2" />
+                                <SmallLoader />
                                 Processing...
                               </>
                             ) : (
@@ -805,7 +804,7 @@ export default function ProfilePage() {
                           >
                             {loadingSubscription ? (
                               <>
-                                <FaSpinner className="animate-spin mr-2" />
+                                <SmallLoader  />
                                 Refreshing...
                               </>
                             ) : (
@@ -853,7 +852,7 @@ export default function ProfilePage() {
                           >
                             {isLoading ? (
                               <>
-                                <FaSpinner className="animate-spin mr-2" />
+                                <SmallLoader />
                                 Processing...
                               </>
                             ) : (

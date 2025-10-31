@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { FaBrain, FaSpinner, FaLightbulb, FaChartPie } from "react-icons/fa";
+import { FaBrain, FaLightbulb, FaChartPie } from "react-icons/fa";
+import SmallLoader from "./SmallLoader";
+import minDelay from "../utils/minDelay";
 
 const AXIS_NAMES = [
   "Equity vs. Free Market",
@@ -50,10 +52,8 @@ const AISummaryCard = ({
 
       {loading && (
         <div className="text-center py-6">
-          <FaSpinner className="text-blue-600 text-2xl mx-auto mb-3 animate-spin" />
-          <p className="text-gray-600 text-sm">
-            We are analyzing your {axisName.toLowerCase()} positioning...
-          </p>
+          <SmallLoader size={40} className="mx-auto mb-3" />
+          <p className="text-gray-600 text-sm">We are analyzing your {axisName.toLowerCase()} positioning...</p>
         </div>
       )}
 
@@ -212,7 +212,7 @@ const AxisSpecificSummaries = ({
     setErrors((prev) => ({ ...prev, [axisName]: "" }));
 
     try {
-      const response = await fetch("/api/ai/generate-axis-summary", {
+      const response = await minDelay(fetch("/api/ai/generate-axis-summary", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -224,7 +224,7 @@ const AxisSpecificSummaries = ({
           userId: localStorage.getItem("userId") || "unknown",
           axisData: axisDataByName[axisName] || null,
         }),
-      });
+      }), 1000);
 
       const data = await response.json();
 

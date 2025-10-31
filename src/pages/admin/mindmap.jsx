@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 import { format } from "date-fns";
 import { getSession } from "next-auth/react";
+import SmallLoader from "../../components/SmallLoader";
 
 const ARCHETYPE_MAP = [
   { code: "ELPSG", label: "The Utopian" },
@@ -419,7 +420,7 @@ export default function AdminMindMap() {
       </div>
       {isLoadingLocations && (
         <div className="mt-2 text-sm text-gray-500 flex items-center">
-          <FaSpinner className="animate-spin mr-2" /> Loading location
+          <SmallLoader />
           options...
         </div>
       )}
@@ -445,7 +446,7 @@ export default function AdminMindMap() {
                 className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
               >
                 {isDeleting ? (
-                  <FaSpinner className="animate-spin" />
+                  <SmallLoader />
                 ) : (
                   <FaTrash />
                 )}
@@ -543,7 +544,7 @@ export default function AdminMindMap() {
               {loading ? (
                 <tr>
                   <td colSpan="7" className="px-6 py-4 text-center">
-                    <FaSpinner className="animate-spin inline-block mr-2" />
+                    <SmallLoader />
                     Loading...
                   </td>
                 </tr>

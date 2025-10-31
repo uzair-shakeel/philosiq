@@ -7,6 +7,7 @@ import {
   FaCheckCircle,
   FaExclamationTriangle,
 } from "react-icons/fa";
+import SmallLoader from "../components/SmallLoader";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -262,7 +263,7 @@ export default function ContactPage() {
                 >
                   {isSubmitting ? (
                     <>
-                      <FaSpinner className="animate-spin mr-2" />
+                      <SmallLoader />
                       Sending...
                     </>
                   ) : (

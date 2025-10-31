@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import axios from "axios";
 import { FaPaperPlane, FaEnvelope, FaSpinner } from "react-icons/fa";
 import { track } from "@vercel/analytics";
+import SmallLoader from "../components/SmallLoader";
 
 export default function ContactUs() {
   const [formData, setFormData] = useState({
@@ -194,7 +195,7 @@ export default function ContactUs() {
                     className="btn-primary flex items-center justify-center gap-2 w-full md:w-auto px-8 py-3"
                   >
                     {isSubmitting ? (
-                      <FaSpinner className="animate-spin" />
+                      <SmallLoader />
                     ) : (
                       <>
                         Send Message <FaPaperPlane />

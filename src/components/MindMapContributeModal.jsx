@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 import { track } from "@vercel/analytics";
 import { getCountriesList } from "../utils/countries";
+import SmallLoader from "./SmallLoader";
 
 // Comprehensive list of countries
 const COUNTRIES = getCountriesList();
@@ -694,7 +695,7 @@ export default function MindMapContributeModal({
                   />
                   <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                     {validatingZipcode ? (
-                      <FaSpinner className="animate-spin text-gray-400" />
+                      <SmallLoader />
                     ) : locationData ? (
                       <FaCheckCircle className="text-green-500" />
                     ) : zipcodeError ? (

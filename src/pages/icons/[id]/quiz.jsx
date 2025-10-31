@@ -15,6 +15,8 @@ import {
   FaEdit,
 } from "react-icons/fa";
 import Navbar from "../../../components/Navbar";
+import SmallLoader from "../../../components/SmallLoader";
+import minDelay from "../../../utils/minDelay";
 
 export default function IconQuizPage() {
   const router = useRouter();
@@ -68,11 +70,11 @@ export default function IconQuizPage() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [iconResponse, questionsResponse, answersResponse] = await Promise.all([
+      const [iconResponse, questionsResponse, answersResponse] = await minDelay(Promise.all([
         axios.get(`/api/icons/${id}`),
         axios.get("/api/questions/public", { params: { active: true } }),
         axios.get("/api/icons/answers", { params: { iconId: id, includeAlternatives: true } }),
-      ]);
+      ]), 1000);
 
       setIcon(iconResponse.data.icon);
       setQuestions(questionsResponse.data.questions);
@@ -211,7 +213,7 @@ export default function IconQuizPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <SmallLoader size={60} />
       </div>
     );
   }
@@ -462,7 +464,7 @@ export default function IconQuizPage() {
                   disabled={submitting || !hasAtLeastOneAnswer()}
                   className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
                 >
-                  {submitting && <FaSpinner className="animate-spin" />}
+                  {submitting && <SmallLoader size={16} />}
                   Submit Answers
                 </button>
               </div>

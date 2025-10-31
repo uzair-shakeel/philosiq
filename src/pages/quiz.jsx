@@ -15,6 +15,8 @@ import axios from "axios";
 import { track } from "@vercel/analytics";
 import { useRouter } from "next/router";
 import { calculateResults } from "../utils/resultsCalculator";
+import SmallLoader from "../components/SmallLoader";
+import minDelay from "../utils/minDelay";
 
 export default function QuizPage() {
   const [quizStarted, setQuizStarted] = useState(false);
@@ -231,7 +233,7 @@ export default function QuizPage() {
       const url = `/api/questions/public?limit=${limit}&includeInShortQuiz=${includeInShortQuiz}`;
       console.log(`Fetching questions from: ${url}`);
 
-      const response = await axios.get(url);
+      const response = await minDelay(axios.get(url), 1000);
 
       if (response.data.success) {
         console.log(
@@ -278,7 +280,7 @@ export default function QuizPage() {
       const url = `/api/questions/all`;
       console.log(`Fetching all questions from: ${url}`);
 
-      const response = await axios.get(url);
+      const response = await minDelay(axios.get(url), 1000);
 
       if (response.data.success) {
         console.log(
@@ -562,7 +564,7 @@ export default function QuizPage() {
       <Layout title="Loading Quiz - Philosiq">
         <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
           <div className="text-center">
-            <div className="w-16 h-16 border-4 border-primary-maroon border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <SmallLoader size={64} className="mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2">Loading Quiz</h2>
             <p className="text-gray-600">
               Please wait while we prepare your questions...

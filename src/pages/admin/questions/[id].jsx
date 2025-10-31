@@ -9,6 +9,7 @@ import {
   FaExclamationTriangle,
   FaSpinner,
 } from "react-icons/fa";
+import SmallLoader from "../../../components/SmallLoader";
 
 export default function EditQuestion() {
   const router = useRouter();
@@ -199,7 +200,7 @@ export default function EditQuestion() {
       {/* Loading state */}
       {loading ? (
         <div className="flex justify-center items-center py-12">
-          <FaSpinner className="animate-spin text-primary-maroon text-4xl" />
+          <SmallLoader />
         </div>
       ) : (
         <>

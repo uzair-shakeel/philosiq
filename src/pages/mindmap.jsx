@@ -10,6 +10,7 @@ import {
   FaMapMarkerAlt,
   FaArrowRight,
 } from "react-icons/fa";
+import SmallLoader from "../components/SmallLoader";
 
 // Filter options
 const FILTER_OPTIONS = {
@@ -331,7 +332,7 @@ export default function MindMap() {
       </div>
       {isLoadingLocations && (
         <div className="mt-2 text-sm text-gray-500 flex items-center">
-          <FaSpinner className="animate-spin mr-2" /> Loading location
+<SmallLoader />
           options...
         </div>
       )}
@@ -468,7 +469,7 @@ export default function MindMap() {
           {/* Rest of the component remains the same */}
           {loading ? (
             <div className="text-center py-12">
-              <FaSpinner className="animate-spin text-4xl text-primary-maroon mx-auto mb-4" />
+              <SmallLoader />
               <p className="text-gray-600">Loading MindMap data...</p>
             </div>
           ) : (
