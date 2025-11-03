@@ -490,7 +490,7 @@ export default function ComparePage() {
                                 {ax.left !== null && (
                                   <div
                                     className="absolute top-0 bottom-0 w-2 h-full bg-yellow-400 border-2 border-yellow-600 z-30 transform -translate-x-1/2 shadow-lg"
-                                    style={{ left: ax.left === 0 ? '99.5%' : `${leftPercent}%` }}
+                                    style={{ left: `${Math.max(1, Math.min(99, 100 - leftPercent))}%` }}
                                   ></div>
                                 )}
                                 
