@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, username } = req.body;
 
     // Validate input
     if (!name || !email || !password) {
@@ -30,6 +30,17 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: "Email already registered" });
     }
 
+    // Enforce unique, case-insensitive username if provided
+    let usernameToSave = (username || "").trim();
+    if (usernameToSave) {
+      const existingByUsername = await db
+        .collection("users")
+        .findOne({ username: { $regex: `^${usernameToSave}$`, $options: "i" } });
+      if (existingByUsername) {
+        return res.status(400).json({ message: "Username already taken" });
+      }
+    }
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -37,6 +48,7 @@ export default async function handler(req, res) {
     const result = await db.collection("users").insertOne({
       name,
       email,
+      username: usernameToSave,
       password: hashedPassword,
       createdAt: new Date(),
     });
@@ -56,6 +68,7 @@ export default async function handler(req, res) {
         id: result.insertedId,
         name,
         email,
+        username: usernameToSave,
       },
     });
   } catch (error) {

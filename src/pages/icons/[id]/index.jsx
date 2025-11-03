@@ -960,24 +960,19 @@ function AnswerCard({
             </span>
           </div>
 
-          {user && (
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-500">
-                Confirmed by {Math.max(0, Number(answer.upvotes || 0))}
-              </span>
-              <button
-                onClick={() => onUpvote(answer._id)}
-                disabled={votingLoading[answer._id]}
-                className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold shadow-sm transition-colors
-                  ${votingLoading[answer._id]
-                    ? 'bg-green-500 text-white opacity-80'
-                    : 'bg-green-600 text-white hover:bg-green-700'}`}
-              >
-                {votingLoading[answer._id] && <SmallLoader />}
-                Confirm Current Answer
-              </button>
-            </div>
-          )}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => onUpvote(answer._id)}
+              disabled={votingLoading[answer._id]}
+              className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold shadow-sm transition-colors
+                ${votingLoading[answer._id]
+                  ? 'bg-green-500 text-white opacity-80'
+                  : 'bg-green-600 text-white hover:bg-green-700'}`}
+            >
+              {/* {votingLoading[answer._id] && <Loading />} */}
+              {userVotes && userVotes[answer._id] === 'upvote' ? 'Confirmed' : 'Confirm Current Answer'}
+            </button>
+          </div>
         </div>
 
         {/* Sources */}
@@ -1016,7 +1011,12 @@ function AnswerCard({
         )}
 
         <div className="text-xs text-gray-500">
-          Submitted by {answer.submittedBy.name}
+          {(() => {
+            const label = answer.submittedAnonymously
+              ? 'Anonymous'
+              : (answer.submittedByUsername || 'Unknown');
+            return `Submitted by ${label}`;
+          })()}
         </div>
       </div>
 
@@ -1043,27 +1043,22 @@ function AnswerCard({
                     >
                       {alt.answer}
                     </span>
-                    {user && (
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-500">
-                          Confirmed by {Math.max(0, Number(alt.upvotes || 0))}
-                        </span>
-                        <button
-                          onClick={() => onUpvote(alt._id)}
-                          disabled={votingLoading[alt._id]}
-                          className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-semibold shadow-sm transition-colors ${
-                            votingLoading[alt._id]
-                              ? 'bg-green-500 text-white opacity-80'
-                              : 'bg-green-600 text-white hover:bg-green-700'
-                          }`}
-                        >
-                          {votingLoading[alt._id] && (
-                            <SmallLoader />
-                          )}
-                          Confirm
-                        </button>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => onUpvote(alt._id)}
+                        disabled={votingLoading[alt._id]}
+                        className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-semibold shadow-sm transition-colors ${
+                          votingLoading[alt._id]
+                            ? 'bg-green-500 text-white opacity-80'
+                            : 'bg-green-600 text-white hover:bg-green-700'
+                        }`}
+                      >
+                        {votingLoading[alt._id] && (
+                          <SmallLoader />
+                        )}
+                        {userVotes && userVotes[alt._id] === 'upvote' ? 'Confirmed' : 'Confirm'}
+                      </button>
+                    </div>
                   </div>
 
                   {/* Optional: show minimal source info if present */}
@@ -1083,7 +1078,12 @@ function AnswerCard({
                   )}
 
                   <div className="text-xs text-gray-600">
-                    By {alt.submittedBy.name}
+                    {(() => {
+                      const label = alt.submittedAnonymously
+                        ? 'Anonymous'
+                        : (alt.submittedByUsername || 'Unknown');
+                      return `By ${label}`;
+                    })()}
                   </div>
                 </div>
               ))}

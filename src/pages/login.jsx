@@ -46,6 +46,7 @@ export default function LoginPage() {
         if (data?.user?.email)
           localStorage.setItem("userEmail", data.user.email);
         if (data?.user?.name) localStorage.setItem("userName", data.user.name);
+        if (data?.user?.username) localStorage.setItem("username", data.user.username);
       } catch {}
 
       // Redirect to the stored return URL, or redirect param, or home page

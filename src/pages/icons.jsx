@@ -15,6 +15,7 @@ export default function IconsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [pagination, setPagination] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [navigating, setNavigating] = useState(false);
 
   useEffect(() => {
     // Check authentication
@@ -32,6 +33,20 @@ export default function IconsPage() {
 
     fetchIcons();
   }, [currentPage, searchTerm]);
+
+  // Show centered loader while navigating away (e.g., clicking View Profile)
+  useEffect(() => {
+    const handleStart = () => setNavigating(true);
+    const handleDone = () => setNavigating(false);
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleDone);
+    router.events.on('routeChangeError', handleDone);
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleDone);
+      router.events.off('routeChangeError', handleDone);
+    };
+  }, [router.events]);
 
   const fetchIcons = async () => {
     try {
@@ -80,6 +95,12 @@ export default function IconsPage() {
 
       <div className="min-h-screen pt-24 pb-16 bg-neutral-light">
         <Navbar user={user} />
+
+        {navigating && (
+          <div className="fixed inset-0 z-50 bg-white/70 backdrop-blur-sm flex items-center justify-center">
+            <SmallLoader size={60} />
+          </div>
+        )}
 
         <div className="container-custom">
           <div className="">
@@ -140,7 +161,7 @@ export default function IconsPage() {
                 </div>
                 <div className="p-6">
                   <p className="text-gray-600 mb-6">
-                    Contribute to our database by creating a new icon profile
+                    Contribute to our database by creating a new Icon profile
                     for a historical or contemporary figure.
                   </p>
                   <button
@@ -163,13 +184,13 @@ export default function IconsPage() {
                     </h2>
                     <p className="text-gray-100 text-sm opacity-90">
                       {searchTerm
-                        ? "Existing icons matching your search criteria."
-                        : "Most engaged existing icons and their positions"}
+                        ? "Existing Icons matching your search criteria."
+                        : "Most engaged existing Icons and their positions"}
                     </p>
                   </div>
                   <div className="flex items-center gap-4">
                     <span className="px-4 py-2 bg-white bg-opacity-10 rounded-lg text-white text-sm font-medium">
-                      {icons.length} {icons.length === 1 ? "icon" : "icons"}{" "}
+                      {icons.length} {icons.length === 1 ? "Icon" : "Icons"}{" "}
                       found
                     </span>
                   </div>
@@ -183,7 +204,7 @@ export default function IconsPage() {
                 <div className="relative">
                 <SmallLoader />
                 </div>
-                <p className="mt-4 text-gray-500">Loading icons...</p>
+                <p className="mt-4 text-gray-500">Loading Icons...</p>
               </div>
             )}
 
@@ -197,12 +218,12 @@ export default function IconsPage() {
                         <FaUser className="h-10 w-10 text-gray-300" />
                       </div>
                       <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                        {searchTerm ? "No icons found" : "No icons yet"}
+                        {searchTerm ? "No Icons found" : "No Icons yet"}
                       </h3>
                       <p className="text-gray-600 mb-8">
                         {searchTerm
-                          ? "Try a different search term or create a new icon."
-                          : "Be the first to create an icon for a famous person!"}
+                          ? "Try a different search term or create a new Icon."
+                          : "Be the first to create an Icon for a famous person!"}
                       </p>
                       <button
                         onClick={handleCreateNew}

@@ -7,6 +7,7 @@ import '../../../../models/Icon';
 import '../../../../models/Question';
 import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
+import { connectToDatabase } from '../../../../utils/db';
 
 export default async function handler(req, res) {
   await dbConnect();
@@ -40,11 +41,48 @@ async function handleGet(req, res) {
       query.isAccepted = true;
     }
     
-    const answers = await IconAnswer.find(query)
+    let answers = await IconAnswer.find(query)
       .populate('question')
       .sort({ netVotes: -1, createdAt: -1 })
       .lean();
-    
+
+    // Backfill submittedByUsername for any answers missing it (non-anonymous)
+    try {
+      const idsNeedingUser = Array.from(new Set(
+        answers
+          .filter(a => !a.submittedAnonymously && (!a.submittedByUsername || a.submittedByUsername === ''))
+          .map(a => a.submittedBy)
+          .filter(Boolean)
+      ));
+
+      if (idsNeedingUser.length > 0) {
+        const { db } = await connectToDatabase();
+        const objectIds = idsNeedingUser
+          .map(id => {
+            try { return new ObjectId(id); } catch { return null; }
+          })
+          .filter(Boolean);
+
+        if (objectIds.length > 0) {
+          const users = await db
+            .collection('users')
+            .find({ _id: { $in: objectIds } })
+            .project({ username: 1, name: 1, email: 1 })
+            .toArray();
+          const map = new Map(users.map(u => [String(u._id), (u.username || u.name || u.email || '')]));
+          answers = answers.map(a => {
+            if (!a.submittedAnonymously && (!a.submittedByUsername || a.submittedByUsername === '')) {
+              const label = map.get(String(a.submittedBy)) || '';
+              return { ...a, submittedByUsername: label };
+            }
+            return a;
+          });
+        }
+      }
+    } catch (e) {
+      console.warn('GET /icons/answers backfill username failed', e?.message);
+    }
+
     return res.status(200).json({ answers });
   } catch (error) {
     console.error('Error fetching icon answers:', error);
@@ -71,6 +109,7 @@ async function handlePost(req, res) {
       answer,
       sources = [],
       reasoning,
+      submittedAnonymously = false,
     } = req.body;
     
     // Validate required fields
@@ -116,6 +155,20 @@ async function handlePost(req, res) {
       isActive: true,
     });
     
+    // Lookup username for submitter (from primary users collection)
+    let submittedByUsername = '';
+    try {
+      const { db } = await connectToDatabase();
+      const filter = typeof userId === 'string' ? { _id: new ObjectId(userId) } : { _id: userId };
+      const userRec = await db.collection('users').findOne(filter);
+      if (userRec) {
+        submittedByUsername = userRec.username || userRec.name || userRec.email || '';
+      }
+    } catch (e) {
+      // non-fatal
+      console.warn('Could not resolve submittedByUsername', e?.message);
+    }
+
     // Create new answer
     const iconAnswer = new IconAnswer({
       icon: iconId,
@@ -125,6 +178,8 @@ async function handlePost(req, res) {
       sources,
       reasoning,
       submittedBy: userId,
+      submittedByUsername: submittedAnonymously ? '' : submittedByUsername,
+      submittedAnonymously: Boolean(submittedAnonymously),
       isAccepted: !existingAcceptedAnswer, // First answer becomes accepted
     });
     

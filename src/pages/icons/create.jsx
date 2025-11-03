@@ -54,7 +54,7 @@ export default function CreateIconPage() {
 
     if (!authToken || !userEmail) {
       console.log(
-        "Create icon page - No auth token found, redirecting to login"
+        "Create Icon page - No auth token found, redirecting to login"
       );
       router.push("/login?redirect=icons/create");
       return;
@@ -131,14 +131,14 @@ export default function CreateIconPage() {
     } catch (error) {
       console.error("Create icon error:", error);
       if (error.response?.data?.existingIcon) {
-        setError(`This person already exists as an icon. Redirecting...`);
+        setError(`This person already exists as an Icon. Redirecting...`);
         setTimeout(() => {
           router.push(`/icons/${error.response.data.existingIcon}`);
         }, 2000);
       } else {
         setError(
           error.response?.data?.message ||
-            "Failed to create icon. Please try again."
+            "Failed to create Icon. Please try again."
         );
       }
     } finally {
@@ -251,7 +251,7 @@ export default function CreateIconPage() {
                         Search Results
                       </h2>
                       <p className="text-white/90">
-                        Select a person to create their icon
+                        Select a person to create their Icon
                       </p>
                     </div>
                     <span className="px-4 py-2 bg-white/10 rounded-lg text-sm font-medium">
@@ -280,7 +280,7 @@ export default function CreateIconPage() {
                     Confirm Icon Creation
                   </h2>
                   <p className="text-gray-600">
-                    Review the information before creating the icon
+                    Review the information before creating the Icon
                   </p>
                 </div>
                 <button

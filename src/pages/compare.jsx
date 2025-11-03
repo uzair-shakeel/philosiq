@@ -60,6 +60,7 @@ export default function ComparePage() {
   const [leftResult, setLeftResult] = useState(null);
   const [rightResult, setRightResult] = useState(null);
   const [resolving, setResolving] = useState(false);
+  const formatPct = (v) => (v === null || v === undefined ? "--" : Number(v).toFixed(2));
 
   useEffect(() => {
     (async () => {
@@ -229,7 +230,9 @@ export default function ComparePage() {
   if (loading) {
     return (
       <Layout title="Compare - Philosiq">
-        <SmallLoader />
+        <div className="pt-24 pb-16 min-h-screen bg-neutral-light flex items-center justify-center">
+          <SmallLoader size={60} />
+        </div>
       </Layout>
     );
   }
@@ -422,7 +425,7 @@ export default function ComparePage() {
                           <span className="font-medium">{ax.leftLabel}</span> vs <span className="font-medium">{ax.rightLabel}</span>
                           {difference > 0 && (
                             <span className="ml-2 text-xs bg-gray-200 px-2 py-1 rounded-full">
-                              {difference.toFixed(1)}% difference
+                              {difference.toFixed(2)}% difference
                             </span>
                           )}
                         </div>
@@ -506,7 +509,7 @@ export default function ComparePage() {
                                     style={{ left: `${Math.max(1, Math.min(99, 100 - leftPercent))}%` }}
                                   >
                                     <div className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-yellow-600">
-                                      You: {ax.left}%
+                                      You: {formatPct(ax.left)}%
                                     </div>
                                   </div>
                                 )}
@@ -517,7 +520,7 @@ export default function ComparePage() {
                                     style={{ left: `${Math.max(1, Math.min(99, 100 - rightPercent))}%` }}
                                   >
                                     <div className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg border border-red-700">
-                                      Friend: {ax.right}%
+                                      Friend: {formatPct(ax.right)}%
                                     </div>
                                   </div>
                                 )}
@@ -554,8 +557,8 @@ export default function ComparePage() {
                                   </span>
                                 </div> */}
                                 <div className="text-sm text-blue-700 space-y-1">
-                                  <div><strong>{ax.left}%</strong> {ax.leftLabel}</div>
-                                  <div><strong>{(100 - ax.left)}%</strong> {ax.rightLabel}</div>
+                                  <div><strong>{formatPct(ax.left)}%</strong> {ax.leftLabel}</div>
+                                  <div><strong>{formatPct(100 - ax.left)}%</strong> {ax.rightLabel}</div>
                                 </div>
                                 <div className="text-sm text-blue-700">
                                   Leans <strong>{leftPercent > 50 ? Math.round((leftPercent - 50) * 2) : Math.round((50 - leftPercent) * 2)}%</strong> {leftDominant}
@@ -580,8 +583,8 @@ export default function ComparePage() {
                                   </span>
                                 </div> */}
                                 <div className="text-sm text-indigo-700 space-y-1">
-                                  <div><strong>{ax.right}%</strong> {ax.leftLabel}</div>
-                                  <div><strong>{(100 - ax.right)}%</strong> {ax.rightLabel}</div>
+                                  <div><strong>{formatPct(ax.right)}%</strong> {ax.leftLabel}</div>
+                                  <div><strong>{formatPct(100 - ax.right)}%</strong> {ax.rightLabel}</div>
                                 </div>
                                 <div className="text-sm text-indigo-700">
                                   Leans <strong>{rightPercent > 50 ? Math.round((rightPercent - 50) * 2) : Math.round((50 - rightPercent) * 2)}%</strong> {rightDominant}

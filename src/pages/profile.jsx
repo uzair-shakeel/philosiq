@@ -32,6 +32,7 @@ export default function ProfilePage() {
 
   const [profileData, setProfileData] = useState({
     name: "",
+    username: "",
     email: "",
     currentPassword: "",
     newPassword: "",
@@ -43,6 +44,7 @@ export default function ProfilePage() {
     const authToken = localStorage.getItem("authToken");
     const userEmail = localStorage.getItem("userEmail");
     const userName = localStorage.getItem("userName");
+    const usernameLS = localStorage.getItem("username") || "";
 
     if (!authToken || !userEmail) {
       console.log("Profile page - No auth token found, redirecting to login");
@@ -58,12 +60,14 @@ export default function ProfilePage() {
     const userData = {
       name: userName || "",
       email: userEmail || "",
+      username: usernameLS,
     };
 
     setUser(userData);
     setProfileData((prev) => ({
       ...prev,
       name: userData.name,
+      username: userData.username,
       email: userData.email,
     }));
 
@@ -190,6 +194,7 @@ export default function ProfilePage() {
       // Prepare request payload
       const payload = {
         name: profileData.name,
+        username: profileData.username,
         email: profileData.email,
       };
 
@@ -218,6 +223,9 @@ export default function ProfilePage() {
         }
         if (profileData.email) {
           localStorage.setItem("userEmail", profileData.email);
+        }
+        if (profileData.username !== undefined) {
+          localStorage.setItem("username", profileData.username || "");
         }
 
         // Update local user state
@@ -498,6 +506,30 @@ export default function ProfilePage() {
 
                   <div>
                     <label
+                      htmlFor="username"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Username
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaUser className="text-gray-400" />
+                      </div>
+                      <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={profileData.username}
+                        onChange={handleChange}
+                        className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-maroon focus:border-transparent"
+                        placeholder="Choose a unique username"
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">Usernames must be unique.</p>
+                  </div>
+
+                  <div>
+                    <label
                       htmlFor="email"
                       className="block text-sm font-medium text-gray-700 mb-2"
                     >
@@ -662,6 +694,9 @@ export default function ProfilePage() {
                     {user?.name}
                   </h3>
                   <p className="text-gray-600">{user?.email}</p>
+                  {profileData.username && (
+                    <p className="text-gray-700 mt-1">@{profileData.username}</p>
+                  )}
                   <div className="mt-2">
                     <span className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-medium">
                       User

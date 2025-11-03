@@ -246,7 +246,7 @@ export default function IconQuizPage() {
         </title>
         <meta
           name="description"
-          content={`Take the political quiz as ${icon?.name || "this icon"}`}
+          content={`Take the political quiz as ${icon?.name || "this Icon"}`}
         />
       </Head>
 

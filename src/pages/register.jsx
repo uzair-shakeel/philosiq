@@ -7,6 +7,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const { redirect } = router.query;
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -50,7 +51,7 @@ export default function RegisterPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, username }),
       });
 
       if (!response.ok) {
@@ -66,6 +67,7 @@ export default function RegisterPage() {
         if (data?.user?.email)
           localStorage.setItem("userEmail", data.user.email);
         if (data?.user?.name) localStorage.setItem("userName", data.user.name);
+        if (data?.user?.username) localStorage.setItem("username", data.user.username);
       } catch {}
 
       // Redirect to the stored return URL, or redirect param, or home page
@@ -128,6 +130,24 @@ export default function RegisterPage() {
                     required
                   />
                 </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2" htmlFor="username">
+                  Username
+                </label>
+                <div className="flex items-center border rounded px-3 py-2">
+                  <FaUser className="text-gray-400 mr-2" />
+                  <input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full focus:outline-none"
+                    placeholder="Choose a unique username"
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Usernames are unique and cannot be changed by others.</p>
               </div>
 
               <div className="mb-4">

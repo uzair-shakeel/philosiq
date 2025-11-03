@@ -58,6 +58,14 @@ const IconAnswerSchema = new mongoose.Schema(
       type: String,
       required: [true, "Submitter is required"],
     },
+    submittedByUsername: {
+      type: String,
+      trim: true,
+    },
+    submittedAnonymously: {
+      type: Boolean,
+      default: false,
+    },
     // Voting system
     upvotes: {
       type: Number,

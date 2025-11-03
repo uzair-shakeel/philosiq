@@ -3,6 +3,135 @@ import Layout from "../components/Layout";
 import Link from "next/link";
 
 export default function ArchetypePage() {
+  // Trait color map (active state BG colors)
+  const traitColor = {
+    Equity: "bg-emerald-600",
+    "Free Market": "bg-amber-600",
+    Libertarian: "bg-cyan-600",
+    Authoritarian: "bg-purple-600",
+    Progressive: "bg-blue-600",
+    Conservative: "bg-orange-600",
+    Secular: "bg-slate-600",
+    Religious: "bg-pink-600",
+    Globalist: "bg-indigo-600",
+    Nationalist: "bg-red-600",
+  };
+
+  // Hex colors for each trait for inline gradients (ensures no Tailwind purge issues)
+  const traitHex = {
+    Equity: "#10B981", // emerald-500
+    "Free Market": "#F59E0B", // amber-500
+    Libertarian: "#06B6D4", // cyan-500
+    Authoritarian: "#8B5CF6", // purple-500
+    Progressive: "#3B82F6", // blue-500
+    Conservative: "#F97316", // orange-500
+    Secular: "#64748B", // slate-500
+    Religious: "#EC4899", // pink-500
+    Globalist: "#6366F1", // indigo-500
+    Nationalist: "#EF4444", // red-500
+  };
+
+  // Explicit class maps to avoid Tailwind purging dynamic classes
+  const fromSoft = {
+    Equity: "from-emerald-50",
+    "Free Market": "from-amber-50",
+    Libertarian: "from-cyan-50",
+    Authoritarian: "from-purple-50",
+    Progressive: "from-blue-50",
+    Conservative: "from-orange-50",
+    Secular: "from-slate-50",
+    Religious: "from-pink-50",
+    Globalist: "from-indigo-50",
+    Nationalist: "from-red-50",
+  };
+  const toSoft = {
+    Equity: "to-emerald-100",
+    "Free Market": "to-amber-100",
+    Libertarian: "to-cyan-100",
+    Authoritarian: "to-purple-100",
+    Progressive: "to-blue-100",
+    Conservative: "to-orange-100",
+    Secular: "to-slate-100",
+    Religious: "to-pink-100",
+    Globalist: "to-indigo-100",
+    Nationalist: "to-red-100",
+  };
+  const fromStrong = {
+    Equity: "from-emerald-100",
+    "Free Market": "from-amber-100",
+    Libertarian: "from-cyan-100",
+    Authoritarian: "from-purple-100",
+    Progressive: "from-blue-100",
+    Conservative: "from-orange-100",
+    Secular: "from-slate-100",
+    Religious: "from-pink-100",
+    Globalist: "from-indigo-100",
+    Nationalist: "from-red-100",
+  };
+  const toStrong = {
+    Equity: "to-emerald-200",
+    "Free Market": "to-amber-200",
+    Libertarian: "to-cyan-200",
+    Authoritarian: "to-purple-200",
+    Progressive: "to-blue-200",
+    Conservative: "to-orange-200",
+    Secular: "to-slate-200",
+    Religious: "to-pink-200",
+    Globalist: "to-indigo-200",
+    Nationalist: "to-red-200",
+  };
+  const viaSoft = {
+    Equity: "via-emerald-100",
+    "Free Market": "via-amber-100",
+    Libertarian: "via-cyan-100",
+    Authoritarian: "via-purple-100",
+    Progressive: "via-blue-100",
+    Conservative: "via-orange-100",
+    Secular: "via-slate-100",
+    Religious: "via-pink-100",
+    Globalist: "via-indigo-100",
+    Nationalist: "via-red-100",
+  };
+  const viaStrong = {
+    Equity: "via-emerald-200",
+    "Free Market": "via-amber-200",
+    Libertarian: "via-cyan-200",
+    Authoritarian: "via-purple-200",
+    Progressive: "via-blue-200",
+    Conservative: "via-orange-200",
+    Secular: "via-slate-200",
+    Religious: "via-pink-200",
+    Globalist: "via-indigo-200",
+    Nationalist: "via-red-200",
+  };
+  const getGradient = (traitA, traitB, traitC, strength = "soft") => {
+    const base = "bg-gradient-to-br";
+    const f = strength === "strong" ? fromStrong : fromSoft;
+    const v = strength === "strong" ? viaStrong : viaSoft;
+    const t = strength === "strong" ? toStrong : toSoft;
+    const fromCls = f[traitA] || "from-gray-50";
+    const viaCls = v[traitC] || "via-gray-100";
+    const toCls = t[traitB] || "to-gray-100";
+    return `${base} ${fromCls} ${viaCls} ${toCls}`;
+  };
+
+  const traitSoft = {
+    Equity: "bg-emerald-100",
+    "Free Market": "bg-amber-100",
+    Libertarian: "bg-cyan-100",
+    Authoritarian: "bg-purple-100",
+    Progressive: "bg-blue-100",
+    Conservative: "bg-orange-100",
+    Secular: "bg-slate-100",
+    Religious: "bg-pink-100",
+    Globalist: "bg-indigo-100",
+    Nationalist: "bg-red-100",
+    Conservative: "text-orange-700 ring-orange-300 hover:ring-orange-400",
+    Secular: "text-slate-700 ring-slate-300 hover:ring-slate-400",
+    Religious: "text-pink-700 ring-pink-300 hover:ring-pink-400",
+    Globalist: "text-indigo-700 ring-indigo-300 hover:ring-indigo-400",
+    Nationalist: "text-red-700 ring-red-300 hover:ring-red-400",
+  };
   // Define trait pairs (opposites)
   const traitPairs = [
     ["Equity", "Free Market"],
@@ -446,6 +575,32 @@ export default function ArchetypePage() {
     });
   };
 
+  const traitBgSoft = {
+    Equity: "bg-emerald-50",
+    "Free Market": "bg-amber-50",
+    Libertarian: "bg-cyan-50",
+    Authoritarian: "bg-purple-50",
+    Progressive: "bg-blue-50",
+    Conservative: "bg-orange-50",
+    Secular: "bg-slate-50",
+    Religious: "bg-pink-50",
+    Globalist: "bg-indigo-50",
+    Nationalist: "bg-red-50",
+  };
+
+  const traitBorderSoft = {
+    Equity: "border-emerald-200",
+    "Free Market": "border-amber-200",
+    Libertarian: "border-cyan-200",
+    Authoritarian: "border-purple-200",
+    Progressive: "border-blue-200",
+    Conservative: "border-orange-200",
+    Secular: "border-slate-200",
+    Religious: "border-pink-200",
+    Globalist: "border-indigo-200",
+    Nationalist: "border-red-200",
+  };
+
   // Check if a trait is disabled (opposite of a selected trait)
   const isTraitDisabled = (trait) => {
     if (selectedFilters.includes(trait)) return false;
@@ -481,20 +636,21 @@ export default function ArchetypePage() {
   {traitPairs.map(([first, second], index) => (
     <div key={index} className="flex flex-col gap-2 items-center">
       {[first, second].map((trait) => (
-        <button
-          key={trait}
-          onClick={() => handleFilterClick(trait)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all w-full text-center ${
+          <button
+            key={trait}
+            onClick={() => handleFilterClick(trait)}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all w-full text-center focus:outline-none focus:ring-2 ${
               selectedFilters.includes(trait)
-                ? "bg-primary-maroon text-white"
+                ? `${traitColor[trait] || "bg-primary-maroon"} text-white shadow`
                 : isTraitDisabled(trait)
-                ? "bg-gray-300 text-gray-400 cursor-not-allowed"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : `bg-gray-100 ${traitSoft[trait] || "text-gray-700 ring-gray-300 hover:ring-gray-400"} ring-1`
             }`}
-          disabled={isTraitDisabled(trait)}
-        >
-          {trait}
-        </button>
+            disabled={isTraitDisabled(trait)}
+            aria-pressed={selectedFilters.includes(trait)}
+          >
+            {trait}
+          </button>
       ))}
     </div>
   ))}
@@ -534,13 +690,27 @@ export default function ArchetypePage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {filteredArchetypes.map((archetype) => (
+                {filteredArchetypes.map((archetype) => {
+                  const activeTrait = selectedFilters.find((t) => archetype.traits.includes(t));
+                  const firstTrait = archetype.traits?.[0];
+                  const secondTrait = archetype.traits?.[1] || firstTrait;
+                  const thirdTrait = archetype.traits?.[2] || secondTrait;
+                  const softGrad = getGradient(firstTrait, secondTrait, thirdTrait, "soft");
+                  const softRing = traitBorderSoft[firstTrait] || "border-gray-200";
+                  // When filtered, use active + next two traits for richer gradient
+                  const strongGrad = activeTrait ? getGradient(activeTrait, secondTrait, thirdTrait, "strong") : softGrad;
+                  const strongRing = activeTrait ? (traitBorderSoft[activeTrait] || softRing) : softRing;
+                  const cardBg = selectedFilters.length === 0 ? softGrad : (activeTrait ? strongGrad : "bg-white");
+                  const cardBorder = selectedFilters.length === 0 ? softRing : (activeTrait ? strongRing : "border-gray-200");
+                  return (
                   <Link
                     href={`/archetypes/${archetype.slug}`}
                     key={archetype.id}
-                    className="flex p-8 flex-col h-full bg-white rounded-lg shadow-md overflow-hidden transform transition-all hover:scale-102 hover:shadow-lg"
+                    className={`group flex p-0 flex-col h-full rounded-xl border ${cardBorder} ${cardBg} shadow-sm overflow-hidden transform transition-all hover:scale-[1.02] hover:shadow-md`}
                     shallow={false}
                   >
+                    <div className={`h-1 w-full ${selectedFilters.length === 0 ? (traitColor[firstTrait] || "bg-primary-maroon") : (activeTrait ? (traitColor[activeTrait] || "bg-primary-maroon") : "bg-gray-200")}`}></div>
+                    <div className={`p-8 bg-transparent`}>
                     <h3 className="text-xl font-bold mb-4 text-primary-maroon">
                       {archetype.name}
                     </h3>
@@ -572,8 +742,9 @@ export default function ArchetypePage() {
                     <div className="mt-4 text-sm text-primary-maroon font-medium">
                       View details →
                     </div>
+                    </div>
                   </Link>
-                ))}
+                );})}
               </div>
             )}
           </div>

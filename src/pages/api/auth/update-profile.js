@@ -34,7 +34,7 @@ export default async function handler(req, res) {
       return res.status(401).json({ message: "User not found" });
     }
 
-    const { name, email, currentPassword, newPassword } = req.body;
+    const { name, email, currentPassword, newPassword, username } = req.body;
 
     // Prepare update object
     const updateData = {};
@@ -55,6 +55,22 @@ export default async function handler(req, res) {
         return res.status(400).json({ message: "Email already in use" });
       }
       updateData.email = email;
+    }
+
+    // Update username if provided and changed
+    if (typeof username === "string") {
+      const trimmed = username.trim();
+      if (trimmed && trimmed !== (user.username || "")) {
+        // Uniqueness check case-insensitive excluding self
+        const existingByUsername = await db.collection("users").findOne({
+          username: { $regex: `^${trimmed}$`, $options: "i" },
+          _id: { $ne: user._id },
+        });
+        if (existingByUsername) {
+          return res.status(400).json({ message: "Username already taken" });
+        }
+        updateData.username = trimmed;
+      }
     }
 
     // Handle password change if requested

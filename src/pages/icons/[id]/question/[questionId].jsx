@@ -355,13 +355,19 @@ export default function QuestionDetailPage() {
                             : "bg-green-600 text-white hover:bg-green-700"
                         }`}
                       >
-                        {voting[acceptedAnswer._id] && (
-                          <SmallLoader size={16} className="mr-2" />
-                        )}
                         Confirm Current Answer
                       </button>
                     </div>
                   )}
+                </div>
+
+                <div className="text-xs text-gray-500 mt-1">
+                  {(() => {
+                    const label = acceptedAnswer.submittedAnonymously
+                      ? 'Anonymous'
+                      : (acceptedAnswer.submittedByUsername || 'Unknown');
+                    return `Submitted by ${label}`;
+                  })()}
                 </div>
 
                 {acceptedAnswer.reasoning && (
@@ -450,9 +456,6 @@ export default function QuestionDetailPage() {
 
                       {user && (
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-gray-500">
-                            Confirmed by {Math.max(0, Number(answer.upvotes || 0))}
-                          </span>
                           <button
                             onClick={() => handleVote(answer._id, "upvote")}
                             disabled={voting[answer._id]}
@@ -469,6 +472,15 @@ export default function QuestionDetailPage() {
                           </button>
                         </div>
                       )}
+                    </div>
+
+                    <div className="text-xs text-gray-500">
+                      {(() => {
+                        const label = answer.submittedAnonymously
+                          ? 'Anonymous'
+                          : (answer.submittedByUsername || 'Unknown');
+                        return `Submitted by ${label}`;
+                      })()}
                     </div>
 
                     {answer.reasoning && (
