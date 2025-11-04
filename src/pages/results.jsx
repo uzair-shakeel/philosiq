@@ -529,11 +529,23 @@ function ResultsContent({ results }) {
           const against = items.filter((x) => x.contribution < 0).slice(0, 2);
           result[axisName] = { aligned, against };
         } else {
+          const needsFlip = [
+            "Equity vs. Free Market",
+            "Libertarian vs. Authoritarian",
+            "Globalism vs. Nationalism",
+          ].includes(axisName);
+
           const aligned = items
-            .filter((x) => (axisSign > 0 ? x.contribution > 0 : x.contribution < 0))
+            .filter((x) => {
+              if (axisSign > 0) return needsFlip ? x.contribution < 0 : x.contribution > 0;
+              return needsFlip ? x.contribution > 0 : x.contribution < 0;
+            })
             .slice(0, 2);
           const against = items
-            .filter((x) => (axisSign > 0 ? x.contribution < 0 : x.contribution > 0))
+            .filter((x) => {
+              if (axisSign > 0) return needsFlip ? x.contribution > 0 : x.contribution < 0;
+              return needsFlip ? x.contribution < 0 : x.contribution > 0;
+            })
             .slice(0, 2);
           result[axisName] = { aligned, against };
         }
