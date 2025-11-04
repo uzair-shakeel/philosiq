@@ -46,6 +46,35 @@ export default function IconProfilePage() {
   });
   const [axisOpen, setAxisOpen] = useState({});
   const [descExpanded, setDescExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const genIqryptFromName = (name) => {
+    if (!name || typeof name !== 'string') return '';
+    const cleaned = name.replace(/\s+/g, ' ').trim();
+    if (!cleaned) return '';
+    const parts = cleaned.split(' ');
+    const first = parts[0] || '';
+    const last = parts.length > 1 ? parts[parts.length - 1] : cleaned;
+    const slug = (s) => (s || '')
+      .toLowerCase()
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    const base = `${slug(first.charAt(0))}-${slug(last)}`.replace(/^-+/, '');
+    return base;
+  };
+
+  const copyIqCode = async (code) => {
+    if (!code) return;
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (e) {
+      // noop
+    }
+  };
 
   useEffect(() => {
     // Check authentication
@@ -450,6 +479,25 @@ export default function IconProfilePage() {
                 <div className="flex items-center gap-3 mb-4">
                   <p className="text-xl text-gray-600">{icon.occupation}</p>
                 </div>
+
+                {(() => {
+                  const iq = icon?.iqryptCode || genIqryptFromName(icon?.name);
+                  if (!iq) return null;
+                  return (
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded border border-gray-300 text-gray-800">
+                        {iq}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => copyIqCode(iq)}
+                        className="text-sm text-blue-600 hover:text-blue-700"
+                      >
+                        {copied ? "Copied" : "Copy"}
+                      </button>
+                    </div>
+                  );
+                })()}
 
                 {/* Dates */}
                 {(icon.birthDate || icon.deathDate) && (
