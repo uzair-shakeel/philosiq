@@ -34,6 +34,16 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { track } from "@vercel/analytics";
 import SmallLoader from "../components/SmallLoader";
+import { GENERAL_PROMPT } from "../lib/ai-prompts";
+
+const hashString = (str) => {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (h << 5) - h + str.charCodeAt(i);
+    h |= 0;
+  }
+  return (h >>> 0).toString(16);
+};
 
 // Helper function to convert answer value to agreement text
 const getAgreementText = (answerValue) => {
@@ -379,7 +389,12 @@ function ResultsContent({ results }) {
           if (response.ok && data.summary) {
             setGeneralSummary(data.summary);
             // Store in session storage for saving
-            sessionStorage.setItem("aiSummary", data.summary);
+            try {
+              const promptHash = hashString(
+                `${GENERAL_PROMPT.system}\n${GENERAL_PROMPT.user}`
+              );
+              sessionStorage.setItem(`aiSummary_${promptHash}`, data.summary);
+            } catch {}
           } else {
             setGeneralSummaryError(data.error || "Failed to generate summary");
           }
@@ -1619,7 +1634,10 @@ function ResultsContent({ results }) {
         impactAnswers, // Add the impact answers data
         aiSummary: (() => {
           try {
-            return sessionStorage.getItem("aiSummary") || null;
+            const promptHash = hashString(
+              `${GENERAL_PROMPT.system}\n${GENERAL_PROMPT.user}`
+            );
+            return sessionStorage.getItem(`aiSummary_${promptHash}`) || null;
           } catch {
             return null;
           }

@@ -1,5 +1,6 @@
 import connectToDatabase from "../../../lib/mongodb";
 import { getGeneralPrompt, formatPrompt } from "../../../lib/ai-prompts";
+import crypto from "crypto";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -105,13 +106,25 @@ export default async function handler(req, res) {
     
     let isLimited = false;
 
-    const cacheKey =
-      userEmail || `anonymous_${JSON.stringify(processedAnswers).length}`;
+    const promptText = `${getGeneralPrompt().system}\n${getGeneralPrompt().user}`;
+    const promptHash = crypto
+      .createHash("sha256")
+      .update(promptText)
+      .digest("hex");
+
+    const processedAnswersJson = JSON.stringify(processedAnswers || []);
+    const answersHash = crypto
+      .createHash("sha256")
+      .update(processedAnswersJson)
+      .digest("hex");
+
+    const cacheKey = userEmail || `anonymous_${answersHash}`;
     const existingSummary = await mongoose.connection.db
       .collection("ai_summaries")
       .findOne({
         userEmail: cacheKey,
-        answersHash: JSON.stringify(processedAnswers).length,
+        promptHash,
+        answersHash,
         isPlusUser: isPlusUser,
       });
 
@@ -240,7 +253,8 @@ export default async function handler(req, res) {
     await mongoose.connection.db.collection("ai_summaries").insertOne({
       userEmail: cacheKey,
       userId: userId,
-      answersHash: JSON.stringify(processedAnswers).length,
+      promptHash,
+      answersHash,
       summary: summary,
       createdAt: new Date(),
       model: "gpt-3.5-turbo",

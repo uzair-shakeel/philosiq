@@ -1,5 +1,6 @@
 import connectToDatabase from "../../../lib/mongodb";
 import { getAxisPrompt, formatPrompt } from "../../../lib/ai-prompts";
+import crypto from "crypto";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -39,12 +40,29 @@ export default async function handler(req, res) {
     console.log("Total answers for this axis:", answers.length);
     console.log("Sample answer structure:", answers.slice(0, 2));
 
+    const axisPrompt = getAxisPrompt(axisName);
+    const promptText = `${axisPrompt.system}\n${axisPrompt.user}\nAXIS:${axisName}`;
+    const promptHash = crypto
+      .createHash("sha256")
+      .update(promptText)
+      .digest("hex");
+
+    const compositePayload = {
+      answers: answers || [],
+      axisData: axisData || null,
+    };
+    const answersHash = crypto
+      .createHash("sha256")
+      .update(JSON.stringify(compositePayload))
+      .digest("hex");
+
     const existingSummary = await mongoose.connection.db
       .collection("ai_axis_summaries")
       .findOne({
         userEmail: userEmail,
         axisName: axisName,
-        answersHash: JSON.stringify(answers).length,
+        promptHash,
+        answersHash,
       });
 
     if (
@@ -59,7 +77,6 @@ export default async function handler(req, res) {
       });
     }
 
-    const axisPrompt = getAxisPrompt(axisName);
     let formattedPrompt = formatPrompt(axisPrompt.user, answers, axisName);
 
     if (
@@ -197,7 +214,8 @@ export default async function handler(req, res) {
       await mongoose.connection.db.collection("ai_axis_summaries").insertOne({
         userEmail: userEmail,
         axisName: axisName,
-        answersHash: JSON.stringify(answers).length,
+        promptHash,
+        answersHash,
         summary: summary,
         createdAt: new Date(),
         tokensUsed: openaiData.usage?.total_tokens || 0,

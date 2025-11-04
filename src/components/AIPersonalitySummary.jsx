@@ -2,6 +2,16 @@ import React, { useState, useEffect } from "react";
 import { FaBrain, FaLock, FaLightbulb } from "react-icons/fa";
 import SmallLoader from "./SmallLoader";
 import minDelay from "../utils/minDelay";
+import { GENERAL_PROMPT } from "../lib/ai-prompts";
+
+const hashString = (str) => {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (h << 5) - h + str.charCodeAt(i);
+    h |= 0;
+  }
+  return (h >>> 0).toString(16);
+};
 
 const AIPersonalitySummary = ({
   answers,
@@ -51,7 +61,10 @@ const AIPersonalitySummary = ({
         userEmail && userEmail.trim() !== ""
           ? userEmail
           : `anonymous_${JSON.stringify(answers).length}`;
-      const sessionFlagKey = `aiSummaryGenerated_${cacheKey}`;
+      const promptHash = hashString(
+        `${GENERAL_PROMPT.system}\n${GENERAL_PROMPT.user}`
+      );
+      const sessionFlagKey = `aiSummaryGenerated_${cacheKey}_${promptHash}`;
       const alreadyGenerated =
         sessionStorage.getItem(sessionFlagKey) === "true";
       if (!alreadyGenerated) {
@@ -92,7 +105,10 @@ const AIPersonalitySummary = ({
         userEmail && userEmail.trim() !== ""
           ? userEmail
           : `anonymous_${JSON.stringify(answers).length}`;
-      const sessionFlagKey = `aiSummaryGenerated_${cacheKey}`;
+      const promptHash = hashString(
+        `${GENERAL_PROMPT.system}\n${GENERAL_PROMPT.user}`
+      );
+      const sessionFlagKey = `aiSummaryGenerated_${cacheKey}_${promptHash}`;
 
       const response = await minDelay(fetch("/api/ai/generate-summary", {
         method: "POST",
@@ -129,7 +145,10 @@ const AIPersonalitySummary = ({
 
       // Persist the generated summary so it can be saved with quiz history
       try {
-        sessionStorage.setItem("aiSummary", data.summary || "");
+        const promptHash = hashString(
+          `${GENERAL_PROMPT.system}\n${GENERAL_PROMPT.user}`
+        );
+        sessionStorage.setItem(`aiSummary_${promptHash}`, data.summary || "");
       } catch {}
 
       if (data.cached) {
