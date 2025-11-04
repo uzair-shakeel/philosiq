@@ -808,18 +808,11 @@ export default function ProfilePage() {
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-600">
-                              Current Period End{subscriptionDetails?.autoRenews === false ? " - Expiring" : " - Auto-Renews"}:
-                            </span>
+                            <span className="text-gray-600">Current Period End:</span>
                             <span className="font-medium text-gray-900">
                               {formatDate(subscriptionDetails.currentPeriodEnd)}
                             </span>
                           </div>
-                          {subscriptionDetails?.autoRenews === false && (
-                            <div className="text-[11px] text-gray-600 text-right">
-                              Access will continue until this date and then end unless renewed.
-                            </div>
-                          )}
                         </div>
 
                         {/* Subscription Management Buttons */}

@@ -17,6 +17,12 @@ export default function ArchetypePage() {
     Nationalist: "bg-red-600",
   };
 
+  // Override colors specifically for dots and selected indicators without changing global card theming
+  const dotColor = {
+    Equity: "bg-blue-600", // override Equity to blue
+    "Free Market": "bg-emerald-600", // override Free Market to green
+  };
+
   // Hex colors for each trait for inline gradients (ensures no Tailwind purge issues)
   const traitHex = {
     Equity: "#10B981", // emerald-500
@@ -116,8 +122,8 @@ export default function ArchetypePage() {
   };
 
   const traitSoft = {
-    Equity: "bg-emerald-100",
-    "Free Market": "bg-amber-100",
+    Equity: "bg-blue-100",
+    "Free Market": "bg-emerald-100",
     Libertarian: "bg-cyan-100",
     Authoritarian: "bg-purple-100",
     Progressive: "bg-blue-100",
@@ -641,7 +647,7 @@ export default function ArchetypePage() {
             onClick={() => handleFilterClick(trait)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all w-full text-center focus:outline-none focus:ring-2 ${
               selectedFilters.includes(trait)
-                ? `${traitColor[trait] || "bg-primary-maroon"} text-white shadow`
+                ? `bg-blue-600 text-white shadow`
                 : isTraitDisabled(trait)
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                 : `bg-gray-100 ${traitSoft[trait] || "text-gray-700 ring-gray-300 hover:ring-gray-400"} ring-1`
@@ -700,7 +706,7 @@ export default function ArchetypePage() {
                   // When filtered, use active + next two traits for richer gradient
                   const strongGrad = activeTrait ? getGradient(activeTrait, secondTrait, thirdTrait, "strong") : softGrad;
                   const strongRing = activeTrait ? (traitBorderSoft[activeTrait] || softRing) : softRing;
-                  const cardBg = selectedFilters.length === 0 ? softGrad : (activeTrait ? strongGrad : "bg-white");
+                  const cardBg = "bg-white";
                   const cardBorder = selectedFilters.length === 0 ? softRing : (activeTrait ? strongRing : "border-gray-200");
                   return (
                   <Link
@@ -722,7 +728,7 @@ export default function ArchetypePage() {
                             <span
                               className={`w-2 h-2 rounded-full mr-2 ${
                                 selectedFilters.includes(trait)
-                                  ? "bg-primary-maroon"
+                                  ? (dotColor[trait] || traitColor[trait] || "bg-primary-maroon")
                                   : "bg-gray-400"
                               }`}
                             ></span>
