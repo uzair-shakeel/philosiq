@@ -517,7 +517,7 @@ function ResultsContent({ results }) {
         });
       });
 
-      // For each axis, pick top 2 aligned and top 2 against based on abs contribution
+      // For each axis, pick top 2 aligned (same sign as axis rawScore) and top 2 against (opposite sign)
       const result = {};
       Object.keys(grouped).forEach((axisName) => {
         const items = grouped[axisName].sort((a, b) => b.abs - a.abs);
@@ -529,30 +529,11 @@ function ResultsContent({ results }) {
           const against = items.filter((x) => x.contribution < 0).slice(0, 2);
           result[axisName] = { aligned, against };
         } else {
-          // Special handling for axes that need flipped logic
-          const isSecularAxis = axisName === "Secular vs. Religious";
-          const isEquityAxis = axisName === "Equity vs. Free Market";
-          const needsFlip = isSecularAxis || isEquityAxis;
-
           const aligned = items
-            .filter((x) => {
-              if (needsFlip) {
-                // For axes that need flipped logic
-                return axisSign > 0 ? x.contribution < 0 : x.contribution > 0;
-              } else {
-                return axisSign > 0 ? x.contribution > 0 : x.contribution < 0;
-              }
-            })
+            .filter((x) => (axisSign > 0 ? x.contribution > 0 : x.contribution < 0))
             .slice(0, 2);
           const against = items
-            .filter((x) => {
-              if (needsFlip) {
-                // For axes that need flipped logic
-                return axisSign > 0 ? x.contribution > 0 : x.contribution < 0;
-              } else {
-                return axisSign > 0 ? x.contribution < 0 : x.contribution > 0;
-              }
-            })
+            .filter((x) => (axisSign > 0 ? x.contribution < 0 : x.contribution > 0))
             .slice(0, 2);
           result[axisName] = { aligned, against };
         }
