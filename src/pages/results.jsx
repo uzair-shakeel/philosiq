@@ -479,11 +479,12 @@ function ResultsContent({ results }) {
       )
         return;
 
-      // Build a quick lookup for axis result sign (-1, 0, 1)
+      // Build a quick lookup for axis result sign (-1, 0, 1) using canonical names
       const axisSignByName = {};
       results.axisResults.forEach((ar) => {
         const sign = ar?.rawScore === 0 ? 0 : ar?.rawScore > 0 ? 1 : -1;
-        axisSignByName[ar.name] = sign;
+        const canonicalName = AXIS_ALIASES[ar.name] || ar.name;
+        axisSignByName[canonicalName] = sign;
       });
 
       // Group answered questions by canonical axis with contribution
@@ -517,35 +518,29 @@ function ResultsContent({ results }) {
         });
       });
 
-      // For each axis, pick top 2 aligned (same sign as axis rawScore) and top 2 against (opposite sign)
+      // For each axis, pick top 2 aligned vs counter.
+      // Self-correct orientation by comparing summed contribution sign with axis rawScore sign.
       const result = {};
       Object.keys(grouped).forEach((axisName) => {
         const items = grouped[axisName].sort((a, b) => b.abs - a.abs);
         const axisSign = axisSignByName[axisName] ?? 0;
+        // Determine if positive contribution moves toward or away from the displayed axis sign
+        const total = items.reduce((s, x) => s + (x.contribution || 0), 0);
+        const totalSign = total === 0 ? 0 : total > 0 ? 1 : -1;
+        // If the net contribution sign disagrees with the axis sign, flip the interpretation
+        const effectiveSign = totalSign !== 0 && totalSign !== axisSign ? -axisSign : axisSign;
 
-        if (axisSign === 0) {
+        if (effectiveSign === 0) {
           // Centered: pick top positives as aligned, top negatives as against
           const aligned = items.filter((x) => x.contribution > 0).slice(0, 2);
           const against = items.filter((x) => x.contribution < 0).slice(0, 2);
           result[axisName] = { aligned, against };
         } else {
-          const needsFlip = [
-            "Equity vs. Free Market",
-            "Libertarian vs. Authoritarian",
-            "Globalism vs. Nationalism",
-          ].includes(axisName);
-
           const aligned = items
-            .filter((x) => {
-              if (axisSign > 0) return needsFlip ? x.contribution < 0 : x.contribution > 0;
-              return needsFlip ? x.contribution > 0 : x.contribution < 0;
-            })
+            .filter((x) => (effectiveSign > 0 ? x.contribution > 0 : x.contribution < 0))
             .slice(0, 2);
           const against = items
-            .filter((x) => {
-              if (axisSign > 0) return needsFlip ? x.contribution > 0 : x.contribution < 0;
-              return needsFlip ? x.contribution < 0 : x.contribution > 0;
-            })
+            .filter((x) => (effectiveSign > 0 ? x.contribution < 0 : x.contribution > 0))
             .slice(0, 2);
           result[axisName] = { aligned, against };
         }
@@ -2024,7 +2019,8 @@ function ResultsContent({ results }) {
               {results.axisResults
                 .filter((_, index) => isPlusActive || index === 0)
                 .map((axis, index) => {
-                  const data = impactAnswers[axis.name] || {
+                  const canonical = AXIS_ALIASES[axis.name] || axis.name;
+                  const data = impactAnswers[canonical] || {
                     aligned: [],
                     against: [],
                   };
