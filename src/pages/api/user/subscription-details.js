@@ -39,11 +39,16 @@ export default async function handler(req, res) {
       currentPeriodEnd.setMonth(currentPeriodStart.getMonth() + 3);
     }
 
+    const cancelAtPeriodEnd = !!user.philosiqPlusCancelAtPeriodEnd;
+    const autoRenews = !cancelAtPeriodEnd;
+
     const subscriptionDetails = {
       active: !!user.philosiqPlusActive,
       since: user.philosiqPlusSince || null,
       currentPeriodStart: currentPeriodStart,
       currentPeriodEnd: currentPeriodEnd,
+      cancelAtPeriodEnd,
+      autoRenews,
     };
 
     res.status(200).json(subscriptionDetails);

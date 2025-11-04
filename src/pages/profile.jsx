@@ -350,69 +350,8 @@ export default function ProfilePage() {
   };
 
   const openBillingPortal = async () => {
-    try {
-      setIsLoading(true);
-      setError("");
-      
-      const email = user?.email || localStorage.getItem("userEmail");
-      if (!email) {
-        throw new Error("No user email found. Please log in again.");
-      }
-      
-      // Add current URL as return URL
-      const returnUrl = window.location.href;
-      
-      const response = await fetch("/api/stripe/portal-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          email,
-          returnUrl 
-        }),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        console.error("Portal session error:", data);
-        
-        // Handle specific error cases
-        if (data.error === "No Stripe customer") {
-          throw new Error("No subscription found. Please contact support.");
-        }
-        
-        // Handle Stripe mode mismatch
-        if (data.details && data.details.includes('test mode')) {
-          throw new Error("Subscription is in test mode. Please contact support for assistance.");
-        }
-        
-        // Handle other errors
-        throw new Error(data.details || data.error || "Failed to open billing portal");
-      }
-      
-      if (!data?.url) {
-        throw new Error("Invalid response from server. Please try again.");
-      }
-      
-      // Redirect to the portal
-      window.location.href = data.url;
-      
-    } catch (error) {
-      console.error("Billing portal error:", error);
-      
-      // Show a user-friendly error message
-      let errorMessage = "Unable to open billing portal. ";
-      
-      if (error.message.includes('test mode')) {
-        errorMessage += "Your subscription is in test mode. Please contact support for assistance.";
-      } else {
-        errorMessage += error.message || "Please try again or contact support.";
-      }
-      
-      setError(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
+    // Direct-link to hosted Stripe portal login provided
+    window.location.href = "https://billing.stripe.com/p/login/eVq5kD7Wt87w115cE99ws00";
   };
 
   const formatDate = (dateString) => {
@@ -870,12 +809,17 @@ export default function ProfilePage() {
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">
-                              Current Period End:
+                              Current Period End{subscriptionDetails?.autoRenews === false ? " - Expiring" : " - Auto-Renews"}:
                             </span>
                             <span className="font-medium text-gray-900">
                               {formatDate(subscriptionDetails.currentPeriodEnd)}
                             </span>
                           </div>
+                          {subscriptionDetails?.autoRenews === false && (
+                            <div className="text-[11px] text-gray-600 text-right">
+                              Access will continue until this date and then end unless renewed.
+                            </div>
+                          )}
                         </div>
 
                         {/* Subscription Management Buttons */}
