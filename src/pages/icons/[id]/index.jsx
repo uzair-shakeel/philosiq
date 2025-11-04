@@ -47,6 +47,7 @@ export default function IconProfilePage() {
   const [axisOpen, setAxisOpen] = useState({});
   const [descExpanded, setDescExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [navigating, setNavigating] = useState(false);
 
   const genIqryptFromName = (name) => {
     if (!name || typeof name !== 'string') return '';
@@ -93,6 +94,20 @@ export default function IconProfilePage() {
     if (!id) return;
     fetchIconData();
   }, [id]);
+
+  // Show centered loader while navigating between routes (match Compare page behavior)
+  useEffect(() => {
+    const handleStart = () => setNavigating(true);
+    const handleDone = () => setNavigating(false);
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleDone);
+    router.events.on('routeChangeError', handleDone);
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleDone);
+      router.events.off('routeChangeError', handleDone);
+    };
+  }, [router.events]);
 
   const fetchIconData = async () => {
     try {
@@ -379,22 +394,9 @@ export default function IconProfilePage() {
     return null;
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <video
-          src="/Loading.gif"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-[10%] h-[10%] object-contain"
-        />
-      </div>
-    );
-  }
+  // Remove early return; we'll show a full-screen overlay instead
 
-  if (error || !icon) {
+  if (!loading && (error || !icon)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -433,16 +435,23 @@ export default function IconProfilePage() {
   return (
     <>
       <Head>
-        <title>{icon.name} - Political Profile - Philosiq Icons</title>
+        <title>{(icon?.name || "Icon")} - Political Profile - Philosiq Icons</title>
         <meta
           name="description"
-          content={`Political compass profile of ${icon.name} based on community research`}
+          content={`Political compass profile of ${(icon?.name || "Icon")} based on community research`}
         />
       </Head>
 
       <div className="min-h-screen bg-gray-50">
         <Navbar user={user} />
 
+        {(loading || navigating) && (
+          <div className="fixed inset-0 z-50 bg-white/70 backdrop-blur-sm flex items-center justify-center">
+            <SmallLoader size={60} />
+          </div>
+        )}
+
+        {icon && (<>
         {/* Hero Section */}
         <div className="bg-white shadow-sm border-b mt-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -647,7 +656,6 @@ export default function IconProfilePage() {
             </div>
           </div>
         </div>
-
         {/* Answers Section */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between mb-8">
@@ -735,6 +743,10 @@ export default function IconProfilePage() {
             </div>
           )}
         </div>
+        </>
+      )}
+
+        
       </div>
     </>
   );
