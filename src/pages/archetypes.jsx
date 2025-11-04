@@ -5,22 +5,30 @@ import Link from "next/link";
 export default function ArchetypePage() {
   // Trait color map (active state BG colors)
   const traitColor = {
-    Equity: "bg-emerald-600",
-    "Free Market": "bg-amber-600",
-    Libertarian: "bg-cyan-600",
-    Authoritarian: "bg-purple-600",
-    Progressive: "bg-blue-600",
-    Conservative: "bg-orange-600",
-    Secular: "bg-slate-600",
-    Religious: "bg-pink-600",
-    Globalist: "bg-indigo-600",
-    Nationalist: "bg-red-600",
+    Equity: "bg-blue-600",
+    "Free Market": "bg-green-600",
+    Libertarian: "bg-teal-500",
+    Authoritarian: "bg-orange-500",
+    Progressive: "bg-sky-500",
+    Conservative: "bg-red-500",
+    Secular: "bg-yellow-400",
+    Religious: "bg-purple-500",
+    Globalist: "bg-lime-500",
+    Nationalist: "bg-rose-500",
   };
 
   // Override colors specifically for dots and selected indicators without changing global card theming
   const dotColor = {
-    Equity: "bg-blue-600", // override Equity to blue
-    "Free Market": "bg-emerald-600", // override Free Market to green
+    Equity: "bg-blue-600",
+    "Free Market": "bg-green-600",
+    Libertarian: "bg-teal-500",
+    Authoritarian: "bg-orange-500",
+    Progressive: "bg-sky-500",
+    Conservative: "bg-red-500",
+    Secular: "bg-yellow-400",
+    Religious: "bg-purple-500",
+    Globalist: "bg-lime-500",
+    Nationalist: "bg-rose-500",
   };
 
   // Hex colors for each trait for inline gradients (ensures no Tailwind purge issues)
@@ -123,20 +131,15 @@ export default function ArchetypePage() {
 
   const traitSoft = {
     Equity: "bg-blue-100",
-    "Free Market": "bg-emerald-100",
-    Libertarian: "bg-cyan-100",
-    Authoritarian: "bg-purple-100",
-    Progressive: "bg-blue-100",
-    Conservative: "bg-orange-100",
-    Secular: "bg-slate-100",
-    Religious: "bg-pink-100",
-    Globalist: "bg-indigo-100",
-    Nationalist: "bg-red-100",
-    Conservative: "text-orange-700 ring-orange-300 hover:ring-orange-400",
-    Secular: "text-slate-700 ring-slate-300 hover:ring-slate-400",
-    Religious: "text-pink-700 ring-pink-300 hover:ring-pink-400",
-    Globalist: "text-indigo-700 ring-indigo-300 hover:ring-indigo-400",
-    Nationalist: "text-red-700 ring-red-300 hover:ring-red-400",
+    "Free Market": "bg-green-100",
+    Libertarian: "bg-teal-100",
+    Authoritarian: "bg-orange-100",
+    Progressive: "bg-sky-100",
+    Conservative: "bg-red-100",
+    Secular: "bg-yellow-100",
+    Religious: "bg-purple-100",
+    Globalist: "bg-lime-100",
+    Nationalist: "bg-rose-100",
   };
   // Define trait pairs (opposites)
   const traitPairs = [
@@ -595,16 +598,16 @@ export default function ArchetypePage() {
   };
 
   const traitBorderSoft = {
-    Equity: "border-emerald-200",
-    "Free Market": "border-amber-200",
-    Libertarian: "border-cyan-200",
-    Authoritarian: "border-purple-200",
-    Progressive: "border-blue-200",
-    Conservative: "border-orange-200",
-    Secular: "border-slate-200",
-    Religious: "border-pink-200",
-    Globalist: "border-indigo-200",
-    Nationalist: "border-red-200",
+    Equity: "border-blue-200",
+    "Free Market": "border-green-200",
+    Libertarian: "border-teal-200",
+    Authoritarian: "border-orange-200",
+    Progressive: "border-sky-200",
+    Conservative: "border-red-200",
+    Secular: "border-yellow-200",
+    Religious: "border-purple-200",
+    Globalist: "border-lime-200",
+    Nationalist: "border-rose-200",
   };
 
   // Check if a trait is disabled (opposite of a selected trait)
@@ -647,7 +650,7 @@ export default function ArchetypePage() {
             onClick={() => handleFilterClick(trait)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all w-full text-center focus:outline-none focus:ring-2 ${
               selectedFilters.includes(trait)
-                ? `bg-blue-600 text-white shadow`
+                ? `${traitColor[trait] || "bg-primary-maroon"} text-white shadow`
                 : isTraitDisabled(trait)
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                 : `bg-gray-100 ${traitSoft[trait] || "text-gray-700 ring-gray-300 hover:ring-gray-400"} ring-1`
