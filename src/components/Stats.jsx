@@ -14,9 +14,9 @@ export default function Stats() {
       color: "from-primary-maroon to-primary-darkMaroon",
     },
     {
-      title: "~100",
+      title: "88",
       description:
-        "Our quiz features around 100 unique questions designed to gauge your perspective across five distinct axes!",
+        "Our full-length quiz features 88 unique questions designed to gauge your perspective across five distinct axes!",
       buttonText: "Take the Quiz",
       buttonLink: "/quiz",
       icon: <FaQuestionCircle className="text-white text-4xl" />,
