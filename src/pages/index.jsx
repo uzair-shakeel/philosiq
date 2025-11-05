@@ -102,8 +102,8 @@ export default function Home() {
                         </h3>
                         <p className="text-gray-600">
                           Measures your stance on the spectrum between{" "}
-                          {axis.split(" Vs. ")[0].toLowerCase()} and{" "}
-                          {axis.split(" Vs. ")[1].toLowerCase()}
+                          {axis.split(" vs. ")[0].toLowerCase()} and{" "}
+                          {axis.split(" vs. ")[1].toLowerCase()}
                         </p>
                       </div>
                     ))}
@@ -123,8 +123,8 @@ export default function Home() {
                           </h3>
                           <p className="text-gray-600">
                             Measures your stance on the spectrum between{" "}
-                            {axis.split(" Vs. ")[0].toLowerCase()} and{" "}
-                            {axis.split(" Vs. ")[1].toLowerCase()}
+                            {axis.split(" vs. ")[0].toLowerCase()} and{" "}
+                            {axis.split(" vs. ")[1].toLowerCase()}
                           </p>
                         </div>
                       ))}
